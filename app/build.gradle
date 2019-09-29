@@ -1,0 +1,113 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+
+android {
+    compileSdkVersion compile_sdk_version
+    dataBinding.enabled = true
+
+    defaultConfig {
+        applicationId "com.customers.zktc"
+        minSdkVersion min_sdk_version
+        targetSdkVersion target_sdk_version
+        versionCode version_code
+        versionName version_name
+        multiDexEnabled true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [moduleName: project.getName()]
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildTypes {
+        debug{
+            applicationIdSuffix ".de"
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "API_HOST", "\"http://xx.com\""
+            buildConfigField "Boolean", "release", "false"
+            buildConfigField "String", "auth", "\"/auth/\""
+            buildConfigField "String", "UMID", "\"5ba9ee4eb465f5f85e000373\""
+            buildConfigField "String", "WX_APPID", "\"xx\""
+            buildConfigField "String", "WX_APPSECRET", "\"xx\""
+            buildConfigField("int", "DATEBASE_VERSION", "$version_code")
+            buildConfigField("String", "bucketName", "\"test166\"")
+            buildConfigField("String", "endpoint", "\"http://oss-cn-hangzhou.aliyuncs.com\"")
+            buildConfigField("String", "ossUrl", "\"test166.oss-cn-hangzhou.aliyuncs.com/\"")
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "API_HOST", "\"http://xx.com\""
+            buildConfigField "Boolean", "release", "false"
+            buildConfigField "String", "auth", "\"/auth/\""
+            buildConfigField "String", "UMID", "\"5ba9ee4eb465f5f85e000373\""
+            buildConfigField "String", "WX_APPID", "\"xx\""
+            buildConfigField "String", "WX_APPSECRET", "\"xx\""
+            buildConfigField("int", "DATEBASE_VERSION", "$version_code")
+            buildConfigField("String", "bucketName", "\"test166\"")
+            buildConfigField("String", "endpoint", "\"http://oss-cn-hangzhou.aliyuncs.com\"")
+            buildConfigField("String", "ossUrl", "\"test166.oss-cn-hangzhou.aliyuncs.com/\"")
+        }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError true
+    }
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            def time = new Date().format("MMddHHmm", TimeZone.getTimeZone("GMT+08:00"))
+            if (variant.name != 'debug') outputFileName = "zktc_${variant.name}_${variant.versionName}.${time}.apk"
+        }
+    }
+}
+
+kapt.generateStubs = true
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(path: ':library')
+
+
+//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    kapt "com.android.databinding:compiler:3.1.4"
+    implementation "androidx.appcompat:appcompat:$androidx_version"
+    implementation "androidx.recyclerview:recyclerview:1.0.0"
+    implementation "androidx.vectordrawable:vectordrawable:$androidx_version"
+    implementation "androidx.legacy:legacy-support-v4:1.0.0"
+    implementation "androidx.core:core-ktx:$androidx_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation "org.jetbrains.anko:anko:$anko_version"
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    testImplementation 'junit:junit:4.12'
+    implementation "com.google.dagger:dagger:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit"
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
+
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.jakewharton.timber:timber:4.5.1'
+    implementation 'com.alibaba:arouter-api:1.2.4'
+    implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
+    implementation 'com.aliyun.dpa:oss-android-sdk:2.9.2'
+
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+
+}
