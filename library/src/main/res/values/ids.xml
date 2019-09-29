@@ -2,4 +2,5 @@
 <resources>
     <item name="holder_position" type="id"/>
     <item name="inflate" type="id"/>
+    <item name="parse" type="id"/>
 </resources>

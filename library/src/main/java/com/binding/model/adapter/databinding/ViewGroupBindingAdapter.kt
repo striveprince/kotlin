@@ -30,6 +30,6 @@ object ViewGroupBindingAdapter {
 
     @BindingAdapter("addInflate")
     fun <E : Inflate<*>>addInflate(viewGroup: ViewGroup,e :E){
-
+        viewGroup.addView(e.attachView(viewGroup.context,viewGroup,false,null).root)
     }
 }
