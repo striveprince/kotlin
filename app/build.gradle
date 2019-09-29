@@ -28,34 +28,65 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     buildTypes {
-        debug{
-            applicationIdSuffix ".de"
+        debug {
+            applicationIdSuffix ".debug1"
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "API_HOST", "\"http://xx.com\""
-            buildConfigField "Boolean", "release", "false"
-            buildConfigField "String", "auth", "\"/auth/\""
-            buildConfigField "String", "UMID", "\"5ba9ee4eb465f5f85e000373\""
-            buildConfigField "String", "WX_APPID", "\"xx\""
-            buildConfigField "String", "WX_APPSECRET", "\"xx\""
-            buildConfigField("int", "DATEBASE_VERSION", "$version_code")
-            buildConfigField("String", "bucketName", "\"test166\"")
-            buildConfigField("String", "endpoint", "\"http://oss-cn-hangzhou.aliyuncs.com\"")
-            buildConfigField("String", "ossUrl", "\"test166.oss-cn-hangzhou.aliyuncs.com/\"")
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "boolean", "LOG_DEBUG", "true"//dug时打开日志
+            buildConfigField "String", "ApiHost", "\"http://dev.zhongketongchuang.com\""
+            buildConfigField "String", "WxAppId", "\"wx278434ee32e2723a\""
+            buildConfigField "String", "WxPublicAppId", "\"wxd7fc85674c6a7a0e\""
+            buildConfigField "String", "endpoint", "\"https:xx.com\""
+//            signingConfig signingConfigs.config
+            debuggable true
+            manifestPlaceholders = [
+                    PGYER_APPID     : "44e9043ccbb21acb3c0ec78b4ba9b3ef",
+                    GETUI_APP_ID    : "dcOVqxK8Et794QXmNwvW74",
+                    GETUI_APP_KEY   : "Gcf6PfMCCgALhTs6XBMkI9",
+                    GETUI_APP_SECRET: "7xxRkwX1vH8XvdlLHyPTMA",
+                    ampkey          : "24502a29f5bb1d0a17281a24a77b0a55"
+            ]
         }
+
+        checkout {
+            minifyEnabled true//混淆打包
+            shrinkResources true//去掉不用资源
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "boolean", "LOG_DEBUG", "false"//release时关闭日志
+            buildConfigField "String", "ApiHost", "\"http://dev.zhongketongchuang.com\""
+            buildConfigField "String", "WxAppId", "\"wx278434ee32e2723a\""
+            buildConfigField "String", "WxPublicAppId", "\"wxd7fc85674c6a7a0e\""
+//            signingConfig signingConfigs.config
+            debuggable false
+
+            manifestPlaceholders = [
+                    PGYER_APPID     : "44e9043ccbb21acb3c0ec78b4ba9b3ef",
+                    GETUI_APP_ID    : "dcOVqxK8Et794QXmNwvW74",
+                    GETUI_APP_KEY   : "Gcf6PfMCCgALhTs6XBMkI9",
+                    GETUI_APP_SECRET: "7xxRkwX1vH8XvdlLHyPTMA",
+                    ampkey          : "24502a29f5bb1d0a17281a24a77b0a55"
+            ]
+        }
+
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "API_HOST", "\"http://xx.com\""
-            buildConfigField "Boolean", "release", "false"
-            buildConfigField "String", "auth", "\"/auth/\""
-            buildConfigField "String", "UMID", "\"5ba9ee4eb465f5f85e000373\""
-            buildConfigField "String", "WX_APPID", "\"xx\""
-            buildConfigField "String", "WX_APPSECRET", "\"xx\""
-            buildConfigField("int", "DATEBASE_VERSION", "$version_code")
-            buildConfigField("String", "bucketName", "\"test166\"")
-            buildConfigField("String", "endpoint", "\"http://oss-cn-hangzhou.aliyuncs.com\"")
-            buildConfigField("String", "ossUrl", "\"test166.oss-cn-hangzhou.aliyuncs.com/\"")
+            minifyEnabled true//混淆打包
+            shrinkResources true//去掉不用资源
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "boolean", "LOG_DEBUG", "false"//release时关闭日志
+            buildConfigField "String", "ApiHost", "\"http://budai.zhongketongchuang.com\""
+            buildConfigField "String", "WxAppId", "\"wxab74c79cb6353b1f\""
+            buildConfigField "String", "WxPublicAppId", "\"wx7b608c29a34e103f\""
+//            signingConfig signingConfigs.config
+            debuggable false
+
+            manifestPlaceholders = [
+                    PGYER_APPID     : "44e9043ccbb21acb3c0ec78b4ba9b3ef",
+                    GETUI_APP_ID    : "pzdl1ky5PL9pi25VqZ8Zi4",
+                    GETUI_APP_KEY   : "E1vdMuIuYW91xk3ZP1snk3",
+                    GETUI_APP_SECRET: "mY4PPv8Yec7j7SDiJO0db3",
+                    ampkey          : "24502a29f5bb1d0a17281a24a77b0a55"
+            ]
         }
     }
 
@@ -98,7 +129,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit"
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
 
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.jakewharton.timber:timber:4.5.1'

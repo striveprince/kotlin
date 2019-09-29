@@ -6,6 +6,7 @@ import dagger.Module
 
 @Module
 class AppModule(val app:ZktcApplication) {
+
     internal fun getApplication():ZktcApplication{
         return app
     }

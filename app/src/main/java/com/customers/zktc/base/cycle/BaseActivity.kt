@@ -16,7 +16,7 @@ abstract class BaseActivity<VM : ViewModel<*, *>> : DataBindingActivity<Activity
     @Inject lateinit var vm: VM
 
     override fun inject(savedInstanceState: Bundle?, parent: ViewGroup?, attachToParent: Boolean): View {
-        val method = FragmentComponent::class.java.getDeclaredMethod("inject",this::class.java)
+        val method = ActivityComponent::class.java.getDeclaredMethod("inject",this::class.java)
         method.invoke(component,this)
         return vm.attachContainer(this, parent, attachToParent, savedInstanceState).root
     }

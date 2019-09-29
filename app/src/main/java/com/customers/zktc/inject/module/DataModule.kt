@@ -28,7 +28,7 @@ class DataModule {
         val client = okHttpClient.newBuilder()
             .addInterceptor(netInterceptor).build()
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.API_HOST)
+            .baseUrl(BuildConfig.ApiHost)
             //                .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
