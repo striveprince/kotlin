@@ -3,8 +3,9 @@ package com.binding.model.adapter.databinding
 import android.view.ViewGroup
 import androidx.databinding.BindingAdapter
 import com.binding.model.R
+import com.binding.model.adapter.IEventAdapter
 import com.binding.model.inflate.inter.Inflate
-
+import com.binding.model.inflate.inter.Measure
 
 
 /**
@@ -28,8 +29,16 @@ object ViewGroupBindingAdapter {
         }
     }
 
+
     @BindingAdapter("addInflate")
-    fun <E : Inflate<*>>addInflate(viewGroup: ViewGroup,e :E){
-        viewGroup.addView(e.attachView(viewGroup.context,viewGroup,false,null).root)
+    fun <E : Inflate<*>> addInflate(viewGroup: ViewGroup,e :E,eventAdapter: IEventAdapter<E>? = null){
+        e.iEventAdapter = eventAdapter
+        val view = e.attachView(viewGroup.context, viewGroup, false, null).root
+        view.id = e.getViewId()
+        if(e is Measure)
+            viewGroup.addView(view,e.measure(view,viewGroup))
+        else
+            viewGroup.addView(view)
+        view.setTag(R.id.inflate,e)
     }
 }

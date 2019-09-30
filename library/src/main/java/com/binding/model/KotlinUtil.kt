@@ -11,6 +11,9 @@ val pageWay  = false
 fun findModelView(thisCls: Class<*>): LayoutView {
     return thisCls.getAnnotation(LayoutView::class.java) ?:return findModelView(thisCls.superclass)
 }
+inline fun <reified T> toArray(list: List<T>):Array<T>{
+    return ArrayList<T>(list).toArray(arrayOf())
+}
 
 val gson = Gson()
 
