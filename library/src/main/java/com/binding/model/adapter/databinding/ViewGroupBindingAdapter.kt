@@ -30,8 +30,8 @@ object ViewGroupBindingAdapter {
     }
 
 
-    @BindingAdapter("addInflate")
-    fun <E : Inflate<*>> addInflate(viewGroup: ViewGroup,e :E,eventAdapter: IEventAdapter<E>? = null){
+    @BindingAdapter(value = ["addInflate","eventAdapter"])
+    fun <E : Inflate<*>> addInflate(viewGroup: ViewGroup,e :E,eventAdapter: IEventAdapter<E>?){
         e.iEventAdapter = eventAdapter
         val view = e.attachView(viewGroup.context, viewGroup, false, null).root
         view.id = e.getViewId()

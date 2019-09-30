@@ -35,7 +35,7 @@ object CheckRadioGroupBindingAdapter {
         radioGroup: RadioGroup, listener: RadioGroup.OnCheckedChangeListener?,
         positionAttrChanged: InverseBindingListener?
     ) {
-        val newValue = { group, checkedId ->
+        val newValue = RadioGroup.OnCheckedChangeListener{ group, checkedId ->
             listener?.onCheckedChanged(group, checkedId)
             positionAttrChanged?.onChange()
         }
