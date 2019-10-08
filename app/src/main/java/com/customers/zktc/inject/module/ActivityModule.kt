@@ -12,7 +12,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class ActivityModule(val activity: AppCompatActivity) {
+class ActivityModule(private val activity: AppCompatActivity) {
 
     @ActivityContext
     @Provides
@@ -21,13 +21,10 @@ class ActivityModule(val activity: AppCompatActivity) {
         return activity
     }
 
-    @Provides
     @ActivityScope
     @ActivityFragmentManager
-    internal fun provideFragmentManager(): FragmentManager? {
-//        return if (activity is FragmentActivity) {
-//            (activity as FragmentActivity).getSupportFragmentManager()
-//        } else null
+    @Provides
+    internal fun provideFragmentManager(): FragmentManager {
         return activity.supportFragmentManager
     }
 

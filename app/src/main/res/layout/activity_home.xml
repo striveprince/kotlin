@@ -1,11 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
-    <FrameLayout
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.customers.zktc.ui.home.HomeModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
 
-            android:layout_height="match_parent"/>
-    </FrameLayout>
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/tab_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"/>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="63sp"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:tabGravity="fill"
+            app:tabIndicatorHeight="0dp"
+            app:tabSelectedTextColor="?colorAccent">
+
+            <com.google.android.material.tabs.TabItem
+                android:icon="@drawable/home_main_selector"
+                android:layout_width="0dp"
+                android:text="@string/cap_home_main"
+                android:layout_height="match_parent" />
+
+            <com.google.android.material.tabs.TabItem
+                android:icon="@drawable/home_goods_selector"
+                android:layout_width="0dp"
+                android:text="@string/type"
+                android:layout_height="match_parent" />
+
+            <com.google.android.material.tabs.TabItem
+                android:icon="@drawable/home_nearby_selector"
+                android:layout_width="0dp"
+                android:text="@string/vip"
+                android:layout_height="match_parent" />
+
+            <com.google.android.material.tabs.TabItem
+                android:icon="@drawable/home_car_selector"
+                android:layout_width="0dp"
+                android:text="@string/cap_home_car"
+                android:layout_height="match_parent" />
+
+            <com.google.android.material.tabs.TabItem
+                android:icon="@drawable/home_mine_selector"
+                android:layout_width="0dp"
+                android:text="@string/cap_home_mine"
+                android:layout_height="match_parent" />
+
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginBottom="6dp"
+            android:backgroundTint="@color/transparent"
+            android:scaleType="center"
+            app:borderWidth="0dp"
+            app:fabSize="auto"
+            app:layout_constraintBottom_toTopOf="@+id/tab_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:maxImageSize="62dp"
+            app:srcCompat="@mipmap/customer_service" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

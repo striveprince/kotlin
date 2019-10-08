@@ -10,6 +10,8 @@ import com.customers.zktc.inject.component.FragmentComponent
 import com.customers.zktc.ui.ZktcApplication
 import javax.inject.Inject
 
+
+
 abstract class BaseFragment<VM: ViewModel<*, *>>: DataBindingFragment<FragmentComponent>(){
     @Inject lateinit var vm: VM
 

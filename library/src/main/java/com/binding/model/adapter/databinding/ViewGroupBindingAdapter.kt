@@ -10,7 +10,7 @@ import com.binding.model.inflate.inter.Inflate
 /**
  * Company: 中科同创
  * Description:
- * Author: created by WangKeZe on 2019/9/29 17:09
+ * Author: created by Arvin on 2019/9/29 17:09
  * Email: wkz0917@163.com
  * Phone: 15390395799
  */

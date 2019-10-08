@@ -12,7 +12,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class FragmentModule (val fragment:Fragment){
+class FragmentModule (private val fragment:Fragment){
 
     @FragmentScope
     @FragmentContext
