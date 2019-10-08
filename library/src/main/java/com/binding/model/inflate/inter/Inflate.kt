@@ -32,4 +32,6 @@ interface Inflate<Binding : ViewDataBinding> : Parse<Binding>{
         return layoutView.layout[layoutIndex]
     }
 
+    fun getViewId(): Int = 0
+
 }
