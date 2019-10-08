@@ -9,11 +9,15 @@ import com.customers.zktc.R
 import com.customers.zktc.base.cycle.BaseFragment
 import com.customers.zktc.databinding.ActivityHomeBinding
 import com.customers.zktc.inject.qualifier.manager.ActivityFragmentManager
+import com.google.android.material.tabs.TabLayout
 import io.reactivex.Observable
 import javax.inject.Inject
 
 @LayoutView(layout = [R.layout.activity_home])
-class HomeModel @Inject constructor(@ActivityFragmentManager private val fragmentManager: FragmentManager) : ViewModel<HomeActivity, ActivityHomeBinding>() {
+class HomeModel
+@Inject constructor(@ActivityFragmentManager private val fragmentManager: FragmentManager)
+    : ViewModel<HomeActivity, ActivityHomeBinding>(),
+        TabLayout.OnTabSelectedListener {
     private var currentPosition = 1
     private val fragments = ArrayList<Item<BaseFragment<*>>>()
     override fun attachView(savedInstanceState: Bundle?, t: HomeActivity) {
@@ -25,6 +29,7 @@ class HomeModel @Inject constructor(@ActivityFragmentManager private val fragmen
                 .map { fragments.addAll(it) }
                 .subscribe()
         )
+        binding!!.tabLayout.addOnTabSelectedListener(this)
     }
 
     private fun checkFragment(position: Int) {
@@ -41,4 +46,17 @@ class HomeModel @Inject constructor(@ActivityFragmentManager private val fragmen
         currentPosition = position
     }
 
+
+    override fun onTabReselected(p0: TabLayout.Tab?) {
+
+    }
+
+    override fun onTabUnselected(p0: TabLayout.Tab?) {
+
+    }
+
+    override fun onTabSelected(tab: TabLayout.Tab?) {
+
+        checkFragment(tab!!.position)
+    }
 }

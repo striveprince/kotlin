@@ -10,8 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:fullBackupContent="@xml/backup_descriptor" >
-
-
         <activity
             android:name=".base.arouter.SchemaFilterActivity"
             android:screenOrientation="portrait">
@@ -32,6 +30,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".ui.home.cart.HomeCartActivity" android:label="@string/cap_home_car"/>
+        <activity android:name=".ui.home.member.HomeMemberActivity" android:label="@string/vip"/>
 
 
     </application>
