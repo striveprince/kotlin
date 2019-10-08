@@ -6,9 +6,7 @@ import com.customers.zktc.R
 import com.customers.zktc.databinding.FragmentHomePageBinding
 import javax.inject.Inject
 
-//@LayoutView(layout=[R.layout.fragment_home_page])
-@LayoutView(layout = [R.layout.activity_home])
-
+@LayoutView(layout = [R.layout.fragment_home_page])
 class HomePageModel @Inject constructor() : ViewModel<HomePageFragment, FragmentHomePageBinding>(){
 
 }

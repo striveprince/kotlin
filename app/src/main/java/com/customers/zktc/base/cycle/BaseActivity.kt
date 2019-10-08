@@ -8,6 +8,7 @@ import com.binding.model.inflate.model.ViewModel
 import com.customers.zktc.inject.component.ActivityComponent
 import com.customers.zktc.inject.component.DaggerActivityComponent
 import com.customers.zktc.inject.component.FragmentComponent
+import com.customers.zktc.inject.module.ActivityModule
 import com.customers.zktc.ui.ZktcApplication
 import javax.inject.Inject
 
@@ -22,5 +23,7 @@ abstract class BaseActivity<VM : ViewModel<*, *>> : DataBindingActivity<Activity
     }
 
     override val component: ActivityComponent
-        get() =  DaggerActivityComponent.builder().appComponent(ZktcApplication.component).build()
+        get() =  DaggerActivityComponent.builder()
+            .activityModule(ActivityModule(this))
+            .appComponent(ZktcApplication.component).build()
 }

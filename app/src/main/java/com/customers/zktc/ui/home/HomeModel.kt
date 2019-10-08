@@ -2,6 +2,7 @@ package com.customers.zktc.ui.home
 
 import android.os.Bundle
 import androidx.fragment.app.FragmentManager
+import com.binding.model.adapter.databinding.TabLayoutBindingAdapter
 import com.binding.model.annoation.LayoutView
 import com.binding.model.inflate.inter.Item
 import com.binding.model.inflate.model.ViewModel
@@ -30,6 +31,7 @@ class HomeModel
                 .subscribe()
         )
         binding!!.tabLayout.addOnTabSelectedListener(this)
+        checkTab(0)
     }
 
     private fun checkFragment(position: Int) {
@@ -56,7 +58,13 @@ class HomeModel
     }
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
+        val p = tab!!.position
+        if(p==3)checkTab(currentPosition)
+        else checkFragment(p)
+    }
 
-        checkFragment(tab!!.position)
+    private fun checkTab(currentPosition: Int) {
+        TabLayoutBindingAdapter.setScrollPosition(binding!!.tabLayout,currentPosition)
+//        ArouterUtil.login()
     }
 }

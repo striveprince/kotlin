@@ -5,6 +5,8 @@ import com.binding.model.inflate.inter.Item
 import com.customers.zktc.base.cycle.BaseFragment
 import com.customers.zktc.ui.home.cart.HomeCartFragment
 import com.customers.zktc.ui.home.classify.HomeClassifyFragment
+import com.customers.zktc.ui.home.member.HomeMemberFragment
+import com.customers.zktc.ui.home.mine.HomeMineFragment
 import com.customers.zktc.ui.home.page.HomePageFragment
 
 class HomeFragmentEntity : Item<BaseFragment<*>> {
@@ -12,10 +14,10 @@ class HomeFragmentEntity : Item<BaseFragment<*>> {
     override fun getItem(position: Int, container: ViewGroup): BaseFragment<*> {
         if (fragment == null) {
             fragment = when (position) {
-                1 -> HomeCartFragment()
-                2 -> HomeClassifyFragment()
-                3 -> HomeClassifyFragment()
-                4 -> HomeClassifyFragment()
+                1 -> HomeClassifyFragment()
+                2 -> HomeMemberFragment()
+                3 -> HomeCartFragment()
+                4 -> HomeMineFragment()
                 else -> HomePageFragment()
             }
         }

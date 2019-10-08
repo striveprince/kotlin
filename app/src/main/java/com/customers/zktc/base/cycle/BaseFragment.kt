@@ -7,6 +7,7 @@ import com.binding.model.base.container.DataBindingFragment
 import com.binding.model.inflate.model.ViewModel
 import com.customers.zktc.inject.component.DaggerFragmentComponent
 import com.customers.zktc.inject.component.FragmentComponent
+import com.customers.zktc.inject.module.FragmentModule
 import com.customers.zktc.ui.ZktcApplication
 import javax.inject.Inject
 
@@ -22,6 +23,8 @@ abstract class BaseFragment<VM: ViewModel<*, *>>: DataBindingFragment<FragmentCo
     }
 
     override val component: FragmentComponent
-        get() =  DaggerFragmentComponent.builder().appComponent(ZktcApplication.component).build()
+        get() =  DaggerFragmentComponent.builder()
+            .fragmentModule(FragmentModule(this))
+            .appComponent(ZktcApplication.component).build()
 
 }
