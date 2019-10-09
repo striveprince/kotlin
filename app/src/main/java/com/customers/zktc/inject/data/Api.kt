@@ -3,6 +3,7 @@ package com.customers.zktc.inject.data
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.net.Uri
 import com.binding.model.App
 import com.customers.zktc.R
 import com.customers.zktc.base.rxjava.exception.RestfulException
@@ -11,10 +12,13 @@ import com.customers.zktc.inject.data.map.MapApi
 import com.customers.zktc.inject.data.net.NetApi
 import com.customers.zktc.inject.data.oss.OssApi
 import com.customers.zktc.inject.data.preference.PreferenceApi
+import com.pgyersdk.update.DownloadFileListener
 import com.pgyersdk.update.PgyUpdateManager
 import com.pgyersdk.update.UpdateManagerListener
 import com.pgyersdk.update.javabean.AppBean
 import io.reactivex.*
+import okio.Okio
+import java.io.File
 import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
@@ -30,14 +34,14 @@ class Api(
         val builder = PgyUpdateManager.Builder()
         return Observable.just(0)
             .delay(2, TimeUnit.SECONDS)
-            .flatMap {
-                Observable.create(ObservableOnSubscribe<AppBean> {emitter->
+            .flatMap { Observable.create(ObservableOnSubscribe<AppBean> {emitter->
                     builder.setUpdateManagerListener(object : UpdateManagerListener {
                         override fun onUpdateAvailable(p0: AppBean) {
                             AlertDialog.Builder(context)
                                 .setNegativeButton(R.string.cancel) { _,_ -> emitter.onError(RestfulException()) }
                                 .setPositiveButton(R.string.update){_,_-> emitter.onNext(p0)}
                                 .show()
+
                         }
                         override fun checkUpdateFailed(p0: Exception) {
                             emitter.onError(p0)
@@ -50,8 +54,13 @@ class Api(
             .flatMap{
                 netApi.download(it.downloadURL)
 //                    .compose(ErrorTransform())
-                    .toObservable()
-
+                    .toObservable() }
+            .map {
+                val file = File("")
+                val sink = Okio.buffer(Okio.sink(file))
+                sink.writeAll(it.source())
+                sink.close()
+                file
             }
     }
 
