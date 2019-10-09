@@ -4,9 +4,13 @@ import android.content.Context
 import com.alibaba.sdk.android.oss.ClientConfiguration
 import com.alibaba.sdk.android.oss.OSSClient
 import com.customers.zktc.BuildConfig
+import com.customers.zktc.inject.data.Api
+import com.customers.zktc.inject.data.database.DatabaseApi
+import com.customers.zktc.inject.data.map.MapApi
 import com.customers.zktc.inject.data.net.NetApi
 import com.customers.zktc.inject.data.oss.OssApi
 import com.customers.zktc.inject.data.oss.OssSignCredentialProvider
+import com.customers.zktc.inject.data.preference.PreferenceApi
 import com.customers.zktc.inject.interceptor.NetInterceptor
 import com.customers.zktc.inject.qualifier.context.AppContext
 import com.customers.zktc.inject.scope.ApplicationScope
@@ -22,11 +26,15 @@ import java.util.concurrent.TimeUnit
 
 @Module
 class DataModule {
+
+
+
     @Provides
     @ApplicationScope
-    internal fun provideReadApi(okHttpClient: OkHttpClient, netInterceptor: NetInterceptor): NetApi {
+    internal fun provideNetApi(okHttpClient: OkHttpClient): NetApi {
         val client = okHttpClient.newBuilder()
-            .addInterceptor(netInterceptor).build()
+//            .addInterceptor(netInterceptor)
+            .build()
         return Retrofit.Builder()
             .baseUrl(BuildConfig.ApiHost)
             //                .addConverterFactory(GsonConverterFactory.create())
@@ -64,9 +72,35 @@ class DataModule {
         return OSSClient(context, BuildConfig.endpoint, credentialProvider1)
     }
 
+
+    @Provides
+    @ApplicationScope
+    internal fun provideDataBaseApi():DatabaseApi{
+        return DatabaseApi()
+    }
+
+    @Provides
+    @ApplicationScope
+    internal fun provideMapApi():MapApi{
+        return MapApi()
+    }
+
     @Provides
     @ApplicationScope
     internal fun provideOssApi(client: OSSClient): OssApi {
         return OssApi(client)
+    }
+
+
+    @Provides
+    @ApplicationScope
+    internal fun providePreferenceApi(@AppContext context: Context): PreferenceApi {
+        return PreferenceApi(context)
+    }
+
+    @Provides
+    @ApplicationScope
+    internal  fun provideApi(@AppContext context: Context,netApi: NetApi,databaseApi:DatabaseApi,mapApi:MapApi,ossApi: OssApi,preferenceApi: PreferenceApi):Api{
+        return Api(context,netApi,databaseApi,mapApi,ossApi,preferenceApi)
     }
 }

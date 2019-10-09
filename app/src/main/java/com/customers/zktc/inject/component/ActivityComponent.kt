@@ -9,4 +9,8 @@ import dagger.Component
 @Component(dependencies = [AppComponent::class], modules = [ActivityModule::class])
 interface ActivityComponent{
     fun inject(activity: HomeActivity)
+
+    object Config{
+       const val zktc = "/zktc/"
+    }
 }

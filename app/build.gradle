@@ -50,8 +50,8 @@ android {
         }
 
         checkout {
-            minifyEnabled true//混淆打包
-            shrinkResources true//去掉不用资源
+            minifyEnabled false//混淆打包
+            shrinkResources false//去掉不用资源
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "boolean", "LOG_DEBUG", "false"//release时关闭日志
             buildConfigField "String", "ApiHost", "\"http://dev.zhongketongchuang.com\""
@@ -70,8 +70,8 @@ android {
         }
 
         release {
-            minifyEnabled true//混淆打包
-            shrinkResources true//去掉不用资源
+            minifyEnabled false//混淆打包
+            shrinkResources false//去掉不用资源
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "boolean", "LOG_DEBUG", "false"//release时关闭日志
             buildConfigField "String", "ApiHost", "\"http://budai.zhongketongchuang.com\""
@@ -107,9 +107,7 @@ kapt.generateStubs = true
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(path: ':library')
-//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     kapt "com.android.databinding:compiler:3.1.4"
-//    implementation "com.android.support.const"
     implementation "androidx.appcompat:appcompat:$androidx_version"
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta2'
     implementation "androidx.recyclerview:recyclerview:1.0.0"
@@ -136,7 +134,7 @@ dependencies {
     implementation 'com.alibaba:arouter-api:1.2.4'
     implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
     implementation 'com.aliyun.dpa:oss-android-sdk:2.9.2'
-
+    implementation 'com.pgyersdk:sdk:3.0.2'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 

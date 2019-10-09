@@ -41,4 +41,9 @@ object ViewGroupBindingAdapter {
             viewGroup.addView(view)
         view.setTag(R.id.inflate,e)
     }
+
+    @BindingAdapter(value = ["addInflate"])
+    fun <E : Inflate<*>> addInflate(viewGroup: ViewGroup,e :E){
+        addInflate(viewGroup,e,null)
+    }
 }

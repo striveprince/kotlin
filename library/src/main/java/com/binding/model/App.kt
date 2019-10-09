@@ -11,12 +11,13 @@ class App constructor(val application: Application) : Application.ActivityLifecy
     companion object {
         var vm = 0
         var debug = true
+        val stack = Stack<Activity>()
     }
 
     init {
         application.registerActivityLifecycleCallbacks(this)
     }
-    val stack = Stack<Activity>()
+
     override fun onActivityPaused(activity: Activity?) {}
     override fun onActivityResumed(activity: Activity?) {}
     override fun onActivityStarted(activity: Activity?) {}
@@ -57,4 +58,5 @@ class App constructor(val application: Application) : Application.ActivityLifecy
     fun getWeightHeight(sum: Int): Int {
         return getScreenHeight() / sum
     }
+
 }

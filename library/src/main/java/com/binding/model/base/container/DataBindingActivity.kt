@@ -11,7 +11,6 @@ import com.binding.model.base.view.SwipeBackLayout.Companion.FROM_LEFT
 abstract class DataBindingActivity<C> : AppCompatActivity(), CycleContainer<C> {
     override val dataActivity = this
     override val cycle= lifecycle
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val rootView = inject(savedInstanceState, null, false)
@@ -30,5 +29,5 @@ abstract class DataBindingActivity<C> : AppCompatActivity(), CycleContainer<C> {
             setContentView(rootView)
     }
 
-    fun isSwipe() = FROM_LEFT
+    open fun isSwipe() = FROM_LEFT
 }

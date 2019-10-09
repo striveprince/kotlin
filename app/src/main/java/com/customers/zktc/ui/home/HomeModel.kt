@@ -7,10 +7,13 @@ import com.binding.model.annoation.LayoutView
 import com.binding.model.inflate.inter.Item
 import com.binding.model.inflate.model.ViewModel
 import com.customers.zktc.R
+import com.customers.zktc.base.arouter.ARouterUtil
 import com.customers.zktc.base.cycle.BaseFragment
 import com.customers.zktc.databinding.ActivityHomeBinding
+import com.customers.zktc.inject.data.Api
 import com.customers.zktc.inject.qualifier.manager.ActivityFragmentManager
 import com.google.android.material.tabs.TabLayout
+import com.pgyersdk.update.PgyUpdateManager
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -19,20 +22,33 @@ class HomeModel
 @Inject constructor(@ActivityFragmentManager private val fragmentManager: FragmentManager)
     : ViewModel<HomeActivity, ActivityHomeBinding>(),
         TabLayout.OnTabSelectedListener {
+
+    @Inject lateinit var api: Api
     private var currentPosition = 1
     private val fragments = ArrayList<Item<BaseFragment<*>>>()
+
+
     override fun attachView(savedInstanceState: Bundle?, t: HomeActivity) {
         super.attachView(savedInstanceState, t)
+        initFragment()
+        checkUpdate()
+    }
+
+    private fun checkUpdate() {
+        addDisposables(api.checkUpdate().subscribe())
+    }
+
+    private fun initFragment() {
         addDisposables(
-            Observable.range(0,5)
+            Observable.range(0, 5)
                 .map { HomeFragmentEntity() }
                 .toList()
                 .map { fragments.addAll(it) }
-                .subscribe()
+                .doOnSuccess { binding!!.tabLayout.addOnTabSelectedListener(this)}
+                .subscribe({checkTab(0)},{it.printStackTrace()})
         )
-        binding!!.tabLayout.addOnTabSelectedListener(this)
-        checkTab(0)
     }
+
 
     private fun checkFragment(position: Int) {
         if (position < 0 || position >= fragments.size || position == currentPosition) return
@@ -65,6 +81,8 @@ class HomeModel
 
     private fun checkTab(currentPosition: Int) {
         TabLayoutBindingAdapter.setScrollPosition(binding!!.tabLayout,currentPosition)
-//        ArouterUtil.login()
+        ARouterUtil.login()
     }
+
+
 }

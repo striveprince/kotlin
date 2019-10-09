@@ -1,30 +1,32 @@
 package com.customers.zktc.ui
 
 import androidx.multidex.MultiDexApplication
+import com.alibaba.android.arouter.launcher.ARouter
 import com.binding.model.App
 import com.customers.zktc.BR
 import com.customers.zktc.BuildConfig
 import com.customers.zktc.inject.component.AppComponent
 import com.customers.zktc.inject.component.DaggerAppComponent
+import com.customers.zktc.inject.module.AppModule
+import com.customers.zktc.inject.module.DataModule
 
 class ZktcApplication : MultiDexApplication() {
-    val appComponent: AppComponent by lazy(
-        DaggerAppComponent.builder()
-//            .appModule(AppModule(application!!))
-            ::build
-    )
 
     companion object {
-        var application: ZktcApplication? = null
+        private var application: ZktcApplication? = null
         var component: AppComponent? = null
     }
 
     override fun onCreate() {
         super.onCreate()
         application = this
+        component = DaggerAppComponent.builder()
+            .appModule(AppModule(this))
+            .build()
+        component?.inject(this)
+        ARouter.init(this)
         App(this)
         App.debug = BuildConfig.DEBUG
         App.vm = BR.vm
-        component = appComponent
     }
 }

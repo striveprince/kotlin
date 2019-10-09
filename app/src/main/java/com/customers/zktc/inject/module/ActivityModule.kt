@@ -39,6 +39,4 @@ class ActivityModule(private val activity: AppCompatActivity) {
     internal fun provideLayoutInflater(): LayoutInflater {
         return LayoutInflater.from(activity)
     }
-
-
 }

@@ -8,15 +8,17 @@ import java.lang.StringBuilder
 
 val pageWay  = false
 
+val gson = Gson()
+
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 fun findModelView(thisCls: Class<*>): LayoutView {
-    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     return thisCls.getAnnotation(LayoutView::class.java) ?:return findModelView(thisCls = thisCls.superclass)
 }
+
 inline fun <reified T> toArray(list: List<T>):Array<T>{
     return ArrayList<T>(list).toArray(arrayOf())
 }
 
-val gson = Gson()
 
 inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>(){}.type)
 inline fun <reified T> String.fromGson() = gson.fromJson<T>(this)

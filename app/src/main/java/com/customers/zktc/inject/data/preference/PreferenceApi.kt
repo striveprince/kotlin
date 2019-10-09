@@ -1,4 +1,6 @@
 package com.customers.zktc.inject.data.preference
 
-class PreferenceApi {
+import android.content.Context
+
+class PreferenceApi (val context: Context){
 }
