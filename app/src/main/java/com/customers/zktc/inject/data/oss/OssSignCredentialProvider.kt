@@ -2,11 +2,13 @@ package com.customers.zktc.inject.data.oss
 
 import android.annotation.SuppressLint
 import com.alibaba.sdk.android.oss.common.auth.OSSCustomSignerCredentialProvider
+import com.customers.zktc.inject.data.net.NetApi
 import io.reactivex.Observable
+import io.reactivex.Single
 import timber.log.Timber
 
 
-class OssSignCredentialProvider(val observable: Observable<String>) : OSSCustomSignerCredentialProvider() {
+class OssSignCredentialProvider(private val netApi: NetApi) : OSSCustomSignerCredentialProvider() {
 
     private var result = ""
     private val obj = Object()
@@ -15,8 +17,7 @@ class OssSignCredentialProvider(val observable: Observable<String>) : OSSCustomS
     @Synchronized
     override fun signContent(content: String): String {
         try {
-//            observable.subscribe({ this.accept(it) }, { BaseUtil.toast(it) })
-            observable.subscribe({this.accept(it)},{it.printStackTrace()})
+            netApi.ossApi(content).map { it.token }.subscribe({this.accept(it)},{it.printStackTrace()})
             synchronized(obj) {
                 obj.wait()
             }

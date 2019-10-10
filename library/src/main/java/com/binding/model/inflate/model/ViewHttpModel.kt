@@ -4,6 +4,7 @@ import android.text.TextUtils
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.ListUpdateCallback
 import com.binding.model.base.container.Container
 import com.binding.model.inflate.obj.RecyclerEvent
 import com.binding.model.inflate.obj.RecyclerStatus
@@ -54,4 +55,5 @@ open class ViewHttpModel<T : Container, Binding : ViewDataBinding, R> : ViewMode
     fun isRefresh(): Boolean {
         return refresh > 0
     }
+
 }

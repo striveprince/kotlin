@@ -7,7 +7,6 @@ import androidx.databinding.InverseBindingMethod
 import androidx.databinding.InverseBindingMethods
 import androidx.databinding.adapters.ListenerUtil
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-
 import com.binding.model.R
 
 

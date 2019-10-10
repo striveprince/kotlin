@@ -1,5 +1,6 @@
 package com.binding.model.adapter.recycler
 
+import androidx.databinding.ViewDataBinding
 import com.binding.model.adapter.GridInflate
 import com.binding.model.adapter.IModelAdapter
 import timber.log.Timber
@@ -8,7 +9,7 @@ import timber.log.Timber
  * Created by arvin on 2018/1/24.
  */
 
-class GridSizeLookup<E : GridInflate>(adapter: IModelAdapter<E>, private val size: Int) :
+class GridSizeLookup<E : GridInflate<in ViewDataBinding>>(adapter: IModelAdapter<E>, private val size: Int) :
     GridSpanSizeLookup<E>(adapter) {
 
     override fun getSpanSize(position: Int): Int {

@@ -6,6 +6,7 @@ import com.binding.model.adapter.databinding.TabLayoutBindingAdapter
 import com.binding.model.annoation.LayoutView
 import com.binding.model.inflate.inter.Item
 import com.binding.model.inflate.model.ViewModel
+import com.binding.model.installApkFile
 import com.customers.zktc.R
 import com.customers.zktc.base.arouter.ARouterUtil
 import com.customers.zktc.base.cycle.BaseFragment
@@ -13,17 +14,17 @@ import com.customers.zktc.databinding.ActivityHomeBinding
 import com.customers.zktc.inject.data.Api
 import com.customers.zktc.inject.qualifier.manager.ActivityFragmentManager
 import com.google.android.material.tabs.TabLayout
-import com.pgyersdk.update.PgyUpdateManager
 import io.reactivex.Observable
 import javax.inject.Inject
 
 @LayoutView(layout = [R.layout.activity_home])
 class HomeModel
-@Inject constructor(@ActivityFragmentManager private val fragmentManager: FragmentManager)
-    : ViewModel<HomeActivity, ActivityHomeBinding>(),
-        TabLayout.OnTabSelectedListener {
+@Inject constructor(@ActivityFragmentManager private val fragmentManager: FragmentManager) :
+    ViewModel<HomeActivity, ActivityHomeBinding>(),
+    TabLayout.OnTabSelectedListener {
 
-    @Inject lateinit var api: Api
+    @Inject
+    lateinit var api: Api
     private var currentPosition = 1
     private val fragments = ArrayList<Item<BaseFragment<*>>>()
 
@@ -31,11 +32,14 @@ class HomeModel
     override fun attachView(savedInstanceState: Bundle?, t: HomeActivity) {
         super.attachView(savedInstanceState, t)
         initFragment()
-        checkUpdate()
+        checkUpdate(t)
     }
 
-    private fun checkUpdate() {
-        addDisposables(api.checkUpdate().subscribe())
+    private fun checkUpdate(t: HomeActivity) {
+        addDisposables(
+            api.checkUpdate(t)
+                .subscribe({ installApkFile(t, it) }, { it.printStackTrace() })
+        )
     }
 
     private fun initFragment() {
@@ -44,8 +48,8 @@ class HomeModel
                 .map { HomeFragmentEntity() }
                 .toList()
                 .map { fragments.addAll(it) }
-                .doOnSuccess { binding!!.tabLayout.addOnTabSelectedListener(this)}
-                .subscribe({checkTab(0)},{it.printStackTrace()})
+                .doOnSuccess { binding!!.tabLayout.addOnTabSelectedListener(this) }
+                .subscribe({ checkTab(0) }, { it.printStackTrace() })
         )
     }
 
@@ -75,12 +79,12 @@ class HomeModel
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
         val p = tab!!.position
-        if(p==3)checkTab(currentPosition)
+        if (p == 3) checkTab(currentPosition)
         else checkFragment(p)
     }
 
     private fun checkTab(currentPosition: Int) {
-        TabLayoutBindingAdapter.setScrollPosition(binding!!.tabLayout,currentPosition)
+        TabLayoutBindingAdapter.setScrollPosition(binding!!.tabLayout, currentPosition)
         ARouterUtil.login()
     }
 

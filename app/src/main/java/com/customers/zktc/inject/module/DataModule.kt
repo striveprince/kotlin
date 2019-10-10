@@ -11,7 +11,6 @@ import com.customers.zktc.inject.data.net.NetApi
 import com.customers.zktc.inject.data.oss.OssApi
 import com.customers.zktc.inject.data.oss.OssSignCredentialProvider
 import com.customers.zktc.inject.data.preference.PreferenceApi
-import com.customers.zktc.inject.interceptor.NetInterceptor
 import com.customers.zktc.inject.qualifier.context.AppContext
 import com.customers.zktc.inject.scope.ApplicationScope
 import dagger.Module
@@ -54,7 +53,7 @@ class DataModule {
             .build().newBuilder()
         if (BuildConfig.DEBUG) {
             val loggingInterceptor = HttpLoggingInterceptor()
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
             httpClientBuilder.addInterceptor(loggingInterceptor)
         }
         return httpClientBuilder.build()
@@ -63,7 +62,7 @@ class DataModule {
     @Provides
     @ApplicationScope
     internal fun provideOssClient(@AppContext context: Context,netApi: NetApi): OSSClient {
-        val credentialProvider1 = OssSignCredentialProvider(netApi.ossApi().map { it.token })
+        val credentialProvider1 = OssSignCredentialProvider(netApi)
         val conf = ClientConfiguration()
         conf.connectionTimeout = 15 * 1000
         conf.socketTimeout = 15 * 1000

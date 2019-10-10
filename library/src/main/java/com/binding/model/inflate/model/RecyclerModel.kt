@@ -5,13 +5,13 @@ import androidx.databinding.ObservableField
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.binding.model.adapter.recycler.RecyclerAdapter
 import com.binding.model.base.container.Container
 import com.binding.model.inflate.inter.Inflate
 import com.binding.model.inflate.obj.RecyclerStatus
 
-class RecyclerModel<T: Container,Binding: ViewDataBinding,E : Inflate<in ViewDataBinding>>
-    private constructor(val recyclerAdapter: RecyclerAdapter<E> = RecyclerAdapter<E>())
+open class RecyclerModel<T: Container,Binding: ViewDataBinding,E : Inflate<in ViewDataBinding>>(val recyclerAdapter: RecyclerAdapter<E> = RecyclerAdapter<E>())
     : ViewArrayModel<T, Binding,E,RecyclerAdapter<E>>(recyclerAdapter) {
     val layoutManagerField:ObservableField<RecyclerView.LayoutManager> = ObservableField()
     val onScrollListener  = OnScrollListener()
@@ -23,11 +23,6 @@ class RecyclerModel<T: Container,Binding: ViewDataBinding,E : Inflate<in ViewDat
 
     fun setLayoutManager(layoutManager: LinearLayoutManager){
         layoutManagerField.set(layoutManager)
-    }
-
-    override fun onSuccess(t: List<E>) {
-        super.onSuccess(t)
-        recyclerAdapter.addListAdapter(0,t)
     }
 
     inner class OnScrollListener:RecyclerView.OnScrollListener(){
@@ -45,6 +40,9 @@ class RecyclerModel<T: Container,Binding: ViewDataBinding,E : Inflate<in ViewDat
             if(layoutManager is LinearLayoutManager){
                 val lastVisibleItem  =  layoutManager.findLastCompletelyVisibleItemPosition()
                 isLast = dy>0&&loading.get()&&(lastVisibleItem+1)>adapter.size()
+//            }else if(layoutManager is StaggeredGridLayoutManager){
+//                val lastVisibleItem  =  layoutManager.findLastCompletelyVisibleItemPositions()
+//                isLast = dy>0&&loading.get()&&(lastVisibleItem+1)>adapter.size()
             }
         }
     }

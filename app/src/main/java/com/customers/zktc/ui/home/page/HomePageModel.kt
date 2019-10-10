@@ -1,12 +1,46 @@
 package com.customers.zktc.ui.home.page
 
+import android.os.Bundle
+import android.renderscript.ScriptGroup
+import android.view.View
+import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.GridLayoutManager
+import com.binding.model.adapter.GridInflate
+import com.binding.model.adapter.recycler.GridSizeLookup
+import com.binding.model.adapter.recycler.RecyclerAdapter
 import com.binding.model.annoation.LayoutView
-import com.binding.model.inflate.model.ViewModel
+import com.binding.model.inflate.inter.Inflate
+import com.binding.model.inflate.inter.ListUpdateRecyclerCallback
+import com.binding.model.inflate.model.RecyclerModel
 import com.customers.zktc.R
 import com.customers.zktc.databinding.FragmentHomePageBinding
+import com.customers.zktc.inject.data.Api
 import javax.inject.Inject
 
 @LayoutView(layout = [R.layout.fragment_home_page])
-class HomePageModel @Inject constructor() : ViewModel<HomePageFragment, FragmentHomePageBinding>(){
+class HomePageModel @Inject constructor() :
+    RecyclerModel<HomePageFragment, FragmentHomePageBinding, GridInflate<in ViewDataBinding>>()
+//    , ListUpdateRecyclerCallback<GridInflate<ViewDataBinding>>
+{
+
+    @Inject
+    lateinit var api: Api
+    private val spanCount = 12
+    override fun attachView(savedInstanceState: Bundle?, t: HomePageFragment) {
+        super.attachView(savedInstanceState, t)
+        val layoutManager = GridLayoutManager(t.context, spanCount)
+        layoutManager.spanSizeLookup = GridSizeLookup(recyclerAdapter, spanCount)
+        layoutManagerField.set(layoutManager)
+        setRxHttp { offset, refresh -> api.homePage(offset, refresh) }
+    }
+
+    fun onSearchClick(v: View) {
+
+    }
+
+    fun onNoticeClick(v: View) {
+
+    }
+
 
 }

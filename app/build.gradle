@@ -57,6 +57,7 @@ android {
             buildConfigField "String", "ApiHost", "\"http://dev.zhongketongchuang.com\""
             buildConfigField "String", "WxAppId", "\"wx278434ee32e2723a\""
             buildConfigField "String", "WxPublicAppId", "\"wxd7fc85674c6a7a0e\""
+            buildConfigField "String", "endpoint", "\"https:xx.com\""
 //            signingConfig signingConfigs.config
             debuggable false
 
@@ -77,6 +78,7 @@ android {
             buildConfigField "String", "ApiHost", "\"http://budai.zhongketongchuang.com\""
             buildConfigField "String", "WxAppId", "\"wxab74c79cb6353b1f\""
             buildConfigField "String", "WxPublicAppId", "\"wx7b608c29a34e103f\""
+            buildConfigField "String", "endpoint", "\"https:xx.com\""
 //            signingConfig signingConfigs.config
             debuggable false
 
@@ -129,6 +131,7 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit"
     implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
     implementation  'com.scwang.smart:refresh-layout-kernel:2.0.0-alpha-1'
+    implementation  'com.scwang.smart:refresh-header-classics:2.0.0-alpha-1'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.jakewharton.timber:timber:4.5.1'
     implementation 'com.alibaba:arouter-api:1.2.4'

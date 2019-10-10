@@ -1,13 +1,25 @@
 package com.binding.model
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.view.View
+import android.view.WindowManager
+import androidx.core.content.FileProvider
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.binding.model.annoation.Event
 import com.binding.model.annoation.LayoutView
+import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.android.schedulers.AndroidSchedulers
+import java.io.File
 import java.lang.StringBuilder
 
-val pageWay  = false
-
+const val pageWay  = false
 val gson = Gson()
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -34,20 +46,140 @@ fun containsList(value: Int, list: List<*>): Boolean {
  inline fun <T, R> T.transform(block: T.() -> R): R {
     return block()
 }
+//---- file -----
+val srcFileDir = Environment.getExternalStorageDirectory().toString() + "/zktc"
+fun createWholeDir(path: String): String {
+    var path = path
+    val builder = StringBuilder()
+    builder.append(srcFileDir)
+    if (path.startsWith(srcFileDir)) {
+        path = path.replace(srcFileDir + File.separatorChar, "")
+    }
+    val dirs = path.split(File.separator.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+    for (dir in dirs) {
+        builder.append(File.separatorChar)
+        builder.append(dir)
+        if (createDir(File(builder.toString())) == FAILED) {
+            return ""
+        }
+    }
+    return builder.toString()
+}
 
-//enum class E :Event{
-//    a,b,c,d
-//}
-//fun t(){
-//    event(E.a, E.b, E.c, E.d)
-//}
-//
-//fun event(vararg event:Event):String{
-//    val s =StringBuilder()
-//    for (event in event) {
-//        s.append(event.toString())
-//        s.append("|")
-//    }
-//    s.deleteCharAt(s.length-1)
-//    return s.toString()
-//}
+
+fun installApkFile(context: Context, file: File, fileProvider: String="com.customers.zktc.fileProvider") {
+    val intent = Intent(Intent.ACTION_VIEW)
+    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        val apkUri = FileProvider.getUriForFile(context, fileProvider, file)
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        intent.setDataAndType(apkUri, "application/vnd.android.package-archive")
+    } else {
+        intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive")
+    }
+    context.startActivity(intent)
+}
+
+const val SUCCESS = 1
+const val FAILED = 0
+fun createDir(path: String): Int {
+    var path = path
+    val l = path.length
+    if (path[l - 1] == File.separatorChar) { //如果末尾是 /
+        path = path.substring(0, l - 1)
+    }
+    return createDir(File(path))
+}
+
+fun createDir(file: File): Int {
+    if (file.exists()) {
+        if (file.isDirectory)
+            return SUCCESS
+        if (!file.delete()) return FAILED// 避免他是一个文件存在
+    }
+    return if (file.mkdirs()) SUCCESS else FAILED
+}
+
+
+/**
+ * 小米
+ *
+ * @param activity
+ * @param darkmode true为深色
+ * @return
+ */
+fun setMiuiStatusBarDarkMode(activity: Activity, darkmode: Boolean): Boolean {
+    val clazz = activity.window.javaClass
+    try {
+        var darkModeFlag = 0
+        val layoutParams = Class.forName("android.view.MiuiWindowManager\$LayoutParams")
+        val field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE")
+        darkModeFlag = field.getInt(layoutParams)
+        val extraFlagField = clazz.getMethod(
+            "setExtraFlags",
+            Int::class.javaPrimitiveType,
+            Int::class.javaPrimitiveType
+        )
+        extraFlagField.invoke(activity.window, if (darkmode) darkModeFlag else 0, darkModeFlag)
+        return true
+    } catch (e: Exception) {
+    }
+
+    return false
+}
+
+/**
+ * Meizu的
+ *
+ * @param activity
+ * @param dark     true为深色
+ * @return
+ */
+fun setMeizuStatusBarDarkIcon(activity: Activity?, dark: Boolean): Boolean {
+    var result = false
+    if (activity != null) {
+        try {
+            val lp = activity.window.attributes
+            val darkFlag = WindowManager.LayoutParams::class.java
+                .getDeclaredField("MEIZU_FLAG_DARK_STATUS_BAR_ICON")
+            val meizuFlags = WindowManager.LayoutParams::class.java
+                .getDeclaredField("meizuFlags")
+            darkFlag.isAccessible = true
+            meizuFlags.isAccessible = true
+            val bit = darkFlag.getInt(null)
+            var value = meizuFlags.getInt(lp)
+            if (dark) {
+                value = value or bit
+            } else {
+                value = value and bit.inv()
+            }
+            meizuFlags.setInt(lp, value)
+            activity.window.attributes = lp
+            result = true
+        } catch (e: Exception) {
+        }
+
+    }
+    return result
+}
+
+/**
+ * 6.0以上系统，可以设置为深色字体
+ *
+ * @param activity
+ */
+fun setAllUpSixVersion(activity: Activity) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        activity.window.decorView.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+    }
+}
+
+fun <T> Single<T>.ioToMainThread():Single<T>{
+    return this.subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+}
+fun <T> Single<T>.newToMainThread():Single<T>{
+    return this.subscribeOn(Schedulers.newThread())
+        .observeOn(AndroidSchedulers.mainThread())
+}

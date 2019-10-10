@@ -308,4 +308,7 @@
     <string name="vip_shopping_title">IP会员赠送礼包大合集</string>
     <string name="noUpdate">当前已是最新版本</string>
     <string name="update">更新</string>
+    <string name="input_search_text">请输入您想搜索的内容</string>
+    <string name="location">定位中..</string>
+<!--    &#8230;-->
 </resources>
