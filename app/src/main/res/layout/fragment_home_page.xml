@@ -34,8 +34,9 @@
                 android:maxWidth="120dp"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
+                android:onClick="@{vm::onLocationClick}"
                 android:singleLine="true"
-                android:text="@string/location"
+                android:text="@{vm.city,default=@string/location}"
                 android:textColor="@android:color/white"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -87,7 +88,9 @@
         <com.scwang.smart.refresh.layout.SmartRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
         </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
     </LinearLayout>

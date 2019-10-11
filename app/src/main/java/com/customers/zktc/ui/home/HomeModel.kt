@@ -45,7 +45,7 @@ class HomeModel
     private fun initFragment() {
         addDisposables(
             Observable.range(0, 5)
-                .map { HomeFragmentEntity() }
+                .map { HomeFragmentEntity(it) }
                 .toList()
                 .map { fragments.addAll(it) }
                 .doOnSuccess { binding!!.tabLayout.addOnTabSelectedListener(this) }
@@ -84,6 +84,7 @@ class HomeModel
     }
 
     private fun checkTab(currentPosition: Int) {
+        checkFragment(currentPosition)
         TabLayoutBindingAdapter.setScrollPosition(binding!!.tabLayout, currentPosition)
         ARouterUtil.login()
     }

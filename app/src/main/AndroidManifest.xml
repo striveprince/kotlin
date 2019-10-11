@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.customers.zktc">
-
+        <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <application
         android:name=".ui.ZktcApplication"
         android:allowBackup="true"
@@ -30,10 +30,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <!--            android:label="@string/cap_home_main"-->
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity
             android:name=".ui.home.cart.HomeCartActivity"
@@ -44,6 +41,14 @@
         <activity
             android:name=".ui.user.login.LoginActivity"
             android:label="@string/login" />
+        <activity android:name=".base.util.PhoneSystemManager" />
+        <activity android:name=".ui.start.StartupActivity" android:label="@string/startup" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"

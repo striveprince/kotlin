@@ -4,6 +4,7 @@ import android.os.Bundle
 import com.alibaba.android.arouter.facade.Postcard
 import com.alibaba.android.arouter.launcher.ARouter
 import com.customers.zktc.R
+import com.customers.zktc.ui.home.HomeActivity
 import com.customers.zktc.ui.user.login.LoginActivity
 
 /**
@@ -23,6 +24,12 @@ object ARouterUtil {
     fun login(){
         ARouter.getInstance()
             .build(LoginActivity.login)
+            .navigation()
+    }
+
+    fun start() {
+        ARouter.getInstance()
+            .build(HomeActivity.home)
             .navigation()
     }
 

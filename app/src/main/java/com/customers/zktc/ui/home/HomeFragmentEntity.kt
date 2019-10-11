@@ -9,11 +9,11 @@ import com.customers.zktc.ui.home.member.HomeMemberFragment
 import com.customers.zktc.ui.home.mine.HomeMineFragment
 import com.customers.zktc.ui.home.page.HomePageFragment
 
-class HomeFragmentEntity : Item<BaseFragment<*>> {
+class HomeFragmentEntity(val p: Int) : Item<BaseFragment<*>> {
     private var fragment: BaseFragment<*>? = null
     override fun getItem(position: Int, container: ViewGroup): BaseFragment<*> {
         if (fragment == null) {
-            fragment = when (position) {
+            fragment = when (p) {
                 1 -> HomeClassifyFragment()
                 2 -> HomeMemberFragment()
                 3 -> HomeCartFragment()

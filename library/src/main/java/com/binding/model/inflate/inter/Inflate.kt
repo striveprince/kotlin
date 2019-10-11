@@ -10,7 +10,12 @@ import com.binding.model.Config
 interface Inflate<Binding : ViewDataBinding> : Parse<Binding>{
     override fun attachView(context: Context, co: ViewGroup?, attachToParent: Boolean, binding: Binding?): Binding {
         this.binding = bind(getLayoutId(), context, co, attachToParent, binding)
+        bindView(context,binding!!)
         return this.binding!!
+    }
+
+    fun bindView(context: Context, binding: Binding){
+
     }
 
     private fun <B : ViewDataBinding> bind(layoutId: Int, context: Context, co: ViewGroup?, attachToParent: Boolean, binding1: B?): B {

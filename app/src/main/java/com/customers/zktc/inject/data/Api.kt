@@ -3,6 +3,7 @@ package com.customers.zktc.inject.data
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.ViewDataBinding
 import com.binding.model.adapter.GridInflate
 import com.binding.model.createWholeDir
@@ -10,12 +11,13 @@ import com.customers.zktc.R
 import com.customers.zktc.inject.data.database.DatabaseApi
 import com.customers.zktc.inject.data.map.MapApi
 import com.customers.zktc.inject.data.net.NetApi
-import com.customers.zktc.inject.data.net.exception.RestfulException
+import com.customers.zktc.inject.data.net.exception.ApiException
 import com.customers.zktc.inject.data.oss.OssApi
 import com.customers.zktc.inject.data.preference.PreferenceApi
 import com.pgyersdk.update.PgyUpdateManager
 import com.pgyersdk.update.UpdateManagerListener
 import com.pgyersdk.update.javabean.AppBean
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.SingleEmitter
 import io.reactivex.SingleOnSubscribe
@@ -32,9 +34,7 @@ class Api(
     private val preferenceApi: PreferenceApi) {
 
     fun homePage(offset: Int, refresh: Int): Single<List<GridInflate<in ViewDataBinding>>> {
-//        netApi.banner()
-//            .compose(RestfulSingleTransformer())
-//            .
+        netApi.banner()
         return Single.just(ArrayList())
     }
 
@@ -52,7 +52,7 @@ class Api(
                             emitter.onError(p0)
                         }
                         override fun onNoUpdateAvailable() {
-                            emitter.onError(RestfulException("", context.getString(R.string.noUpdate)))
+                            emitter.onError(ApiException("", context.getString(R.string.noUpdate)))
                         }
 
                     })
@@ -65,7 +65,7 @@ class Api(
         AlertDialog.Builder(context)
             .setNegativeButton(R.string.cancel) { d, _ ->
                 d.dismiss()
-                emitter.onError(RestfulException())
+                emitter.onError(ApiException())
             }
             .setPositiveButton(R.string.update) { d, _ ->
                 emitter.onSuccess(p0)
@@ -84,6 +84,10 @@ class Api(
                 sink.close()
                 file
             }
+    }
+
+    fun locationCity(activity: AppCompatActivity): Observable<String> {
+        return mapApi.locationCity(activity)
     }
 
 

@@ -4,12 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 
 abstract class DataBindingFragment <T>: Fragment(),CycleContainer<T>{
     override val cycle = lifecycle
-    override val dataActivity:FragmentActivity by lazy { activity!! }
+    override val dataActivity:AppCompatActivity by lazy { activity!! as AppCompatActivity }
 
     fun initView(rootView: View): View {
         return rootView

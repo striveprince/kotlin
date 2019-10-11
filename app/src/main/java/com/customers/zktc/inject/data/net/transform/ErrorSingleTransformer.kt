@@ -4,7 +4,7 @@ import com.binding.model.fromGson
 import com.customers.zktc.inject.data.net.InfoEntity
 import com.customers.zktc.inject.data.net.exception.AuthenticationException
 import com.customers.zktc.inject.data.net.exception.LogoutException
-import com.customers.zktc.inject.data.net.exception.RestfulException
+import com.customers.zktc.inject.data.net.exception.ApiException
 import com.customers.zktc.inject.data.net.exception.TokenExpireException
 import io.reactivex.Single
 import io.reactivex.SingleSource
@@ -51,7 +51,7 @@ class ErrorSingleTransformer<T> : SingleTransformer<T, T> {
                     is ServiceConfigurationError -> msg = "服务器错误"
                     is JSONException -> msg = "数据解析错误"
                 }
-                Single.error<T>(RestfulException(code, msg))
+                Single.error<T>(ApiException(code, msg))
             }
             .flatMap { Single.create<T> { emitter ->
                 if(it is InfoEntity<*>){

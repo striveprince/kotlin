@@ -11,6 +11,7 @@ import com.customers.zktc.inject.data.net.NetApi
 import com.customers.zktc.inject.data.oss.OssApi
 import com.customers.zktc.inject.data.oss.OssSignCredentialProvider
 import com.customers.zktc.inject.data.preference.PreferenceApi
+import com.customers.zktc.inject.interceptor.NetInterceptor
 import com.customers.zktc.inject.qualifier.context.AppContext
 import com.customers.zktc.inject.scope.ApplicationScope
 import dagger.Module
@@ -30,9 +31,9 @@ class DataModule {
 
     @Provides
     @ApplicationScope
-    internal fun provideNetApi(okHttpClient: OkHttpClient): NetApi {
+    internal fun provideNetApi(okHttpClient: OkHttpClient,netInterceptor: NetInterceptor): NetApi {
         val client = okHttpClient.newBuilder()
-//            .addInterceptor(netInterceptor)
+            .addInterceptor(netInterceptor)
             .build()
         return Retrofit.Builder()
             .baseUrl(BuildConfig.ApiHost)
@@ -80,8 +81,8 @@ class DataModule {
 
     @Provides
     @ApplicationScope
-    internal fun provideMapApi():MapApi{
-        return MapApi()
+    internal fun provideMapApi(@AppContext context: Context):MapApi{
+        return MapApi(context)
     }
 
     @Provides

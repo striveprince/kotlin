@@ -1,16 +1,14 @@
 package com.customers.zktc.ui.home.page
 
 import android.os.Bundle
-import android.renderscript.ScriptGroup
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.ObservableField
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.GridLayoutManager
 import com.binding.model.adapter.GridInflate
 import com.binding.model.adapter.recycler.GridSizeLookup
-import com.binding.model.adapter.recycler.RecyclerAdapter
 import com.binding.model.annoation.LayoutView
-import com.binding.model.inflate.inter.Inflate
-import com.binding.model.inflate.inter.ListUpdateRecyclerCallback
 import com.binding.model.inflate.model.RecyclerModel
 import com.customers.zktc.R
 import com.customers.zktc.databinding.FragmentHomePageBinding
@@ -22,6 +20,7 @@ class HomePageModel @Inject constructor() :
     RecyclerModel<HomePageFragment, FragmentHomePageBinding, GridInflate<in ViewDataBinding>>()
 //    , ListUpdateRecyclerCallback<GridInflate<ViewDataBinding>>
 {
+    val city = ObservableField<String>("定位中...")
 
     @Inject
     lateinit var api: Api
@@ -32,6 +31,7 @@ class HomePageModel @Inject constructor() :
         layoutManager.spanSizeLookup = GridSizeLookup(recyclerAdapter, spanCount)
         layoutManagerField.set(layoutManager)
         setRxHttp { offset, refresh -> api.homePage(offset, refresh) }
+        addDisposables(api.locationCity(t.dataActivity).subscribe({ city.set(it) }, { it.printStackTrace() }))
     }
 
     fun onSearchClick(v: View) {
@@ -40,6 +40,10 @@ class HomePageModel @Inject constructor() :
 
     fun onNoticeClick(v: View) {
 
+    }
+
+    fun onLocationClick(v: View) {
+//        api.locationCity()
     }
 
 

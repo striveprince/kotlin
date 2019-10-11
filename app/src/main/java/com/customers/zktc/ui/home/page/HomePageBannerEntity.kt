@@ -1,8 +1,6 @@
 package com.customers.zktc.ui.home.page
 
 import androidx.databinding.ViewDataBinding
-import com.binding.model.adapter.GridInflate
-import com.binding.model.inflate.ViewGridInflate
 import com.binding.model.inflate.ViewInflate
 
 /**
@@ -12,9 +10,11 @@ import com.binding.model.inflate.ViewInflate
  * Email: 1033144294@qq.com
  */
 
-data class HomePageBannerEntity(
-    val a:String
-): ViewGridInflate<ViewDataBinding>(){
-    override fun getSpanSize() = 1
-
-}
+data class HomePageBannerEntity (
+    val id:Int,
+    val name:String,
+    val picture:String,
+    val viceName:String,
+    val orderBy:Int,
+    val linkUrl:String
+):ViewInflate<ViewDataBinding>()

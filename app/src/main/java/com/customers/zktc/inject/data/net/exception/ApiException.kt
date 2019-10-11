@@ -8,7 +8,7 @@ import java.lang.RuntimeException
  * Author: created by ArvinWang on 2019/10/9 17:20
  * Email: 1033144294@qq.com
  */
-open class RestfulException(code:String="",msg:String="") :RuntimeException() {
+open class ApiException(code:String="", msg:String="") :RuntimeException() {
     val code= code
     private val msg= msg
 }

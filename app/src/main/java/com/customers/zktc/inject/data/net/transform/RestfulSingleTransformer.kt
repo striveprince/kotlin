@@ -1,7 +1,7 @@
 package com.customers.zktc.inject.data.net.transform
 
 import com.customers.zktc.inject.data.net.InfoEntity
-import com.customers.zktc.inject.data.net.exception.RestfulException
+import com.customers.zktc.inject.data.net.exception.ApiException
 import io.reactivex.Single
 import io.reactivex.SingleSource
 import io.reactivex.SingleTransformer
@@ -21,7 +21,7 @@ class RestfulSingleTransformer<T> : SingleTransformer<InfoEntity<T>, T> {
                     emitter.onSuccess(it.result)
                 }
             }catch (e:Exception){
-                emitter.onError(RestfulException(it.code,it.message))
+                emitter.onError(ApiException(it.code,it.message))
             } }
         }
     }

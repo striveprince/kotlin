@@ -11,4 +11,9 @@
     <color name="transparent">#00000000</color>
     <color name="z_ff4f61">#ff4f61</color>
     <color name="z_80ffffff">#80ffffff</color>
+    <color name="gray_line">#EFEFEF</color>
+    <color name="mt_actionbar_bg">#ffffffff</color>
+    <color name="mt_btn_disable_color">#fff4f4f4</color>
+    <color name="mt_front_primary_color">#ff333333</color>
+    <color name="z_999999">#999999</color>
 </resources>

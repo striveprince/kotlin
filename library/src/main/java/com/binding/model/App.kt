@@ -9,8 +9,6 @@ class App constructor(val application: Application) : Application.ActivityLifecy
 
 
     companion object {
-        var vm = 0
-        var debug = true
         val stack = Stack<Activity>()
     }
 

@@ -1,6 +1,7 @@
 package com.customers.zktc.inject.data.net
 
 import com.customers.zktc.inject.data.oss.OssEntity
+import com.customers.zktc.ui.home.page.HomePageBannerData
 import com.customers.zktc.ui.home.page.HomePageBannerEntity
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -17,8 +18,8 @@ interface NetApi {
     @GET
     fun download(@Header("RANGE") start: Long, @Header("Config.fileName") fileName: String, @Url path: String): Single<ResponseBody>
 
-    @GET("ope/getOperationAd")
-    fun banner():Single<InfoEntity<List<HomePageBannerEntity>>>
+    @GET("/api/v2/ope/getOperationAd")
+    fun banner():Single<InfoEntity<HomePageBannerData>>
 
 
 }

@@ -14,8 +14,10 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 
 import com.binding.model.adapter.IModelAdapter
+import com.binding.model.adapter.recycler.RecyclerAdapter
 
 /**
  * Created by arvin on 2018/1/17.
@@ -43,6 +45,8 @@ object ViewBindingAdapter {
         } else if (view is AdapterViewAnimator && adapter is Adapter) {
             view.adapter = adapter
         } else if (view is AdapterView<*> && adapter is Adapter) {
+            view.adapter = adapter
+        } else if(view is ViewPager2&&adapter is RecyclerAdapter<*>){
             view.adapter = adapter
         }
     }

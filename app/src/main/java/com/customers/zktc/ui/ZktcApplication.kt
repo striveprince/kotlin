@@ -12,6 +12,7 @@ import com.customers.zktc.inject.module.AppModule
 import com.scwang.smart.refresh.footer.ClassicsFooter
 import com.scwang.smart.refresh.header.ClassicsHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
+import timber.log.Timber
 
 
 class ZktcApplication : MultiDexApplication() {
@@ -40,7 +41,11 @@ class ZktcApplication : MultiDexApplication() {
         component?.inject(this)
         ARouter.init(this)
         App(this)
-        App.debug = BuildConfig.DEBUG
-        App.vm = BR.vm
+        if(BuildConfig.DEBUG){
+            ARouter.openDebug()
+            ARouter.openLog()
+            Timber.plant(Timber.DebugTree())
+        }
+
     }
 }

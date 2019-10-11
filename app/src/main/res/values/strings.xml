@@ -5,7 +5,7 @@
 1、一卡通绑定，可同时用于支付和提现
 2、只用于提现的卡，不能用于支付
 3、不能重复绑定银行卡，若要换绑卡类型，请先解绑或删除"</string>
-    <string name="app_name">布袋好物</string>
+    <string name="app_name">布袋好物test</string>
     <string name="appbar_scrolling_view_behavior">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
     <string name="bottom_sheet_behavior">android.support.design.widget.BottomSheetBehavior</string>
     <string name="camera_permission_required">本功能需要相机权限！</string>
@@ -310,5 +310,10 @@
     <string name="update">更新</string>
     <string name="input_search_text">请输入您想搜索的内容</string>
     <string name="location">定位中..</string>
-<!--    &#8230;-->
+    <string name="setting">设置</string>
+    <string name="gps_notify_msg">需要手动去设置界面打开GPS</string>
+    <string name="should_open_gps">需要手动去设置界面打开GPS</string>
+    <string name="no_permission">请先设置权限</string>
+    <string name="startup">启动页</string>
+    <!--    &#8230;-->
 </resources>

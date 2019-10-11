@@ -116,6 +116,10 @@ open class RecyclerAdapter<E : Inflate<ViewDataBinding>> : RecyclerView.Adapter<
         return true
     }
 
+     fun addListAdapter( es: List<E>): Boolean {
+        return addListAdapter(0,es)
+    }
+
     override fun refreshListAdapter(position: Int, es: List<E>): Boolean {
         if (position == holderList.size || holderList.isEmpty()) return addListAdapter(position, es)
         val eList = ArrayList<E>()
