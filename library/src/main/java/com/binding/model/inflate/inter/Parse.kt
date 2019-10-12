@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import com.binding.model.Config
 import com.binding.model.adapter.IEventAdapter
 import com.binding.model.annoation.LayoutView
+import com.binding.model.base.RxBus
 
 interface Parse<Binding>{
     val layoutView:LayoutView
@@ -13,26 +14,35 @@ interface Parse<Binding>{
     var binding:Binding?
     var iEventAdapter: IEventAdapter<*>?
 
-    fun registerEvent() : Boolean{
-        if(isEmpty(layoutView.event)){
-            val events = layoutView.event.split("|")
-            for (event in events) {
-                Config.array.put(event,this)
-            }
-        }
-        return isEmpty(layoutView.event)
+    fun registerEvent(){
+//        RxBus
     }
 
-    fun unRegisterEvent(): Boolean{
-        if(isEmpty(layoutView.event)){
-            val events = layoutView.event.split("|")
-            for (event in events) {
-                Config.array.remove(event,this)
-            }
-        }
-        return isEmpty(layoutView.event)
-    }
+    fun unRegisterEvent(){
 
+    }
 
     fun attachView(context: Context, co: ViewGroup?, attachToParent: Boolean, t: Binding?): Binding
+
+//    fun registerEvent() : Boolean{
+//        if(isEmpty(layoutView.event)){
+//            val events = layoutView.event.split("|")
+//            for (event in events) {
+//                Config.array.put(event,this)
+//            }
+//        }
+//        return isEmpty(layoutView.event)
+//    }
+//
+//    fun unRegisterEvent(): Boolean{
+//        if(isEmpty(layoutView.event)){
+//            val events = layoutView.event.split("|")
+//            for (event in events) {
+//                Config.array.remove(event,this)
+//            }
+//        }
+//        return isEmpty(layoutView.event)
+//    }
+
+
 }

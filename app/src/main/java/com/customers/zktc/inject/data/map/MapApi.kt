@@ -24,11 +24,14 @@ class MapApi(val context: Context) {
                             if (it != null && it.errorCode == 0) {
                                 emitter.onNext(it)
                                 emitter.onComplete()
+                                mLocationClient.stopLocation()
+                                mLocationClient.unRegisterLocationListener(listener)
                             }else{
+                                mLocationClient.stopLocation()
+                                mLocationClient.unRegisterLocationListener(listener)
                                 emitter.onError(ApiException("","无法定位"))
                             }
-                            mLocationClient.stopLocation()
-                            mLocationClient.unRegisterLocationListener(listener)
+
                         }
                         mLocationOption.locationPurpose = AMapLocationClientOption.AMapLocationPurpose.SignIn
                         mLocationOption.locationMode = AMapLocationClientOption.AMapLocationMode.Hight_Accuracy

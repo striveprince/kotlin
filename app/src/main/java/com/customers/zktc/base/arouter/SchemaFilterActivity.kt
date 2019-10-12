@@ -10,9 +10,7 @@ class SchemaFilterActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val uri = intent.data
-        if (uri != null) {
-            ARouter.getInstance().build(uri).navigation()
-        }
+        uri?.let { ARouter.getInstance().build(it).navigation() }
         finish()
     }
 }

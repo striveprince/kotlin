@@ -5,7 +5,8 @@ import com.alibaba.android.arouter.facade.Postcard
 import com.alibaba.android.arouter.launcher.ARouter
 import com.customers.zktc.R
 import com.customers.zktc.ui.home.HomeActivity
-import com.customers.zktc.ui.user.login.LoginActivity
+import com.customers.zktc.ui.user.sign.SignActivity
+import com.customers.zktc.ui.user.sign.login.LoginFragment
 
 /**
  * Company: 中科同创
@@ -23,7 +24,7 @@ object ARouterUtil {
 
     fun login(){
         ARouter.getInstance()
-            .build(LoginActivity.login)
+            .build(SignActivity.sign)
             .navigation()
     }
 

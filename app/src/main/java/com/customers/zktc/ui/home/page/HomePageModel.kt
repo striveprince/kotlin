@@ -17,9 +17,7 @@ import javax.inject.Inject
 
 @LayoutView(layout = [R.layout.fragment_home_page])
 class HomePageModel @Inject constructor() :
-    RecyclerModel<HomePageFragment, FragmentHomePageBinding, GridInflate<in ViewDataBinding>>()
-//    , ListUpdateRecyclerCallback<GridInflate<ViewDataBinding>>
-{
+    RecyclerModel<HomePageFragment, FragmentHomePageBinding, GridInflate<in ViewDataBinding>>() {
     val city = ObservableField<String>("定位中...")
 
     @Inject

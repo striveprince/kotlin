@@ -7,7 +7,7 @@ import com.customers.zktc.R
 import com.customers.zktc.databinding.FragmentHomeCartBinding
 import javax.inject.Inject
 
-@LayoutView(layout = [R.layout.fragment_home_cart])
+@LayoutView(layout = [R.layout.fragment_home_cart],event = true)
 class HomeCartModel @Inject constructor(): ViewModel<Container, FragmentHomeCartBinding>(){
 
 

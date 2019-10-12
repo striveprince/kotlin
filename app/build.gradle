@@ -3,6 +3,11 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
+kapt {
+    arguments {
+        arg("moduleName", project.getName())
+    }
+}
 
 android {
     compileSdkVersion compile_sdk_version
@@ -16,12 +21,17 @@ android {
         versionName version_name
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [moduleName: project.getName()]
-            }
-        }
+//        javaCompileOptions {
+//            annotationProcessorOptions {
+//                arguments = [moduleName: project.getName()]
+//            }
+//        }
+
     }
+    androidExtensions {
+        experimental = true
+    }
+
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -29,7 +39,7 @@ android {
     }
     buildTypes {
         debug {
-            applicationIdSuffix ".debug1"
+            applicationIdSuffix ".de1"
             minifyEnabled false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -37,7 +47,7 @@ android {
             buildConfigField "String", "ApiHost", "\"http://dev.zhongketongchuang.com\""
             buildConfigField "String", "WxAppId", "\"wx278434ee32e2723a\""
             buildConfigField "String", "WxPublicAppId", "\"wxd7fc85674c6a7a0e\""
-            buildConfigField "String", "endpoint", "\"https:xx.com\""
+            buildConfigField "String", "endpoint", "\"http://oss-cn-hangzhou.aliyuncs.com\""
 //            signingConfig signingConfigs.config
             debuggable true
             manifestPlaceholders = [
@@ -57,7 +67,7 @@ android {
             buildConfigField "String", "ApiHost", "\"http://dev.zhongketongchuang.com\""
             buildConfigField "String", "WxAppId", "\"wx278434ee32e2723a\""
             buildConfigField "String", "WxPublicAppId", "\"wxd7fc85674c6a7a0e\""
-            buildConfigField "String", "endpoint", "\"https:xx.com\""
+            buildConfigField "String", "endpoint", "\"http://oss-cn-hangzhou.aliyuncs.com\""
 //            signingConfig signingConfigs.config
             debuggable false
 
@@ -78,7 +88,7 @@ android {
             buildConfigField "String", "ApiHost", "\"http://budai.zhongketongchuang.com\""
             buildConfigField "String", "WxAppId", "\"wxab74c79cb6353b1f\""
             buildConfigField "String", "WxPublicAppId", "\"wx7b608c29a34e103f\""
-            buildConfigField "String", "endpoint", "\"https:xx.com\""
+            buildConfigField "String", "endpoint", "\"http://oss-cn-hangzhou.aliyuncs.com\""
 //            signingConfig signingConfigs.config
             debuggable false
 
@@ -106,6 +116,7 @@ android {
 
 kapt.generateStubs = true
 
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(path: ':library')
@@ -124,8 +135,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     implementation "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.12'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation "com.squareup.retrofit2:retrofit:$retrofit"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit"
@@ -136,6 +147,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.alibaba:arouter-api:1.2.4'
+    kapt 'com.alibaba:arouter-compiler:1.1.4'
     implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
     implementation 'com.aliyun.dpa:oss-android-sdk:2.9.2'
     implementation 'com.pgyersdk:sdk:3.0.2'

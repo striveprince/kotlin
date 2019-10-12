@@ -8,9 +8,9 @@ import androidx.databinding.ViewDataBinding
 import com.binding.model.Config
 
 interface Inflate<Binding : ViewDataBinding> : Parse<Binding>{
-    override fun attachView(context: Context, co: ViewGroup?, attachToParent: Boolean, binding: Binding?): Binding {
+     override fun attachView(context: Context, co: ViewGroup?, attachToParent: Boolean, binding: Binding?): Binding {
         this.binding = bind(getLayoutId(), context, co, attachToParent, binding)
-        bindView(context,binding!!)
+        binding?.let { bindView(context, it) }
         return this.binding!!
     }
 

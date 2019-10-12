@@ -16,4 +16,10 @@
     <color name="mt_btn_disable_color">#fff4f4f4</color>
     <color name="mt_front_primary_color">#ff333333</color>
     <color name="z_999999">#999999</color>
+    <color name="black">#000000</color>
+    <color name="z_ee6976">#EE6976</color>
+    <color name="z_ee2d40">#ee2d40</color>
+    <color name="zktc_icon_gray">#ffa4aab3</color>
+    <color name="tff941f">#ffff941f</color>
+    <color name="tebebeb">#ffebebeb</color>
 </resources>

@@ -15,18 +15,21 @@ import com.customers.zktc.inject.data.preference.setting.SettingApi
 import javax.inject.Inject
 
 @LayoutView(layout = [R.layout.activity_startup])
-class StartupModel @Inject constructor() :ViewModel<StartupActivity,ActivityStartupBinding>(){
+class StartupModel @Inject constructor() : ViewModel<StartupActivity, ActivityStartupBinding>() {
     override fun attachView(savedInstanceState: Bundle?, t: StartupActivity) {
         super.attachView(savedInstanceState, t)
-        if(TextUtils.isEmpty(SettingApi.deviceId)){
+        if (TextUtils.isEmpty(SettingApi.deviceId)) {
             addDisposables(checkPermission(t, Manifest.permission.READ_PHONE_STATE)
                 .subscribe({
                     val tm = t.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
                     SettingApi.deviceId = tm.deviceId
                     ARouterUtil.start()
-                }, { it.printStackTrace() }))
-        }else
+                    finish()
+                }, { it.printStackTrace() })
+            )
+        } else
             ARouterUtil.start()
+        finish()
     }
 
 }

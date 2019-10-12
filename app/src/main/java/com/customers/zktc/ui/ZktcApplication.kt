@@ -12,6 +12,8 @@ import com.customers.zktc.inject.module.AppModule
 import com.scwang.smart.refresh.footer.ClassicsFooter
 import com.scwang.smart.refresh.header.ClassicsHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
+import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
 
@@ -35,10 +37,6 @@ class ZktcApplication : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         application = this
-        component = DaggerAppComponent.builder()
-            .appModule(AppModule(this))
-            .build()
-        component?.inject(this)
         ARouter.init(this)
         App(this)
         if(BuildConfig.DEBUG){
@@ -46,6 +44,12 @@ class ZktcApplication : MultiDexApplication() {
             ARouter.openLog()
             Timber.plant(Timber.DebugTree())
         }
-
+        val subscribe = Single.just(this)
+            .subscribeOn(Schedulers.newThread()).subscribe { it ->
+                component = DaggerAppComponent.builder()
+                    .appModule(AppModule(it))
+                    .build()
+                component?.inject(it)
+            }
     }
 }

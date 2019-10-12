@@ -7,13 +7,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.ViewDataBinding
 import com.binding.model.adapter.GridInflate
 import com.binding.model.createWholeDir
+import com.binding.model.ioToMainThread
 import com.customers.zktc.R
+import com.customers.zktc.base.util.restfulCompose
 import com.customers.zktc.inject.data.database.DatabaseApi
 import com.customers.zktc.inject.data.map.MapApi
 import com.customers.zktc.inject.data.net.NetApi
 import com.customers.zktc.inject.data.net.exception.ApiException
+import com.customers.zktc.inject.data.net.transform.RestfulSingleTransformer
 import com.customers.zktc.inject.data.oss.OssApi
 import com.customers.zktc.inject.data.preference.PreferenceApi
+import com.customers.zktc.inject.data.preference.user.UserEntity
+import com.customers.zktc.ui.user.sign.SignParams
 import com.pgyersdk.update.PgyUpdateManager
 import com.pgyersdk.update.UpdateManagerListener
 import com.pgyersdk.update.javabean.AppBean
@@ -31,10 +36,11 @@ class Api(
     private val databaseApi: DatabaseApi,
     private val mapApi: MapApi,
     private val ossApi: OssApi,
-    private val preferenceApi: PreferenceApi) {
+    private val preferenceApi: PreferenceApi
+) {
 
     fun homePage(offset: Int, refresh: Int): Single<List<GridInflate<in ViewDataBinding>>> {
-        netApi.banner()
+//        netApi.banner()
         return Single.just(ArrayList())
     }
 
@@ -43,21 +49,25 @@ class Api(
         return Single.just(0)
             .delay(2, TimeUnit.SECONDS)
             .flatMap {
-                Single.create(SingleOnSubscribe  <AppBean> { emitter ->
+                Single.create(SingleOnSubscribe<AppBean> { emitter ->
                     builder.setUpdateManagerListener(object : UpdateManagerListener {
                         override fun onUpdateAvailable(p0: AppBean) {
                             updateDialog(context, emitter, p0)
                         }
+
                         override fun checkUpdateFailed(p0: Exception) {
                             emitter.onError(p0)
                         }
+
                         override fun onNoUpdateAvailable() {
                             emitter.onError(ApiException("", context.getString(R.string.noUpdate)))
                         }
 
                     })
                 })
+
             }
+            .ioToMainThread()
             .flatMap { download(it) }
     }
 
@@ -76,18 +86,28 @@ class Api(
 
     private fun download(it: AppBean): Single<File> {
         val fileName = "/update/zktc_" + it.versionName + ".apk"
-        return netApi.download(0,fileName,it.downloadURL)
+        return netApi.download(0, fileName, it.downloadURL)
             .map {
                 val file = File(createWholeDir(fileName))
                 val sink = Okio.buffer(Okio.sink(file))
                 sink.writeAll(it.source())
                 sink.close()
                 file
-            }
+            }.ioToMainThread()
     }
 
     fun locationCity(activity: AppCompatActivity): Observable<String> {
         return mapApi.locationCity(activity)
+    }
+
+    fun passwordLogin(params: SignParams?) :Single<UserEntity>{
+        return netApi.passwordLogin(params)
+            .restfulCompose()
+    }
+
+    fun wechatLogin(params: SignParams?): Single<UserEntity> {
+        return netApi.wechatLogin(params)
+            .restfulCompose()
     }
 
 

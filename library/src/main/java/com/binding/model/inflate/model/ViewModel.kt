@@ -23,13 +23,14 @@ abstract class ViewModel<T: Container,Binding:ViewDataBinding> : ViewInflate<Bin
     private var bundle: Bundle? = null
     @Transient private var weakReference: WeakReference<T>? = null
     private val disposables = ListCompositeDisposable()
-
+    private lateinit var t:T
     @Suppress("UNCHECKED_CAST")
     fun attachContainer(obj: Any, co: ViewGroup?, attachToParent: Boolean, savedInstanceState: Bundle?): Binding {
         val t = obj as T
+        this.t = t
         val binding = attachView(t.dataActivity, co, attachToParent, null)
         weakReference = WeakReference(t)
-        if(t is CycleContainer<*>)t.cycle.addObserver(this)
+        if(t is CycleContainer<*>) t.cycle.addObserver(this)
         path = t.dataActivity.intent.getStringExtra(Config.path)
         bundle = t.dataActivity.intent.getBundleExtra(Config.bundle)
         attachView(savedInstanceState, t)
@@ -40,6 +41,13 @@ abstract class ViewModel<T: Container,Binding:ViewDataBinding> : ViewInflate<Bin
 
     }
 
+    fun finish(){
+        t.dataActivity.finish()
+    }
+
+    fun onBackPress(){
+        t.dataActivity.onBackPressed()
+    }
 
     fun addDisposables(disposable: Disposable){
         disposables.add(disposable)

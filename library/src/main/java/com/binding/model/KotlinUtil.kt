@@ -9,30 +9,58 @@ import android.os.Environment
 import android.view.View
 import android.view.WindowManager
 import androidx.core.content.FileProvider
+import androidx.lifecycle.LifecycleOwner
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.binding.model.annoation.Event
 import com.binding.model.annoation.LayoutView
+import com.binding.model.base.RxBus
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.android.schedulers.AndroidSchedulers
 import java.io.File
 import java.lang.StringBuilder
+import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle
+import androidx.lifecycle.Lifecycle
+import com.trello.rxlifecycle3.LifecycleProvider
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.R
+import androidx.lifecycle.LifecycleObserver
+import io.reactivex.ObservableTransformer
 
-const val pageWay  = false
+
+const val pageWay = false
 val gson = Gson()
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 fun findModelView(thisCls: Class<*>): LayoutView {
-    return thisCls.getAnnotation(LayoutView::class.java) ?:return findModelView(thisCls = thisCls.superclass)
+    return thisCls.getAnnotation(LayoutView::class.java)
+        ?: return findModelView(thisCls = thisCls.superclass)
 }
 
-inline fun <reified T> toArray(list: List<T>):Array<T>{
+inline fun <reified T> toArray(list: List<T>): Array<T> {
     return ArrayList<T>(list).toArray(arrayOf())
 }
 
+inline fun <reified E> rxBus(owner: LifecycleOwner): Observable<E> {
+    val provider = AndroidLifecycle.createLifecycleProvider(owner)
+    return rxBus<E>()
+        .compose(provider.bindToLifecycle<E>())
+}
 
-inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>(){}.type)
+inline fun <reified E> rxBus(): Observable<E> {
+    return RxBus.getInstance()
+        .toObservable(E::class.java)
+}
+fun busPost(any: Any){
+    return RxBus.getInstance().send(any)
+}
+
+
+inline fun <reified T> Gson.fromJson(json: String) =
+    this.fromJson<T>(json, object : TypeToken<T>() {}.type)
+
 inline fun <reified T> String.fromGson() = gson.fromJson<T>(this)
 
 fun contain(value: Int, min: Int, max: Int): Boolean {
@@ -43,11 +71,13 @@ fun containsList(value: Int, list: List<*>): Boolean {
     return contain(value, 0, list.size)
 }
 
- inline fun <T, R> T.transform(block: T.() -> R): R {
+inline fun <T, R> T.transform(block: T.() -> R): R {
     return block()
 }
+
 //---- file -----
 val srcFileDir = Environment.getExternalStorageDirectory().toString() + "/zktc"
+
 fun createWholeDir(path: String): String {
     var path = path
     val builder = StringBuilder()
@@ -67,7 +97,11 @@ fun createWholeDir(path: String): String {
 }
 
 
-fun installApkFile(context: Context, file: File, fileProvider: String="com.customers.zktc.fileProvider") {
+fun installApkFile(
+    context: Context,
+    file: File,
+    fileProvider: String = "com.customers.zktc.fileProvider"
+) {
     val intent = Intent(Intent.ACTION_VIEW)
     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -175,11 +209,12 @@ fun setAllUpSixVersion(activity: Activity) {
     }
 }
 
-fun <T> Single<T>.ioToMainThread():Single<T>{
+fun <T> Single<T>.ioToMainThread(): Single<T> {
     return this.subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
 }
-fun <T> Single<T>.newToMainThread():Single<T>{
+
+fun <T> Single<T>.newToMainThread(): Single<T> {
     return this.subscribeOn(Schedulers.newThread())
         .observeOn(AndroidSchedulers.mainThread())
 }

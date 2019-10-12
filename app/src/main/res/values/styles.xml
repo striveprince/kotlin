@@ -13,4 +13,16 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">false</item>
     </style>
+
+
+    <declare-styleable name="VerificationCodeView">
+        <attr name="vCodeBackgroundFocus" format="reference" />
+        <attr name="vCodeBackgroundNormal" format="reference" />
+        <attr name="vCodeDataLength" format="integer" />
+        <attr name="vCodeMargin" format="dimension" />
+        <attr name="vCodeHeight" format="dimension" />
+        <attr name="vCodeTextColor" format="color" />
+        <attr name="vCodeTextSize" format="dimension" />
+        <attr name="vCodeWidth" format="dimension" />
+    </declare-styleable>
 </resources>
