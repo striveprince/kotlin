@@ -54,12 +54,12 @@
                 android:inputType="phone"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:text="@={params.phone}"
+                android:text="@={params.mobile}"
                 android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.customers.zktc.base.view.VerificationCodeView
-            android:id="@+id/textInputLayout2"
+            android:id="@+id/code_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="23.0dp"
@@ -89,12 +89,13 @@
             android:background="@drawable/login_button_selector"
             android:gravity="center"
             android:text="@string/get_code"
-            android:enabled="@{vm.phoneLogin}"
+            android:onClick="@{vm::onCodeClick}"
+            android:enabled="@{vm.enablePhone}"
             android:textColor="@color/login_selector"
             android:textSize="20.0sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+            app:layout_constraintTop_toBottomOf="@+id/code_view" />
 
         <TextView
             android:id="@+id/login_code"

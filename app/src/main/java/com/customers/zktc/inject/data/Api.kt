@@ -9,9 +9,11 @@ import com.binding.model.adapter.GridInflate
 import com.binding.model.createWholeDir
 import com.binding.model.ioToMainThread
 import com.customers.zktc.R
+import com.customers.zktc.base.util.errorCompose
 import com.customers.zktc.base.util.restfulCompose
 import com.customers.zktc.inject.data.database.DatabaseApi
 import com.customers.zktc.inject.data.map.MapApi
+import com.customers.zktc.inject.data.net.InfoEntity
 import com.customers.zktc.inject.data.net.NetApi
 import com.customers.zktc.inject.data.net.exception.ApiException
 import com.customers.zktc.inject.data.net.transform.RestfulSingleTransformer
@@ -36,8 +38,7 @@ class Api(
     private val databaseApi: DatabaseApi,
     private val mapApi: MapApi,
     private val ossApi: OssApi,
-    private val preferenceApi: PreferenceApi
-) {
+    private val preferenceApi: PreferenceApi) {
 
     fun homePage(offset: Int, refresh: Int): Single<List<GridInflate<in ViewDataBinding>>> {
 //        netApi.banner()
@@ -108,6 +109,19 @@ class Api(
     fun wechatLogin(params: SignParams?): Single<UserEntity> {
         return netApi.wechatLogin(params)
             .restfulCompose()
+    }
+
+    fun code(): Single<InfoEntity<String>> {
+        return netApi.code().errorCompose()
+    }
+
+    fun codeLogin(params:SignParams): Single<UserEntity> {
+        return netApi.codeLogin(params)
+            .restfulCompose()
+    }
+
+    fun modifyPassword(): Single<String> {
+        return netApi.modifyPassword()
     }
 
 

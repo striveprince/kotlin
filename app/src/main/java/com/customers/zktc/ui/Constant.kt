@@ -7,5 +7,6 @@ package com.customers.zktc.ui
  * Email: 1033144294@qq.com
  */
 object Constant {
+    const val path: String = "path"
     const val params = "params"
 }

@@ -12,7 +12,6 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.LifecycleOwner
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.binding.model.annoation.Event
 import com.binding.model.annoation.LayoutView
 import com.binding.model.base.RxBus
 import io.reactivex.Observable
@@ -22,12 +21,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import java.io.File
 import java.lang.StringBuilder
 import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle
-import androidx.lifecycle.Lifecycle
-import com.trello.rxlifecycle3.LifecycleProvider
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import android.R
-import androidx.lifecycle.LifecycleObserver
-import io.reactivex.ObservableTransformer
+import android.text.Html
+import com.binding.model.base.Text
 
 
 const val pageWay = false
@@ -79,13 +74,13 @@ inline fun <T, R> T.transform(block: T.() -> R): R {
 val srcFileDir = Environment.getExternalStorageDirectory().toString() + "/zktc"
 
 fun createWholeDir(path: String): String {
-    var path = path
+    var path1 = path
     val builder = StringBuilder()
     builder.append(srcFileDir)
-    if (path.startsWith(srcFileDir)) {
-        path = path.replace(srcFileDir + File.separatorChar, "")
+    if (path1.startsWith(srcFileDir)) {
+        path1 = path1.replace(srcFileDir + File.separatorChar, "")
     }
-    val dirs = path.split(File.separator.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+    val dirs = path1.split(File.separator.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
     for (dir in dirs) {
         builder.append(File.separatorChar)
         builder.append(dir)
@@ -218,3 +213,22 @@ fun <T> Single<T>.newToMainThread(): Single<T> {
     return this.subscribeOn(Schedulers.newThread())
         .observeOn(AndroidSchedulers.mainThread())
 }
+
+
+
+fun htmlText(vararg texts: Text): CharSequence {
+    val builder = StringBuilder()
+    for (text in texts) builder.append(text)
+    return Html.fromHtml(builder.toString())
+}
+
+fun h(text: String,color: Int, big: Int=0,line: Boolean=false): Text {
+    return Text(text, color, big, line)
+}
+
+fun h(text: String,color: String="", big: Int=0,line: Boolean=false): Text {
+    return Text(text, color, big, line)
+}
+
+
+

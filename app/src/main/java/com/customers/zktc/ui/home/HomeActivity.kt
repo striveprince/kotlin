@@ -1,6 +1,8 @@
 package com.customers.zktc.ui.home
 
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.binding.model.base.rotate.TimeEntity
+import com.binding.model.base.rotate.TimingEntity
 import com.binding.model.base.view.SwipeBackLayout.Companion.FROM_NO
 import com.customers.zktc.base.cycle.BaseActivity
 import com.customers.zktc.inject.component.ActivityComponent.Config.zktc
@@ -12,4 +14,6 @@ class HomeActivity : BaseActivity<HomeModel>() {
     override fun isSwipe(): Int {
         return FROM_NO
     }
+
+
 }

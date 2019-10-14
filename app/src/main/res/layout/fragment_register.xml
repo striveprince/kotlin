@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
-            android:text="@string/login"
+            android:text="@string/register"
             android:textColor="@color/black"
             android:textSize="20.0sp"
             android:textStyle="bold"
@@ -58,10 +58,51 @@
                 android:inputType="phone"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:text="@={params.phone}"
+                android:text="@={params.mobile}"
                 android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginRight="14dp"
+            android:background="@drawable/icaile_white_bg_with_indent_bottom_line"
+            android:hint="@string/code"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+
+            <!--suppress AndroidUnknownAttribute -->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_edit_code"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:afterTextChanged="@{vm::onCodeFinish}"
+                android:background="@color/transparent"
+                android:drawablePadding="14dp"
+                android:enabled="@{vm.enableCodeInput}"
+                android:inputType="phone"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="@={params.smsCode}"
+                android:textColor="@color/black" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:text="@string/get_code"
+            android:onClick="@{vm::onCodeClick}"
+            android:textColor="@android:color/white"
+            android:layout_width="100dp"
+            android:enabled="@{vm.enablePhone}"
+            android:layout_height="34dp"
+            android:background="@drawable/login_button_selector"
+            app:layout_constraintBottom_toBottomOf="@+id/textInputCode"
+            app:layout_constraintEnd_toEndOf="@+id/textInputCode"
+            app:layout_constraintTop_toTopOf="@+id/textInputCode" />
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout2"
             android:layout_width="match_parent"
@@ -74,10 +115,11 @@
             android:hint="@string/password"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+            app:layout_constraintTop_toBottomOf="@+id/textInputCode">
 
             <!--suppress AndroidUnknownAttribute -->
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputPassword"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:afterTextChanged="@{vm::onPasswordFinish}"
@@ -90,22 +132,86 @@
                 android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/forget_pass"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_gravity="center_vertical"
-            android:gravity="center"
-            android:text="@string/forget_password"
-            android:textSize="14.0sp"
-            app:layout_constraintBottom_toBottomOf="@+id/textInputLayout2"
-            app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginRight="14dp"
+            android:background="@drawable/icaile_white_bg_with_indent_bottom_line"
+            android:hint="@string/confirm_password"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
+
+            <!--suppress AndroidUnknownAttribute -->
+<!--            saveEnabled-->
+            <!--        android:enabled="@={vm.enablePassword}"-->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputConfirmPassword"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:afterTextChanged="@{vm::onPasswordConfirmFinish}"
+                android:background="@color/transparent"
+                android:drawablePadding="14dp"
+                android:inputType="phone"
+                android:enabled="@{vm.enablePassword}"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="@={params.confirmPassword}"
+                android:textColor="@color/black" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputInviteCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginRight="14dp"
+            android:background="@drawable/icaile_white_bg_with_indent_bottom_line"
+            android:hint="@string/invite_code"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputConfirmPassword">
+
+            <!--suppress AndroidUnknownAttribute -->
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:afterTextChanged="@{vm::onInviteCodeFinish}"
+                android:background="@color/transparent"
+                android:drawablePadding="14dp"
+                android:inputType="phone"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="@={params.invitationCode}"
+                android:textColor="@color/black" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="match_parent"
+            android:checked="@={vm.enableAgreement,default=true}"
+            android:layout_height="50dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:button="@drawable/sex_checked_select"
+            android:drawablePadding="0dp"
+            android:text="@string/agreement"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputInviteCode" />
 
         <Button
             android:id="@+id/get_login"
             android:layout_width="0dp"
-            android:enabled="@{vm.enablePhone&amp;&amp;vm.enablePassword}"            android:layout_height="46.0dp"
+            android:layout_height="46.0dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
@@ -114,38 +220,29 @@
             android:layout_marginRight="30dp"
             android:background="@drawable/login_button_selector"
             android:gravity="center"
-            android:text="@string/login_account"
+            android:text="@string/agree_and_register"
+            android:enabled="@{vm.enableConfirm&amp;&amp;vm.enableCode&amp;&amp;vm.enableAgreement}"
             android:textColor="@color/login_selector"
             android:textSize="20.0sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+            app:layout_constraintTop_toBottomOf="@+id/checkbox" />
 
         <TextView
             android:id="@+id/login_code"
             android:layout_width="wrap_content"
+            android:onClick="@{vm::onPasswordLoginClick}"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:paddingLeft="30dp"
             android:paddingTop="10dp"
             android:paddingRight="30dp"
             android:paddingBottom="10dp"
-            android:text="@string/verification_code_login"
+            android:text="@string/account_pwd_login"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/get_login" />
 
-        <TextView
-            android:id="@+id/goto_register"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:paddingLeft="30dp"
-            android:paddingTop="10dp"
-            android:paddingRight="30dp"
-            android:paddingBottom="10dp"
-            android:text="@string/new_user_register"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/get_login" />
+
 
         <TextView
             android:layout_width="wrap_content"

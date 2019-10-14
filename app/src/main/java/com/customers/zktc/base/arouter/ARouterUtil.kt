@@ -4,6 +4,7 @@ import android.os.Bundle
 import com.alibaba.android.arouter.facade.Postcard
 import com.alibaba.android.arouter.launcher.ARouter
 import com.customers.zktc.R
+import com.customers.zktc.ui.Constant
 import com.customers.zktc.ui.home.HomeActivity
 import com.customers.zktc.ui.user.sign.SignActivity
 import com.customers.zktc.ui.user.sign.login.LoginFragment
@@ -22,9 +23,10 @@ object ARouterUtil {
             .with(bundle)
     }
 
-    fun login(){
+    fun login(path:String = LoginFragment.login){
         ARouter.getInstance()
             .build(SignActivity.sign)
+            .withString(Constant.path,path)
             .navigation()
     }
 

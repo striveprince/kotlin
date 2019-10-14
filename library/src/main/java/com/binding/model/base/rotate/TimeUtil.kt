@@ -17,7 +17,7 @@ import java.util.HashMap
  */
 
 
-class TimeUtil private constructor() : Runnable {
+class TimeUtil constructor(): Runnable {
 
     init {
         handler.postDelayed(this, 1000)
@@ -32,9 +32,6 @@ class TimeUtil private constructor() : Runnable {
         handler.postDelayed(this, duration)
     }
 
-    fun add(timeEntity: TimeEntity) {
-        hashMap[timeEntity] = true
-    }
 
     fun switching(timeEntity: TimeEntity, state: Int) {
         if ((state == 0) xor hashMap[timeEntity]!!) {
@@ -54,8 +51,12 @@ class TimeUtil private constructor() : Runnable {
     }
 
     companion object {
+        val instance = TimeUtil()
         private val handler = Handler()
         private val hashMap = HashMap<TimeEntity, Boolean>()
-        val instance = TimeUtil()
+
+        fun add(timeEntity: TimeEntity) {
+            hashMap[timeEntity] = true
+        }
     }
 }

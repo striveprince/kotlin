@@ -13,6 +13,10 @@ import kotlinx.android.parcel.Parcelize
 @SuppressLint("ParcelCreator")
 @Parcelize
 data class SignParams (
-    var phone:String = "",
-    var password:String = ""
+    var mobile:String = "",
+    var smsCode:String = "",
+    var uid:String = "",
+    var invitationCode:String = "",
+    var password:String = "",
+    @Transient var confirmPassword:String = ""
 ): Parcelable

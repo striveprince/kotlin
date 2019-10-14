@@ -60,4 +60,6 @@ abstract class ViewModel<T: Container,Binding:ViewDataBinding> : ViewInflate<Bin
         weakReference?.clear()
         removeBinding()
     }
+
+
 }

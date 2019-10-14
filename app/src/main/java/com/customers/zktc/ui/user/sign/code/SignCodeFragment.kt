@@ -14,6 +14,6 @@ import com.customers.zktc.ui.user.sign.code.SignCodeFragment.Companion.signCode
 @Route(path = signCode)
 class SignCodeFragment:BaseFragment<SignCodeModel>() {
     companion object{
-        const val signCode = fragment+"code"
+        const val signCode = fragment+"smsCode"
     }
 }

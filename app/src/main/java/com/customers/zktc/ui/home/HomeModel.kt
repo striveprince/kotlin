@@ -88,6 +88,4 @@ class HomeModel
         TabLayoutBindingAdapter.setScrollPosition(binding!!.tabLayout, currentPosition)
         ARouterUtil.login()
     }
-
-
 }

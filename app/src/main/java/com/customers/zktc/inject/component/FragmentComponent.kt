@@ -11,6 +11,7 @@ import com.customers.zktc.ui.home.page.HomePageFragment
 import com.customers.zktc.ui.user.sign.code.SignCodeFragment
 import com.customers.zktc.ui.user.sign.login.LoginFragment
 import com.customers.zktc.ui.user.sign.password.forget.PasswordForgetFragment
+import com.customers.zktc.ui.user.sign.register.RegisterFragment
 import dagger.Component
 
 @Component(dependencies = [AppComponent::class],modules = [FragmentModule::class])
@@ -24,6 +25,7 @@ interface FragmentComponent {
     fun inject(fragment: LoginFragment)
     fun inject(fragment: SignCodeFragment)
     fun inject(fragment: PasswordForgetFragment)
+    fun inject(fragment: RegisterFragment)
 
     object Config{
         const val fragment = zktc+"fragment/"

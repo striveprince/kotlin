@@ -58,7 +58,7 @@
                 android:inputType="phone"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:text="@={params.phone}"
+                android:text="@={params.mobile}"
                 android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -85,7 +85,7 @@
                 android:background="@color/transparent"
                 android:drawablePadding="14dp"
                 android:inputType="phone"
-                android:enabled="@{vm.enablePassword}"
+                android:enabled="@{vm.enablePhone}"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:text="@={params.password}"

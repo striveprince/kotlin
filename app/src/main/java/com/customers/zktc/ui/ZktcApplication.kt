@@ -45,7 +45,8 @@ class ZktcApplication : MultiDexApplication() {
             Timber.plant(Timber.DebugTree())
         }
         val subscribe = Single.just(this)
-            .subscribeOn(Schedulers.newThread()).subscribe { it ->
+            .subscribeOn(Schedulers.newThread())
+            .subscribe { it ->
                 component = DaggerAppComponent.builder()
                     .appModule(AppModule(it))
                     .build()

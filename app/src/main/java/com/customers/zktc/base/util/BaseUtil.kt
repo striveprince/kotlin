@@ -21,6 +21,10 @@ import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.rx2.asCoroutineDispatcher
+import okhttp3.Dispatcher
 import java.io.File
 import java.util.regex.Pattern
 
@@ -55,8 +59,13 @@ fun <T> Single<T>.errorCompose(): Single<T> {
     return this.subscribeOn(Schedulers.io())
         .compose(ErrorSingleTransformer())
         .observeOn(AndroidSchedulers.mainThread())
-
 }
+
+//fun <T> Single<T>.errorCompose(): Single<T> {
+//    return this.subscribeOn(Schedulers.io().asCoroutineDispatcher().scheduler)
+//        .compose(ErrorSingleTransformer())
+//        .observeOn(AndroidSchedulers.mainThread().asCoroutineDispatcher().scheduler)
+//}
 
 fun <T> Observable<T>.checkPermission(
     activity: Activity,
@@ -127,7 +136,7 @@ fun dialogForSetting(activity: AppCompatActivity): Observable<Boolean> {
         if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.CREATED))
             AlertDialog.Builder(activity)
                 .setTitle(R.string.location)
-                .setMessage(R.string.gps_notify_msg)
+                .setMessage(R.string.should_open_gps)
                 .setNegativeButton(R.string.cancel) { dialog, _ ->
                     it.onError(ApiException(activity.getString(R.string.should_open_gps)))
                     dialog.dismiss()
@@ -157,6 +166,11 @@ fun getPhoneError(mobiles: String): String? {
     val m = p.matcher(mobiles)
     val valid = m.matches()
     return if (valid) null else "不合法的手机号"
+}
+
+fun getCodeError(code:String):String?{
+    if (TextUtils.isEmpty(code)) return "验证码不能为空"
+    return if (code.length in 4..6)null else "验证码长度为4-6位"
 }
 
 fun getPasswordError(password:String):String?{

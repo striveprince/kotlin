@@ -3,6 +3,7 @@ package com.customers.zktc.inject.data.oss
 import android.annotation.SuppressLint
 import com.alibaba.sdk.android.oss.common.auth.OSSCustomSignerCredentialProvider
 import com.binding.model.ioToMainThread
+import com.customers.zktc.base.util.errorCompose
 import com.customers.zktc.inject.data.net.NetApi
 import io.reactivex.Observable
 import io.reactivex.Scheduler
@@ -21,7 +22,7 @@ class OssSignCredentialProvider(private val netApi: NetApi) : OSSCustomSignerCre
     override fun signContent(content: String): String {
         try {
             netApi.ossApi(content)
-                .subscribeOn(Schedulers.io())
+                .errorCompose()
                 .map { it.token }
                 .subscribe({this.accept(it)},{it.printStackTrace()})
             synchronized(obj) {

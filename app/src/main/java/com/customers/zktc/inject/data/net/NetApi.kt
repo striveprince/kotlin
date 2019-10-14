@@ -26,6 +26,9 @@ interface NetApi {
     fun passwordLogin(params: SignParams?): Single<InfoEntity<UserEntity>>
 
     fun wechatLogin(params: SignParams?): Single<InfoEntity<UserEntity>>
+    fun code(): Single<InfoEntity<String>>
+    fun codeLogin(params: SignParams): Single<InfoEntity<UserEntity>>
+    fun modifyPassword(): Single<String>
 
 
 }

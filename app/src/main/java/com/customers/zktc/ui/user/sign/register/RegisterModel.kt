@@ -2,16 +2,29 @@ package com.customers.zktc.ui.user.sign.register
 
 import android.os.Bundle
 import android.text.Editable
+import android.view.View
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.databinding.ObservableBoolean
+import com.binding.model.App
 import com.binding.model.annoation.LayoutView
+import com.binding.model.base.rotate.TimeUtil
+import com.binding.model.base.rotate.TimingEntity
+import com.binding.model.base.spannable.SpannableUtil
+import com.binding.model.busPost
 import com.binding.model.inflate.model.ViewModel
 import com.binding.model.rxBus
 import com.customers.zktc.R
+import com.customers.zktc.base.util.getCodeError
+import com.customers.zktc.base.util.getPasswordError
 import com.customers.zktc.base.util.getPhoneError
 import com.customers.zktc.databinding.FragmentRegisterBinding
+import com.customers.zktc.inject.data.Api
 import com.customers.zktc.ui.Constant
 import com.customers.zktc.ui.user.sign.SignEvent
 import com.customers.zktc.ui.user.sign.SignParams
+import com.customers.zktc.ui.user.sign.login.LoginFragment
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -23,10 +36,47 @@ import javax.inject.Inject
 @LayoutView(layout = [R.layout.fragment_register])
 class RegisterModel @Inject constructor() : ViewModel<RegisterFragment, FragmentRegisterBinding>() {
     val enablePhone = ObservableBoolean(false)
+    val enableCodeInput = ObservableBoolean(false)
+    val enableCode = ObservableBoolean(false)
     val enablePassword = ObservableBoolean(false)
+    val enableAgreement = ObservableBoolean(true)
+    val enableConfirm = ObservableBoolean(false)
+    @Inject
+    lateinit var api: Api
+    private val timingEntity = TimingEntity()
+
     override fun attachView(savedInstanceState: Bundle?, t: RegisterFragment) {
         super.attachView(savedInstanceState, t)
+        t.lifecycle.addObserver(timingEntity)
         bindingParams(t)
+        val color = ContextCompat.getColor(t.dataActivity, R.color.z_ee2d40)
+        binding?.checkbox?.let {
+            SpannableUtil(it)
+                .addText("我已阅读并同意《")
+                .addClick("用户协议", "", { showAgreement() }, { ds ->
+                    ds.color = color
+                    ds.isUnderlineText = true
+                })
+                .addText("》")
+                .build()
+        }
+    }
+
+    fun onCodeClick(v: View) {
+        enableCodeInput.set(true)
+        binding?.inputEditCode?.findFocus()
+        v.isEnabled = false
+        addDisposables(api.code().subscribe({ timing(v as TextView) }, { v.isEnabled = true }))
+    }
+
+    private fun timing(view: TextView) {
+        timingEntity.time = 60
+        timingEntity.listener = { view.text = String.format("%1ds", it) }
+        TimeUtil.add(timingEntity)
+    }
+
+    private fun showAgreement() {
+        Timber.i("showAgreement")
     }
 
     private fun bindingParams(t: RegisterFragment) {
@@ -36,13 +86,43 @@ class RegisterModel @Inject constructor() : ViewModel<RegisterFragment, Fragment
         }, { it.printStackTrace() }))
     }
 
+
+    fun onCodeFinish(s: Editable) {
+        enableCode.set(getCodeError(s.toString()) == null)
+        binding?.inputEditCode?.error = getCodeError(s.toString())
+    }
+
     fun onPhoneFinish(s: Editable) {
         enablePhone.set(getPhoneError(s.toString()) == null)
         binding?.inputEditMobile?.error = getPhoneError(s.toString())
     }
 
     fun onPasswordFinish(s: Editable) {
-        enablePassword.set(true)
+        enablePassword.set(getPasswordError(s.toString()) == null)
+        binding?.inputPassword?.error = getPasswordError(s.toString())
     }
 
+
+    /**
+     *
+     * confirm password compare
+     * */
+    fun onPasswordConfirmFinish(s: Editable) {
+        binding?.params?.let {
+            if (it.password != it.confirmPassword)
+                binding?.inputConfirmPassword?.error = "两次输入的密码不一致"
+            enableConfirm.set(true)
+        }
+    }
+
+    fun onInviteCodeFinish(s: Editable) {
+//        binding?.params?.invitationCode = s.toString()
+    }
+
+    /**
+     * password login
+     * */
+    fun onPasswordLoginClick(v: View) {
+        binding?.params?.let { busPost(SignEvent(LoginFragment.login, it)) }
+    }
 }

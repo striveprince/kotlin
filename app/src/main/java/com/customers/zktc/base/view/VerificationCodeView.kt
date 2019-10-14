@@ -26,8 +26,7 @@ class VerificationCodeView
         private set
 
     private var inputData: String? = null
-    private var codeListener:((String)->Unit)? = null
-//    var http: ((Int, Int) -> Single<R>)? = null
+    var codeListener:((String)->Unit)? = null
     private var tvBgFocus = R.drawable.verification_code_et_bg_focus
     private var tvBgNormal = R.drawable.verification_code_et_bg_normal
     private var tvHeight = 45

@@ -49,23 +49,23 @@ class LoginModel @Inject constructor() : ViewModel<LoginFragment, FragmentLoginB
     }
 
     fun onForgetClick(v: View) {
-        busPost(SignEvent(forget, binding!!.params))
+        busPost(SignEvent(forget, binding!!.params!!))
     }
 
     fun onWechatClick(v: View) {
-        addDisposables(api.wechatLogin(binding!!.params).subscribe({},{it.printStackTrace()}))
+        addDisposables(api.wechatLogin(binding!!.params!!).subscribe({},{it.printStackTrace()}))
     }
 
     fun onLoginClick(v: View) {
-        addDisposables(api.passwordLogin(binding!!.params).subscribe({},{it.printStackTrace()}))
+        addDisposables(api.passwordLogin(binding!!.params!!).subscribe({},{it.printStackTrace()}))
     }
 
     fun onCodeClick(v: View) {
-        busPost(SignEvent(signCode, binding!!.params))
+        busPost(SignEvent(signCode, binding!!.params!!))
     }
 
     fun onRegisterClick(v: View) {
-        busPost(SignEvent(register, binding!!.params))
+        busPost(SignEvent(register, binding!!.params!!))
     }
 
 }

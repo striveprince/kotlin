@@ -1,15 +1,12 @@
 package com.customers.zktc.inject.module
 
 import android.content.Context
-import com.alibaba.sdk.android.oss.ClientConfiguration
-import com.alibaba.sdk.android.oss.OSSClient
 import com.customers.zktc.BuildConfig
 import com.customers.zktc.inject.data.Api
 import com.customers.zktc.inject.data.database.DatabaseApi
 import com.customers.zktc.inject.data.map.MapApi
 import com.customers.zktc.inject.data.net.NetApi
 import com.customers.zktc.inject.data.oss.OssApi
-import com.customers.zktc.inject.data.oss.OssSignCredentialProvider
 import com.customers.zktc.inject.data.preference.PreferenceApi
 import com.customers.zktc.inject.interceptor.NetInterceptor
 import com.customers.zktc.inject.qualifier.context.AppContext
@@ -60,17 +57,17 @@ class DataModule {
         return httpClientBuilder.build()
     }
 
-    @Provides
-    @ApplicationScope
-    internal fun provideOssClient(@AppContext context: Context,netApi: NetApi): OSSClient {
-        val credentialProvider1 = OssSignCredentialProvider(netApi)
-        val conf = ClientConfiguration()
-        conf.connectionTimeout = 15 * 1000
-        conf.socketTimeout = 15 * 1000
-        conf.maxConcurrentRequest = 5
-        conf.maxErrorRetry = 2
-        return OSSClient(context, BuildConfig.endpoint, credentialProvider1)
-    }
+//    @Provides
+//    @ApplicationScope
+//    internal fun provideOssClient(@AppContext context: Context,netApi: NetApi): OSSClient {
+//        val credentialProvider1 = OssSignCredentialProvider(netApi)
+//        val conf = ClientConfiguration()
+//        conf.connectionTimeout = 15 * 1000
+//        conf.socketTimeout = 15 * 1000
+//        conf.maxConcurrentRequest = 5
+//        conf.maxErrorRetry = 2
+//        return OSSClient(context, BuildConfig.endpoint, credentialProvider1)
+//    }
 
 
     @Provides
@@ -87,8 +84,8 @@ class DataModule {
 
     @Provides
     @ApplicationScope
-    internal fun provideOssApi(client: OSSClient): OssApi {
-        return OssApi(client)
+    internal fun provideOssApi(@AppContext context: Context,netApi: NetApi): OssApi {
+        return OssApi(context,netApi)
     }
 
 
