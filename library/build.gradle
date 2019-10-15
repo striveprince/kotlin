@@ -32,12 +32,12 @@ android {
 
 }
 
-
-kotlin{
-    experimental {
-        coroutines 'enable'
-    }
-}
+//
+//kotlin{
+//    experimental {
+//        coroutines 'enable'
+//    }
+//}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -58,9 +58,6 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofit"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit"
     implementation 'com.jakewharton.timber:timber:4.7.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.1.1'
     implementation "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     implementation 'androidx.viewpager2:viewpager2:1.0.0-beta05'
@@ -71,3 +68,7 @@ dependencies {
     implementation 'com.trello.rxlifecycle3:rxlifecycle-android-lifecycle-kotlin:3.1.0'
 
 }
+
+//implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1'
+//implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1'
+//implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.1.1'

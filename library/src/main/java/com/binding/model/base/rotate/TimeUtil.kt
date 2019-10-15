@@ -35,7 +35,6 @@ class TimeUtil constructor(): Runnable {
 
     fun switching(timeEntity: TimeEntity, state: Int) {
         if ((state == 0) xor hashMap[timeEntity]!!) {
-            val b =
                 if (state == 0) hashMap.put(timeEntity, true) else hashMap.put(timeEntity, false)
         }
     }

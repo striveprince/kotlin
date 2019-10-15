@@ -10,6 +10,9 @@ class App constructor(val application: Application) : Application.ActivityLifecy
 
     companion object {
         val stack = Stack<Activity>()
+        fun activity():Activity{
+            return stack.lastElement()
+        }
     }
 
     init {

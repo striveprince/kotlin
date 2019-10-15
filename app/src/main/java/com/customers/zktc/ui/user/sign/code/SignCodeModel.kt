@@ -8,6 +8,7 @@ import com.binding.model.annoation.LayoutView
 import com.binding.model.busPost
 import com.binding.model.inflate.model.ViewModel
 import com.binding.model.rxBus
+import com.binding.model.subscribeApi
 import com.customers.zktc.R
 import com.customers.zktc.base.util.getPhoneError
 import com.customers.zktc.databinding.FragmentSignCodeBinding
@@ -32,9 +33,8 @@ class SignCodeModel @Inject constructor() : ViewModel<SignCodeFragment, Fragment
 
     private fun bindingParams(t: SignCodeFragment) {
         t.arguments?.getParcelable<SignParams>(Constant.params)?.let { binding?.params = it }
-        addDisposables(rxBus<SignEvent>(t).subscribe({
-            binding?.params = it.signParams
-        }, { it.printStackTrace() }))
+        rxBus<SignEvent>(t)
+            .subscribeApi(t) { binding?.params = it.signParams }
     }
 
     fun onInputFinish(s: Editable) {
@@ -47,13 +47,18 @@ class SignCodeModel @Inject constructor() : ViewModel<SignCodeFragment, Fragment
     }
 
     fun onCodeClick(v: View) {
-        addDisposables(api.code().subscribe())
+        binding?.params?.let {
+            api.code(it.mobile)
+                .subscribeApi(t)
+        }
+
     }
 
     private fun loginCode(code: String) {
         binding?.params?.let {
             it.smsCode = code
-            addDisposables(api.codeLogin(it).subscribe())
+            api.codeLogin(it)
+                .subscribeApi(t)
         }
     }
 }

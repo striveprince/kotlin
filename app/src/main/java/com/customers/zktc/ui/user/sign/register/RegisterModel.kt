@@ -2,11 +2,11 @@ package com.customers.zktc.ui.user.sign.register
 
 import android.os.Bundle
 import android.text.Editable
+import android.text.TextUtils
 import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.ObservableBoolean
-import com.binding.model.App
 import com.binding.model.annoation.LayoutView
 import com.binding.model.base.rotate.TimeUtil
 import com.binding.model.base.rotate.TimingEntity
@@ -14,6 +14,8 @@ import com.binding.model.base.spannable.SpannableUtil
 import com.binding.model.busPost
 import com.binding.model.inflate.model.ViewModel
 import com.binding.model.rxBus
+import com.binding.model.subscribeApi
+import com.binding.model.toast
 import com.customers.zktc.R
 import com.customers.zktc.base.util.getCodeError
 import com.customers.zktc.base.util.getPasswordError
@@ -21,6 +23,7 @@ import com.customers.zktc.base.util.getPhoneError
 import com.customers.zktc.databinding.FragmentRegisterBinding
 import com.customers.zktc.inject.data.Api
 import com.customers.zktc.ui.Constant
+import com.customers.zktc.ui.user.sign.CodeEntity
 import com.customers.zktc.ui.user.sign.SignEvent
 import com.customers.zktc.ui.user.sign.SignParams
 import com.customers.zktc.ui.user.sign.login.LoginFragment
@@ -62,17 +65,29 @@ class RegisterModel @Inject constructor() : ViewModel<RegisterFragment, Fragment
         }
     }
 
-    fun onCodeClick(v: View) {
-        enableCodeInput.set(true)
-        binding?.inputEditCode?.findFocus()
-        v.isEnabled = false
-        addDisposables(api.code().subscribe({ timing(v as TextView) }, { v.isEnabled = true }))
+    fun onRegisterClick(v: View) {
+        api.register(binding!!.params!!)
+            .subscribeApi(t) {
+
+            }
     }
 
-    private fun timing(view: TextView) {
+    fun onCodeClick(v: View) {
+        binding?.inputEditCode?.findFocus()
+        v.isEnabled = false
+        api.code(binding!!.params!!.mobile).subscribeApi(t, { timing(v as TextView, it) }, {
+            v.isEnabled = true
+            toast(it)
+        })
+
+    }
+
+    private fun timing(view: TextView, it: CodeEntity) {
         timingEntity.time = 60
         timingEntity.listener = { view.text = String.format("%1ds", it) }
         TimeUtil.add(timingEntity)
+        enableCodeInput.set(!TextUtils.isEmpty(it.uid))
+        binding?.params?.uid = it.uid
     }
 
     private fun showAgreement() {
@@ -81,9 +96,7 @@ class RegisterModel @Inject constructor() : ViewModel<RegisterFragment, Fragment
 
     private fun bindingParams(t: RegisterFragment) {
         t.arguments?.getParcelable<SignParams>(Constant.params)?.let { binding?.params = it }
-        addDisposables(rxBus<SignEvent>(t).subscribe({
-            binding?.params = it.signParams
-        }, { it.printStackTrace() }))
+        rxBus<SignEvent>(t).subscribeApi(t) { binding?.params = it.signParams }
     }
 
 
@@ -116,7 +129,7 @@ class RegisterModel @Inject constructor() : ViewModel<RegisterFragment, Fragment
     }
 
     fun onInviteCodeFinish(s: Editable) {
-//        binding?.params?.invitationCode = s.toString()
+
     }
 
     /**

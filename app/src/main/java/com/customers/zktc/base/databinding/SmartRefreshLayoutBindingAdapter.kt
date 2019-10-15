@@ -31,20 +31,20 @@ object SmartRefreshLayoutBindingAdapter{
             view.autoRefresh()
         }
     }
-
-    @BindingAdapter(value = ["onRefreshListener", "refreshingAttrChanged"], requireAll = false)
-    fun setOnRefreshListener(view: SmartRefreshLayout, listener: OnRefreshListener?, refreshingAttrChanged: InverseBindingListener?) {
-        val newValue = OnRefreshListener{
-            refreshingAttrChanged?.onChange()
-            listener?.onRefresh(view)
-        }
-        val oldValue = ListenerUtil.trackListener<OnRefreshListener>(
-            view,
-            newValue,
-            R.id.smart_refresh_layout
-        )
-        if (oldValue != null) view.setOnRefreshListener(null)
-        view.setOnRefreshListener(newValue)
-    }
+//
+//    @BindingAdapter(value = ["onRefreshListener", "refreshingAttrChanged"], requireAll = false)
+//    fun setOnRefreshListener(view: SmartRefreshLayout, listener: OnRefreshListener?, refreshingAttrChanged: InverseBindingListener?) {
+//        val newValue = OnRefreshListener{
+//            refreshingAttrChanged?.onChange()
+//            listener?.onRefresh(view)
+//        }
+//        val oldValue = ListenerUtil.trackListener<OnRefreshListener>(
+//            view,
+//            newValue,
+//            R.id.smart_refresh_layout
+//        )
+//        if (oldValue != null) view.setOnRefreshListener(null)
+//        view.setOnRefreshListener(newValue)
+//    }
 
 }

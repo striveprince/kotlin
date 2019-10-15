@@ -87,7 +87,7 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
         mDragHelper.setEdgeTrackingEnabled(directionMode)
         mTouchSlop = mDragHelper.touchSlop
         setOnSwipeFinishedListener { _, isEnd -> if (isEnd) finish() }
-        setOnSwipeBackListener { mView, swipeBackFraction1 -> this.alpha = 1 - swipeBackFraction1 }
+        setOnSwipeBackListener { _, swipeBackFraction1 -> this.alpha = 1 - swipeBackFraction1 }
         init(context, attrs)
     }
 

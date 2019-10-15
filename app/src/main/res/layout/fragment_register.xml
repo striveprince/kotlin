@@ -219,12 +219,14 @@
             android:layout_marginEnd="30dp"
             android:layout_marginRight="30dp"
             android:background="@drawable/login_button_selector"
+            android:enabled="@{vm.enableConfirm&amp;&amp;vm.enableCode&amp;&amp;vm.enableAgreement}"
             android:gravity="center"
             android:text="@string/agree_and_register"
-            android:enabled="@{vm.enableConfirm&amp;&amp;vm.enableCode&amp;&amp;vm.enableAgreement}"
+            android:onClick="@{vm::onRegisterClick}"
             android:textColor="@color/login_selector"
             android:textSize="20.0sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/checkbox" />
 

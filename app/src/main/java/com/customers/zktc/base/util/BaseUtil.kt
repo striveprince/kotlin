@@ -9,7 +9,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Lifecycle
-import com.binding.model.Config
 import com.customers.zktc.R
 import com.customers.zktc.inject.data.net.InfoEntity
 import com.customers.zktc.inject.data.net.exception.ApiException
@@ -17,14 +16,9 @@ import com.customers.zktc.inject.data.net.transform.ErrorSingleTransformer
 import com.customers.zktc.inject.data.net.transform.RestfulSingleTransformer
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Observable
-import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.rx2.asCoroutineDispatcher
-import okhttp3.Dispatcher
 import java.io.File
 import java.util.regex.Pattern
 

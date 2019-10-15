@@ -22,7 +22,11 @@ import java.io.File
 import java.lang.StringBuilder
 import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle
 import android.text.Html
+import android.widget.Toast
+import androidx.lifecycle.Lifecycle
 import com.binding.model.base.Text
+import com.binding.model.base.container.CycleContainer
+import com.binding.model.inflate.ApiObserver
 
 
 const val pageWay = false
@@ -91,6 +95,31 @@ fun createWholeDir(path: String): String {
     return builder.toString()
 }
 
+fun <T> Observable<T>.subscribeApi(onNext:(T)->Unit){
+    this.subscribe(ApiObserver(onNext,{ toast(it) }))
+}
+
+fun <T> Observable<T>.subscribeApi(t: CycleContainer<*>,onNext:(T)->Unit){
+    val observer = ApiObserver(onNext,{ toast(it) })
+    t.cycle.addObserver(observer)
+    this.subscribe(observer)
+}
+fun <T> Single<T>.subscribeApi(onNext:(T)->Unit={}){
+    this.subscribe(ApiObserver(onNext,{ toast(it) }))
+}
+
+fun <T> Single<T>.subscribeApi(container: CycleContainer<*>,
+                               onNext:(T)->Unit={},
+                               onError:(Throwable)->Unit={ toast(it) })
+{
+    val observer = ApiObserver(onNext,onError)
+    container.cycle.addObserver(observer)
+    this.subscribe(observer)
+}
+
+fun toast(e:Throwable){
+    Toast.makeText(App.activity(),e.message,Toast.LENGTH_SHORT).show()
+}
 
 fun installApkFile(
     context: Context,

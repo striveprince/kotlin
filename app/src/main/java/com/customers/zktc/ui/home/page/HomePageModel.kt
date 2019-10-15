@@ -10,6 +10,7 @@ import com.binding.model.adapter.GridInflate
 import com.binding.model.adapter.recycler.GridSizeLookup
 import com.binding.model.annoation.LayoutView
 import com.binding.model.inflate.model.RecyclerModel
+import com.binding.model.subscribeApi
 import com.customers.zktc.R
 import com.customers.zktc.databinding.FragmentHomePageBinding
 import com.customers.zktc.inject.data.Api
@@ -29,7 +30,7 @@ class HomePageModel @Inject constructor() :
         layoutManager.spanSizeLookup = GridSizeLookup(recyclerAdapter, spanCount)
         layoutManagerField.set(layoutManager)
         setRxHttp { offset, refresh -> api.homePage(offset, refresh) }
-        addDisposables(api.locationCity(t.dataActivity).subscribe({ city.set(it) }, { it.printStackTrace() }))
+        api.locationCity(t.dataActivity).subscribeApi(t) { city.set(it) }
     }
 
     fun onSearchClick(v: View) {

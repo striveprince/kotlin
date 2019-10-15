@@ -23,7 +23,7 @@ abstract class ViewModel<T: Container,Binding:ViewDataBinding> : ViewInflate<Bin
     private var bundle: Bundle? = null
     @Transient private var weakReference: WeakReference<T>? = null
     private val disposables = ListCompositeDisposable()
-    private lateinit var t:T
+    lateinit var t:T
     @Suppress("UNCHECKED_CAST")
     fun attachContainer(obj: Any, co: ViewGroup?, attachToParent: Boolean, savedInstanceState: Bundle?): Binding {
         val t = obj as T
@@ -60,6 +60,4 @@ abstract class ViewModel<T: Container,Binding:ViewDataBinding> : ViewInflate<Bin
         weakReference?.clear()
         removeBinding()
     }
-
-
 }

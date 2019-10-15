@@ -9,17 +9,15 @@ import com.binding.model.adapter.GridInflate
 import com.binding.model.createWholeDir
 import com.binding.model.ioToMainThread
 import com.customers.zktc.R
-import com.customers.zktc.base.util.errorCompose
 import com.customers.zktc.base.util.restfulCompose
 import com.customers.zktc.inject.data.database.DatabaseApi
 import com.customers.zktc.inject.data.map.MapApi
-import com.customers.zktc.inject.data.net.InfoEntity
 import com.customers.zktc.inject.data.net.NetApi
 import com.customers.zktc.inject.data.net.exception.ApiException
-import com.customers.zktc.inject.data.net.transform.RestfulSingleTransformer
 import com.customers.zktc.inject.data.oss.OssApi
 import com.customers.zktc.inject.data.preference.PreferenceApi
 import com.customers.zktc.inject.data.preference.user.UserEntity
+import com.customers.zktc.ui.user.sign.CodeEntity
 import com.customers.zktc.ui.user.sign.SignParams
 import com.pgyersdk.update.PgyUpdateManager
 import com.pgyersdk.update.UpdateManagerListener
@@ -111,8 +109,8 @@ class Api(
             .restfulCompose()
     }
 
-    fun code(): Single<InfoEntity<String>> {
-        return netApi.code().errorCompose()
+    fun code(mobile:String): Single<CodeEntity> {
+        return netApi.code(mobile).restfulCompose()
     }
 
     fun codeLogin(params:SignParams): Single<UserEntity> {
@@ -122,6 +120,10 @@ class Api(
 
     fun modifyPassword(): Single<String> {
         return netApi.modifyPassword()
+    }
+
+    fun register(signParams: SignParams): Single<UserEntity> {
+        return netApi.register(signParams).restfulCompose()
     }
 
 
