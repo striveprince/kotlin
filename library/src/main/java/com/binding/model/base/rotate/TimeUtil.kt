@@ -17,10 +17,11 @@ import java.util.HashMap
  */
 
 
-class TimeUtil constructor(): Runnable {
-
+class TimeUtil: Runnable {
+    private val handler = Handler()
     init {
-        handler.postDelayed(this, 1000)
+        handler.postDelayed(this, 200)
+        TimeUtil.handler = handler
     }
 
     override fun run() {
@@ -50,8 +51,12 @@ class TimeUtil constructor(): Runnable {
     }
 
     companion object {
+        fun destroy() {
+            hashMap.clear()
+            handler.removeCallbacksAndMessages(null)
+        }
+        lateinit var handler :Handler
         val instance = TimeUtil()
-        private val handler = Handler()
         private val hashMap = HashMap<TimeEntity, Boolean>()
 
         fun add(timeEntity: TimeEntity) {

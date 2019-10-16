@@ -2,7 +2,9 @@ package com.customers.zktc.inject.data.preference.user
 
 import android.app.Application
 import android.content.Context
+import android.text.TextUtils
 import com.customers.zktc.inject.data.preference.SharePreferenceUtil
+import com.customers.zktc.ui.user.sign.SignEntity
 
 
 /**
@@ -12,19 +14,30 @@ import com.customers.zktc.inject.data.preference.SharePreferenceUtil
  * Email: 1033144294@qq.com
  */
 class UserApi private constructor(context: Context) {
-    private val sharePreferenceUtil: SharePreferenceUtil = SharePreferenceUtil.getUserInstance(context)
-    private val userEntity : UserEntity
-        init {
+    private val sharePreferenceUtil: SharePreferenceUtil =
+        SharePreferenceUtil.getUserInstance(context)
+    private val userEntity: UserEntity
+    init {
         userEntity = sharePreferenceUtil.getAllDto(UserEntity::class.java)
-        isLogin(userEntity)
+        isLogin = isLogin(userEntity.token)
     }
 
-    private fun isLogin(userEntity: UserEntity):Boolean{
-        return true
+    private fun isLogin(token:String): Boolean {
+        return !TextUtils.isEmpty(token)
+    }
+
+    fun login(it: SignEntity): UserEntity {
+        sharePreferenceUtil.setAllDto(it)
+        sharePreferenceUtil.setAllDto(it.customerVo)
+        sharePreferenceUtil.setAllDto(it.customerVo.extWechatCustomerVo)
+        sharePreferenceUtil.getAllDto(userEntity)
+        isLogin = isLogin(userEntity.token)
+        return userEntity
     }
 
     companion object {
         var token = ""
+        var isLogin = false
         private var userApi: UserApi? = null
         fun getInstance(context: Context): UserApi {
             var util: UserApi? =
@@ -43,13 +56,7 @@ class UserApi private constructor(context: Context) {
             }
             return util!!
         }
-
-
     }
-
-
-
-
 
 
 }

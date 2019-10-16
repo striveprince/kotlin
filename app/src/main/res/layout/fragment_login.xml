@@ -52,6 +52,7 @@
                 android:id="@+id/input_edit_mobile"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:focusable="true"
                 android:afterTextChanged="@{vm::onPhoneFinish}"
                 android:background="@color/transparent"
                 android:drawablePadding="14dp"
@@ -84,11 +85,13 @@
                 android:afterTextChanged="@{vm::onPasswordFinish}"
                 android:background="@color/transparent"
                 android:drawablePadding="14dp"
-                android:inputType="phone"
+                android:inputType="textPassword"
                 android:enabled="@{vm.enablePhone}"
+                android:layout_marginEnd="70dp"
+                android:layout_marginRight="70dp"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:text="@={params.password}"
+                android:text="@={params.confirmPassword}"
                 android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 

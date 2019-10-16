@@ -9,6 +9,4 @@ import com.binding.model.adapter.GridInflate
  * Author: created by ArvinWang on 2019/10/10 13:17
  * Email: 1033144294@qq.com
  */
-abstract class ViewGridInflate<Binding:ViewDataBinding> :ViewInflate<Binding>(),GridInflate<Binding> {
-
-}
+abstract class ViewGridInflate<Binding:ViewDataBinding> :ViewInflate<Binding>(),GridInflate<Binding>

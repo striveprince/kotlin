@@ -8,5 +8,5 @@ import javax.inject.Inject
 
 @LayoutView(layout = [R.layout.fragment_home_mine])
 class HomeMineModel @Inject constructor() : ViewModel<HomeMineFragment,FragmentHomeMineBinding>(){
-
+    
 }

@@ -7,7 +7,7 @@ import com.alibaba.android.arouter.launcher.ARouter
 import com.binding.model.annoation.LayoutView
 import com.binding.model.inflate.model.ViewModel
 import com.binding.model.rxBus
-import com.binding.model.subscribeApi
+import com.binding.model.subscribeNormal
 import com.customers.zktc.R
 import com.customers.zktc.base.cycle.BaseFragment
 import com.customers.zktc.databinding.ActivitySignBinding
@@ -30,7 +30,7 @@ class SignModel
     override fun attachView(savedInstanceState: Bundle?, t: SignActivity) {
         super.attachView(savedInstanceState, t)
         showFragment(t.path)
-        rxBus<SignEvent>(t).subscribeApi(t) {  showFragment(it.path,it.signParams) }
+        rxBus<SignEvent>(t).subscribeNormal(t,{  showFragment(it.path,it.signParams) })
     }
 
     private fun getFragment(path: String): BaseFragment<*> {

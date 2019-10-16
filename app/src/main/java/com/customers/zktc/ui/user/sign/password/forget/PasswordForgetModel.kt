@@ -8,7 +8,7 @@ import com.binding.model.annoation.LayoutView
 import com.binding.model.busPost
 import com.binding.model.inflate.model.ViewModel
 import com.binding.model.rxBus
-import com.binding.model.subscribeApi
+import com.binding.model.subscribeNormal
 import com.customers.zktc.R
 import com.customers.zktc.base.util.getPhoneError
 import com.customers.zktc.databinding.FragmentPasswordForgetBinding
@@ -36,7 +36,7 @@ class PasswordForgetModel @Inject constructor(): ViewModel<PasswordForgetFragmen
     private fun bindingParams(t: PasswordForgetFragment) {
         t.arguments?.getParcelable<SignParams>(Constant.params)?.let { binding?.params = it }
         rxBus<SignEvent>(t)
-            .subscribeApi(t)  { binding?.params = it.signParams }
+            .subscribeNormal(t,  { binding?.params = it.signParams })
     }
 
     fun onPhoneFinish(s:Editable){
@@ -55,7 +55,7 @@ class PasswordForgetModel @Inject constructor(): ViewModel<PasswordForgetFragmen
     }
 
     fun onConfirmClick(v:View){
-        api.modifyPassword().subscribeApi(t)
+        api.modifyPassword().subscribeNormal(t)
     }
 
     fun onPasswordFinish(s:Editable){

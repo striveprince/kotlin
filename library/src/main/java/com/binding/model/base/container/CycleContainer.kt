@@ -22,4 +22,5 @@ interface CycleContainer<T> : Container {
     val component: T
     val cycle: Lifecycle
     fun inject(savedInstanceState: Bundle?, parent: ViewGroup?, attachToParent: Boolean): View
+    fun finish()
 }

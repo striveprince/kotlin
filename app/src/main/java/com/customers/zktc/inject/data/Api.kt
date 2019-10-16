@@ -9,14 +9,18 @@ import com.binding.model.adapter.GridInflate
 import com.binding.model.createWholeDir
 import com.binding.model.ioToMainThread
 import com.customers.zktc.R
+import com.customers.zktc.base.util.restful
 import com.customers.zktc.base.util.restfulCompose
 import com.customers.zktc.inject.data.database.DatabaseApi
 import com.customers.zktc.inject.data.map.MapApi
 import com.customers.zktc.inject.data.net.NetApi
 import com.customers.zktc.inject.data.net.exception.ApiException
+import com.customers.zktc.inject.data.net.transform.ErrorSingleTransformer
+import com.customers.zktc.inject.data.net.transform.NoErrorObservableTransformer
 import com.customers.zktc.inject.data.oss.OssApi
 import com.customers.zktc.inject.data.preference.PreferenceApi
 import com.customers.zktc.inject.data.preference.user.UserEntity
+import com.customers.zktc.ui.home.page.HomePageParams
 import com.customers.zktc.ui.user.sign.CodeEntity
 import com.customers.zktc.ui.user.sign.SignParams
 import com.pgyersdk.update.PgyUpdateManager
@@ -26,6 +30,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.SingleEmitter
 import io.reactivex.SingleOnSubscribe
+import io.reactivex.android.schedulers.AndroidSchedulers
 import okio.Okio
 import java.io.File
 import java.util.concurrent.TimeUnit
@@ -38,8 +43,13 @@ class Api(
     private val ossApi: OssApi,
     private val preferenceApi: PreferenceApi) {
 
-    fun homePage(offset: Int, refresh: Int): Single<List<GridInflate<in ViewDataBinding>>> {
-//        netApi.banner()
+    fun homePage(offset: Int, refresh: Int): Single<List<GridInflate<ViewDataBinding>>> {
+//        netApi.banner(HomePageParams("ad_home_index_1"))
+//            .restful()
+//            .toObservable()
+//            .compose(NoErrorObservableTransformer())
+//            .toList()
+//            .zipWith(netApi.)
         return Single.just(ArrayList())
     }
 
@@ -99,22 +109,31 @@ class Api(
         return mapApi.locationCity(activity)
     }
 
-    fun passwordLogin(params: SignParams?) :Single<UserEntity>{
+    fun passwordLogin(params: SignParams) :Single<UserEntity>{
         return netApi.passwordLogin(params)
-            .restfulCompose()
+            .restful()
+            .map { preferenceApi.login(it) }
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun wechatLogin(params: SignParams?): Single<UserEntity> {
+    fun wechatLogin(params: SignParams): Single<UserEntity> {
         return netApi.wechatLogin(params)
             .restfulCompose()
     }
 
-    fun code(mobile:String): Single<CodeEntity> {
-        return netApi.code(mobile).restfulCompose()
+    fun registerCode(mobile:SignParams): Single<CodeEntity> {
+        return netApi.registerCode(mobile).restfulCompose()
     }
 
     fun codeLogin(params:SignParams): Single<UserEntity> {
         return netApi.codeLogin(params)
+            .restful()
+            .map { preferenceApi.login(it) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun loginCode(params:SignParams): Single<CodeEntity> {
+        return netApi.loginCode(params)
             .restfulCompose()
     }
 
@@ -123,8 +142,12 @@ class Api(
     }
 
     fun register(signParams: SignParams): Single<UserEntity> {
-        return netApi.register(signParams).restfulCompose()
+        return netApi.register(signParams)
+            .restful()
+            .map { preferenceApi.login(it) }
+            .observeOn(AndroidSchedulers.mainThread())
     }
+
 
 
 }

@@ -2,7 +2,6 @@ package com.customers.zktc.ui.home.page
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.ObservableField
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.GridLayoutManager
@@ -10,7 +9,7 @@ import com.binding.model.adapter.GridInflate
 import com.binding.model.adapter.recycler.GridSizeLookup
 import com.binding.model.annoation.LayoutView
 import com.binding.model.inflate.model.RecyclerModel
-import com.binding.model.subscribeApi
+import com.binding.model.subscribeNormal
 import com.customers.zktc.R
 import com.customers.zktc.databinding.FragmentHomePageBinding
 import com.customers.zktc.inject.data.Api
@@ -30,7 +29,7 @@ class HomePageModel @Inject constructor() :
         layoutManager.spanSizeLookup = GridSizeLookup(recyclerAdapter, spanCount)
         layoutManagerField.set(layoutManager)
         setRxHttp { offset, refresh -> api.homePage(offset, refresh) }
-        api.locationCity(t.dataActivity).subscribeApi(t) { city.set(it) }
+        api.locationCity(t.dataActivity).subscribeNormal(this, { city.set(it) })
     }
 
     fun onSearchClick(v: View) {

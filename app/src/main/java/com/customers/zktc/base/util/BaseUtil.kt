@@ -2,9 +2,12 @@ package com.customers.zktc.base.util
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.text.TextUtils
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -18,9 +21,10 @@ import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import java.io.File
+import java.security.MessageDigest
 import java.util.regex.Pattern
+
 
 /**
  * Company: 中科同创
@@ -43,15 +47,40 @@ fun checkPermissions(activity: Activity, vararg permissions: String): Boolean {
     return true
 }
 
+
+fun md5(paramString: String): String {
+    return try {
+        val arrayOfByte = MessageDigest.getInstance("MD5")
+            .digest(paramString.toByteArray(charset("UTF-8")))
+        val stringBuilder = StringBuilder()
+        for (b in arrayOfByte.indices) {
+            val str = Integer.toHexString(arrayOfByte[b].toInt() and 0xFF)
+            if (str.length == 1)
+                stringBuilder.append("0")
+            stringBuilder.append(str)
+        }
+        stringBuilder.toString()
+    } catch (e: Exception) {
+        ""
+    }
+
+}
+
+
+
+
+fun <T> Single<InfoEntity<T>>.restful(): Single<T> {
+    return this.compose(ErrorSingleTransformer())
+        .compose(RestfulSingleTransformer())
+}
+
 fun <T> Single<InfoEntity<T>>.restfulCompose(): Single<T> {
-    return this.subscribeOn(Schedulers.io())
-        .compose(ErrorSingleTransformer())
+    return this.compose(ErrorSingleTransformer())
         .compose(RestfulSingleTransformer())
         .observeOn(AndroidSchedulers.mainThread())
 }
 fun <T> Single<T>.errorCompose(): Single<T> {
-    return this.subscribeOn(Schedulers.io())
-        .compose(ErrorSingleTransformer())
+    return this.compose(ErrorSingleTransformer())
         .observeOn(AndroidSchedulers.mainThread())
 }
 
@@ -170,4 +199,23 @@ fun getCodeError(code:String):String?{
 fun getPasswordError(password:String):String?{
     if (TextUtils.isEmpty(password)) return "密码不能为空"
     return if (password.length>5)null else "密码长度不能小于6位"
+}
+
+fun showInputMethod(context: Context):Boolean{
+    return if(isShowing(context)) false
+    else{
+        showOrHide(context)
+        true
+    }
+}
+
+fun showOrHide(context: Context) {
+    val imm = context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS)
+}
+
+
+fun isShowing(context: Context): Boolean {
+    val imm = context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+    return imm.isActive
 }

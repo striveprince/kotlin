@@ -22,8 +22,7 @@ interface Parse<Binding>{
 
     }
 
-    fun attachView(context: Context, co: ViewGroup?, attachToParent: Boolean, t: Binding?): Binding
-
+    fun attachView(context: Context, co: ViewGroup?, attachToParent: Boolean, binding1: Binding?): Binding
 //    fun registerEvent() : Boolean{
 //        if(isEmpty(layoutView.event)){
 //            val events = layoutView.event.split("|")

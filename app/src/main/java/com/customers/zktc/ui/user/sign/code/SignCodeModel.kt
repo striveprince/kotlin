@@ -8,7 +8,7 @@ import com.binding.model.annoation.LayoutView
 import com.binding.model.busPost
 import com.binding.model.inflate.model.ViewModel
 import com.binding.model.rxBus
-import com.binding.model.subscribeApi
+import com.binding.model.subscribeNormal
 import com.customers.zktc.R
 import com.customers.zktc.base.util.getPhoneError
 import com.customers.zktc.databinding.FragmentSignCodeBinding
@@ -16,6 +16,7 @@ import com.customers.zktc.inject.data.Api
 import com.customers.zktc.ui.Constant
 import com.customers.zktc.ui.user.sign.SignEvent
 import com.customers.zktc.ui.user.sign.SignParams
+import com.customers.zktc.ui.user.sign.login.LoginEvent
 import com.customers.zktc.ui.user.sign.login.LoginFragment.Companion.login
 import javax.inject.Inject
 
@@ -34,7 +35,7 @@ class SignCodeModel @Inject constructor() : ViewModel<SignCodeFragment, Fragment
     private fun bindingParams(t: SignCodeFragment) {
         t.arguments?.getParcelable<SignParams>(Constant.params)?.let { binding?.params = it }
         rxBus<SignEvent>(t)
-            .subscribeApi(t) { binding?.params = it.signParams }
+            .subscribeNormal(t, { binding?.params = it.signParams })
     }
 
     fun onInputFinish(s: Editable) {
@@ -47,18 +48,21 @@ class SignCodeModel @Inject constructor() : ViewModel<SignCodeFragment, Fragment
     }
 
     fun onCodeClick(v: View) {
-        binding?.params?.let {
-            api.code(it.mobile)
-                .subscribeApi(t)
+        binding?.params?.let { params ->
+            api.loginCode(params)
+                .subscribeNormal(t, { binding?.params?.uid = it.uid })
         }
 
     }
 
     private fun loginCode(code: String) {
-        binding?.params?.let {
-            it.smsCode = code
-            api.codeLogin(it)
-                .subscribeApi(t)
+        binding?.params?.let { params ->
+            params.smsCode = code
+            api.codeLogin(params)
+                .subscribeNormal(t, {
+                    busPost(LoginEvent(true, it))
+                    finish()
+                })
         }
     }
 }

@@ -50,29 +50,25 @@ class SharePreferenceUtil private constructor(context: Context, name: String) {
 
     private fun putValue(key: String, value: Any?, remove: Boolean) {
         if (value == null) return
-        if (value is String) {
-            editor.putString(key, value.toString())
-        } else if (value is Boolean) {
-            editor.putBoolean(key, (value as Boolean?)!!)
-        } else if (value is Float) {
-            editor.putFloat(key, (value as Float?)!!)
-        } else if (value is Int) {
-            editor.putInt(key, (value as Int?)!!)
-        } else if (value is Long) {
-            editor.putLong(key, (value as Long?)!!)
-        } else if (value is Set<*>) {
-            editor.putStringSet(key, value as Set<String>?)
-        } else {
-            val clazz = value.javaClass
-            val fields = clazz.declaredFields
-            for (f in fields) {
-                val obj = ReflectUtil.beanGetValue(f, value)
-                if (!ReflectUtil.isFieldNull(obj))
-                    putValue(f.name, obj, remove)
-                else if (remove) editor.remove(f.name)
-            }
-            Timber.w("key:%1s,value:%2s", key, value)
+        when (value) {
+            is String -> editor.putString(key, value.toString())
+            is Boolean -> editor.putBoolean(key, (value as Boolean?)!!)
+            is Float -> editor.putFloat(key, (value as Float?)!!)
+            is Int -> editor.putInt(key, (value as Int?)!!)
+            is Long -> editor.putLong(key, (value as Long?)!!)
+            is Set<*> -> editor.putStringSet(key, value as Set<String>?)
+//            else -> {
+//                val clazz = value.javaClass
+//                val fields = clazz.declaredFields
+//                for (f in fields) {
+//                    val obj = ReflectUtil.beanGetValue(f, value)
+//                    if (!ReflectUtil.isFieldNull(obj))
+//                        putValue(f.name, obj, remove)
+//                    else if (remove) editor.remove(f.name)
+//                }
+//            }
         }
+        Timber.w("key:%1s,value:%2s", key, value)
     }
 
     /**
@@ -90,7 +86,7 @@ class SharePreferenceUtil private constructor(context: Context, name: String) {
 
     fun <T : Any> setAllDto(t: T) {
         val clazz = t.javaClass
-        val fields = clazz.getDeclaredFields()
+        val fields = clazz.declaredFields
         for (f in fields) {
             val obj = ReflectUtil.beanGetValue(f, t)
             if (!ReflectUtil.isFieldNull(obj))
@@ -103,7 +99,7 @@ class SharePreferenceUtil private constructor(context: Context, name: String) {
 
     fun <T : Any> setNotNullDto(t: T) {
         val clazz = t.javaClass
-        val fields = clazz.getDeclaredFields()
+        val fields = clazz.declaredFields
         for (f in fields) {
             val `object` = ReflectUtil.beanGetValue(f, t)
             if (!ReflectUtil.isFieldNull(`object`))
@@ -139,6 +135,10 @@ class SharePreferenceUtil private constructor(context: Context, name: String) {
         }
         return t
 
+    }
+
+    fun<T:Any> getAllDto(t:T):T{
+        return getAllDto(t, share)
     }
 
     fun <T: Any> getAllDto(clazz: Class<T>): T {

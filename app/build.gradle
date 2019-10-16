@@ -12,9 +12,7 @@ kapt {
 }
 
 kotlin{
-    experimental {
-        coroutines 'enable'
-    }
+    experimental.coroutines 'enable'
 }
 
 
@@ -30,12 +28,6 @@ android {
         versionName version_name
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-//        javaCompileOptions {
-//            annotationProcessorOptions {
-//                arguments = [moduleName: project.getName()]
-//            }
-//        }
-
     }
     androidExtensions {
         experimental = true

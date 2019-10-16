@@ -19,7 +19,7 @@ class RestfulSingleTransformer<T> : SingleTransformer<InfoEntity<T>, T> {
             Single.create<T> { emitter ->  try {
                 if(it.result!=null){
                     emitter.onSuccess(it.result)
-                }
+                }else emitter.onError(ApiException(it.code,it.message))
             }catch (e:Exception){
                 emitter.onError(ApiException(it.code,it.message))
             } }

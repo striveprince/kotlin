@@ -20,4 +20,6 @@ abstract class DataBindingFragment <T>: Fragment(),CycleContainer<T>{
         val rootView = inject(savedInstanceState,container,false)
         return  initView(rootView)
     }
+
+
 }

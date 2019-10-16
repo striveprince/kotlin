@@ -7,25 +7,24 @@ import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.ObservableBoolean
+import com.binding.model.*
 import com.binding.model.annoation.LayoutView
 import com.binding.model.base.rotate.TimeUtil
 import com.binding.model.base.rotate.TimingEntity
 import com.binding.model.base.spannable.SpannableUtil
-import com.binding.model.busPost
 import com.binding.model.inflate.model.ViewModel
-import com.binding.model.rxBus
-import com.binding.model.subscribeApi
-import com.binding.model.toast
 import com.customers.zktc.R
 import com.customers.zktc.base.util.getCodeError
 import com.customers.zktc.base.util.getPasswordError
 import com.customers.zktc.base.util.getPhoneError
+import com.customers.zktc.base.util.showInputMethod
 import com.customers.zktc.databinding.FragmentRegisterBinding
 import com.customers.zktc.inject.data.Api
 import com.customers.zktc.ui.Constant
 import com.customers.zktc.ui.user.sign.CodeEntity
 import com.customers.zktc.ui.user.sign.SignEvent
 import com.customers.zktc.ui.user.sign.SignParams
+import com.customers.zktc.ui.user.sign.login.LoginEvent
 import com.customers.zktc.ui.user.sign.login.LoginFragment
 import timber.log.Timber
 import javax.inject.Inject
@@ -67,27 +66,44 @@ class RegisterModel @Inject constructor() : ViewModel<RegisterFragment, Fragment
 
     fun onRegisterClick(v: View) {
         api.register(binding!!.params!!)
-            .subscribeApi(t) {
-
-            }
+            .subscribeNormal(t,{
+                finish()
+                busPost(LoginEvent(true,it))
+            })
     }
 
     fun onCodeClick(v: View) {
-        binding?.inputEditCode?.findFocus()
         v.isEnabled = false
-        api.code(binding!!.params!!.mobile).subscribeApi(t, { timing(v as TextView, it) }, {
-            v.isEnabled = true
-            toast(it)
-        })
+        binding?.params?.let { params ->
+            api.registerCode(params)
+                .subscribeNormal(t, { timing(v as TextView, it) },
+                    {
+                        v.isEnabled = true
+                        toast(it)
+                    })
+        }
+
 
     }
 
     private fun timing(view: TextView, it: CodeEntity) {
         timingEntity.time = 60
-        timingEntity.listener = { view.text = String.format("%1ds", it) }
+        timingEntity.listener = {
+            view.text = String.format("%1ds", it)
+            if (it == 0) {
+                view.isEnabled = true
+                view.text = view.context.getString(R.string.get_code)
+            }
+        }
         TimeUtil.add(timingEntity)
         enableCodeInput.set(!TextUtils.isEmpty(it.uid))
         binding?.params?.uid = it.uid
+        binding?.textInputCode?.findFocus()
+        binding?.textInputCode?.requestFocus()
+        binding?.inputEditCode?.findFocus()
+        binding?.inputEditCode?.requestFocus()
+        binding?.inputEditCode?.setSelection(0)
+        showInputMethod(view.context)
     }
 
     private fun showAgreement() {
@@ -96,7 +112,7 @@ class RegisterModel @Inject constructor() : ViewModel<RegisterFragment, Fragment
 
     private fun bindingParams(t: RegisterFragment) {
         t.arguments?.getParcelable<SignParams>(Constant.params)?.let { binding?.params = it }
-        rxBus<SignEvent>(t).subscribeApi(t) { binding?.params = it.signParams }
+        rxBus<SignEvent>(t).subscribeNormal(t, { binding?.params = it.signParams })
     }
 
 

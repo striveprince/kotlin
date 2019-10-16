@@ -3,10 +3,11 @@ package com.binding.model.inflate.model
 import androidx.databinding.ViewDataBinding
 import com.binding.model.adapter.IModelAdapter
 import com.binding.model.base.container.Container
+import com.binding.model.base.container.CycleContainer
 import com.binding.model.inflate.obj.EventType
 import com.binding.model.pageWay
 
-open class ViewArrayModel<T : Container, Binding : ViewDataBinding, E,Adapter:IModelAdapter<E>>
+open class ViewArrayModel<T : CycleContainer<*>, Binding : ViewDataBinding, E,Adapter:IModelAdapter<E>>
     constructor(val adapter: Adapter)
     :ViewHttpModel<T,Binding,List<E>> ()
 {

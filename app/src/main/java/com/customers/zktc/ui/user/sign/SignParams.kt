@@ -2,6 +2,8 @@ package com.customers.zktc.ui.user.sign
 
 import android.annotation.SuppressLint
 import android.os.Parcelable
+import com.customers.zktc.base.util.md5
+import com.customers.zktc.inject.data.net.converter.ApiParams
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -12,11 +14,18 @@ import kotlinx.android.parcel.Parcelize
  */
 @SuppressLint("ParcelCreator")
 @Parcelize
-data class SignParams (
-    var mobile:String = "",
+ class SignParams (
+    var mobile:String="",
+    var accountName:String = "",
     var smsCode:String = "",
     var uid:String = "",
     var invitationCode:String = "",
     var password:String = "",
     @Transient var confirmPassword:String = ""
-): Parcelable
+): Parcelable,ApiParams{
+    fun change(): SignParams {
+        accountName = mobile
+        password = md5(confirmPassword)
+        return this
+    }
+}

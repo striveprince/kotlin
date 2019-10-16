@@ -1,5 +1,6 @@
 package com.binding.model
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -22,20 +23,23 @@ import java.io.File
 import java.lang.StringBuilder
 import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle
 import android.text.Html
+import android.text.TextUtils
 import android.widget.Toast
-import androidx.lifecycle.Lifecycle
 import com.binding.model.base.Text
 import com.binding.model.base.container.CycleContainer
-import com.binding.model.inflate.ApiObserver
+import com.binding.model.inflate.model.ViewModel
+import com.binding.model.inflate.observer.NormalObserver
+import io.reactivex.disposables.Disposable
 
 
 const val pageWay = false
 val gson = Gson()
 
-@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 fun findModelView(thisCls: Class<*>): LayoutView {
+    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     return thisCls.getAnnotation(LayoutView::class.java)
         ?: return findModelView(thisCls = thisCls.superclass)
+
 }
 
 inline fun <reified T> toArray(list: List<T>): Array<T> {
@@ -52,15 +56,16 @@ inline fun <reified E> rxBus(): Observable<E> {
     return RxBus.getInstance()
         .toObservable(E::class.java)
 }
-fun busPost(any: Any){
+
+fun busPost(any: Any) {
     return RxBus.getInstance().send(any)
 }
 
 
 inline fun <reified T> Gson.fromJson(json: String) =
-    this.fromJson<T>(json, object : TypeToken<T>() {}.type)
+    this.fromJson<T>(json, object : TypeToken<T>() {}.type)!!
 
-inline fun <reified T> String.fromGson() = gson.fromJson<T>(this)
+inline fun <reified T> String.fromJson() = gson.fromJson<T>(this)
 
 fun contain(value: Int, min: Int, max: Int): Boolean {
     return value in min until max
@@ -73,6 +78,7 @@ fun containsList(value: Int, list: List<*>): Boolean {
 inline fun <T, R> T.transform(block: T.() -> R): R {
     return block()
 }
+
 
 //---- file -----
 val srcFileDir = Environment.getExternalStorageDirectory().toString() + "/zktc"
@@ -95,30 +101,86 @@ fun createWholeDir(path: String): String {
     return builder.toString()
 }
 
-fun <T> Observable<T>.subscribeApi(onNext:(T)->Unit){
-    this.subscribe(ApiObserver(onNext,{ toast(it) }))
+//-------------Observable---------------
+fun <T> Observable<T>.subscribeNormal(
+    onNext: (T) -> Unit = {},
+    onError: (Throwable) -> Unit = { toast(it) },
+    onComplete: () -> Unit = {},
+    onSubscribe: (Disposable) -> Unit = {}
+) {
+    this.subscribe(NormalObserver(onNext, onError, onComplete, onSubscribe))
 }
 
-fun <T> Observable<T>.subscribeApi(t: CycleContainer<*>,onNext:(T)->Unit){
-    val observer = ApiObserver(onNext,{ toast(it) })
+fun <T> Observable<T>.subscribeNormal(
+    t: CycleContainer<*>,
+    onNext: (T) -> Unit = {},
+    onError: (Throwable) -> Unit = { toast(it) },
+    onComplete: () -> Unit = {},
+    onSubscribe: (Disposable) -> Unit = {}
+) {
+    val observer = NormalObserver(onNext, onError, onComplete, onSubscribe)
     t.cycle.addObserver(observer)
     this.subscribe(observer)
 }
-fun <T> Single<T>.subscribeApi(onNext:(T)->Unit={}){
-    this.subscribe(ApiObserver(onNext,{ toast(it) }))
+
+fun <T : Any> Observable<T>.subscribeNormal(
+    t: ViewModel<*, *>,
+    onNext: (T) -> Unit = {},
+    onError: (Throwable) -> Unit = { toast(it) },
+    onComplete: () -> Unit = {},
+    onSubscribe: (Disposable) -> Unit = {}
+) {
+    val observer = NormalObserver(onNext, onError, onComplete, onSubscribe)
+    t.t.cycle.addObserver(observer)
+    if (t.disposable == null || t.disposable?.isDisposed!!) {
+        this.subscribe(observer)
+        t.disposable = observer
+    }
 }
 
-fun <T> Single<T>.subscribeApi(container: CycleContainer<*>,
-                               onNext:(T)->Unit={},
-                               onError:(Throwable)->Unit={ toast(it) })
-{
-    val observer = ApiObserver(onNext,onError)
-    container.cycle.addObserver(observer)
+//-------------Single---------------
+fun <T> Single<T>.subscribeNormal(
+    onNext: (T) -> Unit = {},
+    onError: (Throwable) -> Unit = { toast(it) },
+    onComplete: () -> Unit = {},
+    onSubscribe: (Disposable) -> Unit = {}
+) {
+    this.subscribe(NormalObserver(onNext, onError, onComplete, onSubscribe))
+}
+
+fun <T> Single<T>.subscribeNormal(
+    t: CycleContainer<*>,
+    onNext: (T) -> Unit = {},
+    onError: (Throwable) -> Unit = { toast(it) },
+    onComplete: () -> Unit = {},
+    onSubscribe: (Disposable) -> Unit = {}
+) {
+    val observer = NormalObserver(onNext, onError, onComplete, onSubscribe)
+    t.cycle.addObserver(observer)
     this.subscribe(observer)
 }
 
-fun toast(e:Throwable){
-    Toast.makeText(App.activity(),e.message,Toast.LENGTH_SHORT).show()
+
+fun <T : Any> Single<T>.subscribeNormal(
+    t: ViewModel<*, *>,
+    onNext: (T) -> Unit = {},
+    onError: (Throwable) -> Unit = { toast(it) },
+    onComplete: () -> Unit = {},
+    onSubscribe: (Disposable) -> Unit = {}
+) {
+    val observer = NormalObserver(onNext, onError, onComplete, onSubscribe)
+    t.t.cycle.addObserver(observer)
+    if (t.disposable == null || t.disposable?.isDisposed!!) {
+        this.subscribe(observer)
+        t.disposable = observer
+    }
+}
+
+
+fun toast(e: Throwable) {
+    val message = e.message
+    if (!TextUtils.isEmpty(message))
+        Toast.makeText(App.activity(), e.message, Toast.LENGTH_SHORT).show()
 }
 
 fun installApkFile(
@@ -141,12 +203,12 @@ fun installApkFile(
 const val SUCCESS = 1
 const val FAILED = 0
 fun createDir(path: String): Int {
-    var path = path
-    val l = path.length
-    if (path[l - 1] == File.separatorChar) { //如果末尾是 /
-        path = path.substring(0, l - 1)
+    var p = path
+    val l = p.length
+    if (p[l - 1] == File.separatorChar) { //如果末尾是 /
+        p = path.substring(0, l - 1)
     }
-    return createDir(File(path))
+    return createDir(File(p))
 }
 
 fun createDir(file: File): Int {
@@ -166,6 +228,7 @@ fun createDir(file: File): Int {
  * @param darkmode true为深色
  * @return
  */
+@SuppressLint("PrivateApi")
 fun setMiuiStatusBarDarkMode(activity: Activity, darkmode: Boolean): Boolean {
     val clazz = activity.window.javaClass
     try {
@@ -244,18 +307,17 @@ fun <T> Single<T>.newToMainThread(): Single<T> {
 }
 
 
-
 fun htmlText(vararg texts: Text): CharSequence {
     val builder = StringBuilder()
     for (text in texts) builder.append(text)
     return Html.fromHtml(builder.toString())
 }
 
-fun h(text: String,color: Int, big: Int=0,line: Boolean=false): Text {
+fun h(text: String, color: Int, big: Int = 0, line: Boolean = false): Text {
     return Text(text, color, big, line)
 }
 
-fun h(text: String,color: String="", big: Int=0,line: Boolean=false): Text {
+fun h(text: String, color: String = "", big: Int = 0, line: Boolean = false): Text {
     return Text(text, color, big, line)
 }
 

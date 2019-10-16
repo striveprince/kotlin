@@ -6,6 +6,7 @@ import androidx.databinding.ObservableField
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.ListUpdateCallback
 import com.binding.model.base.container.Container
+import com.binding.model.base.container.CycleContainer
 import com.binding.model.inflate.obj.RecyclerEvent
 import com.binding.model.inflate.obj.RecyclerStatus
 import com.binding.model.pageWay
@@ -13,7 +14,7 @@ import io.reactivex.Single
 import io.reactivex.SingleObserver
 import io.reactivex.disposables.Disposable
 
-open class ViewHttpModel<T : Container, Binding : ViewDataBinding, R> : ViewModel<T, Binding>(),
+open class ViewHttpModel<T : CycleContainer<*>, Binding : ViewDataBinding, R> : ViewModel<T, Binding>(),
     SingleObserver<R> {
     val loading = ObservableBoolean(false)
     val enable = ObservableBoolean(true)

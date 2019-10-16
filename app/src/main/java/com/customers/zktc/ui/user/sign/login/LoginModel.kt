@@ -8,12 +8,13 @@ import com.binding.model.annoation.LayoutView
 import com.binding.model.busPost
 import com.binding.model.inflate.model.ViewModel
 import com.binding.model.rxBus
-import com.binding.model.subscribeApi
+import com.binding.model.subscribeNormal
 import com.customers.zktc.R
 import com.customers.zktc.base.util.getPasswordError
 import com.customers.zktc.base.util.getPhoneError
 import com.customers.zktc.databinding.FragmentLoginBinding
 import com.customers.zktc.inject.data.Api
+import com.customers.zktc.inject.data.preference.user.UserApi
 import com.customers.zktc.ui.Constant
 import com.customers.zktc.ui.user.sign.SignEvent
 import com.customers.zktc.ui.user.sign.SignParams
@@ -34,7 +35,7 @@ class LoginModel @Inject constructor() : ViewModel<LoginFragment, FragmentLoginB
 
     private fun bindingParams(t: LoginFragment) {
         t.arguments?.getParcelable<SignParams>(Constant.params)?.let { binding?.params = it }
-        rxBus<SignEvent>(t).subscribeApi(t) { binding?.params = it.signParams }
+        rxBus<SignEvent>(t).subscribeNormal(t, { binding?.params = it.signParams })
     }
 
     fun onPhoneFinish(s: Editable) {
@@ -52,11 +53,17 @@ class LoginModel @Inject constructor() : ViewModel<LoginFragment, FragmentLoginB
     }
 
     fun onWechatClick(v: View) {
-        api.wechatLogin(binding!!.params!!).subscribeApi(t)
+        api.wechatLogin(binding!!.params!!)
+            .subscribeNormal(t,{
+
+        })
     }
 
     fun onLoginClick(v: View) {
-        api.passwordLogin(binding!!.params!!).subscribeApi(t)
+        api.passwordLogin(binding!!.params!!.change())
+            .subscribeNormal(t,{
+                busPost(LoginEvent(true,it))
+                finish()})
     }
 
     fun onCodeClick(v: View) {

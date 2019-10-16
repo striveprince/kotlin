@@ -8,10 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.binding.model.adapter.recycler.RecyclerAdapter
 import com.binding.model.base.container.Container
+import com.binding.model.base.container.CycleContainer
 import com.binding.model.inflate.inter.Inflate
 import com.binding.model.inflate.obj.RecyclerStatus
 
-open class RecyclerModel<T: Container,Binding: ViewDataBinding,E : Inflate<in ViewDataBinding>>(val recyclerAdapter: RecyclerAdapter<E> = RecyclerAdapter<E>())
+open class RecyclerModel<T: CycleContainer<*>,Binding: ViewDataBinding,E : Inflate<in ViewDataBinding>>(val recyclerAdapter: RecyclerAdapter<E> = RecyclerAdapter<E>())
     : ViewArrayModel<T, Binding,E,RecyclerAdapter<E>>(recyclerAdapter) {
     val layoutManagerField:ObservableField<RecyclerView.LayoutManager> = ObservableField()
     val onScrollListener  = OnScrollListener()

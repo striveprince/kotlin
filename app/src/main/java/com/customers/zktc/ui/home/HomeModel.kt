@@ -7,7 +7,7 @@ import com.binding.model.annoation.LayoutView
 import com.binding.model.inflate.inter.Item
 import com.binding.model.inflate.model.ViewModel
 import com.binding.model.installApkFile
-import com.binding.model.subscribeApi
+import com.binding.model.subscribeNormal
 import com.customers.zktc.R
 import com.customers.zktc.base.arouter.ARouterUtil
 import com.customers.zktc.base.cycle.BaseFragment
@@ -38,7 +38,7 @@ class HomeModel
 
     private fun checkUpdate(t: HomeActivity) {
         api.checkUpdate(t)
-            .subscribeApi(t,{ installApkFile(t, it) })
+            .subscribeNormal(t,{ installApkFile(t, it) })
     }
 
     private fun initFragment() {
@@ -47,7 +47,7 @@ class HomeModel
             .toList()
             .map { fragments.addAll(it) }
             .doOnSuccess { binding!!.tabLayout.addOnTabSelectedListener(this) }
-            .subscribeApi(t){checkTab(0)}
+            .subscribeNormal(t){checkTab(0)}
     }
 
 
