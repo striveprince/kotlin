@@ -9,7 +9,7 @@ import timber.log.Timber
  * Created by arvin on 2018/1/24.
  */
 
-class GridSizeLookup<E : GridInflate<in ViewDataBinding>>(adapter: IModelAdapter<E>, private val size: Int) :
+class GridSizeLookup<E : GridInflate<out ViewDataBinding>>(adapter: IModelAdapter<E>, private val size: Int) :
     GridSpanSizeLookup<E>(adapter) {
 
     override fun getSpanSize(position: Int): Int {

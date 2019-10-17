@@ -6,7 +6,7 @@ import org.jetbrains.anko.AnkoComponent
 
 interface Anko<Component : AnkoComponent<*>> : Parse<Component> {
 
-    override fun attachView(context: Context, co: ViewGroup?, attachToParent: Boolean, t: Component?): Component {
+    override fun attachView(context: Context, co: ViewGroup?, attachToParent: Boolean, t: Any?): Component {
         return binding!!
     }
 

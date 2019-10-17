@@ -6,11 +6,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.binding.model.Config
+import java.lang.RuntimeException
 
 interface Inflate<Binding : ViewDataBinding> : Parse<Binding>{
-     override fun attachView(context: Context, co: ViewGroup?, attachToParent: Boolean, binding1: Binding?): Binding {
+     override fun attachView(context: Context, co: ViewGroup?, attachToParent: Boolean, binding1: Any?): Binding {
         this.binding = bind(getLayoutId(), context, co, attachToParent, binding1)
-        binding1?.let { bindView(context, it) }
+        binding?.let { bindView(context, it) }
         return this.binding!!
     }
 
@@ -18,16 +19,21 @@ interface Inflate<Binding : ViewDataBinding> : Parse<Binding>{
 
     }
 
-    private fun <B : ViewDataBinding> bind(layoutId: Int, context: Context, co: ViewGroup?, attachToParent: Boolean, binding1: B?): B {
-        var binding = binding1
-        if (binding == null) {
-            binding = DataBindingUtil.inflate(LayoutInflater.from(context), layoutId, co, attachToParent)
-            binding!!.setVariable(Config.vm, this)
-        } else {
-            binding.setVariable(Config.vm, this)
-            binding.executePendingBindings()
+    @Suppress("UNCHECKED_CAST")
+    private fun<B:ViewDataBinding> bind(layoutId: Int, context: Context, co: ViewGroup?, attachToParent: Boolean, binding1: Any?): B {
+        return when (binding1) {
+            null -> {
+                val b = DataBindingUtil.inflate(LayoutInflater.from(context), layoutId, co, attachToParent) as B
+                b.setVariable(Config.vm, this)
+                b
+            }
+            is ViewDataBinding -> {
+                binding1.setVariable(Config.vm, this)
+                binding1.executePendingBindings()
+                binding1 as B
+            }
+            else -> throw RuntimeException("error bind type = ${binding1.javaClass.name}")
         }
-        return binding
     }
 
     fun removeBinding(){

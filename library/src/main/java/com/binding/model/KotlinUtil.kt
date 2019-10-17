@@ -46,11 +46,12 @@ inline fun <reified T> toArray(list: List<T>): Array<T> {
     return ArrayList<T>(list).toArray(arrayOf())
 }
 
-inline fun <reified E> rxBus(owner: LifecycleOwner): Observable<E> {
-    val provider = AndroidLifecycle.createLifecycleProvider(owner)
-    return rxBus<E>()
-        .compose(provider.bindToLifecycle<E>())
-}
+
+//inline fun <reified E> rxBus(owner: LifecycleOwner): Observable<E> {
+//    val provider = AndroidLifecycle.createLifecycleProvider(owner)
+//    return rxBus<E>()
+//        .compose(provider.bindToLifecycle<E>())
+//}
 
 inline fun <reified E> rxBus(): Observable<E> {
     return RxBus.getInstance()
@@ -102,6 +103,10 @@ fun createWholeDir(path: String): String {
 }
 
 //-------------Observable---------------
+//inline fun <reified T> Observable<T>.merge(observable: Observable<T>){
+//    this.mergeWith(observable)
+//}
+
 fun <T> Observable<T>.subscribeNormal(
     onNext: (T) -> Unit = {},
     onError: (Throwable) -> Unit = { toast(it) },
@@ -232,10 +237,10 @@ fun createDir(file: File): Int {
 fun setMiuiStatusBarDarkMode(activity: Activity, darkmode: Boolean): Boolean {
     val clazz = activity.window.javaClass
     try {
-        var darkModeFlag = 0
+
         val layoutParams = Class.forName("android.view.MiuiWindowManager\$LayoutParams")
         val field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE")
-        darkModeFlag = field.getInt(layoutParams)
+        var  darkModeFlag = field.getInt(layoutParams)
         val extraFlagField = clazz.getMethod(
             "setExtraFlags",
             Int::class.javaPrimitiveType,

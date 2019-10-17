@@ -9,6 +9,7 @@
             name="vm"
             type="com.customers.zktc.ui.user.sign.register.RegisterModel" />
 
+
         <variable
             name="params"
             type="com.customers.zktc.ui.user.sign.SignParams" />

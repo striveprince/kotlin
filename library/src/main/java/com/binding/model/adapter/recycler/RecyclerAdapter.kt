@@ -12,7 +12,7 @@ import com.binding.model.inflate.inter.Inflate
 import com.binding.model.adapter.recycler.RecyclerHolder
 import com.binding.model.containsList
 
-open class RecyclerAdapter<E : Inflate<ViewDataBinding>> : RecyclerView.Adapter<RecyclerHolder<E>>()
+open class RecyclerAdapter<E : Inflate<*>> : RecyclerView.Adapter<RecyclerHolder<E>>()
     , IRecyclerAdapter<E> {
 
     private val sparseArray = SparseArray<E>()

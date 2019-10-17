@@ -8,11 +8,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import com.binding.model.Config
-import com.binding.model.base.RxBus
 import com.binding.model.base.container.CycleContainer
 import com.binding.model.inflate.ViewInflate
-import com.binding.model.inflate.observer.NormalObserver
-import com.binding.model.rxBus
 import io.reactivex.disposables.Disposable
 import io.reactivex.internal.disposables.ListCompositeDisposable
 

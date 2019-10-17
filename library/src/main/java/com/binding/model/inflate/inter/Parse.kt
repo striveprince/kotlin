@@ -14,15 +14,8 @@ interface Parse<Binding>{
     var binding:Binding?
     var iEventAdapter: IEventAdapter<*>?
 
-    fun registerEvent(){
-//        RxBus
-    }
 
-    fun unRegisterEvent(){
-
-    }
-
-    fun attachView(context: Context, co: ViewGroup?, attachToParent: Boolean, binding1: Binding?): Binding
+    fun attachView(context: Context, co: ViewGroup?, attachToParent: Boolean, binding1: Any?): Binding
 //    fun registerEvent() : Boolean{
 //        if(isEmpty(layoutView.event)){
 //            val events = layoutView.event.split("|")

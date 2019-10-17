@@ -4,6 +4,7 @@ import com.binding.model.toast
 import com.customers.zktc.inject.data.net.exception.ApiException
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
+import io.reactivex.Single
 import io.reactivex.functions.Function
 
 /**
@@ -16,12 +17,10 @@ class NoErrorObservableTransformer <T> : ObservableTransformer<T, T> {
 
     override fun apply(upstream: Observable<T>): Observable<T> {
         return upstream
-//            .subscribeOn(Schedulers.io())
-//            .compose(ErrorObservableTransformer())
             .onErrorResumeNext(Function{
                 if(it is ApiException){
                     toast(it)
-                    Observable.create<T> { emitter -> emitter.onComplete()}
+                    Observable.create{emitter->emitter.onComplete()}
                 }else Observable.error(it)
             })
     }

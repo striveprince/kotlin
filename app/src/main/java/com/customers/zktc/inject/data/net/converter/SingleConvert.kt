@@ -1,6 +1,5 @@
 package com.customers.zktc.inject.data.net.converter
 
-import com.customers.zktc.ui.user.sign.SignParams
 import okhttp3.RequestBody
 
 /**

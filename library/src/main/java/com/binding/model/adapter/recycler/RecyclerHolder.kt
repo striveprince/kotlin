@@ -7,7 +7,7 @@ import com.binding.model.adapter.IEventAdapter
 import com.binding.model.inflate.inter.Inflate
 import com.binding.model.R
 
-class RecyclerHolder<E:Inflate<ViewDataBinding>>
+class RecyclerHolder<E:Inflate<*>>
 private constructor(private val container:ViewGroup, val binding: ViewDataBinding)
     : RecyclerView.ViewHolder(binding.root) {
 

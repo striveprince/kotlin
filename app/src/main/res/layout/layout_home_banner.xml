@@ -4,7 +4,7 @@
     <data>
         <variable
             name="vm"
-            type="com.customers.zktc.ui.home.page.HomePageBannerData" />
+            type="com.customers.zktc.ui.home.page.HomePageOperationData" />
     </data>
     <FrameLayout
         android:layout_width="match_parent"

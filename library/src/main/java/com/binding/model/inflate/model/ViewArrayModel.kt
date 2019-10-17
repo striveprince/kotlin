@@ -7,7 +7,7 @@ import com.binding.model.base.container.CycleContainer
 import com.binding.model.inflate.obj.EventType
 import com.binding.model.pageWay
 
-open class ViewArrayModel<T : CycleContainer<*>, Binding : ViewDataBinding, E,Adapter:IModelAdapter<E>>
+open class ViewArrayModel<T : CycleContainer<*>, Binding : ViewDataBinding,E,Adapter:IModelAdapter<E>>
     constructor(val adapter: Adapter)
     :ViewHttpModel<T,Binding,List<E>> ()
 {

@@ -6,13 +6,14 @@ import androidx.fragment.app.FragmentManager
 import com.alibaba.android.arouter.launcher.ARouter
 import com.binding.model.annoation.LayoutView
 import com.binding.model.inflate.model.ViewModel
-import com.binding.model.rxBus
 import com.binding.model.subscribeNormal
 import com.customers.zktc.R
 import com.customers.zktc.base.cycle.BaseFragment
 import com.customers.zktc.databinding.ActivitySignBinding
 import com.customers.zktc.inject.qualifier.manager.ActivityFragmentManager
 import com.customers.zktc.ui.Constant
+import com.customers.zktc.ui.user.sign.SignParams
+import com.customers.zktc.ui.receiveSignEvent
 import javax.inject.Inject
 
 /**
@@ -24,20 +25,20 @@ import javax.inject.Inject
 @LayoutView(layout = [R.layout.activity_sign])
 class SignModel
 @Inject constructor(@ActivityFragmentManager private val fragmentManager: FragmentManager) :
-    ViewModel<SignActivity,ActivitySignBinding>() {
+    ViewModel<SignActivity, ActivitySignBinding>() {
     private var currentPath: String = ""
 
     override fun attachView(savedInstanceState: Bundle?, t: SignActivity) {
         super.attachView(savedInstanceState, t)
         showFragment(t.path)
-        rxBus<SignEvent>(t).subscribeNormal(t,{  showFragment(it.path,it.signParams) })
+        receiveSignEvent().subscribeNormal(t, { showFragment(it.path, it.signParams) })
     }
 
     private fun getFragment(path: String): BaseFragment<*> {
         return ARouter.getInstance().build(path).navigation() as BaseFragment<*>
     }
 
-    fun onCloseClick(v:View){
+    fun onCloseClick(v: View) {
         onBackPress()
     }
 
@@ -46,9 +47,9 @@ class SignModel
         val ft = fragmentManager.beginTransaction()
         val beforeFragment = fragmentManager.findFragmentByTag(currentPath) as BaseFragment<*>?
         beforeFragment?.let { ft.hide(it) }
-        if (!fragment.isAdded) ft.add(R.id.frameLayout, fragment,path)
+        if (!fragment.isAdded) ft.add(R.id.frameLayout, fragment, path)
         val bundle = Bundle()
-        bundle.putParcelable(Constant.params,signParams)
+        bundle.putParcelable(Constant.params, signParams)
         fragment.arguments = bundle
         ft.show(fragment)
         ft.commitAllowingStateLoss()

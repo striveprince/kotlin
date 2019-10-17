@@ -17,18 +17,17 @@ import javax.inject.Inject
 
 @LayoutView(layout = [R.layout.fragment_home_page])
 class HomePageModel @Inject constructor() :
-    RecyclerModel<HomePageFragment, FragmentHomePageBinding, GridInflate<in ViewDataBinding>>() {
+    RecyclerModel<HomePageFragment, FragmentHomePageBinding, HomeBaseInflate<*>>() {
     val city = ObservableField<String>("定位中...")
 
-    @Inject
-    lateinit var api: Api
+    @Inject lateinit var api: Api
     private val spanCount = 12
     override fun attachView(savedInstanceState: Bundle?, t: HomePageFragment) {
         super.attachView(savedInstanceState, t)
         val layoutManager = GridLayoutManager(t.context, spanCount)
         layoutManager.spanSizeLookup = GridSizeLookup(recyclerAdapter, spanCount)
         layoutManagerField.set(layoutManager)
-        setRxHttp { offset, refresh -> api.homePage(offset, refresh) }
+        setRxHttp { offset, refresh -> api.homePage(offset, refresh,pageCount) }
         api.locationCity(t.dataActivity).subscribeNormal(this, { city.set(it) })
     }
 

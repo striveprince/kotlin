@@ -2,11 +2,10 @@ package com.customers.zktc.inject.data.net
 
 import com.customers.zktc.inject.data.oss.OssEntity
 import com.customers.zktc.inject.data.preference.user.UserEntity
-import com.customers.zktc.ui.home.page.HomePageBannerData
-import com.customers.zktc.ui.home.page.HomePageParams
+import com.customers.zktc.ui.home.page.*
+import com.customers.zktc.ui.user.sign.SignParams
 import com.customers.zktc.ui.user.sign.CodeEntity
 import com.customers.zktc.ui.user.sign.SignEntity
-import com.customers.zktc.ui.user.sign.SignParams
 import io.reactivex.Single
 import okhttp3.ResponseBody
 import retrofit2.http.*
@@ -43,6 +42,19 @@ interface NetApi {
 
 
     @POST("/api/v2/ope/getOperationAd")
-    fun banner(@Body params: HomePageParams):Single<InfoEntity<HomePageBannerData>>
+    fun getOperationAd(@Body params: HomeOperationParams):Single<InfoEntity<HomePageOperationData>>
+
+    @POST("/api/v2/marketing/rush/list")
+//    fun getRushList(@Body params: HomeRecommendParams):Single<InfoEntity<HomeGoodsVoData>>
+    fun getRushList():Single<InfoEntity<HomeGoodsVoData>>
+
+    @POST("/api/v2/ope/getOperationHomeCategory")
+    fun operationHomeCategorys(): Single<InfoEntity<HomeCategoryData>>
+
+    @POST("/api/v2/ope/getGoodsRecommend")
+    fun homeGoodRecommend(@Body params: HomeRecommendParams): Single<InfoEntity<HomeRecommendData>>
+
+    @POST("/api/v2/ope/getOperationFloor")
+    fun getOperationFloor(@Body params:HomeFloorParams): Single<InfoEntity<HomeFloorData>>
 
 }

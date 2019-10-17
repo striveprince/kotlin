@@ -1,6 +1,8 @@
 package com.binding.model.inflate.observer
 
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import io.reactivex.*
 import io.reactivex.disposables.Disposable
 import io.reactivex.exceptions.CompositeException
@@ -118,5 +120,10 @@ open class NormalObserver<T> constructor(
 
     override fun hasCustomOnError(): Boolean {
         return onError !== Functions.ON_ERROR_MISSING
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    fun onDestroy(){
+        dispose()
     }
 }

@@ -5,18 +5,17 @@ import android.text.Editable
 import android.view.View
 import androidx.databinding.ObservableBoolean
 import com.binding.model.annoation.LayoutView
-import com.binding.model.busPost
 import com.binding.model.inflate.model.ViewModel
-import com.binding.model.rxBus
 import com.binding.model.subscribeNormal
 import com.customers.zktc.R
 import com.customers.zktc.base.util.getPasswordError
 import com.customers.zktc.base.util.getPhoneError
 import com.customers.zktc.databinding.FragmentLoginBinding
 import com.customers.zktc.inject.data.Api
-import com.customers.zktc.inject.data.preference.user.UserApi
 import com.customers.zktc.ui.Constant
-import com.customers.zktc.ui.user.sign.SignEvent
+import com.customers.zktc.ui.loginEvent
+import com.customers.zktc.ui.receiveSignEvent
+import com.customers.zktc.ui.signEvent
 import com.customers.zktc.ui.user.sign.SignParams
 import com.customers.zktc.ui.user.sign.code.SignCodeFragment.Companion.signCode
 import com.customers.zktc.ui.user.sign.password.forget.PasswordForgetFragment.Companion.forget
@@ -35,7 +34,8 @@ class LoginModel @Inject constructor() : ViewModel<LoginFragment, FragmentLoginB
 
     private fun bindingParams(t: LoginFragment) {
         t.arguments?.getParcelable<SignParams>(Constant.params)?.let { binding?.params = it }
-        rxBus<SignEvent>(t).subscribeNormal(t, { binding?.params = it.signParams })
+//        rxBus<SignEvent>(t).subscribeNormal(this, { binding?.params = it.signParams })
+        receiveSignEvent().subscribeNormal(this)
     }
 
     fun onPhoneFinish(s: Editable) {
@@ -49,7 +49,7 @@ class LoginModel @Inject constructor() : ViewModel<LoginFragment, FragmentLoginB
     }
 
     fun onForgetClick(v: View) {
-        busPost(SignEvent(forget, binding!!.params!!))
+        signEvent(forget, binding!!.params!!)
     }
 
     fun onWechatClick(v: View) {
@@ -62,16 +62,16 @@ class LoginModel @Inject constructor() : ViewModel<LoginFragment, FragmentLoginB
     fun onLoginClick(v: View) {
         api.passwordLogin(binding!!.params!!.change())
             .subscribeNormal(t,{
-                busPost(LoginEvent(true,it))
+                loginEvent(true,it)
                 finish()})
     }
 
     fun onCodeClick(v: View) {
-        busPost(SignEvent(signCode, binding!!.params!!))
+        signEvent(signCode, binding!!.params!!)
     }
 
     fun onRegisterClick(v: View) {
-        busPost(SignEvent(register, binding!!.params!!))
+        signEvent(register, binding!!.params!!)
     }
 
 }

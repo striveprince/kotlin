@@ -16,6 +16,7 @@ import com.customers.zktc.R
 import com.customers.zktc.inject.data.net.InfoEntity
 import com.customers.zktc.inject.data.net.exception.ApiException
 import com.customers.zktc.inject.data.net.transform.ErrorSingleTransformer
+import com.customers.zktc.inject.data.net.transform.NoErrorObservableTransformer
 import com.customers.zktc.inject.data.net.transform.RestfulSingleTransformer
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Observable
@@ -66,12 +67,19 @@ fun md5(paramString: String): String {
 
 }
 
-
+fun<T> Single<T>.noError():Observable<T>{
+    return this.toObservable().compose(NoErrorObservableTransformer())
+}
 
 
 fun <T> Single<InfoEntity<T>>.restful(): Single<T> {
     return this.compose(ErrorSingleTransformer())
         .compose(RestfulSingleTransformer())
+}
+
+fun <T> Single<InfoEntity<T>>.noErrorRestful():Observable<T>{
+    return this.restful().noError()
+
 }
 
 fun <T> Single<InfoEntity<T>>.restfulCompose(): Single<T> {

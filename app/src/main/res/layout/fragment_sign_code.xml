@@ -63,6 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="23.0dp"
+            android:enabled="@{vm.enableCodeInput}"
             android:paddingBottom="23.0dp"
             app:vCodeBackgroundFocus="@drawable/verification_code_et_bg_focus"
             app:vCodeBackgroundNormal="@drawable/verification_code_et_bg_normal"

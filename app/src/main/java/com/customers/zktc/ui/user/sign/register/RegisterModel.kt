@@ -7,12 +7,13 @@ import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.ObservableBoolean
-import com.binding.model.*
 import com.binding.model.annoation.LayoutView
 import com.binding.model.base.rotate.TimeUtil
 import com.binding.model.base.rotate.TimingEntity
 import com.binding.model.base.spannable.SpannableUtil
 import com.binding.model.inflate.model.ViewModel
+import com.binding.model.subscribeNormal
+import com.binding.model.toast
 import com.customers.zktc.R
 import com.customers.zktc.base.util.getCodeError
 import com.customers.zktc.base.util.getPasswordError
@@ -21,10 +22,11 @@ import com.customers.zktc.base.util.showInputMethod
 import com.customers.zktc.databinding.FragmentRegisterBinding
 import com.customers.zktc.inject.data.Api
 import com.customers.zktc.ui.Constant
+import com.customers.zktc.ui.loginEvent
+import com.customers.zktc.ui.receiveSignEvent
+import com.customers.zktc.ui.signEvent
 import com.customers.zktc.ui.user.sign.CodeEntity
-import com.customers.zktc.ui.user.sign.SignEvent
 import com.customers.zktc.ui.user.sign.SignParams
-import com.customers.zktc.ui.user.sign.login.LoginEvent
 import com.customers.zktc.ui.user.sign.login.LoginFragment
 import timber.log.Timber
 import javax.inject.Inject
@@ -68,7 +70,7 @@ class RegisterModel @Inject constructor() : ViewModel<RegisterFragment, Fragment
         api.register(binding!!.params!!)
             .subscribeNormal(t,{
                 finish()
-                busPost(LoginEvent(true,it))
+                loginEvent(true,it)
             })
     }
 
@@ -112,7 +114,7 @@ class RegisterModel @Inject constructor() : ViewModel<RegisterFragment, Fragment
 
     private fun bindingParams(t: RegisterFragment) {
         t.arguments?.getParcelable<SignParams>(Constant.params)?.let { binding?.params = it }
-        rxBus<SignEvent>(t).subscribeNormal(t, { binding?.params = it.signParams })
+        receiveSignEvent().subscribeNormal(t, { binding?.params = it.signParams })
     }
 
 
@@ -152,6 +154,6 @@ class RegisterModel @Inject constructor() : ViewModel<RegisterFragment, Fragment
      * password login
      * */
     fun onPasswordLoginClick(v: View) {
-        binding?.params?.let { busPost(SignEvent(LoginFragment.login, it)) }
+        binding?.params?.let { signEvent(LoginFragment.login, it) }
     }
 }

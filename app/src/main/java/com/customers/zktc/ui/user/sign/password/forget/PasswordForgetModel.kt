@@ -5,17 +5,16 @@ import android.text.Editable
 import android.view.View
 import androidx.databinding.ObservableBoolean
 import com.binding.model.annoation.LayoutView
-import com.binding.model.busPost
 import com.binding.model.inflate.model.ViewModel
-import com.binding.model.rxBus
 import com.binding.model.subscribeNormal
 import com.customers.zktc.R
 import com.customers.zktc.base.util.getPhoneError
 import com.customers.zktc.databinding.FragmentPasswordForgetBinding
 import com.customers.zktc.inject.data.Api
 import com.customers.zktc.ui.Constant
-import com.customers.zktc.ui.user.sign.SignEvent
 import com.customers.zktc.ui.user.sign.SignParams
+import com.customers.zktc.ui.receiveSignEvent
+import com.customers.zktc.ui.signEvent
 import com.customers.zktc.ui.user.sign.login.LoginFragment
 import javax.inject.Inject
 
@@ -35,8 +34,7 @@ class PasswordForgetModel @Inject constructor(): ViewModel<PasswordForgetFragmen
 
     private fun bindingParams(t: PasswordForgetFragment) {
         t.arguments?.getParcelable<SignParams>(Constant.params)?.let { binding?.params = it }
-        rxBus<SignEvent>(t)
-            .subscribeNormal(t,  { binding?.params = it.signParams })
+        receiveSignEvent().subscribeNormal(this,{ binding?.params = it.signParams })
     }
 
     fun onPhoneFinish(s:Editable){
@@ -59,6 +57,6 @@ class PasswordForgetModel @Inject constructor(): ViewModel<PasswordForgetFragmen
     }
 
     fun onPasswordFinish(s:Editable){
-        binding?.params?.let { busPost(SignEvent(LoginFragment.login,it)) }
+        binding?.params?.let { signEvent(LoginFragment.login,it) }
     }
 }
