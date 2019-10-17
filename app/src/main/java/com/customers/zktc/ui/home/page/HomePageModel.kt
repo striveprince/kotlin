@@ -36,6 +36,11 @@ class HomePageModel @Inject constructor() :
                 onHttp(0, RecyclerStatus.loadTop)
                 binding?.smartRefreshLayout?.finishRefresh()
             }
+
+            override fun onLoadMore(refreshLayout: RefreshLayout) {
+                super.onLoadMore(refreshLayout)
+
+            }
         })
         val layoutManager = GridLayoutManager(t.context, spanCount)
         layoutManager.spanSizeLookup = GridSizeLookup(recyclerAdapter, spanCount)
