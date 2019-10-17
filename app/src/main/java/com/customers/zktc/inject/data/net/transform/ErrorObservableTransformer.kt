@@ -28,9 +28,6 @@ class ErrorObservableTransformer<T> : ObservableTransformer<T, T> {
     private val tokenExpire = "1"
     private val authenticationException = "user"
     private val logout = "us"
-//    override fun apply(upstream: Observable<T>): ObservableSource<T> {
-//        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//    }
 
     override fun apply(upstream: Observable<T>): ObservableSource<T> {
         return upstream.subscribeOn(Schedulers.io())
@@ -73,6 +70,6 @@ class ErrorObservableTransformer<T> : ObservableTransformer<T, T> {
                     }
                 }
             }
-
+            .compose(ErrorThreadTransform())
     }
 }

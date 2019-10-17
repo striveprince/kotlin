@@ -9,13 +9,15 @@ import com.binding.model.base.container.Container
 import com.binding.model.base.container.CycleContainer
 import com.binding.model.inflate.obj.RecyclerEvent
 import com.binding.model.inflate.obj.RecyclerStatus
+import com.binding.model.inflate.observer.NormalObserver
 import com.binding.model.pageWay
+import io.reactivex.Observer
 import io.reactivex.Single
 import io.reactivex.SingleObserver
 import io.reactivex.disposables.Disposable
 
-open class ViewHttpModel<T : CycleContainer<*>, Binding : ViewDataBinding, R> : ViewModel<T, Binding>(),
-    SingleObserver<R> {
+open class ViewHttpModel<T : CycleContainer<*>, Binding : ViewDataBinding, R> : ViewModel<T, Binding>(), Observer<R> {
+    private val normalObserver by lazy { NormalObserver(this) }
     val loading = ObservableBoolean(false)
     val enable = ObservableBoolean(true)
     val error = ObservableField("")
@@ -24,6 +26,8 @@ open class ViewHttpModel<T : CycleContainer<*>, Binding : ViewDataBinding, R> : 
     var headIndex = 0
     var http: ((Int, Int) -> Single<R>)? = null
     var refresh = 0
+
+
 
     fun setRxHttp(http: ((Int, Int) -> Single<R>) ){
         this.http = http
@@ -35,10 +39,14 @@ open class ViewHttpModel<T : CycleContainer<*>, Binding : ViewDataBinding, R> : 
         this.offset = if (refresh > 0) 0 else offset
         val o = if (offset > headIndex) offset - headIndex else 0
         val p = if (pageWay) o / pageCount + 1 else o
-        http?.invoke(offset, refresh)?.subscribe(this)
+        http?.invoke(offset, refresh)?.subscribe(normalObserver)
     }
 
-    override fun onSuccess(t: R) {
+    override fun onNext(t: R) {
+
+    }
+
+    override fun onComplete() {
         loading.set(false)
     }
 

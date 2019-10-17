@@ -11,8 +11,8 @@ open class ViewArrayModel<T : CycleContainer<*>, Binding : ViewDataBinding,E,Ada
     constructor(val adapter: Adapter)
     :ViewHttpModel<T,Binding,List<E>> ()
 {
-    override fun onSuccess(t: List<E>) {
-        super.onSuccess(t)
+    override fun onNext(t: List<E>) {
+        super.onNext(t)
         val position = if (pageWay) (offset - headIndex) / pageCount*pageCount else offset
         val headIndex = if (isRefresh()) 0 else this.headIndex
         adapter.setList(position + headIndex, t, EventType.refresh)

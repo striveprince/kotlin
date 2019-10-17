@@ -27,6 +27,7 @@ import android.text.TextUtils
 import android.widget.Toast
 import com.binding.model.base.Text
 import com.binding.model.base.container.CycleContainer
+import com.binding.model.base.utils.MainLooper
 import com.binding.model.inflate.model.ViewModel
 import com.binding.model.inflate.observer.NormalObserver
 import io.reactivex.disposables.Disposable
@@ -183,9 +184,11 @@ fun <T : Any> Single<T>.subscribeNormal(
 
 
 fun toast(e: Throwable) {
-    val message = e.message
-    if (!TextUtils.isEmpty(message))
-        Toast.makeText(App.activity(), e.message, Toast.LENGTH_SHORT).show()
+    MainLooper.runOnUiThread(Runnable{
+        val message = e.message
+        if (!TextUtils.isEmpty(message))
+            Toast.makeText(App.activity(), e.message, Toast.LENGTH_SHORT).show()
+    })
 }
 
 fun installApkFile(

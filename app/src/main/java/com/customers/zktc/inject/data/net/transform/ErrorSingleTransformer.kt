@@ -67,6 +67,5 @@ class ErrorSingleTransformer<T> : SingleTransformer<T, T> {
                     }
                 }
             } }
-
     }
 }

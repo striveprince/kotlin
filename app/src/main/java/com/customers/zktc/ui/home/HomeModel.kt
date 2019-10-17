@@ -47,7 +47,7 @@ class HomeModel
             .toList()
             .map { fragments.addAll(it) }
             .doOnSuccess { binding!!.tabLayout.addOnTabSelectedListener(this) }
-            .subscribeNormal(t){checkTab(0)}
+            .subscribeNormal{checkTab(0)}
     }
 
 

@@ -7,9 +7,7 @@ import io.reactivex.*
 import io.reactivex.disposables.Disposable
 import io.reactivex.exceptions.CompositeException
 import io.reactivex.exceptions.Exceptions
-import io.reactivex.internal.functions.Functions
 import io.reactivex.internal.subscriptions.SubscriptionHelper
-import io.reactivex.observers.LambdaConsumerIntrospection
 import io.reactivex.plugins.RxJavaPlugins
 import org.reactivestreams.Subscriber
 import org.reactivestreams.Subscription
@@ -22,33 +20,39 @@ import java.util.concurrent.atomic.AtomicReference
  * Email: 1033144294@qq.com
  */
 open class NormalObserver<T> constructor(
-    private val onNext: (T) -> Unit = {},
-    private val onError: (Throwable) -> Unit = {},
-    private val onComplete: () -> Unit = {},
-    private val onSubscribe: (Disposable) -> Unit = {}
-) : SingleObserver<T>, Observer<T>, MaybeObserver<T>, CompletableObserver, Subscriber<T>,
-    LifecycleObserver, AtomicReference<Subscription>(), FlowableSubscriber<T>, Subscription, Disposable,
-    LambdaConsumerIntrospection {
+   private val observer:Observer<T>
+) : SingleObserver<T>, Observer<T>, MaybeObserver<T>,
+    CompletableObserver, Subscriber<T>,
+    LifecycleObserver, AtomicReference<Subscription>(),
+    FlowableSubscriber<T>, Subscription, Disposable {
+    constructor( onNext: (T) -> Unit = {},
+                onError: (Throwable) -> Unit = {},
+                onComplete: () -> Unit = {},
+                onSubscribe: (Disposable) -> Unit = {}):this(LambdaObserver(onNext,onError,onComplete,onSubscribe))
+
+
     private var disposable:Disposable? = null
     override fun onSubscribe(d: Disposable) {
         try {
             disposable = d
-            onSubscribe.invoke(this)
+            observer.onSubscribe(this)
         } catch (ex: Throwable) {
             Exceptions.throwIfFatal(ex)
             d.dispose()
             onError(ex)
+
         }
     }
 
     override fun onSuccess(t: T) {
         onNext(t)
+        onComplete()
     }
 
     override fun onSubscribe(s: Subscription) {
         if (SubscriptionHelper.setOnce(this, s)) {
             try {
-                onSubscribe.invoke(this)
+                observer.onSubscribe(this)
             } catch (ex: Throwable) {
                 Exceptions.throwIfFatal(ex)
                 s.cancel()
@@ -61,7 +65,7 @@ open class NormalObserver<T> constructor(
     override fun onNext(t: T) {
         if (!isDisposed) {
             try {
-                onNext.invoke(t)
+                observer.onNext(t)
             } catch (e: Throwable) {
                 Exceptions.throwIfFatal(e)
                 get().cancel()
@@ -74,22 +78,23 @@ open class NormalObserver<T> constructor(
         if (get() !== SubscriptionHelper.CANCELLED) {
             lazySet(SubscriptionHelper.CANCELLED)
             try {
-                onError.invoke(t)
+                observer.onError(t)
             } catch (e: Throwable) {
                 Exceptions.throwIfFatal(e)
                 RxJavaPlugins.onError(CompositeException(t, e))
+                onComplete()
             }
-
         } else {
             RxJavaPlugins.onError(t)
         }
+        onComplete()
     }
 
     override fun onComplete() {
         if (get() !== SubscriptionHelper.CANCELLED) {
             lazySet(SubscriptionHelper.CANCELLED)
             try {
-                onComplete.invoke()
+                observer.onComplete()
             } catch (e: Throwable) {
                 Exceptions.throwIfFatal(e)
                 RxJavaPlugins.onError(e)
@@ -118,9 +123,6 @@ open class NormalObserver<T> constructor(
         SubscriptionHelper.cancel(this)
     }
 
-    override fun hasCustomOnError(): Boolean {
-        return onError !== Functions.ON_ERROR_MISSING
-    }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy(){

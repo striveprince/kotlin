@@ -52,6 +52,7 @@ class Api(
             .noErrorRestful().map { converterRushList(it) }.concatMap {  Observable.fromIterable(it) }
         return Observable.mergeArray(banner,category,homeSpecial,operationFloor,homeGoodRecommend,rushList)
             .toSortedList{t1,t2-> return@toSortedList t1.sorted-t2.sorted}
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
     private fun converterRushList(it: HomeGoodsVoData):  ArrayList<HomeBaseInflate<*>> {
