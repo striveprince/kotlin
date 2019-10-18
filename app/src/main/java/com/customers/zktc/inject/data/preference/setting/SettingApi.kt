@@ -12,7 +12,7 @@ import com.customers.zktc.inject.data.preference.SharePreferenceUtil
  * Email: 1033144294@qq.com
  */
 class SettingApi private constructor(context: Context) {
-    private val sharePreferenceUtil: SharePreferenceUtil = SharePreferenceUtil.getSettingInstance(context)
+    private val sharePreferenceUtil = SharePreferenceUtil.getSettingInstance(context)
     private val settingEntity : SettingEntity
     init {
         settingEntity = sharePreferenceUtil.getAllDto(SettingEntity::class.java)

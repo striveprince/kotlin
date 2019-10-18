@@ -37,40 +37,39 @@ class Api(
     private val mapApi: MapApi,
     private val ossApi: OssApi,
     private val preferenceApi: PreferenceApi) {
-
-    fun homePage(offset: Int, refresh: Int,pageCount:Int): Single<List<HomeBaseInflate<*>>> {
-        val banner: Observable<out HomeBaseInflate<*>> = getOperationAd("ad_home_index_1")
-        val category:Observable<HomeBaseInflate<*>> = netApi.operationHomeCategorys()
+    fun homePage(offset: Int, refresh: Int,pageCount:Int): Single<List<HomePageEntity<*>>> {
+        val banner: Observable<out HomePageEntity<*>> = getOperationAd("ad_home_index_1")
+        val category:Observable<HomePageEntity<*>> = netApi.operationHomeCategorys()
             .restful().map { it.operationHomeCategorys }.toObservable().concatMap{ Observable.fromIterable(it)}
-        val homeSpecial: ObservableSource<HomeBaseInflate<*>> = getOperationAd("ad_home_index_2")
+        val homeSpecial: ObservableSource<HomePageEntity<*>> = getOperationAd("ad_home_index_2")
                 .zipWith(getOperationAd("ad_home_index_3")) { t1, t2 -> getPageArea(t1, t2) }
         val operationFloor = netApi.getOperationFloor(HomeFloorParams(""))
             .noErrorRestful().map { converterFloorData(it) }.concatMap { Observable.fromIterable(it) }
-        val homeGoodRecommend  = netApi.homeGoodRecommend(HomeRecommendParams("goods_home_index_1",offset,offset,pageCount))
+        val homeGoodRecommend  = netApi.homeGoodRecommend(HomeRecommendParams("goods_home_index_1",1,1,pageCount))
             .noErrorRestful().map { converterGoodsRecommends(it) }.concatMap { Observable.fromIterable(it) }
-        val rushList = netApi.getRushList()
+        val rushList = netApi.getRushList(HomeRushListParams())
             .noErrorRestful().map { converterRushList(it) }.concatMap {  Observable.fromIterable(it) }
         return Observable.mergeArray(banner,category,homeSpecial,operationFloor,homeGoodRecommend,rushList)
-            .toSortedList{t1,t2-> return@toSortedList t1.sorted-t2.sorted}
+            .toSortedList{t1,t2->  t1.sorted-t2.sorted}
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    private fun converterRushList(it: HomeGoodsVoData):  ArrayList<HomeBaseInflate<*>> {
-        val list = ArrayList<HomeBaseInflate<*>>()
+    private fun converterRushList(it: HomeGoodsVoData):  ArrayList<HomePageEntity<*>> {
+        val list = ArrayList<HomePageEntity<*>>()
         list.add(HomeRushTitle(""))
         list.addAll(it.goodsVos)
         return list
     }
 
-    private fun converterGoodsRecommends(it: HomeRecommendData): ArrayList<HomeBaseInflate<*>> {
-        val list = ArrayList<HomeBaseInflate<*>>()
+    private fun converterGoodsRecommends(it: HomeRecommendData): ArrayList<HomePageEntity<*>> {
+        val list = ArrayList<HomePageEntity<*>>()
         list.add(HomeRecommendTitle("为你推荐"))
         list.addAll(it.goodsRecommends)
         return list
     }
 
-    private fun converterFloorData(it: HomeFloorData): ArrayList<HomeBaseInflate<*>> {
-        val list = ArrayList<HomeBaseInflate<*>>()
+    private fun converterFloorData(it: HomeFloorData): ArrayList<HomePageEntity<*>> {
+        val list = ArrayList<HomePageEntity<*>>()
         for (floorType in it.operationFloorTypes) {
             list.add(HomeFloorDataEntity(floorType.name, floorType.pictureNumber, ArrayList()))
             list.addAll(floorType.operationFloors)
@@ -78,7 +77,7 @@ class Api(
         return list
     }
 
-    private fun getPageArea(t1: HomePageOperationData, t2: HomePageOperationData): HomeBaseInflate<*> {
+    private fun getPageArea(t1: HomePageOperationData, t2: HomePageOperationData): HomePageEntity<*> {
         val list = ArrayList<HomePageOperationEntity>()
         for (index in 0..3) {
             when (index) {

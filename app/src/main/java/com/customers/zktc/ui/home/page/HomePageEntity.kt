@@ -14,8 +14,8 @@ import com.customers.zktc.databinding.*
  * Author: created by ArvinWang on 2019/10/10 13:15
  * Email: 1033144294@qq.com
  */
-
 @LayoutView(layout=[R.layout.layout_home_banner_item])
+
 data class HomePageOperationEntity(
     val id: Int = 0,
     val name: String = "",
@@ -23,14 +23,14 @@ data class HomePageOperationEntity(
     val viceName: String = "",
     val orderBy: Int = 0,
     val linkUrl: String = ""
-) : HomeBaseInflate<ViewDataBinding>() {
-    override fun getSpanSize() = if (layoutIndex == 0) 1 else 2
+) : HomePageEntity<ViewDataBinding>() {
+    override fun getSpanSize() = 1
 }
 
 //banner图界面
 @LayoutView(layout = [R.layout.layout_home_banner])
 class HomePageOperationData(val operationAds: List<HomePageOperationEntity>) :
-    HomeBaseInflate<LayoutHomeBannerBinding>(1) {
+    HomePageEntity<LayoutHomeBannerBinding>(1) {
     @Transient
     val adapter = RecyclerAdapter<HomePageOperationEntity>()
 
@@ -43,30 +43,33 @@ class HomePageOperationData(val operationAds: List<HomePageOperationEntity>) :
 }
 
 //活动专区界面
+
 @LayoutView(layout = [R.layout.layout_home_area])
 class HomePageAreaData(val operationAds: List<HomePageOperationEntity>) :
-    HomeBaseInflate<LayoutHomeAreaBinding>(3) {
+    HomePageEntity<LayoutHomeAreaBinding>(3) {
     override fun getSpanSize() = 1
 }
 
 data class HomeCategoryData(val operationHomeCategorys: List<HomeCategoryEntity>)
 
 //分类
+
 @LayoutView(layout = [R.layout.layout_home_category])
 data class HomeCategoryEntity(
     val iconUrl: String,
     val linkUrl: String,
     val name: String,
     val orderBy: Int
-) : HomeBaseInflate<LayoutHomeCategoryBinding>(1) {
+) : HomePageEntity<LayoutHomeCategoryBinding>(1) {
     override fun getSpanSize() = 1
 }
 
 data class HomeGoodsVoData(
     val goodsVos: List<HomeGoodVosEntity>
 )
+
 @LayoutView(layout=[R.layout.layout_home_rush_title])
-data class HomeRushTitle(val name:String):HomeBaseInflate<LayoutHomeRushTitleBinding>(6){
+data class HomeRushTitle(val name:String):HomePageEntity<LayoutHomeRushTitleBinding>(6){
     override fun getSpanSize()=1
 }
 
@@ -77,7 +80,7 @@ data class HomeGoodVosEntity(
     val marketingTime: String,
     val marketingProgress: Double,
     val marketingVo: List<MarketVoEntity>
-):HomeBaseInflate<LayoutHomeRushBinding>(6){
+):HomePageEntity<LayoutHomeRushBinding>(6){
     override fun getSpanSize(): Int =1
 }
 
@@ -96,8 +99,8 @@ data class MarketVoEntity(
 data class HomeGoodVoEntity(
     val auditStatus: String,
     val fictitiousSalesCount: Int,
-    val freightTemplateId: Any,
-    val goodsBrandVo: Any,
+    val freightTemplateId: Int,
+    val goodsBrandVo: Int,
     val goodsId: Int,
     val goodsInfoAdded: String,
     val goodsInfoAddedTime: String,
@@ -110,12 +113,12 @@ data class HomeGoodVoEntity(
     val goodsInfoMarketPrice: Double,
     val goodsInfoName: String,
     val goodsInfoPreferPrice: Double,
-    val goodsInfoScorePrice: Any,
+    val goodsInfoScorePrice: Int,
     val goodsInfoStock: Int,
     val goodsInfoSubtitle: String,
-    val goodsInfoUnaddedTime: Any,
+    val goodsInfoUnaddedTime: Int,
     val goodsInfoWeight: Int,
-    val goodsSpecDetailVos: List<Any>,
+    val goodsSpecDetailVos: List<String>,
     val isCustomerDiscount: String,
     val isThird: String,
     val ismailbay: String,
@@ -133,10 +136,10 @@ data class HomeGoodsRecommendEntity(
     val goodsName: String,
     val goodsPicture: String,
     val preferPrice: Double,
-    val scorePrice: Any
+    val scorePrice: String
 )
 
-abstract class HomeBaseInflate<Binding : ViewDataBinding>(var sorted: Int = 0) :
+abstract class HomePageEntity<Binding : ViewDataBinding>(var sorted: Int = 0) :
     ViewGridInflate<Binding>()
 
 
@@ -144,12 +147,14 @@ data class HomeFloorData(
     val operationFloorTypes:List<HomeFloorDataEntity>
 )
 
+
 @LayoutView(layout = [R.layout.layout_home_floor_title])
 data class HomeFloorDataEntity(
     val name:String,
     val pictureNumber:Int,
     val operationFloors:List<HomeFloorTypeEntity>
-):HomeBaseInflate<LayoutHomeFloorTitleBinding>(2){
+):HomePageEntity<LayoutHomeFloorTitleBinding>(2){
+
     override fun getSpanSize()=1
 }
 
@@ -162,9 +167,10 @@ data class HomeFloorTypeEntity(
     val id:Int,
     val orderBy:Int,
     var pictureNumber:Int
-):HomeBaseInflate<LayoutHomeFloorBinding>(2){
+):HomePageEntity<LayoutHomeFloorBinding>(2){
     override fun getSpanSize() = pictureNumber
 }
+
 data class HomeRecommendData(
     val goodsRecommends:List<HomeRecommendEntity>,
     val haveNext:Boolean
@@ -176,11 +182,11 @@ data class HomeRecommendEntity(
     val goodsName:String,
     val preferPrice:String,
     val goodsPicture:String
-):HomeBaseInflate<ViewDataBinding>(7){
+):HomePageEntity<ViewDataBinding>(7){
     override fun getSpanSize(): Int=2
 }
 
 @LayoutView(layout=[R.layout.layout_home_recommend_title])
-data class HomeRecommendTitle(val name:String):HomeBaseInflate<LayoutHomeRecommendTitleBinding>(7){
+data class HomeRecommendTitle(val name:String):HomePageEntity<LayoutHomeRecommendTitleBinding>(7){
     override fun getSpanSize()=1
 }

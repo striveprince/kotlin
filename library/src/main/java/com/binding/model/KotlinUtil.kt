@@ -7,30 +7,29 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
-import android.view.View
-import android.view.WindowManager
-import androidx.core.content.FileProvider
-import androidx.lifecycle.LifecycleOwner
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.binding.model.annoation.LayoutView
-import com.binding.model.base.RxBus
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.android.schedulers.AndroidSchedulers
-import java.io.File
-import java.lang.StringBuilder
-import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle
 import android.text.Html
 import android.text.TextUtils
+import android.view.View
+import android.view.WindowManager
 import android.widget.Toast
+import androidx.core.content.FileProvider
+import com.binding.model.annoation.LayoutView
+import com.binding.model.base.RxBus
 import com.binding.model.base.Text
 import com.binding.model.base.container.CycleContainer
-import com.binding.model.base.utils.MainLooper
 import com.binding.model.inflate.model.ViewModel
 import com.binding.model.inflate.observer.NormalObserver
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import io.reactivex.Flowable
+import io.reactivex.Observable
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Action
+import io.reactivex.functions.Consumer
+import io.reactivex.schedulers.Schedulers
+import java.io.File
 
 
 const val pageWay = false
@@ -40,12 +39,24 @@ fun findModelView(thisCls: Class<*>): LayoutView {
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     return thisCls.getAnnotation(LayoutView::class.java)
         ?: return findModelView(thisCls = thisCls.superclass)
-
 }
 
 inline fun <reified T> toArray(list: List<T>): Array<T> {
     return ArrayList<T>(list).toArray(arrayOf())
 }
+
+
+//
+//
+//@ImplicitReflectionSerializer
+//inline fun <reified T:Any> String.json():T{
+//    val j = Json(JsonConfiguration.Default)
+//    val v = j.parseJson(this)
+//    return j.fromJson(v)
+//}
+//inline fun <reified T> String.json():T{
+//    Moshi.Builder().add(KotlinJsonAdapterFactory())
+//}
 
 
 //inline fun <reified E> rxBus(owner: LifecycleOwner): Observable<E> {
@@ -140,8 +151,18 @@ fun <T : Any> Observable<T>.subscribeNormal(
     t.t.cycle.addObserver(observer)
     if (t.disposable == null || t.disposable?.isDisposed!!) {
         this.subscribe(observer)
-        t.disposable = observer
+        t.disposable = observer.disposable.get()
     }
+}
+
+//-------------Flowable---------------
+fun <T> Flowable<T>.subscribeNormal(
+    onNext: (T) -> Unit = {},
+    onError: (Throwable) -> Unit = { toast(it) },
+    onComplete: () -> Unit = {},
+    onSubscribe: (Disposable) -> Unit = {}
+) {
+    onSubscribe.invoke(subscribe(Consumer(onNext), Consumer(onError), Action(onComplete)))
 }
 
 //-------------Single---------------
@@ -178,17 +199,15 @@ fun <T : Any> Single<T>.subscribeNormal(
     t.t.cycle.addObserver(observer)
     if (t.disposable == null || t.disposable?.isDisposed!!) {
         this.subscribe(observer)
-        t.disposable = observer
+        t.disposable = observer.disposable.get()
     }
 }
 
 
 fun toast(e: Throwable) {
-    MainLooper.runOnUiThread(Runnable{
-        val message = e.message
-        if (!TextUtils.isEmpty(message))
-            Toast.makeText(App.activity(), e.message, Toast.LENGTH_SHORT).show()
-    })
+    val message = e.message
+    if (!TextUtils.isEmpty(message))
+        Toast.makeText(App.activity(), e.message, Toast.LENGTH_SHORT).show()
 }
 
 fun installApkFile(
@@ -243,7 +262,7 @@ fun setMiuiStatusBarDarkMode(activity: Activity, darkmode: Boolean): Boolean {
 
         val layoutParams = Class.forName("android.view.MiuiWindowManager\$LayoutParams")
         val field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE")
-        var  darkModeFlag = field.getInt(layoutParams)
+        var darkModeFlag = field.getInt(layoutParams)
         val extraFlagField = clazz.getMethod(
             "setExtraFlags",
             Int::class.javaPrimitiveType,

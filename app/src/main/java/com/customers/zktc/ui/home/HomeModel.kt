@@ -9,13 +9,13 @@ import com.binding.model.inflate.model.ViewModel
 import com.binding.model.installApkFile
 import com.binding.model.subscribeNormal
 import com.customers.zktc.R
-import com.customers.zktc.base.arouter.ARouterUtil
 import com.customers.zktc.base.cycle.BaseFragment
 import com.customers.zktc.databinding.ActivityHomeBinding
 import com.customers.zktc.inject.data.Api
 import com.customers.zktc.inject.qualifier.manager.ActivityFragmentManager
 import com.google.android.material.tabs.TabLayout
 import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 @LayoutView(layout = [R.layout.activity_home])
@@ -46,8 +46,9 @@ class HomeModel
             .map { HomeFragmentEntity(it) }
             .toList()
             .map { fragments.addAll(it) }
-            .doOnSuccess { binding!!.tabLayout.addOnTabSelectedListener(this) }
-            .subscribeNormal{checkTab(0)}
+            .doOnSuccess { binding?.tabLayout?.addOnTabSelectedListener(this) }
+            .toFlowable()
+            .subscribeNormal({checkTab(0)})
     }
 
 
@@ -82,7 +83,7 @@ class HomeModel
 
     private fun checkTab(currentPosition: Int) {
         checkFragment(currentPosition)
-        TabLayoutBindingAdapter.setScrollPosition(binding!!.tabLayout, currentPosition)
-        ARouterUtil.login()
+        binding?.tabLayout?.let { TabLayoutBindingAdapter.setScrollPosition(it, currentPosition) }
+//        ARouterUtil.login()
     }
 }

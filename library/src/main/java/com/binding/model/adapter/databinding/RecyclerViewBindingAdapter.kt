@@ -20,16 +20,18 @@ import androidx.recyclerview.widget.RecyclerView
     )
 )
 object RecyclerViewBindingAdapter {
+    @JvmStatic
     @BindingAdapter("position")
     fun position(view: RecyclerView, position: Int) {
         view.scrollToPosition(position)
     }
 
     @BindingAdapter("layout_manager")
+    @JvmStatic
     fun setLayoutManager(view: RecyclerView, layoutManager: RecyclerView.LayoutManager?) {
         if (layoutManager != null) view.layoutManager = layoutManager
     }
-
+    @JvmStatic
     @BindingAdapter("scroll_listener")
     fun setOnScroll(view: RecyclerView, listener: RecyclerView.OnScrollListener?) {
         if (listener != null) view.addOnScrollListener(listener)

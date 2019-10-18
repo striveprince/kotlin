@@ -13,7 +13,7 @@ import com.customers.zktc.ui.receiveLoginEvent
 import com.customers.zktc.ui.receiveSignEvent
 import javax.inject.Inject
 
-@LayoutView(layout = [R.layout.fragment_home_cart],event = true)
+@LayoutView(layout = [R.layout.fragment_home_cart])
 class HomeCartModel @Inject constructor(): ViewModel<CycleContainer<*>, FragmentHomeCartBinding>(){
 
     override fun attachView(savedInstanceState: Bundle?, t: CycleContainer<*>) {

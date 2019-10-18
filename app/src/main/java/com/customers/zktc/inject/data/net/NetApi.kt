@@ -46,13 +46,15 @@ interface NetApi {
 
     @POST("/api/v2/marketing/rush/list")
 //    fun getRushList(@Body params: HomeRecommendParams):Single<InfoEntity<HomeGoodsVoData>>
-    fun getRushList():Single<InfoEntity<HomeGoodsVoData>>
+    fun getRushList(@Body params: HomeRushListParams):Single<InfoEntity<HomeGoodsVoData>>
 
     @POST("/api/v2/ope/getOperationHomeCategory")
     fun operationHomeCategorys(): Single<InfoEntity<HomeCategoryData>>
 
     @POST("/api/v2/ope/getGoodsRecommend")
     fun homeGoodRecommend(@Body params: HomeRecommendParams): Single<InfoEntity<HomeRecommendData>>
+//    D: ---getRequestId url :1072 http://dev.zhongketongchuang.com/api/v2/ope/getGoodsRecommend
+//    D: ---onRequest :{"siteNumber":"goods_home_index_1","pageNo":"1","pageNum":"1","pageSize":"200"}
 
     @POST("/api/v2/ope/getOperationFloor")
     fun getOperationFloor(@Body params:HomeFloorParams): Single<InfoEntity<HomeFloorData>>

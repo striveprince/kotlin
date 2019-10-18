@@ -8,20 +8,22 @@ import retrofit2.Converter
 import java.io.IOException
 import java.lang.reflect.Type
 
-class JsonResponseBodyConverter<T> internal constructor(
+class JsonResponseBodyConverter<T : Any> internal constructor(
     private val json: Gson,
     private val type: Type
 ) : Converter<ResponseBody, T> {
 
     @Throws(IOException::class)
-    @Suppress("UNCHECKED_CAST")
     override fun convert(value: ResponseBody): T {
         return value.use {
-            val adapter = json.getAdapter<T>(TypeToken.get(type) as TypeToken<T>)
+                        val adapter = json.getAdapter<T>(TypeToken.get(type) as TypeToken<T>)
             val jsonReader = json.newJsonReader(it.charStream())
             val t = adapter.read(jsonReader)
             t
         }
+
     }
 
 }
+
+//

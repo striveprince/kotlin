@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+//apply plugin: 'kotlinx-serialization'
 
 kapt {
     arguments {
@@ -134,7 +135,7 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.1.1'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     testImplementation 'junit:junit:4.12'
     implementation "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
@@ -143,6 +144,7 @@ dependencies {
     implementation 'com.trello.rxlifecycle3:rxlifecycle:3.1.0'
     implementation 'com.trello.rxlifecycle3:rxlifecycle-android-lifecycle-kotlin:3.1.0'
     implementation "com.squareup.retrofit2:retrofit:$retrofit"
+    implementation 'com.squareup.retrofit2:converter-moshi:2.5.0'
     implementation "com.squareup.retrofit2:converter-gson:$retrofit"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit"
     implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
@@ -156,8 +158,6 @@ dependencies {
     implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
     implementation 'com.aliyun.dpa:oss-android-sdk:2.9.2'
     implementation 'com.pgyersdk:sdk:3.0.2'
-//    implementation 'com.zhpan.library:bannerview:2.3.4'
-
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.jakewharton.timber:timber:4.7.1'
@@ -166,4 +166,9 @@ dependencies {
     implementation 'com.amap.api:search:5.0.0'
     implementation 'com.github.chrisbanes:PhotoView:2.1.4'
     implementation 'androidx.viewpager2:viewpager2:1.0.0-beta05'
+//    implementation 'com.squareup.moshi:moshi:1.8.0'
+
 }
+//    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.13.0"
+//    implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.4.0'
+//    implementation 'com.zhpan.library:bannerview:2.3.4'
