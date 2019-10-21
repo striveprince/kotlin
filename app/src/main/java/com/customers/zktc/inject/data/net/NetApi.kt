@@ -48,6 +48,10 @@ interface NetApi {
 //    fun getRushList(@Body params: HomeRecommendParams):Single<InfoEntity<HomeGoodsVoData>>
     fun getRushList(@Body params: HomeRushListParams):Single<InfoEntity<HomeGoodsVoData>>
 
+    @POST("/api/v2/marketing/rush/list")
+//    fun getRushList(@Body params: HomeRecommendParams):Single<InfoEntity<HomeGoodsVoData>>
+    fun getList(@Body params: HomeRushListParams):Single<InfoEntity<HomeGoodsVoData>>
+
     @POST("/api/v2/ope/getOperationHomeCategory")
     fun operationHomeCategorys(): Single<InfoEntity<HomeCategoryData>>
 

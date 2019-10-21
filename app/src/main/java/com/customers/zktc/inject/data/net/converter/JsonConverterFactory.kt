@@ -32,40 +32,11 @@ import kotlin.reflect.full.isSubclassOf
 
 
 class JsonConverterFactory constructor(
-    val moshi: Moshi = Moshi.Builder().build(),
-    val lenient: Boolean,
-    val failOnUnknown: Boolean,
-    val serializeNulls: Boolean
 ) : Converter.Factory() {
-    val gson:Gson = Gson()
+    private val gson:Gson = Gson()
 
-//    /** Return a new factory which uses [lenient][JsonAdapter.lenient] adapters.  */
-//    fun asLenient(): JsonConverterFactory {
-//        return JsonConverterFactory(moshi, true, failOnUnknown, serializeNulls)
-//    }
-//
-//    /**
-//     * Return a new factory which uses [JsonAdapter.failOnUnknown] adapters.
-//     */
-//    fun failOnUnknown(): JsonConverterFactory {
-//        return JsonConverterFactory(moshi, lenient, true, serializeNulls)
-//    }
-//
-//    /** Return a new factory which includes null values into the serialized JSON.  */
-//    fun withNullSerialization(): JsonConverterFactory {
-//        return JsonConverterFactory(moshi, lenient, failOnUnknown, true)
-//    }
-
-    override fun responseBodyConverter(
-        type: Type,
-        annotations: Array<Annotation>?,
-        retrofit: Retrofit?
-    ): Converter<ResponseBody, *> {
-        var adapter: JsonAdapter<*> = moshi.adapter<Any>(type, jsonAnnotations(annotations!!))
-        if (lenient) adapter = adapter.lenient()
-        if (failOnUnknown) adapter = adapter.failOnUnknown()
-        if (serializeNulls) adapter = adapter.serializeNulls()
-        return MoshiResponseBodyConverter(adapter)
+    override fun responseBodyConverter(type: Type, annotations: Array<Annotation>?, retrofit: Retrofit?): Converter<ResponseBody, *> {
+        return JsonResponseBodyConverter<Any>(gson,type)
     }
 
     override fun requestBodyConverter(
@@ -77,15 +48,4 @@ class JsonConverterFactory constructor(
         return JsonRequestBodyConverter<Any>(gson,type)
     }
 
-    private fun jsonAnnotations(annotations: Array<Annotation>): Set<Annotation> {
-        var result: MutableSet<Annotation>? = null
-        for (annotation in annotations) {
-            if(annotation.annotationClass.isSubclassOf(JsonQualifier::class)){
-//            if (annotation.annotationType().isAnnotationPresent(JsonQualifier::class.java)) {
-                if (result == null) result = LinkedHashSet()
-                result.add(annotation)
-            }
-        }
-        return if (result != null) unmodifiableSet<Annotation>(result) else emptySet()
-    }
 }

@@ -2,6 +2,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlinx-serialization'
+
 android {
     compileSdkVersion compile_sdk_version
 
@@ -42,6 +44,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.13.0"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     implementation "androidx.appcompat:appcompat:$androidx_version"
     implementation "androidx.core:core-ktx:$androidx_version"
     implementation 'com.google.android.material:material:1.0.0'
@@ -68,6 +72,7 @@ dependencies {
 
 }
 
+//    implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.4.0'
 //    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.13.0"
 //    implementation 'com.squareup.moshi:moshi:1.8.0'
 //    implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-experimental-adapter:1.0.0'

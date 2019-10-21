@@ -29,7 +29,17 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
+import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.internal.ArrayListSerializer
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
 import java.io.File
+import java.lang.reflect.GenericArrayType
+import java.lang.reflect.ParameterizedType
+import java.lang.reflect.Type
+import java.lang.reflect.TypeVariable
+import kotlin.reflect.KClass
 
 
 const val pageWay = false
@@ -45,18 +55,31 @@ inline fun <reified T> toArray(list: List<T>): Array<T> {
     return ArrayList<T>(list).toArray(arrayOf())
 }
 
+@ImplicitReflectionSerializer
+fun getType(type: Type,clazzs :ArrayList<Class<*>>): ArrayList<Class<*>> {
+    val v = arrayListOf<Class<*>>()
+    when (type) {
+        is Class<*> -> v.add(type)
+        is ParameterizedType -> {
+            val c: Class<*> = type.rawType as Class<*>
+            v.add(c)
+            c.kotlin.serializer()
+            if (List::class.java.isAssignableFrom(c)) {
+                type.rawType
+                v.add(type.rawType as Class<*>)
+                return getType(type.actualTypeArguments[0],v)
+            }
+        }
+        is GenericArrayType -> {
 
-//
-//
-//@ImplicitReflectionSerializer
-//inline fun <reified T:Any> String.json():T{
-//    val j = Json(JsonConfiguration.Default)
-//    val v = j.parseJson(this)
-//    return j.fromJson(v)
-//}
-//inline fun <reified T> String.json():T{
-//    Moshi.Builder().add(KotlinJsonAdapterFactory())
-//}
+        }
+    }
+    return v
+}
+//                c.kotlin
+//                ArrayListSerializer()
+
+
 
 
 //inline fun <reified E> rxBus(owner: LifecycleOwner): Observable<E> {

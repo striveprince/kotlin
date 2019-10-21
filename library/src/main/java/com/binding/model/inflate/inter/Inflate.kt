@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.binding.model.Config
+import com.binding.model.findModelView
 import java.lang.RuntimeException
 
 interface Inflate<Binding : ViewDataBinding> : Parse<Binding>{
@@ -40,7 +41,8 @@ interface Inflate<Binding : ViewDataBinding> : Parse<Binding>{
     }
 
     fun getLayoutId(): Int{
-        return layoutView.layout[layoutIndex]
+        if(layoutView == null) layoutView = findModelView(javaClass)
+        return layoutView!!.layout[layoutIndex]
     }
 
     fun getViewId(): Int = 0

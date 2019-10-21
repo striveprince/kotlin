@@ -11,15 +11,17 @@ import com.customers.zktc.inject.data.preference.PreferenceApi
 import com.customers.zktc.inject.interceptor.NetInterceptor
 import com.customers.zktc.inject.qualifier.context.AppContext
 import com.customers.zktc.inject.scope.ApplicationScope
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import io.reactivex.schedulers.Schedulers
+import kotlinx.serialization.json.Json
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 @Module
@@ -33,12 +35,12 @@ class DataModule {
         val client = okHttpClient.newBuilder()
             .addInterceptor(netInterceptor)
             .build()
-        val contentType = MediaType.get("application/json")
+//        val contentType = MediaType.get("application/json")
         return Retrofit.Builder()
             .baseUrl(BuildConfig.ApiHost)
-            .addConverterFactory(MoshiConverterFactory.create())
+//            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
 //            .addConverterFactory(Json.asConverterFactory(contentType))
-//            .addConverterFactory(serializationConverterFactory(contentType,Json))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
             .callFactory(client)
             .build().create(NetApi::class.java)

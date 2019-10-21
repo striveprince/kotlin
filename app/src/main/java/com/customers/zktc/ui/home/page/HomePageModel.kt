@@ -47,7 +47,6 @@ class HomePageModel @Inject constructor() :
 
     override fun onNext(t: List<HomePageEntity<*>>) {
         super.onNext(t)
-
     }
 
     override fun onComplete() {

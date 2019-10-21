@@ -1,6 +1,7 @@
 package com.customers.zktc.ui.home.page
 
 import com.customers.zktc.inject.data.net.converter.ApiParams
+import kotlinx.serialization.Serializable
 
 /**
  * Company: 中科同创
@@ -11,6 +12,8 @@ import com.customers.zktc.inject.data.net.converter.ApiParams
 data class HomeOperationParams(val adPositionNumber: String) : ApiParams
 
 data class HomeFloorParams(val floorClassifyNumber: String) : ApiParams
+
+@Serializable
 data class HomeRecommendParams(
     val siteNumber: String,
     val pageNo: Int, val pageNum: Int, val pageSize: Int

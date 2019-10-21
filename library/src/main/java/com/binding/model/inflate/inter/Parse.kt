@@ -9,7 +9,7 @@ import com.binding.model.annoation.LayoutView
 import com.binding.model.base.RxBus
 
 interface Parse<Binding>{
-    val layoutView:LayoutView
+    var layoutView:LayoutView?
     var layoutIndex:Int
     var binding:Binding?
     var iEventAdapter: IEventAdapter<*>?

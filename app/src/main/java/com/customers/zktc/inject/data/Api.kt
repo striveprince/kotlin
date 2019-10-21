@@ -27,6 +27,7 @@ import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.zipWith
 import okio.Okio
+import timber.log.Timber
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -36,25 +37,45 @@ class Api(
     private val databaseApi: DatabaseApi,
     private val mapApi: MapApi,
     private val ossApi: OssApi,
-    private val preferenceApi: PreferenceApi) {
-    fun homePage(offset: Int, refresh: Int,pageCount:Int): Single<List<HomePageEntity<*>>> {
+    private val preferenceApi: PreferenceApi
+) {
+    fun homePage(offset: Int, refresh: Int, pageCount: Int): Single<List<HomePageEntity<*>>> {
         val banner: Observable<out HomePageEntity<*>> = getOperationAd("ad_home_index_1")
-        val category:Observable<HomePageEntity<*>> = netApi.operationHomeCategorys()
-            .restful().map { it.operationHomeCategorys }.toObservable().concatMap{ Observable.fromIterable(it)}
+        val category: Observable<HomePageEntity<*>> = netApi.operationHomeCategorys()
+            .restful().map { it.operationHomeCategorys }.toObservable()
+            .concatMap { Observable.fromIterable(it) }
         val homeSpecial: ObservableSource<HomePageEntity<*>> = getOperationAd("ad_home_index_2")
-                .zipWith(getOperationAd("ad_home_index_3")) { t1, t2 -> getPageArea(t1, t2) }
+            .zipWith(getOperationAd("ad_home_index_3")) { t1, t2 -> getPageArea(t1, t2) }
         val operationFloor = netApi.getOperationFloor(HomeFloorParams(""))
-            .noErrorRestful().map { converterFloorData(it) }.concatMap { Observable.fromIterable(it) }
-        val homeGoodRecommend  = netApi.homeGoodRecommend(HomeRecommendParams("goods_home_index_1",1,1,pageCount))
-            .noErrorRestful().map { converterGoodsRecommends(it) }.concatMap { Observable.fromIterable(it) }
+            .noErrorRestful().map { converterFloorData(it) }
+            .concatMap { Observable.fromIterable(it) }
+        val homeGoodRecommend =
+            netApi.homeGoodRecommend(HomeRecommendParams("goods_home_index_1", 1, 1, pageCount))
+                .noErrorRestful().map { converterGoodsRecommends(it) }
+                .concatMap { Observable.fromIterable(it) }
         val rushList = netApi.getRushList(HomeRushListParams())
-            .noErrorRestful().map { converterRushList(it) }.concatMap {  Observable.fromIterable(it) }
-        return Observable.mergeArray(banner,category,homeSpecial,operationFloor,homeGoodRecommend,rushList)
-            .toSortedList{t1,t2->  t1.sorted-t2.sorted}
+            .noErrorRestful().map { converterRushList(it) }
+            .concatMap { Observable.fromIterable(it) }
+        return Observable.mergeArray(
+            banner,
+            category,
+            homeSpecial,
+            operationFloor,
+            homeGoodRecommend,
+            rushList
+        )
+            .toSortedList { t1, t2 -> t1.sorted - t2.sorted }
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    private fun converterRushList(it: HomeGoodsVoData):  ArrayList<HomePageEntity<*>> {
+    fun homePageTest(offset: Int, refresh: Int, pageCount: Int): Single<List<HomePageEntity<*>>> {
+        return netApi.homeGoodRecommend(HomeRecommendParams("goods_home_index_1", 1, 1, 20))
+            .observeOn(AndroidSchedulers.mainThread())
+            .map { it.result.goodsRecommends }
+    }
+
+
+    private fun converterRushList(it: HomeGoodsVoData): ArrayList<HomePageEntity<*>> {
         val list = ArrayList<HomePageEntity<*>>()
         list.add(HomeRushTitle(""))
         list.addAll(it.goodsVos)
@@ -77,7 +98,10 @@ class Api(
         return list
     }
 
-    private fun getPageArea(t1: HomePageOperationData, t2: HomePageOperationData): HomePageEntity<*> {
+    private fun getPageArea(
+        t1: HomePageOperationData,
+        t2: HomePageOperationData
+    ): HomePageEntity<*> {
         val list = ArrayList<HomePageOperationEntity>()
         for (index in 0..3) {
             when (index) {
@@ -104,8 +128,14 @@ class Api(
             .flatMap {
                 Single.create(SingleOnSubscribe<AppBean> { emitter ->
                     builder.setUpdateManagerListener(object : UpdateManagerListener {
-                        override fun onUpdateAvailable(p0: AppBean) { updateDialog(context, emitter, p0) }
-                        override fun checkUpdateFailed(p0: Exception) { emitter.onError(p0) }
+                        override fun onUpdateAvailable(p0: AppBean) {
+                            updateDialog(context, emitter, p0)
+                        }
+
+                        override fun checkUpdateFailed(p0: Exception) {
+                            emitter.onError(p0)
+                        }
+
                         override fun onNoUpdateAvailable() {
                             emitter.onError(ApiException("", context.getString(R.string.noUpdate)))
                         }

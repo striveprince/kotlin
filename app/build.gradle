@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-//apply plugin: 'kotlinx-serialization'
+apply plugin: 'kotlinx-serialization'
 
 kapt {
     arguments {
@@ -146,6 +146,8 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit"
     implementation 'com.squareup.retrofit2:converter-moshi:2.5.0'
     implementation "com.squareup.retrofit2:converter-gson:$retrofit"
+    implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.4.0'
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.13.0"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit"
     implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
     implementation 'com.squareup.okhttp3:okhttp:3.14.2'
@@ -169,6 +171,5 @@ dependencies {
 //    implementation 'com.squareup.moshi:moshi:1.8.0'
 
 }
-//    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.13.0"
 //    implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.4.0'
 //    implementation 'com.zhpan.library:bannerview:2.3.4'
