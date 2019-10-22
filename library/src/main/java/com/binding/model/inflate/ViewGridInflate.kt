@@ -2,6 +2,7 @@ package com.binding.model.inflate
 
 import androidx.databinding.ViewDataBinding
 import com.binding.model.adapter.GridInflate
+import kotlinx.serialization.Serializable
 
 /**
  * Company: 中科同创

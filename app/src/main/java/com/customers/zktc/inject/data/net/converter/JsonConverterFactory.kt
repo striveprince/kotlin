@@ -7,6 +7,8 @@ import com.google.gson.reflect.TypeToken
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonQualifier
 import com.squareup.moshi.Moshi
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonConfiguration
 import java.lang.reflect.Type
 
 import okhttp3.RequestBody
@@ -31,12 +33,12 @@ import kotlin.reflect.full.isSubclassOf
  */
 
 
-class JsonConverterFactory constructor(
-) : Converter.Factory() {
+class JsonConverterFactory : Converter.Factory() {
     private val gson:Gson = Gson()
 
     override fun responseBodyConverter(type: Type, annotations: Array<Annotation>?, retrofit: Retrofit?): Converter<ResponseBody, *> {
-        return JsonResponseBodyConverter<Any>(gson,type)
+        val json = Json(JsonConfiguration.Stable.copy(unquoted = true))
+        return JsonResponseBodyConverter<Any>(json,type)
     }
 
     override fun requestBodyConverter(

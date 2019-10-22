@@ -29,11 +29,10 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
-import kotlinx.serialization.DeserializationStrategy
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.*
 import kotlinx.serialization.internal.ArrayListSerializer
+import kotlinx.serialization.internal.defaultSerializer
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.serializer
 import java.io.File
 import java.lang.reflect.GenericArrayType
 import java.lang.reflect.ParameterizedType
@@ -56,26 +55,33 @@ inline fun <reified T> toArray(list: List<T>): Array<T> {
 }
 
 @ImplicitReflectionSerializer
-fun getType(type: Type,clazzs :ArrayList<Class<*>>): ArrayList<Class<*>> {
-    val v = arrayListOf<Class<*>>()
-    when (type) {
-        is Class<*> -> v.add(type)
-        is ParameterizedType -> {
-            val c: Class<*> = type.rawType as Class<*>
-            v.add(c)
-            c.kotlin.serializer()
-            if (List::class.java.isAssignableFrom(c)) {
-                type.rawType
-                v.add(type.rawType as Class<*>)
-                return getType(type.actualTypeArguments[0],v)
-            }
-        }
-        is GenericArrayType -> {
-
-        }
-    }
-    return v
+inline fun <reified T:Any> parse(string: String):T{
+    return Json.parse(string)
 }
+
+//
+//@ImplicitReflectionSerializer
+//fun getType(type: Type,clazzs :ArrayList<Class<*>>): ArrayList<Class<*>>{
+//    val kvalue =  serializerByTypeToken(type)
+//    val v = arrayListOf<Class<*>>()
+//
+//    when (type) {
+//        is Class<*> -> v.add(type)
+//        is ParameterizedType -> {
+//            val c: Class<*> = type.rawType as Class<*>
+//            v.add(c)
+//
+//            if (List::class.java.isAssignableFrom(c)) {
+//                v.add(type.rawType as Class<*>)
+//                return getType(type.actualTypeArguments[0],v)
+//            }
+//        }
+//        is GenericArrayType -> {
+//
+//        }
+//    }
+//    return v
+//}
 //                c.kotlin
 //                ArrayListSerializer()
 

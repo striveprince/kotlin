@@ -1,13 +1,16 @@
 package com.customers.zktc.ui.home.page
 
 import android.content.Context
-import android.view.View
 import androidx.databinding.ViewDataBinding
 import com.binding.model.adapter.recycler.RecyclerAdapter
 import com.binding.model.annoation.LayoutView
 import com.binding.model.inflate.ViewGridInflate
 import com.customers.zktc.R
 import com.customers.zktc.databinding.*
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Serializer
+import java.lang.Exception
 
 /**
  * Company: 中科同创
@@ -16,6 +19,7 @@ import com.customers.zktc.databinding.*
  * Email: 1033144294@qq.com
  */
 @LayoutView(layout=[R.layout.layout_home_banner_item])
+
 data class HomePageOperationEntity(
     val id: Int = 0,
     val name: String = "",
@@ -38,7 +42,7 @@ class HomePageOperationData(val operationAds: List<HomePageOperationEntity>) :
 
     override fun bindView(context: Context, binding: LayoutHomeBannerBinding) {
         super.bindView(context, binding)
-//        adapter.addListAdapter(0, operationAds)
+        adapter.addListAdapter(0, operationAds)
     }
 }
 
@@ -57,13 +61,14 @@ data class HomeCategoryData(val operationHomeCategorys: List<HomeCategoryEntity>
 //分类
 
 @LayoutView(layout = [R.layout.layout_home_category])
+
 data class HomeCategoryEntity(
     val iconUrl: String,
     val linkUrl: String,
     val name: String,
     val orderBy: Int
 ) : HomePageEntity<LayoutHomeCategoryBinding>(1) {
-    override fun getSpanSize() = 5
+    override fun getSpanSize() = 1
 }
 
 data class HomeGoodsVoData(
@@ -84,14 +89,6 @@ data class HomeGoodVosEntity(
     val marketingVo: List<MarketVoEntity>
 ):HomePageEntity<LayoutHomeRushBinding>(6){
     override fun getSpanSize(): Int =1
-
-     fun getImage():String{
-         return marketingTime+marketingTimeDesc
-     }
-
-    fun onClick(v:View){
-//        iEventAdapter?.setEntity()
-    }
 }
 
 data class MarketVoEntity(
@@ -141,17 +138,23 @@ data class HomeGoodVoEntity(
 )
 
 
+@LayoutView(layout=[R.layout.layout_home_recommend])
 data class HomeGoodsRecommendEntity(
     val goodsId: Int,
     val goodsName: String,
     val goodsPicture: String,
     val preferPrice: Double,
-    val scorePrice: String
+    val scorePrice: String?
 )
+//    :HomePageEntity<LayoutHomeRecommendBinding>(){
+//    override fun getSpanSize(): Int=2
+//}
 
 
-abstract class HomePageEntity<Binding : ViewDataBinding>(var sorted: Int = 0) :
-    ViewGridInflate<Binding>()
+open class HomePageEntity<Binding : ViewDataBinding>(var sorted: Int = 0)
+    : ViewGridInflate<Binding>(){
+    override fun getSpanSize()=1
+}
 
 
 data class HomeFloorData(
@@ -182,8 +185,8 @@ data class HomeFloorTypeEntity(
 }
 
 data class HomeRecommendData(
-    val goodsRecommends:List<HomeRecommendEntity>,
-    val haveNext:Boolean=false
+    val goodsRecommends:List<HomeGoodsRecommendEntity>,
+    val haveNext:Boolean
 )
 
 @LayoutView(layout=[R.layout.layout_home_recommend])
@@ -197,8 +200,21 @@ data class HomeRecommendEntity(
 }
 
 @LayoutView(layout=[R.layout.layout_home_recommend_title])
-data class HomeRecommendTitle(
-    val name:String
-):HomePageEntity<LayoutHomeRecommendTitleBinding>(7){
+data class HomeRecommendTitle(val name:String):HomePageEntity<LayoutHomeRecommendTitleBinding>(7){
     override fun getSpanSize()=1
 }
+
+
+//
+@Serializable
+data class TestDto(
+    val name:String,
+    val phone:String,
+    @kotlinx.serialization.Transient val throwable:Throwable = Exception()
+){
+
+}
+//@Serializer(forClass = ViewDataBinding::class)
+//object ViewDatabindingSerialier:KSerializer<ViewDataBinding>{
+//
+//}

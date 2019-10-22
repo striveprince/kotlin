@@ -41,8 +41,7 @@ interface Inflate<Binding : ViewDataBinding> : Parse<Binding>{
     }
 
     fun getLayoutId(): Int{
-        if(layoutView == null) layoutView = findModelView(javaClass)
-        return layoutView!!.layout[layoutIndex]
+        return layoutView.layout[layoutIndex]
     }
 
     fun getViewId(): Int = 0

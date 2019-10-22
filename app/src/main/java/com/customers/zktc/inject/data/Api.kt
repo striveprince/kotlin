@@ -68,7 +68,7 @@ class Api(
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun homePageTest(offset: Int, refresh: Int, pageCount: Int): Single<List<HomePageEntity<*>>> {
+    fun homePageTest(): Single<List<HomeGoodsRecommendEntity>> {
         return netApi.homeGoodRecommend(HomeRecommendParams("goods_home_index_1", 1, 1, 20))
             .observeOn(AndroidSchedulers.mainThread())
             .map { it.result.goodsRecommends }
@@ -85,7 +85,7 @@ class Api(
     private fun converterGoodsRecommends(it: HomeRecommendData): ArrayList<HomePageEntity<*>> {
         val list = ArrayList<HomePageEntity<*>>()
         list.add(HomeRecommendTitle("为你推荐"))
-        list.addAll(it.goodsRecommends)
+//        list.addAll(it.goodsRecommends)
         return list
     }
 

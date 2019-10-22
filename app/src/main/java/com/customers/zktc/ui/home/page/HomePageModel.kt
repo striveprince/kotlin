@@ -14,6 +14,7 @@ import com.customers.zktc.databinding.FragmentHomePageBinding
 import com.customers.zktc.inject.data.Api
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.simple.SimpleMultiListener
+import timber.log.Timber
 import javax.inject.Inject
 
 @LayoutView(layout = [R.layout.fragment_home_page])
@@ -41,7 +42,8 @@ class HomePageModel @Inject constructor() :
             }
         })
         layoutManagerField.set(layoutManager)
-        setRxHttp { offset, refresh -> api.homePage(offset, refresh, pageCount) }
+//        setRxHttp { offset, refresh ->  }
+        api.homePageTest().subscribeNormal ({ Timber.i("name:${it[0].goodsName}") },{it.printStackTrace()})
         api.locationCity(t.dataActivity).subscribeNormal (t, { city.set(it) })
     }
 

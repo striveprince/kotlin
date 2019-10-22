@@ -16,7 +16,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="12dp"
-            android:text="@{vm.marketingTimeDesc}"
             android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toTopOf="parent" />
@@ -24,8 +23,6 @@
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="100dp"
-            android:src="@{vm.image}"
-            android:onClick="@{vm::onClick}"
             android:layout_height="100dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

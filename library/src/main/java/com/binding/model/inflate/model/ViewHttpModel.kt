@@ -39,7 +39,7 @@ open class ViewHttpModel<T : CycleContainer<*>, Binding : ViewDataBinding, R> : 
         this.offset = if (refresh > 0) 0 else offset
         val o = if (offset > headIndex) offset - headIndex else 0
         val p = if (pageWay) o / pageCount + 1 else o
-        http?.invoke(offset, refresh)?.subscribe(normalObserver)
+        http?.invoke(p, refresh)?.subscribe(normalObserver)
     }
 
     override fun onNext(t: R) {

@@ -6,6 +6,7 @@ import com.customers.zktc.inject.data.Api
 import com.customers.zktc.inject.data.database.DatabaseApi
 import com.customers.zktc.inject.data.map.MapApi
 import com.customers.zktc.inject.data.net.NetApi
+import com.customers.zktc.inject.data.net.converter.JsonConverterFactory
 import com.customers.zktc.inject.data.oss.OssApi
 import com.customers.zktc.inject.data.preference.PreferenceApi
 import com.customers.zktc.inject.interceptor.NetInterceptor
@@ -39,9 +40,9 @@ class DataModule {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.ApiHost)
 //            .addConverterFactory(MoshiConverterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
-//            .addConverterFactory(Json.asConverterFactory(contentType))
+//            .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
+            .addConverterFactory(JsonConverterFactory())
             .callFactory(client)
             .build().create(NetApi::class.java)
     }
