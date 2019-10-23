@@ -17,7 +17,7 @@ import kotlinx.serialization.Transient
  * Email: 1033144294@qq.com
  */
 
-open class HomePageEntity<Binding : ViewDataBinding>() : ViewGridInflate<Binding>() {
+open class HomePageEntity<Binding : ViewDataBinding> : ViewGridInflate<Binding>() {
     override fun getSpanSize() = 1
     open fun getSorted():Int = 0
 }
