@@ -1,6 +1,8 @@
 package com.customers.zktc.inject.data.net.transform
 
+import android.os.Build
 import com.binding.model.fromJson
+import com.customers.zktc.BuildConfig
 import com.customers.zktc.inject.data.net.InfoEntity
 import com.customers.zktc.inject.data.net.exception.AuthenticationException
 import com.customers.zktc.inject.data.net.exception.LogoutException
@@ -11,9 +13,11 @@ import io.reactivex.SingleSource
 import io.reactivex.SingleTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.serialization.SerializationException
 import org.jetbrains.anko.Android
 import org.json.JSONException
 import retrofit2.HttpException
+import timber.log.Timber
 import java.lang.Exception
 import java.util.*
 
@@ -31,6 +35,7 @@ class ErrorSingleTransformer<T> : SingleTransformer<T, T> {
     override fun apply(upstream: Single<T>): SingleSource<T> {
         return upstream.subscribeOn(Schedulers.io())
             .onErrorResumeNext { throwable ->
+                if(BuildConfig.DEBUG) throwable.printStackTrace()
                 var code = ""
                 var msg = ""
                 when (throwable) {
@@ -52,6 +57,7 @@ class ErrorSingleTransformer<T> : SingleTransformer<T, T> {
                     }
                     is ServiceConfigurationError -> msg = "服务器错误"
                     is JSONException -> msg = "数据解析错误"
+                    is SerializationException ->msg="数据解析错误"
                 }
                 Single.error(ApiException(code, msg))
             }

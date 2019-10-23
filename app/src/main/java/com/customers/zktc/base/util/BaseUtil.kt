@@ -71,16 +71,16 @@ fun<T> Single<T>.noError():Observable<T>{
     return this.toObservable().compose(NoErrorObservableTransformer())
 }
 
+fun<T> Observable<T>.noError():Observable<T>{
+    return this.compose(NoErrorObservableTransformer())
+}
+
 
 fun <T> Single<InfoEntity<T>>.restful(): Single<T> {
     return this.compose(ErrorSingleTransformer())
         .compose(RestfulSingleTransformer())
 }
 
-fun <T> Single<InfoEntity<T>>.noErrorRestful():Observable<T>{
-    return this.restful().noError()
-
-}
 
 fun <T> Single<InfoEntity<T>>.restfulCompose(): Single<T> {
     return this.compose(ErrorSingleTransformer())

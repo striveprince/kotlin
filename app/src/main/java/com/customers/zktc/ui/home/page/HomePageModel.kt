@@ -42,13 +42,8 @@ class HomePageModel @Inject constructor() :
             }
         })
         layoutManagerField.set(layoutManager)
-//        setRxHttp { offset, refresh ->  }
-        api.homePageTest().subscribeNormal ({ Timber.i("name:${it[0].goodsName}") },{it.printStackTrace()})
+        setRxHttp { offset, refresh ->  api.homePage(offset, refresh, pageCount)}
         api.locationCity(t.dataActivity).subscribeNormal (t, { city.set(it) })
-    }
-
-    override fun onNext(t: List<HomePageEntity<*>>) {
-        super.onNext(t)
     }
 
     override fun onComplete() {
