@@ -47,6 +47,7 @@ class NormalObserver<T> constructor(
     override fun onSuccess(t: T) {
         observer.onNext(t)
         observer.onComplete()
+        disposable.get().dispose()
     }
 
     override fun onNext(t: T) {
@@ -73,6 +74,7 @@ class NormalObserver<T> constructor(
     override fun onComplete() {
             try {
                 observer.onComplete()
+                disposable.get().dispose()
             } catch (e: Throwable) {
                 Exceptions.throwIfFatal(e)
                 RxJavaPlugins.onError(e)

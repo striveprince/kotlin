@@ -60,7 +60,7 @@ class LoginModel @Inject constructor() : ViewModel<LoginFragment, FragmentLoginB
     }
 
     fun onLoginClick(v: View) {
-        api.passwordLogin(binding!!.params!!.change())
+        api.passwordLogin(binding!!.params!!)
             .subscribeNormal(t,{
                 loginEvent(true,it)
                 finish()})

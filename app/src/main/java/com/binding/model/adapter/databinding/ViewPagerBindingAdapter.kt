@@ -21,11 +21,13 @@ import com.customers.zktc.R
     )
 )
 object ViewPagerBindingAdapter {
+    @JvmStatic
     @BindingAdapter("position")
     fun setCurrentItem(view: ViewPager, position: Int) {
         if(view.currentItem!=position)view.currentItem=position
     }
 
+    @JvmStatic
     @BindingAdapter(value = [ "pageChange", "positionAttrChanged" ], requireAll = false)
     fun addOnPageChangeListener(pager: ViewPager, listener: ViewPager.OnPageChangeListener?, positionAttrChanged: InverseBindingListener?) {
         val newValue = object : ViewPager.OnPageChangeListener {

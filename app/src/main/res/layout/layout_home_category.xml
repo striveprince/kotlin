@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
-
+        <variable
+            name="vm"
+            type="com.customers.zktc.ui.home.page.HomeCategoryEntity" />
     </data>
-    <LinearLayout
+    <TextView
+        android:text="@{vm.name,default=xswl}"
+        android:gravity="center|bottom"
+        android:drawableTop="@{vm.iconUrl}"
+        android:onClick="@{vm::onImageClick}"
+        android:textSize="14sp"
+        android:textColor="@color/z_343434"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="135dp"/>
 </layout>

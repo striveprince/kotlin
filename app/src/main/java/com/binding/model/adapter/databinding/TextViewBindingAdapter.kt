@@ -11,13 +11,13 @@ import androidx.databinding.BindingAdapter
 @SuppressLint("RestrictedApi")
 object TextViewBindingAdapter {
 
-
+    @JvmStatic
     @BindingAdapter("android:drawableBottom")
     fun setDrawableBottom(view: TextView, drawable: Int) {
         androidx.databinding.adapters.TextViewBindingAdapter.setDrawableBottom(view, ContextCompat.getDrawable(view.context, drawable)
         )
     }
-
+    @JvmStatic
     @BindingAdapter("android:drawableLeft")
     fun setDrawableLeft(view: TextView, drawable: Int) {
         androidx.databinding.adapters.TextViewBindingAdapter.setDrawableLeft(
@@ -26,7 +26,7 @@ object TextViewBindingAdapter {
         )
 
     }
-
+    @JvmStatic
     @BindingAdapter("android:drawableRight")
     fun setDrawableRight(view: TextView, drawable: Int) {
         androidx.databinding.adapters.TextViewBindingAdapter.setDrawableRight(
@@ -34,7 +34,7 @@ object TextViewBindingAdapter {
             ContextCompat.getDrawable(view.context, drawable)
         )
     }
-
+    @JvmStatic
     @BindingAdapter("android:drawableTop")
     fun setDrawableTop(view: TextView, drawable: Int) {
         androidx.databinding.adapters.TextViewBindingAdapter.setDrawableTop(

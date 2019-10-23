@@ -91,7 +91,7 @@
                 android:layout_marginRight="70dp"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:text="@={params.confirmPassword}"
+                android:text="@={params.password}"
                 android:textColor="@color/black" />
         </com.google.android.material.textfield.TextInputLayout>
 

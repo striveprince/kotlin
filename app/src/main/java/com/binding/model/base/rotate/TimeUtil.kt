@@ -20,7 +20,7 @@ import java.util.HashMap
 class TimeUtil: Runnable {
     private val handler = Handler()
     init {
-        handler.postDelayed(this, 200)
+        handler.postDelayed(this, 50)
         TimeUtil.handler = handler
     }
 
@@ -29,38 +29,36 @@ class TimeUtil: Runnable {
             if (hashMap[timeEntity]!!) timeEntity.getTurn()
         }
         val duration = 1000 - System.currentTimeMillis() % 1000
-        //        Timber.i("current time:%1d,duration:%2d",System.currentTimeMillis(),duration);
         handler.postDelayed(this, duration)
     }
 
 
-    fun switching(timeEntity: TimeEntity, state: Int) {
-        if ((state == 0) xor hashMap[timeEntity]!!) {
-                if (state == 0) hashMap.put(timeEntity, true) else hashMap.put(timeEntity, false)
-        }
-    }
-
-    fun remove(timeEntity: TimeEntity?) {
-        if (timeEntity == null) return
-        handler.postDelayed({ hashMap.remove(timeEntity) }, 400)
-    }
-
-    fun destroy() {
-        hashMap.clear()
-        handler.removeCallbacksAndMessages(null)
-    }
 
     companion object {
+        private val instance=TimeUtil()
         fun destroy() {
             hashMap.clear()
             handler.removeCallbacksAndMessages(null)
         }
         lateinit var handler :Handler
-        val instance = TimeUtil()
+        fun switching(timeEntity: TimeEntity, state: Int) {
+            val b = state==0
+            if (b xor hashMap[timeEntity]!!) {
+                if (b) hashMap.put(timeEntity, true)
+                else hashMap.put(timeEntity, false)
+            }
+        }
+
         private val hashMap = HashMap<TimeEntity, Boolean>()
 
         fun add(timeEntity: TimeEntity) {
             hashMap[timeEntity] = true
         }
+
+        fun remove(timeEntity: TimeEntity?) {
+            if (timeEntity == null) return
+            handler.postDelayed({ hashMap.remove(timeEntity) }, 400)
+        }
+
     }
 }

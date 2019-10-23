@@ -23,13 +23,14 @@ import com.binding.model.base.view.CheckRadioGroup
     )
 )
 object CheckRadioGroupBindingAdapter {
+    @JvmStatic
     @BindingAdapter("position")
     fun checkPosition(radioGroup: CheckRadioGroup, position: Int) {
         if (radioGroup.checkedPosition != position) {
             radioGroup.checkPosition(position)
         }
     }
-
+    @JvmStatic
     @BindingAdapter(value = ["checkedChange", "positionAttrChanged"], requireAll = false)
     fun addOnCheckedChangeListener(
         radioGroup: RadioGroup, listener: RadioGroup.OnCheckedChangeListener?,

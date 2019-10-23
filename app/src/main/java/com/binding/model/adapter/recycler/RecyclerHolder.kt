@@ -22,7 +22,7 @@ private constructor(private val container:ViewGroup, val binding: ViewDataBindin
         e.removeBinding()
         this.e = e
         this.e.iEventAdapter = iEventAdapter
-        container.setTag(R.id.holder_position,position)
+        container.setTag(R.id.holder_position,adapterPosition)
         this.e.attachView(container.context,container,false,binding)
     }
 }

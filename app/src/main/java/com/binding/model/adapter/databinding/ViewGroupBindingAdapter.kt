@@ -16,7 +16,7 @@ import com.binding.model.inflate.inter.Measure
  * Phone: 15390395799
  */
 object ViewGroupBindingAdapter {
-
+    @JvmStatic
     @BindingAdapter("rmInflate")
     fun <E:Inflate<*>>removeInflate(viewGroup: ViewGroup,e:E){
         for (i in 0 until viewGroup.childCount) {
@@ -29,7 +29,7 @@ object ViewGroupBindingAdapter {
         }
     }
 
-
+    @JvmStatic
     @BindingAdapter(value = ["addInflate","eventAdapter"])
     fun <E : Inflate<*>> addInflate(viewGroup: ViewGroup,e :E,eventAdapter: IEventAdapter<E>?){
         e.iEventAdapter = eventAdapter
@@ -41,7 +41,7 @@ object ViewGroupBindingAdapter {
             viewGroup.addView(view)
         view.setTag(R.id.inflate,e)
     }
-
+    @JvmStatic
     @BindingAdapter(value = ["addInflate"])
     fun <E : Inflate<*>> addInflate(viewGroup: ViewGroup,e :E){
         addInflate(viewGroup,e,null)

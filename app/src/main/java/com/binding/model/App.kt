@@ -24,7 +24,7 @@ class App constructor(val application: Application) : Application.ActivityLifecy
             return application.resources.displayMetrics.heightPixels
         }
 
-        fun dipTopx(dp: Float): Float {
+        fun dipToPx(dp: Float): Float {
             return application.resources.displayMetrics.density * dp
         }
 

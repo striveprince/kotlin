@@ -11,12 +11,12 @@ import com.binding.model.adapter.IRecyclerAdapter
 import com.binding.model.inflate.inter.Inflate
 import com.binding.model.adapter.recycler.RecyclerHolder
 import com.binding.model.containsList
+import timber.log.Timber
 
 open class RecyclerAdapter<E : Inflate<*>> : RecyclerView.Adapter<RecyclerHolder<E>>()
     , IRecyclerAdapter<E> {
-
     private val sparseArray = SparseArray<E>()
-    private val iEventAdapter = this
+    private val iEventAdapter by lazy { this }
     private val eventAdapters: ArrayList<IEventAdapter<E>> = ArrayList()
 
     init {
@@ -24,7 +24,6 @@ open class RecyclerAdapter<E : Inflate<*>> : RecyclerView.Adapter<RecyclerHolder
     }
 
     override val holderList = ArrayList<E>()
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerHolder<E> {
         return RecyclerHolder(parent, sparseArray.get(viewType))
     }
@@ -36,6 +35,15 @@ open class RecyclerAdapter<E : Inflate<*>> : RecyclerView.Adapter<RecyclerHolder
     override fun onBindViewHolder(holder: RecyclerHolder<E>, position: Int) {
         val e = holderList[position]
         holder.executePendingBindings(position, e, iEventAdapter)
+    }
+
+    override fun onBindViewHolder(holder: RecyclerHolder<E>, position: Int, payloads: MutableList<Any>) {
+        if (payloads.isEmpty()) onBindViewHolder(holder, position)
+        else {
+            Timber.i("payloads size=${payloads.size}")
+            val e = holderList[position]
+            holder.executePendingBindings(position, e, iEventAdapter)
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -82,14 +90,14 @@ open class RecyclerAdapter<E : Inflate<*>> : RecyclerView.Adapter<RecyclerHolder
 
     override fun removeListAdapter(position: Int, es: List<E>): Boolean {
         val rang = isRang(position, es, holderList)
-        if(rang>=0){
+        if (rang >= 0) {
             holderList.removeAll(es)
-            notifyItemRangeRemoved(position,es.size)
-        }else for (e in es){
-            removeToAdapter(0,e)
+            notifyItemRangeRemoved(position, es.size)
+        } else for (e in es) {
+            removeToAdapter(0, e)
         }
 
-        return rang>=0
+        return rang >= 0
     }
 
 
@@ -108,16 +116,16 @@ open class RecyclerAdapter<E : Inflate<*>> : RecyclerView.Adapter<RecyclerHolder
 
     override fun addListAdapter(position: Int, es: List<E>): Boolean {
         var p = position
-        if(!containsList(position,holderList)){
+        if (!containsList(position, holderList)) {
             p = holderList.size
             holderList.addAll(es)
-        }else holderList.addAll(p,es)
-        notifyItemRangeInserted(p,es.size)
+        } else holderList.addAll(p, es)
+        notifyItemRangeInserted(p, es.size)
         return true
     }
 
-     fun addListAdapter( es: List<E>): Boolean {
-        return addListAdapter(0,es)
+    fun addListAdapter(es: List<E>): Boolean {
+        return addListAdapter(0, es)
     }
 
     override fun refreshListAdapter(position: Int, es: List<E>): Boolean {

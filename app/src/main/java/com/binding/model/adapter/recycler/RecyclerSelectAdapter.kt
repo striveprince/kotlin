@@ -2,17 +2,16 @@ package com.binding.model.adapter.recycler
 
 import android.view.View
 import android.widget.Checkable
-import androidx.databinding.ViewDataBinding
 import com.binding.model.containsList
-import com.binding.model.inflate.inter.Recycler
+import com.binding.model.inflate.inter.Check
 import com.binding.model.inflate.obj.EventType
 
-class RecyclerSelectAdapter<E : Recycler<in ViewDataBinding>>
-constructor(val max: Int = Int.MAX_VALUE) : RecyclerAdapter<E>() {
+class RecyclerSelectAdapter<E : Check<*>>
+constructor(private val max: Int = Int.MAX_VALUE) : RecyclerAdapter<E>() {
 
-    private val ENABLE = 1
-    private val CHECK = 2
-    private val SELECT = 3
+    private val enable = 1
+    private val check = 2
+    private val select = 3
     val checkList = ArrayList<E>()
 
     override fun setList(position: Int, es: List<E>, type: Int): Boolean {
@@ -25,30 +24,27 @@ constructor(val max: Int = Int.MAX_VALUE) : RecyclerAdapter<E>() {
 
 
     override fun setIEntity(position: Int, e: E, type: Int, view: View?): Boolean {
-        when (type) {
-            EventType.select -> return select(position, e, view)
-            else -> return super.setIEntity(position, e, type, view)
+        return when (type) {
+            EventType.select -> select(position, e, view)
+            else -> super.setIEntity(position, e, type, view)
         }
     }
 
     fun select(position: Int, e: E, v: View?): Boolean {
-        var position = position
-        var e = e
-        if (v != null) {
+        var p = position
+        return if (v != null) {
             if (holderList.isEmpty()) return false
-            if (!containsList(position, holderList)) position = 0
-            e = holderList[position]
-            when (e.getCheckType()) {
-                ENABLE -> return select(e, !v.isEnabled, isPush(e))
-                CHECK -> return if (v is Checkable) {
-                    select(e, (v as Checkable).isChecked, isPush(e))
-                } else
-                    false
-                SELECT -> return select(e, v.isSelected, isPush(e))
-                else -> return select(e, !checkList.contains(e), isPush(e))
+            if (!containsList(p, holderList)) p = 0
+            var inE = holderList[p]
+            when (inE.getCheckType()) {
+                enable -> select(inE, !v.isEnabled, isPush(inE))
+                this.check -> if (v is Checkable) {
+                    select(inE, (v as Checkable).isChecked, isPush(inE))
+                } else false
+                select -> select(inE, v.isSelected, isPush(inE))
+                else -> select(inE, !checkList.contains(inE), isPush(inE))
             }
-        } else
-            return select(e, !checkList.contains(e), isPush(e))
+        } else select(e, !checkList.contains(e), isPush(e))
     }
 
     private fun isPush(e: E): Boolean {
@@ -75,12 +71,8 @@ constructor(val max: Int = Int.MAX_VALUE) : RecyclerAdapter<E>() {
                 }
             } else {
                 success = add(inE)
-                if (success)
-                    inE.check(true)
-                else
-                    inE.check(false)
+                inE.check(success)
             }
-
         }
         return success
     }

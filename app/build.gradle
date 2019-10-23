@@ -157,6 +157,7 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.alibaba:arouter-api:1.2.4'
     kapt 'com.alibaba:arouter-compiler:1.1.4'
+    implementation "com.github.bumptech.glide:glide:$glide_version"
     implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
     implementation 'com.aliyun.dpa:oss-android-sdk:2.9.2'
     implementation 'com.pgyersdk:sdk:3.0.2'
@@ -170,8 +171,8 @@ dependencies {
     implementation 'androidx.viewpager2:viewpager2:1.0.0-beta05'
     implementation 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
 
-//    implementation 'com.squareup.moshi:moshi:1.8.0'
 
 }
+//    implementation 'com.squareup.moshi:moshi:1.8.0'
 //    implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.4.0'
 //    implementation 'com.zhpan.library:bannerview:2.3.4'

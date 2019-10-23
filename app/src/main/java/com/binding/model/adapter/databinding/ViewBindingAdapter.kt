@@ -24,13 +24,13 @@ import com.binding.model.adapter.recycler.RecyclerAdapter
  */
 
 object ViewBindingAdapter {
-
+    @JvmStatic
     @BindingAdapter("android:alpha")
     fun setAlpha(view: View, alpha: Float) {
         if (!(alpha < 0 || alpha > 1)) view.alpha = alpha
 //        if (alpha >= 0 && alpha <= 1) view.alpha = alpha
     }
-
+    @JvmStatic
     @BindingAdapter("adapter")
     fun setAdapter(view: View, adapter: IModelAdapter<*>?) {
         if (adapter == null) return
@@ -51,7 +51,7 @@ object ViewBindingAdapter {
         }
     }
 
-
+    @JvmStatic
     @BindingAdapter("params")
     fun setLayoutParams(view: View, params: ViewGroup.LayoutParams?) {
         if (params != null) view.layoutParams = params

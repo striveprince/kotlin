@@ -18,11 +18,11 @@ data class HomeRecommendParams(
     val siteNumber: String,
     val pageNo: Int, val pageNum: Int, val pageSize: Int
 ) : ApiParams
- class HomeRushListParams:ApiParams
+class HomeRushListParams:ApiParams
+
 data class HomeRushParams(
-    val pageNo: Int = 0,
+    val pageNo: Int = 1,
     val storeId: Int = 0,
     val customerId: Int = 0,
-    val pageSize: Int = 0,
-    val marketingIds: Array<Int>
+    val pageSize: Int = 20
 ) :ApiParams

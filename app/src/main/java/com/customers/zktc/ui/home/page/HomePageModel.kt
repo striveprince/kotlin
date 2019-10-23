@@ -3,7 +3,9 @@ package com.customers.zktc.ui.home.page
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.ObservableField
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
+import com.binding.model.adapter.recycler.DiffUtilCallback
 import com.binding.model.adapter.recycler.GridSizeLookup
 import com.binding.model.annoation.LayoutView
 import com.binding.model.inflate.model.RecyclerModel
@@ -14,14 +16,15 @@ import com.customers.zktc.databinding.FragmentHomePageBinding
 import com.customers.zktc.inject.data.Api
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.simple.SimpleMultiListener
-import timber.log.Timber
+import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
 @LayoutView(layout = [R.layout.fragment_home_page])
 class HomePageModel @Inject constructor() :
-    RecyclerModel<HomePageFragment, FragmentHomePageBinding, HomePageEntity<*>>() {
+    RecyclerModel<HomePageFragment, FragmentHomePageBinding, HomePageInflate<*>>() {
     val city = ObservableField<String>("定位中...")
-
+    private val banner = HomePageBanner(arrayListOf())
+    private val list = ArrayList<HomePageInflate<*>>()
     @Inject
     lateinit var api: Api
     private val spanCount = 2520
@@ -29,21 +32,37 @@ class HomePageModel @Inject constructor() :
         super.attachView(savedInstanceState, t)
         val layoutManager = GridLayoutManager(t.context, spanCount)
         layoutManager.spanSizeLookup = GridSizeLookup(recyclerAdapter, spanCount)
+        layoutManagerField.set(layoutManager)
+        t.lifecycle.addObserver(banner)
+        http = { offset, _ -> api.getRushList(offset).map { it.goodsVos }}
+        initHttp()
+        api.locationCity(t.dataActivity).subscribeNormal(t, { city.set(it) })
         binding?.smartRefreshLayout?.setOnMultiListener(object : SimpleMultiListener() {
             override fun onRefresh(refreshLayout: RefreshLayout) {
                 super.onRefresh(refreshLayout)
-                onHttp(0, RecyclerStatus.loadTop)
+                initHttp()
             }
-
             override fun onLoadMore(refreshLayout: RefreshLayout) {
                 super.onLoadMore(refreshLayout)
                 val position = layoutManager.findLastCompletelyVisibleItemPosition()
-                onHttp(position,RecyclerStatus.loadBottom)
+                onHttp(position, RecyclerStatus.loadBottom)
             }
         })
-        layoutManagerField.set(layoutManager)
-        setRxHttp { offset, refresh ->  api.homePage(offset, refresh, pageCount)}
-        api.locationCity(t.dataActivity).subscribeNormal (t, { city.set(it) })
+    }
+
+    private fun initHttp() {
+       return api.homePage(offset, refresh, pageCount, banner)
+            .doOnSuccess {
+                list.clear()
+                list.addAll(it)
+            }
+            .map { DiffUtil.calculateDiff(DiffUtilCallback(adapter.holderList, it)) }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeNormal(t,{
+                it.dispatchUpdatesTo(adapter)
+                adapter.clear()
+                adapter.holderList.addAll(list)
+            },onComplete = {onComplete()})
     }
 
     override fun onComplete() {

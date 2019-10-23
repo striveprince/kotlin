@@ -30,7 +30,6 @@ import io.reactivex.SingleOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.zipWith
 import okio.Okio
-import timber.log.Timber
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -42,8 +41,10 @@ class Api(
     private val ossApi: OssApi,
     private val preferenceApi: PreferenceApi
 ) {
-    fun homePage(offset: Int, refresh: Int, pageCount: Int): Single<List<HomePageEntity<*>>> {
-        val banner: Observable<out HomePageEntity<*>> = getOperationAd("ad_home_index_1")
+    fun homePage(offset: Int, refresh: Int, pageCount: Int, homePageBanner: HomePageBanner): Single<List<HomePageInflate<*>>> {
+        val banner: Observable<out HomePageInflate<*>> = getOperationAd("ad_home_index_1")
+            .map { homePageBanner.operationAds = (it.operationAds)
+                 homePageBanner}
         val category: Observable<HomePageEntity<*>> = netApi.operationHomeCategorys()
             .restful().map { it.operationHomeCategorys }.toObservable()
             .concatMap { Observable.fromIterable(it) }
@@ -53,32 +54,29 @@ class Api(
             .restful()
             .toObservable()
             .concatMap { Observable.fromIterable(converterFloorData(it)) }
+        val rushList = getRushList(offset)
+            .toObservable()
+            .concatMap { Observable.fromIterable(converterRushList(it)) }
         val homeGoodRecommend =
-            netApi.homeGoodRecommend(HomeRecommendParams("goods_home_index_1", 1, 1, pageCount))
+            netApi.homeGoodRecommend(HomeRecommendParams("goods_home_index_1", offset, offset, pageCount))
                 .restful()
                 .toObservable()
                 .concatMap { Observable.fromIterable(converterGoodsRecommends(it)) }
-
-        val rushList = netApi.getRushList(HomeRushListParams())
-            .restful()
-            .toObservable()
-            .concatMap { Observable.fromIterable(converterRushList(it)) }
         return Observable.mergeArray(
             banner.noError(),
             category.noError(),
             homeSpecial.noError(),
             operationFloor.noError(),
-            homeGoodRecommend.noError(),
-            rushList.noError()
+            rushList.noError(),
+            homeGoodRecommend.noError()
         ).toSortedList { t1, t2 -> t1.getSorted() - t2.getSorted()}
-            .doOnSuccess{
-                Timber.i("list=$it")
-            }
-            .observeOn(AndroidSchedulers.mainThread())
+
     }
 
     private fun getOperationAd(adPositionNumber: String): Observable<HomePageOperationData> {
-        return netApi.getOperationAd(HomeOperationParams(adPositionNumber)).restful().toObservable()
+        return netApi.getOperationAd(HomeOperationParams(adPositionNumber))
+            .restful()
+            .toObservable()
     }
 
     private fun getPageArea(t1: HomePageOperationData, t2: HomePageOperationData): HomePageEntity<*> {
@@ -118,6 +116,10 @@ class Api(
         list.addAll(it.goodsVos)
         return list
     }
+
+    fun getRushList(offset: Int) = netApi.getRushList(HomeRushParams(pageNo = offset))
+        .restful()
+
 
     fun checkUpdate(context: Activity): Single<File> {
         val builder = PgyUpdateManager.Builder()

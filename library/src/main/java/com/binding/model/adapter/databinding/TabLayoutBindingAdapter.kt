@@ -22,7 +22,7 @@ import com.google.android.material.tabs.TabLayout
     )
 )
 object TabLayoutBindingAdapter {
-
+    @JvmStatic
     @BindingAdapter("position")
     fun setScrollPosition(layout: TabLayout, position: Int) {
         val current = layout.selectedTabPosition
@@ -31,7 +31,7 @@ object TabLayoutBindingAdapter {
         ReflectUtil.invoke("selectTab", layout, tab)
         layout.setScrollPosition(position, 0f, true)
     }
-
+    @JvmStatic
     @BindingAdapter(value = [ "tab_selected", "positionAttrChanged" ], requireAll = false)
     fun addOnTabSelectedListener(
         layout: TabLayout,

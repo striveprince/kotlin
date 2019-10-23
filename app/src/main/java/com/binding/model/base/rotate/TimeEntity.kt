@@ -6,5 +6,4 @@ package com.binding.model.base.rotate
 
 interface TimeEntity {
     fun getTurn()
-
 }

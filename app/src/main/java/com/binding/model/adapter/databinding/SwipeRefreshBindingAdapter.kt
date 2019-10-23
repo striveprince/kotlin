@@ -30,13 +30,14 @@ import com.customers.zktc.R
     )
 )
 object SwipeRefreshBindingAdapter {
+    @JvmStatic
     @BindingAdapter("refreshing")
     fun setRefreshing(view: SwipeRefreshLayout, refreshing: Boolean) {
         if (refreshing != view.isRefreshing) {
             view.isRefreshing = refreshing
         }
     }
-
+    @JvmStatic
     @BindingAdapter(value = ["onRefreshListener", "refreshingAttrChanged"], requireAll = false)
     fun setOnRefreshListener(view: SwipeRefreshLayout, listener: SwipeRefreshLayout.OnRefreshListener?, refreshingAttrChanged: InverseBindingListener?) {
         val newValue = SwipeRefreshLayout.OnRefreshListener {

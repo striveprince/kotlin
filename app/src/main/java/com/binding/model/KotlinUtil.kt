@@ -223,13 +223,14 @@ fun <T : Any> Single<T>.subscribeNormal(
     onError: (Throwable) -> Unit = { toast(it) },
     onComplete: () -> Unit = {},
     onSubscribe: (Disposable) -> Unit = {}
-) {
+) :Boolean{
     val observer = NormalObserver(onNext, onError, onComplete, onSubscribe)
     t.t.cycle.addObserver(observer)
-    if (t.disposable == null || t.disposable?.isDisposed!!) {
+    return if (t.disposable == null || t.disposable?.isDisposed!!) {
         this.subscribe(observer)
         t.disposable = observer.disposable.get()
-    }
+        true
+    }else false
 }
 
 

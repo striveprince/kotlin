@@ -15,13 +15,13 @@ class TimingEntity : TimeEntity, LifecycleObserver {
 
     override fun getTurn() {
         if (--time == 0)
-            TimeUtil.instance.remove(this)
+            TimeUtil.remove(this)
         listener?.invoke(time)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onStop() {
-        TimeUtil.instance.remove(this)
+        TimeUtil.remove(this)
     }
 
 
