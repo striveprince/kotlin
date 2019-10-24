@@ -8,5 +8,5 @@ import android.view.ViewGroup
  */
 
 interface Measure {
-    fun measure(view: View, parent: ViewGroup): ViewGroup.LayoutParams
+    fun measure(view: View, parent: ViewGroup?): ViewGroup.LayoutParams
 }

@@ -1,5 +1,6 @@
 package com.binding.model.adapter.databinding
 
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.BindingAdapter
 import com.customers.zktc.R
@@ -30,15 +31,19 @@ object ViewGroupBindingAdapter {
     }
 
     @JvmStatic
+    @BindingAdapter("params")
+    fun <E:Measure> setParams(view:View,e:E){
+        view.layoutParams = e.measure(view, view.parent as? ViewGroup)
+    }
+
+    @JvmStatic
     @BindingAdapter(value = ["addInflate","eventAdapter"])
     fun <E : Inflate<*>> addInflate(viewGroup: ViewGroup,e :E,eventAdapter: IEventAdapter<E>?){
         e.iEventAdapter = eventAdapter
         val view = e.attachView(viewGroup.context, viewGroup, false, null).root
         view.id = e.getViewId()
-        if(e is Measure)
-            viewGroup.addView(view,e.measure(view,viewGroup))
-        else
-            viewGroup.addView(view)
+        if(e is Measure) viewGroup.addView(view,e.measure(view,viewGroup))
+        else viewGroup.addView(view)
         view.setTag(R.id.inflate,e)
     }
     @JvmStatic

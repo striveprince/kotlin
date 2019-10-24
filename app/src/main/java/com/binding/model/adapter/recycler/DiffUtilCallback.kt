@@ -3,6 +3,7 @@ package com.binding.model.adapter.recycler
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import com.binding.model.containsList
+import com.binding.model.inflate.inter.Diff
 import com.binding.model.inflate.inter.Recycler
 
 
@@ -10,7 +11,7 @@ import com.binding.model.inflate.inter.Recycler
  * Created by apple on 2017/7/28.
  */
 
-class DiffUtilCallback<E : Recycler<out ViewDataBinding>>(
+class DiffUtilCallback<E : Diff<out ViewDataBinding>>(
     private val oldList: List<E>,
     private val newList: List<E>
 ) : DiffUtil.Callback() {

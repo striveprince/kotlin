@@ -6,19 +6,17 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.binding.model.Config
-import com.binding.model.findModelView
+import com.binding.model.adapter.recycler.RecyclerHolder
 import java.lang.RuntimeException
 
 interface Inflate<Binding : ViewDataBinding> : Parse<Binding>{
      override fun attachView(context: Context, co: ViewGroup?, attachToParent: Boolean, binding1: Any?): Binding {
         this.binding = bind(getLayoutId(), context, co, attachToParent, binding1)
-        binding?.let { bindView(context, it) }
+        binding?.let { bindView(context,co, it) }
         return this.binding!!
     }
 
-    fun bindView(context: Context, binding: Binding){
-
-    }
+    fun bindView(context: Context, viewGroup: ViewGroup?, binding: Binding){}
 
     @Suppress("UNCHECKED_CAST")
     private fun<B:ViewDataBinding> bind(layoutId: Int, context: Context, co: ViewGroup?, attachToParent: Boolean, binding1: Any?): B {

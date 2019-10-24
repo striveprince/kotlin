@@ -18,9 +18,10 @@
             android:name=".base.arouter.SchemaFilterActivity"
             android:screenOrientation="portrait">
             <intent-filter>
+<!--                com.tongchuang.budai://catagory?catagory_2=134&catagory_3=135 -->
                 <data
-                    android:host="www.zktc.com"
-                    android:scheme="budai" />
+                    android:host="com.tongchuang.budai"
+                    android:scheme="zktc" />
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -47,6 +48,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.user.sign.SignActivity" />
+        <activity android:name=".ui.mall.catagory.MallCategoryActivity" android:label="@string/category" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

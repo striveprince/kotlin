@@ -37,11 +37,7 @@ object TextViewBindingAdapter {
     @JvmStatic
     @BindingAdapter("android:drawableTop")
     fun setDrawableTop(view: TextView, drawable: Int) {
-        androidx.databinding.adapters.TextViewBindingAdapter.setDrawableTop(
-            view,
-            ContextCompat.getDrawable(view.context, drawable)
-        )
-
+        androidx.databinding.adapters.TextViewBindingAdapter.setDrawableTop(view, ContextCompat.getDrawable(view.context, drawable))
     }
 
     @BindingAdapter("android:drawableStart")

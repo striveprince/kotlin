@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="vm"
+            type="com.customers.zktc.ui.home.page.HomeFloorTypeEntity" />
+    </data>
+
 
     <ImageView
+        android:src="@{vm.floorPicture}"
+        app:radius="@{vm.radius}"
+        android:onClick="@{vm::onRouteClick}"
+        android:layout_margin="10dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
 </layout>

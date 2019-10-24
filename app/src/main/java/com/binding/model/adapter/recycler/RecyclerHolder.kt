@@ -5,6 +5,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.binding.model.adapter.IEventAdapter
 import com.binding.model.inflate.inter.Inflate
+import com.binding.model.inflate.inter.Recycler
 import com.customers.zktc.R
 
 class RecyclerHolder<E:Inflate<*>>
@@ -23,6 +24,7 @@ private constructor(private val container:ViewGroup, val binding: ViewDataBindin
         this.e = e
         this.e.iEventAdapter = iEventAdapter
         container.setTag(R.id.holder_position,adapterPosition)
+        if(e is Recycler<*>)e.recycler(this)
         this.e.attachView(container.context,container,false,binding)
     }
 }

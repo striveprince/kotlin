@@ -37,16 +37,17 @@ class ZktcApplication : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         application = this
-        ARouter.init(this)
         App(this)
         if(BuildConfig.DEBUG){
             ARouter.openDebug()
             ARouter.openLog()
             Timber.plant(Timber.DebugTree())
         }
+        ARouter.init(this)
         val subscribe = Single.just(this)
             .subscribeOn(Schedulers.newThread())
             .subscribe { it ->
+
                 component = DaggerAppComponent.builder()
                     .appModule(AppModule(it))
                     .build()

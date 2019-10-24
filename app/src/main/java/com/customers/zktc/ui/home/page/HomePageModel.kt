@@ -34,7 +34,7 @@ class HomePageModel @Inject constructor() :
         layoutManager.spanSizeLookup = GridSizeLookup(recyclerAdapter, spanCount)
         layoutManagerField.set(layoutManager)
         t.lifecycle.addObserver(banner)
-        http = { offset, _ -> api.getRushList(offset).map { it.goodsVos }}
+        http = { offset, _ -> api.getRecommend(offset,pageCount).map { it.goodsRecommends }}
         initHttp()
         api.locationCity(t.dataActivity).subscribeNormal(t, { city.set(it) })
         binding?.smartRefreshLayout?.setOnMultiListener(object : SimpleMultiListener() {

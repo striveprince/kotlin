@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import com.alibaba.android.arouter.launcher.ARouter
 import com.customers.zktc.R
 import com.binding.model.base.view.SwipeBackLayout
 import com.binding.model.base.view.SwipeBackLayout.Companion.FROM_LEFT
@@ -20,6 +21,7 @@ abstract class DataBindingActivity<C> : AppCompatActivity(), CycleContainer<C> {
     override val cycle= lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ARouter.getInstance().inject(this)
         val rootView = inject(savedInstanceState, null, false)
         if (isSwipe() != SwipeBackLayout.FROM_NO) {
             setContentView(R.layout.activity_base)

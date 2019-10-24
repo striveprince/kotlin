@@ -2,23 +2,30 @@ package com.customers.zktc.ui.home.page
 
 import android.content.Context
 import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.marginLeft
+import androidx.core.view.marginRight
+import androidx.core.view.marginTop
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
-import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
+import com.binding.model.App
 import com.binding.model.adapter.GridInflate
 import com.binding.model.adapter.IEventAdapter
 import com.binding.model.adapter.recycler.RecyclerAdapter
+import com.binding.model.adapter.recycler.RecyclerHolder
 import com.binding.model.annoation.LayoutView
 import com.binding.model.base.rotate.TimeEntity
 import com.binding.model.base.rotate.TimeUtil
 import com.binding.model.findModelView
 import com.binding.model.inflate.ViewParse
-import com.binding.model.inflate.inter.Inflate
+import com.binding.model.inflate.inter.Diff
+import com.binding.model.inflate.inter.Measure
 import com.binding.model.inflate.inter.Recycler
 import com.customers.zktc.R
+import com.customers.zktc.base.arouter.ARouterUtil
 import com.customers.zktc.databinding.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -30,16 +37,16 @@ import timber.log.Timber
  * Author: created by ArvinWang on 2019/10/10 13:15
  * Email: 1033144294@qq.com
  */
-interface HomePageInflate<Binding : ViewDataBinding> : GridInflate<Binding>, Recycler<Binding> {
-    fun getSorted(): Int
-}
-
-open class HomePageEntity<Binding : ViewDataBinding> : ViewParse<Binding>(),
-    HomePageInflate<Binding> {
+interface HomePageInflate<Binding : ViewDataBinding> : GridInflate<Binding>, Recycler<Binding> ,Diff<Binding>{
+    fun getSorted(): Int = 0
+    override fun recycler(recyclerHolder: RecyclerHolder<*>) {}
     override fun getSpanSize() = 1
-    override fun getSorted() = 0
     override fun key() = getLayoutId()
     override fun value() = hashCode()
+}
+
+open class HomePageEntity<Binding : ViewDataBinding> : ViewParse<Binding>(),Diff<Binding>,
+    HomePageInflate<Binding> {
 }
 
 @Serializable
@@ -47,7 +54,7 @@ data class HomePageOperationData(val operationAds: List<HomePageOperationEntity>
 
 //banner图界面
 @LayoutView(layout = [R.layout.layout_home_banner])
-class HomePageBanner(var operationAds: List<HomePageOperationEntity>) :
+class HomePageBanner(var operationAds: List<HomePageOperationEntity>) :Diff<LayoutHomeBannerBinding>,
     HomePageInflate<LayoutHomeBannerBinding>, TimeEntity, LifecycleObserver,
     ViewPager2.OnPageChangeCallback() {
     @Transient
@@ -62,17 +69,15 @@ class HomePageBanner(var operationAds: List<HomePageOperationEntity>) :
     override fun getSorted() = 0
     override fun getSpanSize() = 1
     override fun key() = 0
-
     override fun value(): Int {
         var result = 0
         for (operationAd in operationAds) {
+            result = 31 * result + operationAd.id
             result = 31 * result + operationAd.name.hashCode()
             result = 31 * result + operationAd.picture.hashCode()
-            result = 31 * result + operationAd.viceName.hashCode()
             result = 31 * result + operationAd.linkUrl.hashCode()
-            result = 31 * result + operationAd.id
-            result = 31 * result + operationAd.orderBy
         }
+        Timber.i("result=$result")
         return result
     }
 
@@ -83,11 +88,15 @@ class HomePageBanner(var operationAds: List<HomePageOperationEntity>) :
     @Transient
     private var loopPosition = 0
 
-    override fun bindView(context: Context, binding: LayoutHomeBannerBinding) {
-        super.bindView(context, binding)
+    override fun recycler(recyclerHolder: RecyclerHolder<*>) {
+
+    }
+
+    override fun bindView(context: Context, viewGroup: ViewGroup?, binding: LayoutHomeBannerBinding) {
         adapter.refreshListAdapter(0, operationAds)
         TimeUtil.add(this)
         binding.viewPager2.registerOnPageChangeCallback(this)
+
     }
 
     override fun getTurn() {
@@ -117,9 +126,19 @@ data class HomePageOperationEntity(
     val viceName: String = "",
     val orderBy: Int = 0,
     val linkUrl: String = ""
-) : HomePageEntity<LayoutHomeBannerItemBinding>() {
+) : HomePageEntity<LayoutHomeBannerItemBinding>(), Measure {
+    override fun measure(view: View, parent: ViewGroup?): ViewGroup.LayoutParams {
+        val params = view.layoutParams
+        params.width = (App.getScreenWidth() - App.dipToPx(30f).toInt()) / 2
+        params.height = params.width
+        return params
+    }
+
     override fun getSpanSize() = 1
     fun getRadius() = 5
+    fun onRouteClick(v: View) {
+        ARouterUtil.homeNavigation(linkUrl, name)
+    }
 }
 
 //分类
@@ -137,19 +156,10 @@ data class HomeCategoryEntity(
 ) : HomePageEntity<LayoutHomeCategoryBinding>() {
     override fun getSpanSize() = 5
     override fun getSorted() = 2
-    fun onImageClick(v:View){
-
+    fun onRouteClick(v: View) {
+        ARouterUtil.homeNavigation(linkUrl, name)
     }
 }
-
-//活动专区界面
-@LayoutView(layout = [R.layout.layout_home_area])
-class HomePageAreaData(val operationAds: List<HomePageOperationEntity>) :
-    HomePageEntity<LayoutHomeAreaBinding>() {
-    override fun getSpanSize() = 1
-    override fun getSorted() = 3
-}
-
 
 @Serializable
 data class HomeFloorData(
@@ -164,7 +174,7 @@ data class HomeFloorDataEntity(
     val operationFloors: List<HomeFloorTypeEntity>
 ) : HomePageEntity<LayoutHomeFloorTitleBinding>() {
     override fun getSpanSize() = 1
-    override fun getSorted() = 4
+    override fun getSorted() = 3
 }
 
 @LayoutView(layout = [R.layout.layout_home_floor])
@@ -176,12 +186,37 @@ data class HomeFloorTypeEntity(
     val floorViceName: String,
     val id: Int,
     val orderBy: Int,
-    var pictureNumber: Int = 1
+    var pictureNumber: Int = 1//should add default value when json didn't have this key
 ) : HomePageEntity<LayoutHomeFloorBinding>() {
     override fun getSpanSize() = pictureNumber
-    override fun getSorted() = 4
+    override fun getSorted() = 3
+    @Transient var recyclerHolder :RecyclerHolder<*>? = null
+
+    fun onRouteClick(v: View) {
+        ARouterUtil.homeNavigation(floorLinkUrl, floorName)
+    }
+
+    override fun recycler(recyclerHolder: RecyclerHolder<*>) {
+        super.recycler(recyclerHolder)
+        this.recyclerHolder = recyclerHolder
+    }
+
+    fun getRadius() = 5
+
+    override fun bindView(context: Context, viewGroup: ViewGroup?, binding: LayoutHomeFloorBinding) {
+        super.bindView(context, viewGroup, binding)
+    }
+
 }
 
+
+//活动专区界面
+@LayoutView(layout = [R.layout.layout_home_area])
+class HomePageAreaData(val operationAds: List<HomePageOperationEntity>) :
+    HomePageEntity<LayoutHomeAreaBinding>() {
+    override fun getSpanSize() = 1
+    override fun getSorted() = 4
+}
 
 
 @Serializable

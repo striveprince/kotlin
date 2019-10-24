@@ -12,6 +12,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Lifecycle
+import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.load.model.LazyHeaders
 import com.customers.zktc.R
 import com.customers.zktc.inject.data.net.InfoEntity
 import com.customers.zktc.inject.data.net.exception.ApiException
@@ -48,6 +50,17 @@ fun checkPermissions(activity: Activity, vararg permissions: String): Boolean {
     return true
 }
 
+
+
+fun headUrl(url: String): GlideUrl {
+    var url = url
+    if (TextUtils.isEmpty(url)) url = "1"
+    return GlideUrl(
+        url, LazyHeaders.Builder()
+            //.addHeader("referer", "")
+            .build()
+    )
+}
 
 fun md5(paramString: String): String {
     return try {

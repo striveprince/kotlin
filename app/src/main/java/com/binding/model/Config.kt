@@ -6,8 +6,9 @@ import com.customers.zktc.BR
 
 
 object Config {
-    val bundle="bundle"
-    val path = "path"
+    const val title="title"
+    const val bundle="bundle"
+    const val path = "path"
     val vm = BR.vm
     val array = ListMap<String, Parse<*>>()
 

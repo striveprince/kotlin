@@ -11,5 +11,6 @@
         android:layout_width="match_parent"
         android:src="@{vm.picture}"
         app:radius="@{vm.radius}"
+        android:onClick="@{vm::onRouteClick}"
         android:layout_height="match_parent"/>
 </layout>

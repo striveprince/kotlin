@@ -9,4 +9,4 @@ import kotlinx.serialization.Serializable
  * Email: 1033144294@qq.com
  */
 @Serializable
-data class InfoEntity<T>(var result:T, val message :String, val code:String,val errorType:String="")
+data class InfoEntity<T>(val result:T?, val message :String, val code:String,val errorType:String="")

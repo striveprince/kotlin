@@ -5,13 +5,29 @@
             name="vm"
             type="com.customers.zktc.ui.home.page.HomeCategoryEntity" />
     </data>
-    <TextView
-        android:text="@{vm.name,default=xswl}"
-        android:gravity="center|bottom"
-        android:drawableTop="@{vm.iconUrl}"
-        android:onClick="@{vm::onImageClick}"
-        android:textSize="14sp"
-        android:textColor="@color/z_343434"
+
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="135dp"/>
+        android:onClick="@{vm::onRouteClick}"
+        android:paddingTop="10dp"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:src="@{vm.iconUrl}"
+            android:scaleType="centerCrop"
+            android:layout_width="48dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="6dp"
+            android:layout_height="48dp"/>
+        <TextView
+            android:text="@{vm.name,default=xswl}"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:textSize="12sp"
+            android:textColor="@color/z_343434"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
 </layout>
+
+<!---->

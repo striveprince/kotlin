@@ -57,26 +57,39 @@ class Api(
         val rushList = getRushList(offset)
             .toObservable()
             .concatMap { Observable.fromIterable(converterRushList(it)) }
-        val homeGoodRecommend =
-            netApi.homeGoodRecommend(HomeRecommendParams("goods_home_index_1", offset, offset, pageCount))
-                .restful()
+        val homeGoodRecommend = getRecommend(offset, pageCount)
                 .toObservable()
                 .concatMap { Observable.fromIterable(converterGoodsRecommends(it)) }
         return Observable.mergeArray(
             banner.noError(),
             category.noError(),
-            homeSpecial.noError(),
             operationFloor.noError(),
+            homeSpecial.noError(),
             rushList.noError(),
             homeGoodRecommend.noError()
         ).toSortedList { t1, t2 -> t1.getSorted() - t2.getSorted()}
-
     }
+
+    fun getRecommend(offset: Int, pageCount: Int) =
+        netApi.homeGoodRecommend(HomeRecommendParams("goods_home_index_1", offset, offset, pageCount))
+            .restful()
 
     private fun getOperationAd(adPositionNumber: String): Observable<HomePageOperationData> {
         return netApi.getOperationAd(HomeOperationParams(adPositionNumber))
             .restful()
             .toObservable()
+    }
+
+    private fun converterFloorData(it: HomeFloorData): ArrayList<HomePageEntity<*>> {
+        val list = ArrayList<HomePageEntity<*>>()
+        for (floorType in it.operationFloorTypes) {
+            list.add(HomeFloorDataEntity(floorType.name, floorType.pictureNumber, ArrayList()))
+            for (operationFloor in floorType.operationFloors) {
+                operationFloor.pictureNumber = floorType.pictureNumber
+            }
+            list.addAll(floorType.operationFloors)
+        }
+        return list
     }
 
     private fun getPageArea(t1: HomePageOperationData, t2: HomePageOperationData): HomePageEntity<*> {
@@ -94,15 +107,6 @@ class Api(
         return HomePageAreaData(list)
     }
 
-    private fun converterFloorData(it: HomeFloorData): ArrayList<HomePageEntity<*>> {
-        val list = ArrayList<HomePageEntity<*>>()
-        for (floorType in it.operationFloorTypes) {
-            list.add(HomeFloorDataEntity(floorType.name, floorType.pictureNumber, ArrayList()))
-            list.addAll(floorType.operationFloors)
-        }
-        return list
-    }
-
     private fun converterGoodsRecommends(it: HomeRecommendData): ArrayList<HomePageEntity<*>> {
         val list = ArrayList<HomePageEntity<*>>()
         list.add(HomeRecommendTitle("为你推荐"))
@@ -117,7 +121,7 @@ class Api(
         return list
     }
 
-    fun getRushList(offset: Int) = netApi.getRushList(HomeRushParams(pageNo = offset))
+    private fun getRushList(offset: Int) = netApi.getRushList(HomeRushParams(pageNo = offset))
         .restful()
 
 
