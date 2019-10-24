@@ -52,7 +52,7 @@ abstract class ViewModel<T : CycleContainer<*>, Binding : ViewDataBinding> : Vie
     @CallSuper
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy() {
-//        disposables.dispose()
+        disposables.dispose()
         removeBinding()
     }
 }

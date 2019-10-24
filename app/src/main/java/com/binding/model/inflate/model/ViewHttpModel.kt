@@ -27,8 +27,6 @@ open class ViewHttpModel<T : CycleContainer<*>, Binding : ViewDataBinding, R> : 
     var http: ((Int, Int) -> Single<R>)? = null
     var refresh = 0
 
-
-
     fun setRxHttp(http: ((Int, Int) -> Single<R>) ){
         this.http = http
         onHttp(0,RecyclerStatus.init)
