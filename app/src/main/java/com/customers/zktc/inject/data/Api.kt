@@ -54,9 +54,16 @@ class Api(
             .restful()
             .toObservable()
             .concatMap { Observable.fromIterable(converterFloorData(it)) }
+        val mallRecommend:Observable<HomePageInflate<*>> = getOperationAd("ad_home_index_4")
+            .map { converterMall(it) }
+        val marketingList:Observable<HomePageInflate<*>> = netApi.marketingList(HomeRushListParams())
+            .restful()
+            .toObservable()
+            .concatMap { Observable.fromIterable(it.goodsVos) }
         val rushList = getRushList(offset)
             .toObservable()
             .concatMap { Observable.fromIterable(converterRushList(it)) }
+            .doOnNext{ it.layoutIndex = 1}
         val homeGoodRecommend = getRecommend(offset, pageCount)
                 .toObservable()
                 .concatMap { Observable.fromIterable(converterGoodsRecommends(it)) }
@@ -65,9 +72,12 @@ class Api(
             category.noError(),
             operationFloor.noError(),
             homeSpecial.noError(),
+            mallRecommend.noError(),
+            marketingList.noError(),
             rushList.noError(),
             homeGoodRecommend.noError()
-        ).toSortedList { t1, t2 -> t1.getSorted() - t2.getSorted()}
+        ).toSortedList { t1, t2 -> t1.sorted() - t2.sorted()}
+            .doOnSuccess{ if(it.isEmpty())throw ApiException("请求失败") }
     }
 
     fun getRecommend(offset: Int, pageCount: Int) =
@@ -112,6 +122,14 @@ class Api(
         list.add(HomeRecommendTitle("为你推荐"))
         list.addAll(it.goodsRecommends)
         return list
+    }
+
+    private fun converterMall(it: HomePageOperationData): HomeMallEntity{
+        if (it.operationAds.isEmpty())throw ApiException("")
+        for (operationAd in it.operationAds) {
+            operationAd.layoutIndex = 1
+        }
+        return HomeMallEntity(it.operationAds)
     }
 
     private fun converterRushList(it: HomeGoodsVoData): ArrayList<HomePageEntity<*>> {

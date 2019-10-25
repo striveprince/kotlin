@@ -17,6 +17,7 @@ import com.customers.zktc.inject.data.Api
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.simple.SimpleMultiListener
 import io.reactivex.android.schedulers.AndroidSchedulers
+import timber.log.Timber
 import javax.inject.Inject
 
 @LayoutView(layout = [R.layout.fragment_home_page])
@@ -33,36 +34,52 @@ class HomePageModel @Inject constructor() :
         val layoutManager = GridLayoutManager(t.context, spanCount)
         layoutManager.spanSizeLookup = GridSizeLookup(recyclerAdapter, spanCount)
         layoutManagerField.set(layoutManager)
+
         t.lifecycle.addObserver(banner)
-        http = { offset, _ -> api.getRecommend(offset,pageCount).map { it.goodsRecommends }}
+        http = { offset, _ ->
+            api.getRecommend(offset, pageCount)
+                .observeOn(AndroidSchedulers.mainThread())
+                .map { it.goodsRecommends }
+        }
         initHttp()
+        binding?.recyclerView?.addItemDecoration(HomePageDecoration())
         api.locationCity(t.dataActivity).subscribeNormal(t, { city.set(it) })
         binding?.smartRefreshLayout?.setOnMultiListener(object : SimpleMultiListener() {
             override fun onRefresh(refreshLayout: RefreshLayout) {
                 super.onRefresh(refreshLayout)
                 initHttp()
             }
+
             override fun onLoadMore(refreshLayout: RefreshLayout) {
                 super.onLoadMore(refreshLayout)
-                val position = layoutManager.findLastCompletelyVisibleItemPosition()
-                onHttp(position, RecyclerStatus.loadBottom)
+                val position = layoutManager.findLastVisibleItemPosition()
+                binding?.recyclerView?.let { onHttp(position, RecyclerStatus.loadBottom) }
             }
         })
     }
 
     private fun initHttp() {
-       return api.homePage(offset, refresh, pageCount, banner)
-            .doOnSuccess {
-                list.clear()
-                list.addAll(it)
-            }
+        return api.homePage(offset, refresh, pageCount, banner)
+            .doOnSuccess { addHeadIndex(it) }
             .map { DiffUtil.calculateDiff(DiffUtilCallback(adapter.holderList, it)) }
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribeNormal(t,{
+            .subscribeNormal(t, {
                 it.dispatchUpdatesTo(adapter)
                 adapter.clear()
                 adapter.holderList.addAll(list)
-            },onComplete = {onComplete()})
+            }, onComplete = { onComplete() })
+    }
+
+    private fun addHeadIndex(it: List<HomePageInflate<*>>) {
+        list.clear()
+        list.addAll(it)
+        var size = it.size
+        for (homePageInflate in it.asReversed()) {
+            if(homePageInflate is HomeGoodsRecommendEntity){
+                size--
+            }
+        }
+        headIndex = size
     }
 
     override fun onComplete() {

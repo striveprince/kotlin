@@ -37,6 +37,8 @@
     <string name="reset_password">重置密码</string>
     <string name="confirm_modify">确认修改</string>
     <string name="category">商品分类</string>
+    <string name="sack_goods">布袋好物</string>
+    <string name="hot">大牌特卖中</string>
 </resources>
 <!--        <string name="add_bank_car_zhu">"注：-->
 <!--1、一卡通绑定，可同时用于支付和提现-->

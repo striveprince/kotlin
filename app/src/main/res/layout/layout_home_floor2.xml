@@ -3,32 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="vm"
             type="com.customers.zktc.ui.home.page.HomeFloorTypeEntity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/floor_picture_layout"
         android:layout_width="match_parent"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/floor_picture_layout"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:contentDescription="@{vm.floorName}">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/floor_picture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="1dp"
             android:contentDescription="@{vm.floorName}"
             android:onClick="@{vm::onRouteClick}"
-            android:scaleType="centerCrop"
-            android:src="@{vm.floorPicture}"
+            android:scaleType="centerInside"
+            app:srcCompat="@{vm.floorPicture}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintDimensionRatio="16:7"
             app:layout_constraintTop_toTopOf="parent"
             app:radius="@{vm.radius}" />
+<!--            app:layout_constraintDimensionRatio="32:32"-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

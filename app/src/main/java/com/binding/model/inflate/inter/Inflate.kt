@@ -10,19 +10,19 @@ import com.binding.model.adapter.recycler.RecyclerHolder
 import java.lang.RuntimeException
 
 interface Inflate<Binding : ViewDataBinding> : Parse<Binding>{
-     override fun attachView(context: Context, co: ViewGroup?, attachToParent: Boolean, binding1: Any?): Binding {
-        this.binding = bind(getLayoutId(), context, co, attachToParent, binding1)
-        binding?.let { bindView(context,co, it) }
+     override fun attachView(context: Context, viewGroup: ViewGroup?, attachToParent: Boolean, binding1: Any?): Binding {
+        this.binding = bind(getLayoutId(), context, viewGroup, attachToParent, binding1)
+        binding?.let { bindView(context,viewGroup, it) }
         return this.binding!!
     }
 
     fun bindView(context: Context, viewGroup: ViewGroup?, binding: Binding){}
 
     @Suppress("UNCHECKED_CAST")
-    private fun<B:ViewDataBinding> bind(layoutId: Int, context: Context, co: ViewGroup?, attachToParent: Boolean, binding1: Any?): B {
+    private fun<B:ViewDataBinding> bind(layoutId: Int, context: Context, viewGroup: ViewGroup?, attachToParent: Boolean, binding1: Any?): B {
         return when (binding1) {
             null -> {
-                val b = DataBindingUtil.inflate(LayoutInflater.from(context), layoutId, co, attachToParent) as B
+                val b = DataBindingUtil.inflate(LayoutInflater.from(context), layoutId, viewGroup, attachToParent) as B
                 b.setVariable(Config.vm, this)
                 b
             }

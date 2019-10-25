@@ -6,6 +6,7 @@ import com.customers.zktc.ui.home.page.*
 import com.customers.zktc.ui.user.sign.SignParams
 import com.customers.zktc.ui.user.sign.CodeEntity
 import com.customers.zktc.ui.user.sign.SignEntity
+import io.reactivex.Observable
 import io.reactivex.Single
 import okhttp3.ResponseBody
 import retrofit2.http.*
@@ -62,5 +63,8 @@ interface NetApi {
 
     @POST("/api/v2/ope/getOperationFloor")
     fun getOperationFloor(@Body params:HomeFloorParams): Single<InfoEntity<HomeFloorData>>
+
+    @POST("/api/v2/marketing/group/list")
+    fun marketingList(homeRushListParams: HomeRushListParams): Single<InfoEntity<HomeGoodsVoData>>
 
 }

@@ -25,7 +25,8 @@ private constructor(private val container:ViewGroup, val binding: ViewDataBindin
         this.e.iEventAdapter = iEventAdapter
         container.setTag(R.id.holder_position,adapterPosition)
         if(e is Recycler<*>)e.recycler(this)
-        this.e.attachView(container.context,container,false,binding)
+        val view = this.e.attachView(container.context,container,false,binding).root
+        view.setTag(R.id.inflate,e)
     }
 }
 

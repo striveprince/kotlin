@@ -1,23 +1,18 @@
 package com.customers.zktc.base.databinding
 
 import android.graphics.drawable.Drawable
-import android.text.TextUtils
+import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.binding.model.App
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.model.GlideUrl
-import com.bumptech.glide.load.model.LazyHeaders
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
-import com.customers.zktc.base.util.headUrl
-import kotlin.math.min
+import timber.log.Timber
 
 /**
  * Company: 中科同创
@@ -41,7 +36,7 @@ object ImageViewBindingAdapter {
     @JvmStatic
     @BindingAdapter("android:src","radius")
     fun seImage(imageView: ImageView,url: String,radius: Int){
-        val radiusDp = App.dipToPx(radius.toFloat()).toInt()
+        val radiusDp = App.floatToPx(radius.toFloat()).toInt()
         val options2 = RequestOptions()
             .priority(Priority.HIGH)//优先级
             .diskCacheStrategy(DiskCacheStrategy.NONE)//缓存策略
@@ -53,7 +48,37 @@ object ImageViewBindingAdapter {
             .into(imageView)
     }
 
-
+    @JvmStatic
+    @BindingAdapter("srcCompat","radius")
+    fun seImageWrap(imageView: ImageView,url: String,radius: Int){
+        val radiusDp = App.floatToPx(radius.toFloat()).toInt()
+        val options2 = RequestOptions()
+            .priority(Priority.HIGH)//优先级
+            .diskCacheStrategy(DiskCacheStrategy.NONE)//缓存策略
+            .fitCenter()
+            .transform(RoundedCorners(radiusDp))
+        Glide.with(imageView.context)
+            .load(url)
+            .apply(options2)
+            .into(imageView)
+//        Glide.with(imageView.context)
+//            .load(url)
+//            .apply(options2)
+//            .into(object : SimpleTarget<Drawable>() {
+//                override fun onResourceReady(drawable: Drawable, transition: Transition<in Drawable>?) {
+////                    drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
+//                    Timber.i("intrinsicWidth=${drawable.intrinsicWidth},intrinsicHeight=${drawable.intrinsicHeight}")
+//                    val layoutParams = imageView.layoutParams
+//                    if(imageView.layoutParams.height == -1){
+//                        layoutParams.height = imageView.layoutParams.width*drawable.intrinsicHeight/drawable.intrinsicWidth
+//                    }else if(imageView.layoutParams.width == -1){
+//                        layoutParams.width = imageView.layoutParams.height*drawable.intrinsicWidth/drawable.intrinsicHeight
+//                    }
+//                    imageView.layoutParams = layoutParams
+//                    imageView.setImageDrawable(drawable)
+//                }
+//            })
+    }
 
 
 }

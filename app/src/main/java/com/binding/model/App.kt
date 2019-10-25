@@ -2,6 +2,7 @@ package com.binding.model
 
 import android.app.Activity
 import android.app.Application
+import android.graphics.Rect
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import java.util.*
@@ -24,13 +25,27 @@ class App constructor(val application: Application) : Application.ActivityLifecy
             return application.resources.displayMetrics.heightPixels
         }
 
-        fun dipToPx(dp: Float): Float {
+        fun dpRcet(left:Int,top:Int,right:Int,bottom:Int):Rect{
+            return Rect(left,top, right, bottom)
+        }
+
+        fun floatToPx(dp: Float): Float {
             return application.resources.displayMetrics.density * dp
         }
 
-        fun pxTodip(px: Float): Float {
+        fun floatTodp(px: Float): Float {
             return px / application.resources.displayMetrics.density
         }
+
+        fun toPx(dp: Int): Int {
+            return (floatToPx(dp.toFloat())+0.5).toInt()
+        }
+
+        fun toDp(px: Int): Int {
+            return (floatTodp(px.toFloat())+0.5).toInt()
+        }
+
+
 
         fun getWeightWidth(sum: Int): Int {
             return getScreenWidth() / sum
