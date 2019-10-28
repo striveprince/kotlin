@@ -40,7 +40,7 @@ interface Inflate<Binding : ViewDataBinding> : Parse<Binding>{
     }
 
     fun getLayoutId(): Int{
-        Timber.i("class name=${this.javaClass.name},layoutView.size=${layoutView.layout.size},layoutIndex=${layoutIndex}")
+//        Timber.i("class name=${this.javaClass.name},layoutView.size=${layoutView.layout.size},layoutIndex=${layoutIndex}")
         return layoutView.layout[layoutIndex]
     }
 

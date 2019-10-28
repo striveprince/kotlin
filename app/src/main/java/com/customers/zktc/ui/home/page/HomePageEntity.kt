@@ -56,20 +56,13 @@ data class HomePageOperationData(val operationAds: List<HomePageOperationEntity>
 class HomePageBanner(var operationAds: List<HomePageOperationEntity>) :
     HomePageInflate<LayoutHomeBannerBinding>, TimeEntity, LifecycleObserver,
     ViewPager2.OnPageChangeCallback() {
-    @Transient
-    override var iEventAdapter: IEventAdapter<*>? = null
-    @Transient
-    override var layoutIndex = 0
-    @Transient
-    override val layoutView = findModelView(javaClass)
-    @Transient
-    val adapter = RecyclerAdapter<HomePageOperationEntity>()
-    @Transient
-    private var position = 0
-    @Transient
-    private var loopPosition = 0
-    @Transient
-    override var binding: LayoutHomeBannerBinding? = null
+    @Transient override var iEventAdapter: IEventAdapter<*>? = null
+    @Transient override var layoutIndex = 0
+    @Transient override val layoutView = findModelView(javaClass)
+    @Transient val adapter = RecyclerAdapter<HomePageOperationEntity>()
+    @Transient private var position = 0
+    @Transient private var loopPosition = 0
+    @Transient override var binding: LayoutHomeBannerBinding? = null
 
     override fun getSpanSize() = 1
     override fun key() = 0
@@ -180,7 +173,6 @@ data class HomeFloorDataEntity(
 }
 
 @LayoutView(layout = [R.layout.layout_home_floor, R.layout.layout_home_floor2])
-//@LayoutView(layout = [R.layout.layout_home_floor])
 @Serializable
 data class HomeFloorTypeEntity(
     val floorLinkUrl: String,

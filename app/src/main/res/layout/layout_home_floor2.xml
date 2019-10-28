@@ -10,7 +10,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/floor_picture_layout"
+        android:id="@+id/home_page_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"

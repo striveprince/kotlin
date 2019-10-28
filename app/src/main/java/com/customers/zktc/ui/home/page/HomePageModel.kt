@@ -92,6 +92,4 @@ class HomePageModel @Inject constructor() :
     fun onNoticeClick(v: View) {}
 
     fun onLocationClick(v: View) {}
-
-
 }

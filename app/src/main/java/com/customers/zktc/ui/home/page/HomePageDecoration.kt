@@ -5,6 +5,8 @@ import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.binding.model.App
+import com.binding.model.adapter.GridInflate
+import com.binding.model.inflate.inter.Inflate
 import com.customers.zktc.R
 import timber.log.Timber
 
@@ -18,24 +20,22 @@ class HomePageDecoration : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         super.getItemOffsets(outRect, view, parent, state)
-        if (R.id.floor_picture_layout == view.id) {
-            val tenDp = App.toPx(6)
-            val layoutManager = parent.layoutManager as GridLayoutManager
-            val spanCount = layoutManager.spanCount
-            val itemCount = layoutManager.childCount
-//            layoutManager.
-            layoutManager.findContainingItemView(view)?.let {
-                Timber.i("view: left=${it.left},right=${it.right},${it.contentDescription}")
+        val tenDp = App.toPx(6)
+        val layoutManager = parent.layoutManager as GridLayoutManager
+        val spanCount = layoutManager.spanCount
+        val position = parent.getChildAdapterPosition(view)
+        val index = layoutManager.spanSizeLookup.getSpanIndex(position, spanCount)
+        val itemSpan = layoutManager.spanSizeLookup.getSpanSize(position)
+//        Timber.i("position=$position,index=$index,itemSpan=$itemSpan,spanCount=$spanCount")
+        if (view.id == R.id.home_page_layout) {
+            if (itemSpan != spanCount) {
+                if (index == 0)
+                    outRect.set(tenDp, 0, 0, 0)
+                 else if (index + itemSpan == spanCount)
+                    outRect.set(0, 0, tenDp, 0)
+            }else{
+                outRect.set(tenDp,0,tenDp,0)
             }
         }
     }
 }
-//            (view as ViewGroup).lef
-//            val from = App.getScreenWidth() - tenDp
-//            Timber.i("view: left=${view.left},right=${view.right},${view.contentDescription}")
-//            if (view.x.toInt() == 0|| view.left == tenDp) {
-//                outRect.set(tenDp, 0,0,0)
-//            }else if (view.y.toInt() == from||view.right== App.getScreenWidth()) {
-//                outRect.set(0,0, tenDp, 0)
-//            }
-//            Timber.i("rect: left=${outRect.left},right=${outRect.right},in=${from}..${App.getScreenWidth()}")

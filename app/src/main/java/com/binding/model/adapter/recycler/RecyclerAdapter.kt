@@ -49,6 +49,7 @@ open class RecyclerAdapter<E : Inflate<*>> : RecyclerView.Adapter<RecyclerHolder
     override fun getItemViewType(position: Int): Int {
         val e = holderList[position]
         val viewType = e.getLayoutId()
+        Timber.i("viewType=${viewType},Inflate=${e.javaClass.name}")
         sparseArray.put(viewType, e)
         return viewType
     }

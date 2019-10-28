@@ -13,6 +13,7 @@ open class GridSpanSizeLookup<E : GridInflate<out ViewDataBinding>>(private val 
     GridLayoutManager.SpanSizeLookup() {
 
     override fun getSpanSize(position: Int): Int {
+        if(position == -1) return 1
         return adapter.holderList[position].getSpanSize()
     }
 

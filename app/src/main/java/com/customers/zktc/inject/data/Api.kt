@@ -38,11 +38,7 @@ class Api(
     private val ossApi: OssApi,
     private val preferenceApi: PreferenceApi
 ) {
-    fun homePage(
-        offset: Int,
-        refresh: Int,
-        pageCount: Int,
-        homePageBanner: HomePageBanner
+    fun homePage(offset: Int, refresh: Int, pageCount: Int, homePageBanner: HomePageBanner
     ): Single<List<HomePageInflate<*>>> {
         val banner: Observable<out HomePageInflate<*>> = getOperationAd("ad_home_index_1")
             .map {
