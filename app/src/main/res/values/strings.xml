@@ -39,6 +39,11 @@
     <string name="category">商品分类</string>
     <string name="sack_goods">布袋好物</string>
     <string name="hot">大牌特卖中</string>
+    <string name="go_assemble">去拼团</string>
+    <string name="flash_sale">限时抢购</string>
+    <string name="more">查看更多</string>
+    <string name="recommend_for_you">为你推荐</string>
+    <string name="assemble_every_day">每日拼团</string>
 </resources>
 <!--        <string name="add_bank_car_zhu">"注：-->
 <!--1、一卡通绑定，可同时用于支付和提现-->

@@ -44,7 +44,9 @@ interface HomePageInflate<Binding : ViewDataBinding> : GridInflate<Binding>, Rec
 }
 
 open class HomePageEntity<Binding : ViewDataBinding> : ViewParse<Binding>(), Diff<Binding>,
-    HomePageInflate<Binding>
+    HomePageInflate<Binding> {
+//    @Transient val sorted:Int
+}
 
 @Serializable
 data class HomePageOperationData(val operationAds: List<HomePageOperationEntity>)
@@ -54,13 +56,20 @@ data class HomePageOperationData(val operationAds: List<HomePageOperationEntity>
 class HomePageBanner(var operationAds: List<HomePageOperationEntity>) :
     HomePageInflate<LayoutHomeBannerBinding>, TimeEntity, LifecycleObserver,
     ViewPager2.OnPageChangeCallback() {
-    @Transient override var iEventAdapter: IEventAdapter<*>? = null
-    @Transient override var layoutIndex = 0
-    @Transient override val layoutView = findModelView(javaClass)
-    @Transient val adapter = RecyclerAdapter<HomePageOperationEntity>()
-    @Transient private var position = 0
-    @Transient private var loopPosition = 0
-    @Transient override var binding: LayoutHomeBannerBinding? = null
+    @Transient
+    override var iEventAdapter: IEventAdapter<*>? = null
+    @Transient
+    override var layoutIndex = 0
+    @Transient
+    override val layoutView = findModelView(javaClass)
+    @Transient
+    val adapter = RecyclerAdapter<HomePageOperationEntity>()
+    @Transient
+    private var position = 0
+    @Transient
+    private var loopPosition = 0
+    @Transient
+    override var binding: LayoutHomeBannerBinding? = null
 
     override fun getSpanSize() = 1
     override fun key() = 0
@@ -121,13 +130,17 @@ data class HomePageOperationEntity(
                 val params = view.layoutParams
                 params.width = (App.getScreenWidth() - App.floatToPx(30f).toInt()) / 2
                 params.height = params.width
-                params }
+                params
+            }
             else -> view.layoutParams
         }
     }
+
     override fun getSpanSize() = 1
     fun getRadius() = 5
-    fun onRouteClick(v: View) { ARouterUtil.homeNavigation(linkUrl, name) }
+    fun onRouteClick(v: View) {
+        ARouterUtil.homeNavigation(linkUrl, name)
+    }
 }
 
 //分类
@@ -166,8 +179,8 @@ data class HomeFloorDataEntity(
     override fun sorted() = 3
 }
 
-//@LayoutView(layout = [R.layout.layout_home_floor,R.layout.layout_home_floor2])
-@LayoutView(layout = [R.layout.layout_home_floor])
+@LayoutView(layout = [R.layout.layout_home_floor, R.layout.layout_home_floor2])
+//@LayoutView(layout = [R.layout.layout_home_floor])
 @Serializable
 data class HomeFloorTypeEntity(
     val floorLinkUrl: String,
@@ -175,8 +188,8 @@ data class HomeFloorTypeEntity(
     val floorPicture: String,
     val floorViceName: String,
     val id: Int,
-    val orderBy: Int,
-    var pictureNumber: Int = 1//should add default value when json didn't have this key
+    var pictureNumber: Int = 1,//should add default value when json didn't have this key
+    val orderBy: Int
 ) : HomePageEntity<LayoutHomeFloorBinding>() {
     override fun getSpanSize() = pictureNumber
     override fun sorted() = 3
@@ -201,30 +214,58 @@ data class HomeMallEntity(val list: List<HomePageOperationEntity>) :
     override fun sorted() = 5
 }
 
+
+@LayoutView(layout = [R.layout.layout_home_marketing_title, R.layout.layout_home_recommend_title])
+class HomePageTitle(layoutIndex: Int=0) : HomePageEntity<LayoutHomeRushTitleBinding>() {
+    init { this.layoutIndex = layoutIndex }
+    override fun getSpanSize() = 1
+    override fun sorted() = when (layoutIndex) {
+        0 -> 6
+        else -> 8 }
+    fun onMoreClick(view: View) {}
+}
+
 @Serializable
 data class HomeGoodsVoData(
     val goodsVos: List<HomeGoodVosEntity>
 )
 
-
-@LayoutView(layout = [R.layout.layout_home_rush_title])
-data class HomeRushTitle(val name: String) : HomePageEntity<LayoutHomeRushTitleBinding>() {
-    override fun getSpanSize() = 1
+@LayoutView(layout = [R.layout.layout_home_assemble])
+data class HomeAssembleEntity(val goodsVos: List<HomeGoodVosEntity>) :
+    HomePageEntity<LayoutHomeAssembleBinding>() {
+    init { for (goodsVo in goodsVos) goodsVo.layoutIndex = 1 }
     override fun sorted() = 7
+    override fun bindView(context: Context, viewGroup: ViewGroup?, binding: LayoutHomeAssembleBinding) {
+        val adapter = RecyclerAdapter<HomeGoodVosEntity>()
+        adapter.refreshListAdapter(0, goodsVos)
+        binding.viewPager.adapter = adapter
+    }
 }
 
 @Serializable
-@LayoutView(layout = [R.layout.layout_home_rush])
+@LayoutView(layout = [R.layout.layout_home_market, R.layout.layout_home_assemble_item])
 data class HomeGoodVosEntity(
     val goodsVo: HomeGoodVoEntity,
     val marketingTimeDesc: String,
     val marketingTime: String,
     val marketingProgress: Double,
     val marketingVo: MarketVoEntity
-) : HomePageEntity<LayoutHomeRushBinding>() {
-    override fun getSpanSize(): Int = 1
-    override fun sorted() = 8
+) : HomePageEntity<ViewDataBinding>() {
+    override fun getSpanSize() = 1
+    override fun sorted() = 6
+    fun getPrice(): CharSequence {
+        return "￥15"
+    }
+
+    fun getAssembled(): String {
+        return "已拼${marketingVo.groupedNumbers}件"
+    }
+
+    fun onAssembleClick(v: View) {
+
+    }
 }
+
 
 @Serializable
 data class MarketVoEntity(
@@ -281,15 +322,6 @@ data class HomeRecommendData(
     val haveNext: Boolean
 )
 
-//推荐title
-@LayoutView(layout = [R.layout.layout_home_recommend_title])
-data class HomeRecommendTitle(val name: String) :
-    HomePageEntity<LayoutHomeRecommendTitleBinding>() {
-    override fun getSpanSize() = 1
-    override fun sorted() = 9
-}
-
-
 @Serializable
 @LayoutView(layout = [R.layout.layout_home_recommend])
 data class HomeGoodsRecommendEntity(
@@ -300,6 +332,17 @@ data class HomeGoodsRecommendEntity(
     val scorePrice: String?
 ) : HomePageEntity<LayoutHomeRecommendBinding>() {
     override fun getSpanSize() = 2
-    override fun sorted(): Int = 10
+    override fun sorted(): Int = 8
+    override fun bindView(context: Context, viewGroup: ViewGroup?, binding: LayoutHomeRecommendBinding) {
+        val width = App.getScreenWidth()/2-App.toPx(15)
+        val layoutParams = binding.imageView.layoutParams
+        layoutParams.width = width
+        layoutParams.height = width
+        binding.imageView.layoutParams = layoutParams
+    }
+
+    fun getPrice():String{
+        return preferPrice.toString()
+    }
 }
 

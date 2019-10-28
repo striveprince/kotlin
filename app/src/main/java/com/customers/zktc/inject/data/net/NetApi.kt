@@ -65,6 +65,6 @@ interface NetApi {
     fun getOperationFloor(@Body params:HomeFloorParams): Single<InfoEntity<HomeFloorData>>
 
     @POST("/api/v2/marketing/group/list")
-    fun marketingList(homeRushListParams: HomeRushListParams): Single<InfoEntity<HomeGoodsVoData>>
+    fun marketingList(@Body homeRushListParams: HomeRushListParams): Single<InfoEntity<HomeGoodsVoData>>
 
 }

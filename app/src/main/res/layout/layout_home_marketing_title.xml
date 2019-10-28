@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.customers.zktc.ui.home.page.HomePageTitle" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="@string/assemble_every_day"
+            android:drawableStart="@drawable/rectangle_floor_title"
+            android:drawableLeft="@drawable/rectangle_floor_title"
+            android:drawablePadding="5dp"
+            android:textSize="12sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_gravity="center|end"
+            android:layout_width="wrap_content"
+            android:text="@string/more"
+            android:layout_height="wrap_content"
+            android:onClick="@{vm::onMoreClick}" />
+    </FrameLayout>
+</layout>

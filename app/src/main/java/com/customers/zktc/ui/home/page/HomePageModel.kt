@@ -34,7 +34,6 @@ class HomePageModel @Inject constructor() :
         val layoutManager = GridLayoutManager(t.context, spanCount)
         layoutManager.spanSizeLookup = GridSizeLookup(recyclerAdapter, spanCount)
         layoutManagerField.set(layoutManager)
-
         t.lifecycle.addObserver(banner)
         http = { offset, _ ->
             api.getRecommend(offset, pageCount)
@@ -59,7 +58,7 @@ class HomePageModel @Inject constructor() :
     }
 
     private fun initHttp() {
-        return api.homePage(offset, refresh, pageCount, banner)
+        return api.homePage(1, refresh, pageCount, banner)
             .doOnSuccess { addHeadIndex(it) }
             .map { DiffUtil.calculateDiff(DiffUtilCallback(adapter.holderList, it)) }
             .observeOn(AndroidSchedulers.mainThread())

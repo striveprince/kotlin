@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="vm"
+            type="com.customers.zktc.ui.home.page.HomeAssembleEntity" />
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <TextView
+            android:padding="10dp"
+            android:drawablePadding="5dp"
+            android:layout_gravity="center"
+            android:drawableLeft="@mipmap/slash"
+            android:drawableStart="@mipmap/slash"
+            android:drawableRight="@mipmap/slash"
+            android:drawableEnd="@mipmap/slash"
+            android:text="@string/flash_sale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <com.google.android.material.tabs.TabLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_margin="15dp"
+            android:layout_height="255dp"/>
+    </LinearLayout>
+</layout>

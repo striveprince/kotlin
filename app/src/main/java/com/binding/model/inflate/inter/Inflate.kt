@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.binding.model.Config
 import com.binding.model.adapter.recycler.RecyclerHolder
+import timber.log.Timber
 import java.lang.RuntimeException
 
 interface Inflate<Binding : ViewDataBinding> : Parse<Binding>{
@@ -39,6 +40,7 @@ interface Inflate<Binding : ViewDataBinding> : Parse<Binding>{
     }
 
     fun getLayoutId(): Int{
+        Timber.i("class name=${this.javaClass.name},layoutView.size=${layoutView.layout.size},layoutIndex=${layoutIndex}")
         return layoutView.layout[layoutIndex]
     }
 

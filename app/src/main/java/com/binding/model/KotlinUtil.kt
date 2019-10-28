@@ -35,7 +35,7 @@ import kotlinx.serialization.parse
 import java.io.File
 
 
-const val pageWay = false
+const val pageWay = true
 val gson = Gson()
 
 fun findModelView(thisCls: Class<*>): LayoutView {

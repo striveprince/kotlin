@@ -23,10 +23,7 @@ import com.customers.zktc.ui.user.sign.SignParams
 import com.pgyersdk.update.PgyUpdateManager
 import com.pgyersdk.update.UpdateManagerListener
 import com.pgyersdk.update.javabean.AppBean
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.SingleEmitter
-import io.reactivex.SingleOnSubscribe
+import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.zipWith
 import okio.Okio
@@ -41,10 +38,17 @@ class Api(
     private val ossApi: OssApi,
     private val preferenceApi: PreferenceApi
 ) {
-    fun homePage(offset: Int, refresh: Int, pageCount: Int, homePageBanner: HomePageBanner): Single<List<HomePageInflate<*>>> {
+    fun homePage(
+        offset: Int,
+        refresh: Int,
+        pageCount: Int,
+        homePageBanner: HomePageBanner
+    ): Single<List<HomePageInflate<*>>> {
         val banner: Observable<out HomePageInflate<*>> = getOperationAd("ad_home_index_1")
-            .map { homePageBanner.operationAds = (it.operationAds)
-                 homePageBanner}
+            .map {
+                homePageBanner.operationAds = (it.operationAds)
+                homePageBanner
+            }
         val category: Observable<HomePageEntity<*>> = netApi.operationHomeCategorys()
             .restful().map { it.operationHomeCategorys }.toObservable()
             .concatMap { Observable.fromIterable(it) }
@@ -54,19 +58,20 @@ class Api(
             .restful()
             .toObservable()
             .concatMap { Observable.fromIterable(converterFloorData(it)) }
-        val mallRecommend:Observable<HomePageInflate<*>> = getOperationAd("ad_home_index_4")
+        val mallRecommend: Observable<HomePageInflate<*>> = getOperationAd("ad_home_index_4")
             .map { converterMall(it) }
-        val marketingList:Observable<HomePageInflate<*>> = netApi.marketingList(HomeRushListParams())
-            .restful()
-            .toObservable()
-            .concatMap { Observable.fromIterable(it.goodsVos) }
-        val rushList = getRushList(offset)
-            .toObservable()
-            .concatMap { Observable.fromIterable(converterRushList(it)) }
-            .doOnNext{ it.layoutIndex = 1}
-        val homeGoodRecommend = getRecommend(offset, pageCount)
+        val marketingList: Observable<HomePageInflate<*>> =
+            netApi.marketingList(HomeRushListParams())
+                .restful()
                 .toObservable()
-                .concatMap { Observable.fromIterable(converterGoodsRecommends(it)) }
+                .concatMap { Observable.fromIterable(converterMarketing(it.goodsVos)) }
+        val rushList =  netApi.getRushList(HomeRushParams(pageNo = offset))
+            .restful()
+            .map { HomeAssembleEntity(it.goodsVos) }
+            .toObservable()
+        val homeGoodRecommend = getRecommend(offset, pageCount)
+            .toObservable()
+            .concatMap { Observable.fromIterable(converterGoodsRecommends(it)) }
         return Observable.mergeArray(
             banner.noError(),
             category.noError(),
@@ -76,8 +81,24 @@ class Api(
             marketingList.noError(),
             rushList.noError(),
             homeGoodRecommend.noError()
-        ).toSortedList { t1, t2 -> t1.sorted() - t2.sorted()}
-            .doOnSuccess{ if(it.isEmpty())throw ApiException("请求失败") }
+        ).toSortedList { t1, t2 -> t1.sorted() - t2.sorted() }
+            .flatMap<List<HomePageInflate<*>>> {
+                if (it.isEmpty()) Single.just(it)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .flatMap {
+                        val single:SingleSource<List<HomePageInflate<*>>> = Single.error(ApiException("请求失败"))
+                        single
+                    }
+                else Single.just(it)
+            }
+    }
+
+    private fun converterMarketing(goodsVos: List<HomeGoodVosEntity>): ArrayList<HomePageEntity<*>> {
+        val list = ArrayList<HomePageEntity<*>>()
+        val title = HomePageTitle()
+        list.add(title)
+        list.addAll(goodsVos)
+        return list
     }
 
     fun getRecommend(offset: Int, pageCount: Int) =
@@ -102,7 +123,10 @@ class Api(
         return list
     }
 
-    private fun getPageArea(t1: HomePageOperationData, t2: HomePageOperationData): HomePageEntity<*> {
+    private fun getPageArea(
+        t1: HomePageOperationData,
+        t2: HomePageOperationData
+    ): HomePageEntity<*> {
         val list = ArrayList<HomePageOperationEntity>()
         for (index in 0..3) {
             when (index) {
@@ -119,28 +143,19 @@ class Api(
 
     private fun converterGoodsRecommends(it: HomeRecommendData): ArrayList<HomePageEntity<*>> {
         val list = ArrayList<HomePageEntity<*>>()
-        list.add(HomeRecommendTitle("为你推荐"))
+        list.add(HomePageTitle(1))
         list.addAll(it.goodsRecommends)
         return list
     }
 
-    private fun converterMall(it: HomePageOperationData): HomeMallEntity{
-        if (it.operationAds.isEmpty())throw ApiException("")
+    private fun converterMall(it: HomePageOperationData): HomeMallEntity {
+        if (it.operationAds.isEmpty()) throw ApiException("")
         for (operationAd in it.operationAds) {
             operationAd.layoutIndex = 1
         }
         return HomeMallEntity(it.operationAds)
     }
 
-    private fun converterRushList(it: HomeGoodsVoData): ArrayList<HomePageEntity<*>> {
-        val list = ArrayList<HomePageEntity<*>>()
-        list.add(HomeRushTitle(""))
-        list.addAll(it.goodsVos)
-        return list
-    }
-
-    private fun getRushList(offset: Int) = netApi.getRushList(HomeRushParams(pageNo = offset))
-        .restful()
 
 
     fun checkUpdate(context: Activity): Single<File> {
