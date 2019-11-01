@@ -35,6 +35,7 @@ fun receiveSignEvent(): Observable<SignEvent> {
 
 
 class LoginEvent(val login: Boolean, val userEntity: UserEntity)
+
 fun loginEvent(boolean: Boolean,userEntity: UserEntity){
     busPost(LoginEvent(boolean, userEntity))
 }

@@ -1,5 +1,11 @@
 package com.customers.zktc
 
+import io.reactivex.Observable
+import io.reactivex.ObservableEmitter
+import io.reactivex.ObservableOnSubscribe
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
 import org.junit.Assert.assertEquals
@@ -23,11 +29,24 @@ class ExampleUnitTest {
     fun json() {
 //        dd/MM/yyyy HH:mm:ss.SSS
         val json = Json(JsonConfiguration.Stable.copy(unquoted = false))
-        val d = json.parse(Data.serializer(),jsonString)
+        val d = json.parse(Data.serializer(), jsonString)
 
 //        println(Json.nonstrict.stringify(Data.serializer(),Data(time = Date())))
         println(d.time.time)
 //        println(Date().time)
+    }
 
+    @Test
+    fun t() {
+        lateinit var emitter: ObservableEmitter<Long>
+        Observable.create<Long> {
+            emitter = it
+        }
+            .firstOrError()
+            .subscribe({ println("time:$it") }, { it.printStackTrace() })
+        for (index in 0..10){
+            Thread.sleep(1000)
+            emitter.onNext(System.currentTimeMillis())
+        }
     }
 }

@@ -38,8 +38,8 @@ object ViewGroupBindingAdapter {
 
     @JvmStatic
     @BindingAdapter(value = ["addInflate","eventAdapter"])
-    fun <E : Inflate<*>> addInflate(viewGroup: ViewGroup,e :E,eventAdapter: IEventAdapter<*>?){
-        e.iEventAdapter = eventAdapter
+    fun <E : Inflate<*>> addInflate(viewGroup: ViewGroup,e :E,eventAdapter: IEventAdapter<out Any>?){
+        eventAdapter?.let { e.setEventAdapter(it) }
         val view = e.attachView(viewGroup.context, viewGroup, false, null).root
         view.id = e.getViewId()
         if(e is Measure) viewGroup.addView(view,e.measure(view,viewGroup))
@@ -49,7 +49,7 @@ object ViewGroupBindingAdapter {
 
     @JvmStatic
     @BindingAdapter(value = ["addInflates","eventAdapter"])
-    fun <E : Inflate<*>> addInflates(viewGroup: ViewGroup,es :List<E>,eventAdapter: IEventAdapter<*>?){
+    fun <E : Inflate<*>> addInflates(viewGroup: ViewGroup,es :List<E>,eventAdapter: IEventAdapter<out Any>?){
         viewGroup.removeAllViews()
         for (e in es) {
             addInflate(viewGroup,e,eventAdapter)

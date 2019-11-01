@@ -1,12 +1,11 @@
 package com.customers.zktc.inject.data.net.transform
 
-import android.os.Build
 import com.binding.model.fromJson
 import com.customers.zktc.BuildConfig
 import com.customers.zktc.inject.data.net.InfoEntity
+import com.customers.zktc.inject.data.net.exception.ApiException
 import com.customers.zktc.inject.data.net.exception.AuthenticationException
 import com.customers.zktc.inject.data.net.exception.LogoutException
-import com.customers.zktc.inject.data.net.exception.ApiException
 import com.customers.zktc.inject.data.net.exception.TokenExpireException
 import io.reactivex.Single
 import io.reactivex.SingleSource
@@ -14,11 +13,8 @@ import io.reactivex.SingleTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.serialization.SerializationException
-import org.jetbrains.anko.Android
 import org.json.JSONException
 import retrofit2.HttpException
-import timber.log.Timber
-import java.lang.Exception
 import java.util.*
 
 /**

@@ -4,25 +4,30 @@ import android.content.Context
 import com.alibaba.sdk.android.oss.ClientConfiguration
 import com.alibaba.sdk.android.oss.OSSClient
 import com.customers.zktc.BuildConfig
-import com.customers.zktc.inject.data.net.NetApi
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
+import com.customers.zktc.inject.data.net.HttpApi
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
-class OssApi(context: Context, netApi: NetApi) {
+class OssApi(context: Context, httpApi: HttpApi) {
 
-    lateinit var client:OSSClient
-    init { GlobalScope.launch{ client= createClient(context,netApi) } }
+    lateinit var client: OSSClient
 
-    private suspend fun createClient(context: Context, netApi: NetApi):OSSClient{
-        val credentialProvider1 = OssSignCredentialProvider(netApi)
+    init {
+//        GlobalScope.launch { client = createClient(context, httpApi) }
+        CoroutineScope(Dispatchers.Default).launch{
+            client = createClient(context, httpApi)
+        }
+    }
+
+    private suspend fun createClient(context: Context, httpApi: HttpApi): OSSClient {
+        val credentialProvider1 = OssSignCredentialProvider(httpApi)
         val conf = ClientConfiguration()
         conf.connectionTimeout = 15 * 1000
         conf.socketTimeout = 15 * 1000
         conf.maxConcurrentRequest = 5
         conf.maxErrorRetry = 2
-        return OSSClient(context, BuildConfig.endpoint, credentialProvider1,conf)
+        return OSSClient(context, BuildConfig.endpoint, credentialProvider1, conf)
     }
 }

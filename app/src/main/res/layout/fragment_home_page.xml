@@ -89,12 +89,28 @@
             android:id="@+id/smart_refresh_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+            <com.scwang.smart.refresh.header.ClassicsHeader
+                app:srlPrimaryColor="@color/z_ff4f61"
+                android:layout_width="match_parent"
+                app:srlTextLoading="@string/loading"
+                app:srlTextRefreshing="@string/loading"
+                app:srlTextRelease="@string/release_to_refresh"
+                app:srlTextPulling="@string/pulling_to_refresh"
+                app:srlTextFinish="@string/loading_success"
+                app:srlEnableLastTime="false"
+                app:srlAccentColor="@android:color/white"
+                android:layout_height="wrap_content"/>
             <androidx.recyclerview.widget.RecyclerView
                 app:adapter="@{vm.adapter}"
                 app:layout_manager="@{vm.layoutManagerField}"
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
+            <com.scwang.smart.refresh.footer.ClassicsFooter
+                android:layout_width="match_parent"
+                app:srlTextFinish="@string/loading_success"
+                app:srlTextLoading="@string/loading"
+                android:layout_height="wrap_content"/>
         </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
     </LinearLayout>

@@ -11,30 +11,13 @@ import com.binding.model.base.RxBus
 interface Parse<Binding>{
     val layoutView:LayoutView
     var layoutIndex:Int
-    var binding:Binding?
-    var iEventAdapter: IEventAdapter<*>?
+//    var binding:binding
 
+    fun <E> setEventAdapter(iEventAdapter: IEventAdapter<E>):Boolean{
+        return false
+    }
 
-    fun attachView(context: Context, viewGroup: ViewGroup?, attachToParent: Boolean, binding1: Any?): Binding
-//    fun registerEvent() : Boolean{
-//        if(isEmpty(layoutView.event)){
-//            val events = layoutView.event.split("|")
-//            for (event in events) {
-//                Config.array.put(event,this)
-//            }
-//        }
-//        return isEmpty(layoutView.event)
-//    }
-//
-//    fun unRegisterEvent(): Boolean{
-//        if(isEmpty(layoutView.event)){
-//            val events = layoutView.event.split("|")
-//            for (event in events) {
-//                Config.array.remove(event,this)
-//            }
-//        }
-//        return isEmpty(layoutView.event)
-//    }
+    fun attachView(context: Context, viewGroup: ViewGroup?, attachToParent: Boolean, binding1: Binding?): Binding
 
 
 }

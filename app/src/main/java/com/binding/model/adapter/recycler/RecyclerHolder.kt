@@ -19,13 +19,13 @@ private constructor(private val container:ViewGroup, val binding: ViewDataBindin
         this.e = e
     }
 
-    fun executePendingBindings(position:Int,e: E,iEventAdapter: IEventAdapter<E>){
+    fun executePendingBindings(e: E,iEventAdapter: IEventAdapter<E>){
         e.removeBinding()
         this.e = e
-        this.e.iEventAdapter = iEventAdapter
+        this.e.setEventAdapter(iEventAdapter)
         container.setTag(R.id.holder_position,adapterPosition)
         if(e is Recycler<*>)e.recycler(this)
-        val view = this.e.attachView(container.context,container,false,binding).root
+        val view = this.e.attachContainer(container.context,container,false,binding).root
         view.setTag(R.id.inflate,e)
     }
 }

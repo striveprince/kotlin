@@ -21,22 +21,27 @@ abstract class DataBindingActivity<C> : AppCompatActivity(), CycleContainer<C> {
     override val cycle= lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initView(savedInstanceState)
+    }
+
+    open fun initView(savedInstanceState: Bundle?) {
         ARouter.getInstance().inject(this)
         val rootView = inject(savedInstanceState, null, false)
         if (isSwipe() != SwipeBackLayout.FROM_NO) {
             setContentView(R.layout.activity_base)
-            val swipeBackLayout:SwipeBackLayout = findViewById(R.id.swipe_back_layout)
+            val swipeBackLayout: SwipeBackLayout = findViewById(R.id.swipe_back_layout)
             swipeBackLayout.directionMode = isSwipe()
             swipeBackLayout.addView(
                 rootView,
-                ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                )
             )
-            val imageView:ImageView = findViewById(R.id.iv_shadow)
-            swipeBackLayout.setOnSwipeBackListener { mView, f -> imageView.alpha = 1 - f }
+            val imageView: ImageView = findViewById(R.id.iv_shadow)
+            swipeBackLayout.setOnSwipeBackListener { _, f -> imageView.alpha = 1 - f }
 
-        } else
-            setContentView(rootView)
-
+        } else setContentView(rootView)
         applyKitKatTranslucency(android.R.color.transparent)
     }
 

@@ -1,6 +1,7 @@
 package com.binding.model.inflate.model
 
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.databinding.ViewDataBinding
@@ -15,11 +16,10 @@ import io.reactivex.internal.disposables.ListCompositeDisposable
 
 abstract class ViewModel<T : CycleContainer<*>, Binding : ViewDataBinding> : ViewInflate<Binding>(),
     LifecycleObserver {
-    private var path: String? = null
-    private var bundle: Bundle? = null
     private val disposables = ListCompositeDisposable()
-    var disposable:Disposable? = null
     lateinit var t: T
+    lateinit var path: String
+    lateinit var bundle: Bundle
 
     @Suppress("UNCHECKED_CAST")
     fun attachContainer(obj: Any, co: ViewGroup?, attachToParent: Boolean, savedInstanceState: Bundle?): Binding {
@@ -27,8 +27,8 @@ abstract class ViewModel<T : CycleContainer<*>, Binding : ViewDataBinding> : Vie
         t = t1
         val binding = attachView(this.t.dataActivity, co, attachToParent, null)
         t.cycle.addObserver(this)
-        path = t.dataActivity.intent.getStringExtra(Config.path)
-        bundle = t.dataActivity.intent.getBundleExtra(Config.bundle)
+        t.dataActivity.intent.getStringExtra(Config.path).let { path = it ?: "" }
+        t.dataActivity.intent.getBundleExtra(Config.bundle).let { bundle = it ?: Bundle() }
         attachView(savedInstanceState, t)
         return binding
     }
@@ -41,7 +41,7 @@ abstract class ViewModel<T : CycleContainer<*>, Binding : ViewDataBinding> : Vie
         t.finish()
     }
 
-    fun onBackPress() {
+    open fun onBackPress() {
         t.dataActivity.onBackPressed()
     }
 
@@ -54,5 +54,13 @@ abstract class ViewModel<T : CycleContainer<*>, Binding : ViewDataBinding> : Vie
     fun onDestroy() {
         disposables.dispose()
         removeBinding()
+    }
+
+    fun onSaveInstanceState(outState: Bundle): Bundle {
+        return outState
+    }
+
+    fun onRestoreInstanceState(savedInstanceState: Bundle) {
+
     }
 }

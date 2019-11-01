@@ -5,6 +5,7 @@ import com.customers.zktc.BuildConfig
 import com.customers.zktc.inject.data.Api
 import com.customers.zktc.inject.data.database.DatabaseApi
 import com.customers.zktc.inject.data.map.MapApi
+import com.customers.zktc.inject.data.net.HttpApi
 import com.customers.zktc.inject.data.net.NetApi
 import com.customers.zktc.inject.data.net.converter.JsonConverterFactory
 import com.customers.zktc.inject.data.oss.OssApi
@@ -12,39 +13,30 @@ import com.customers.zktc.inject.data.preference.PreferenceApi
 import com.customers.zktc.inject.interceptor.NetInterceptor
 import com.customers.zktc.inject.qualifier.context.AppContext
 import com.customers.zktc.inject.scope.ApplicationScope
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import io.reactivex.schedulers.Schedulers
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 @Module
 class DataModule {
 
-
-
     @Provides
     @ApplicationScope
-    internal fun provideNetApi(okHttpClient: OkHttpClient,netInterceptor: NetInterceptor): NetApi {
+    internal fun provideNetApi(okHttpClient: OkHttpClient,netInterceptor: NetInterceptor): HttpApi {
         val client = okHttpClient.newBuilder()
             .addInterceptor(netInterceptor)
             .build()
-//        val contentType = MediaType.get("application/json")
         return Retrofit.Builder()
             .baseUrl(BuildConfig.ApiHost)
-//            .addConverterFactory(MoshiConverterFactory.create())
-//            .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
             .addConverterFactory(JsonConverterFactory())
             .callFactory(client)
-            .build().create(NetApi::class.java)
+            .build().create(HttpApi::class.java)
     }
 
     @Provides
@@ -53,7 +45,7 @@ class DataModule {
         val httpClientBuilder = OkHttpClient.Builder()
             .readTimeout(30, TimeUnit.SECONDS)
             .addInterceptor(HttpLoggingInterceptor())
-            //                .cache(new Cache(new File(""),1024*1024*20))
+            //.cache(new Cache(new File(""),1024*1024*20))
             .build().newBuilder()
         if (BuildConfig.DEBUG) {
             val loggingInterceptor = HttpLoggingInterceptor()
@@ -65,7 +57,7 @@ class DataModule {
 
 //    @Provides
 //    @ApplicationScope
-//    internal fun provideOssClient(@AppContext context: Context,netApi: NetApi): OSSClient {
+//    internal fun provideOssClient(@AppContext context: Context,netApi: HttpApi): OSSClient {
 //        val credentialProvider1 = OssSignCredentialProvider(netApi)
 //        val conf = ClientConfiguration()
 //        conf.connectionTimeout = 15 * 1000
@@ -90,10 +82,9 @@ class DataModule {
 
     @Provides
     @ApplicationScope
-    internal fun provideOssApi(@AppContext context: Context,netApi: NetApi): OssApi {
-        return OssApi(context,netApi)
+    internal fun provideOssApi(@AppContext context: Context, httpApi: HttpApi): OssApi {
+        return OssApi(context,httpApi)
     }
-
 
     @Provides
     @ApplicationScope
@@ -103,7 +94,14 @@ class DataModule {
 
     @Provides
     @ApplicationScope
-    internal  fun provideApi(@AppContext context: Context,netApi: NetApi,databaseApi:DatabaseApi,mapApi:MapApi,ossApi: OssApi,preferenceApi: PreferenceApi):Api{
-        return Api(context,netApi,databaseApi,mapApi,ossApi,preferenceApi)
+    internal  fun provideApi(@AppContext context: Context, httpApi: HttpApi, databaseApi:DatabaseApi, mapApi:MapApi, ossApi: OssApi, preferenceApi: PreferenceApi):Api{
+        return Api(context,NetApi(httpApi),databaseApi,mapApi,ossApi,preferenceApi)
     }
+
+//    @Provides
+//    @ApplicationScope
+//    internal  fun provideJpushClient(){
+//
+//    }
+
 }

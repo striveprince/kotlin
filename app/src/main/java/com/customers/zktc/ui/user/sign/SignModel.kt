@@ -10,8 +10,10 @@ import com.binding.model.subscribeNormal
 import com.customers.zktc.R
 import com.customers.zktc.base.cycle.BaseFragment
 import com.customers.zktc.databinding.ActivitySignBinding
+import com.customers.zktc.inject.data.preference.user.UserEntity
 import com.customers.zktc.inject.qualifier.manager.ActivityFragmentManager
 import com.customers.zktc.ui.Constant
+import com.customers.zktc.ui.loginEvent
 import com.customers.zktc.ui.user.sign.SignParams
 import com.customers.zktc.ui.receiveSignEvent
 import javax.inject.Inject
@@ -41,6 +43,9 @@ class SignModel
     fun onCloseClick(v: View) {
         onBackPress()
     }
+
+
+
 
     private fun showFragment(path: String, signParams: SignParams = SignParams()) {
         val fragment = getFragment(path)

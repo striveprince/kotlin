@@ -12,6 +12,7 @@ import androidx.core.view.MotionEventCompat
 import androidx.core.view.ViewCompat
 import androidx.customview.widget.ViewDragHelper
 import com.customers.zktc.R
+import kotlin.math.abs
 
 /**
  * Created by GongWen on 17/8/24.
@@ -135,7 +136,9 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
     }
 
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
-        when (MotionEventCompat.getActionMasked(ev)) {
+//        MotionEvent#getAction()
+//        when (MotionEventCompat.getActionMasked(ev)) {
+        when (ev.getAction()) {
             MotionEvent.ACTION_DOWN -> {
                 downX = ev.rawX
                 downY = ev.rawY
@@ -234,12 +237,12 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
             return topOffset
         }
 
-        override fun onViewPositionChanged(changedView: View, left: Int, top: Int, dx: Int, dy: Int) {
-            var left = left
-            var top = top
+        override fun onViewPositionChanged(changedView: View, l: Int, t: Int, dx: Int, dy: Int) {
+            var left = l
+            var top = t
             super.onViewPositionChanged(changedView, left, top, dx, dy)
-            left = Math.abs(left)
-            top = Math.abs(top)
+            left = abs(left)
+            top = abs(top)
             when (directionMode) {
                 FROM_LEFT, FROM_RIGHT -> swipeBackFraction = 1.0f * left / swipeWidth
                 FROM_TOP, FROM_BOTTOM -> swipeBackFraction = 1.0f * top / swipeHeight

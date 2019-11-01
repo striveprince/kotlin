@@ -10,49 +10,29 @@ import java.util.*
 class App constructor(val application: Application) : Application.ActivityLifecycleCallbacks {
     companion object {
         val stack = Stack<Activity>()
-        lateinit var application:Application
-        fun activity():Activity{
-            return stack.lastElement()
-        }
+        lateinit var application: Application
 
+        fun activity()=stack.lastElement()
 
+        fun getScreenWidth() = application.resources.displayMetrics.widthPixels
 
-        fun getScreenWidth(): Int {
-            return application.resources.displayMetrics.widthPixels
-        }
+        fun getScreenHeight() = application.resources.displayMetrics.heightPixels
 
-        fun getScreenHeight(): Int {
-            return application.resources.displayMetrics.heightPixels
-        }
+        fun dpRcet(left: Int, top: Int, right: Int, bottom: Int) = Rect(left, top, right, bottom)
 
-        fun dpRcet(left:Int,top:Int,right:Int,bottom:Int):Rect{
-            return Rect(left,top, right, bottom)
-        }
+        fun floatToPx(dp: Float) = application.resources.displayMetrics.density * dp
 
-        fun floatToPx(dp: Float): Float {
-            return application.resources.displayMetrics.density * dp
-        }
+        fun floatTodp(px: Float) = px / application.resources.displayMetrics.density
 
-        fun floatTodp(px: Float): Float {
-            return px / application.resources.displayMetrics.density
-        }
+        fun toPx(dp: Int): Int = (floatToPx(dp.toFloat()) + 0.5).toInt()
 
-        fun toPx(dp: Int): Int {
-            return (floatToPx(dp.toFloat())+0.5).toInt()
-        }
+        fun toDp(px: Int) = (floatTodp(px.toFloat()) + 0.5).toInt()
 
-        fun toDp(px: Int): Int {
-            return (floatTodp(px.toFloat())+0.5).toInt()
-        }
+        fun getWeightWidth(sum: Int) = getScreenWidth() / sum
 
-
-
-        fun getWeightWidth(sum: Int): Int {
-            return getScreenWidth() / sum
-        }
-
-        fun getWeightHeight(sum: Int): Int {
-            return getScreenHeight() / sum
+        fun getWeightHeight(sum: Int) = getScreenHeight() / sum
+        fun getColor(res: Int): Int {
+            return ContextCompat.getColor(application,res)
         }
     }
 
@@ -60,19 +40,11 @@ class App constructor(val application: Application) : Application.ActivityLifecy
         application.registerActivityLifecycleCallbacks(this)
         App.application = application
     }
-
     override fun onActivityPaused(activity: Activity?) {}
     override fun onActivityResumed(activity: Activity?) {}
     override fun onActivityStarted(activity: Activity?) {}
-    override fun onActivityDestroyed(activity: Activity?) {
-        stack.remove(activity)
-    }
-
+    override fun onActivityDestroyed(activity: Activity?) { stack.remove(activity) }
     override fun onActivitySaveInstanceState(activity: Activity?, outState: Bundle?) {}
     override fun onActivityStopped(activity: Activity?) {}
-    override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
-        stack.add(activity)
-    }
-
-
+    override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) { stack.add(activity) }
 }

@@ -8,12 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.binding.model.adapter.IEventAdapter
 import com.binding.model.adapter.IModelAdapter
 import com.binding.model.adapter.IRecyclerAdapter
-import com.binding.model.inflate.inter.Inflate
-import com.binding.model.adapter.recycler.RecyclerHolder
 import com.binding.model.containsList
-import timber.log.Timber
+import com.binding.model.inflate.inter.Inflate
 
-open class RecyclerAdapter<E : Inflate<*>> : RecyclerView.Adapter<RecyclerHolder<E>>()
+open class RecyclerAdapter<E : Inflate<out ViewDataBinding>> : RecyclerView.Adapter<RecyclerHolder<E>>()
     , IRecyclerAdapter<E> {
     private val sparseArray = SparseArray<E>()
     private val iEventAdapter by lazy { this }
@@ -34,22 +32,18 @@ open class RecyclerAdapter<E : Inflate<*>> : RecyclerView.Adapter<RecyclerHolder
 
     override fun onBindViewHolder(holder: RecyclerHolder<E>, position: Int) {
         val e = holderList[position]
-        holder.executePendingBindings(position, e, iEventAdapter)
+        holder.executePendingBindings(e, iEventAdapter)
     }
 
     override fun onBindViewHolder(holder: RecyclerHolder<E>, position: Int, payloads: MutableList<Any>) {
-        if (payloads.isEmpty()) onBindViewHolder(holder, position)
-        else {
-            Timber.i("payloads size=${payloads.size}")
-            val e = holderList[position]
-            holder.executePendingBindings(position, e, iEventAdapter)
-        }
+//        if(payloads.isNotEmpty())
+            onBindViewHolder(holder, position)
     }
 
     override fun getItemViewType(position: Int): Int {
         val e = holderList[position]
         val viewType = e.getLayoutId()
-        Timber.i("viewType=${viewType},Inflate=${e.javaClass.name}")
+//        Timber.i("viewType=${viewType},Inflate=${e.javaClass.name}")
         sparseArray.put(viewType, e)
         return viewType
     }
@@ -140,7 +134,6 @@ open class RecyclerAdapter<E : Inflate<*>> : RecyclerView.Adapter<RecyclerHolder
         return true
     }
 
-
     override fun moveListAdapter(position: Int, es: List<E>): Boolean {
         for (i in es.indices)
             moveToAdapter(position + i, es[i])
@@ -149,7 +142,7 @@ open class RecyclerAdapter<E : Inflate<*>> : RecyclerView.Adapter<RecyclerHolder
 
     override fun setToAdapter(position: Int, e: E): Boolean {
         if (containsList(position, holderList)) {
-            e.iEventAdapter = iEventAdapter
+            e.setEventAdapter(iEventAdapter)
             notifyItemChanged(position)
             holderList[position] = e
             return true

@@ -5,8 +5,8 @@
 <!--    <color name="colorAccent">#D81B60</color>-->
     <color name="windowBackground">#FFFFFFFF</color>
     <color name="colorAccent">#ffff4081</color>
-    <color name="colorPrimary">#ff3f51b5</color>
-    <color name="colorPrimaryDark">#ff303f9f</color>
+    <color name="colorPrimary">#DB4147</color>
+    <color name="colorPrimaryDark">#DB4147</color>
     <color name="customer_service_color">#DB4147</color>
     <color name="transparent">#00000000</color>
     <color name="z_ff4f61">#ff4f61</color>

@@ -33,18 +33,18 @@ class PasswordForgetModel @Inject constructor(): ViewModel<PasswordForgetFragmen
     }
 
     private fun bindingParams(t: PasswordForgetFragment) {
-        t.arguments?.getParcelable<SignParams>(Constant.params)?.let { binding?.params = it }
-        receiveSignEvent().subscribeNormal(this,{ binding?.params = it.signParams })
+        t.arguments?.getParcelable<SignParams>(Constant.params)?.let { binding.params = it }
+        receiveSignEvent().subscribeNormal(t,{ binding.params = it.signParams })
     }
 
     fun onPhoneFinish(s:Editable){
         enablePhone.set(getPhoneError(s.toString())==null)
-        binding?.inputEditMobile?.error = getPhoneError(s.toString())
+        binding.inputEditMobile.error = getPhoneError(s.toString())
     }
 
     fun onCodeFinish(s:Editable){
         enableCode.set(getPhoneError(s.toString())==null)
-        binding?.inputEditMobile?.error = getPhoneError(s.toString())
+        binding.inputEditMobile.error = getPhoneError(s.toString())
     }
 
 
@@ -53,10 +53,10 @@ class PasswordForgetModel @Inject constructor(): ViewModel<PasswordForgetFragmen
     }
 
     fun onConfirmClick(v:View){
-        api.modifyPassword().subscribeNormal(t)
+        api.modifyPassword().subscribeNormal(v,t.lifecycle)
     }
 
     fun onPasswordFinish(s:Editable){
-        binding?.params?.let { signEvent(LoginFragment.login,it) }
+        binding.params?.let { signEvent(LoginFragment.login,it) }
     }
 }

@@ -96,8 +96,7 @@ fun <T> Single<InfoEntity<T>>.restful(): Single<T> {
 
 
 fun <T> Single<InfoEntity<T>>.restfulCompose(): Single<T> {
-    return this.compose(ErrorSingleTransformer())
-        .compose(RestfulSingleTransformer())
+    return this.restful()
         .observeOn(AndroidSchedulers.mainThread())
 }
 fun <T> Single<T>.errorCompose(): Single<T> {

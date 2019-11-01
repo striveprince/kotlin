@@ -34,4 +34,9 @@ abstract class BaseFragment<VM : ViewModel<*, *>> : DataBindingFragment<Fragment
     override fun finish() {
         dataActivity.finish()
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(vm.onSaveInstanceState(outState))
+    }
+
 }

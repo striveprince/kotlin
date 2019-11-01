@@ -17,13 +17,16 @@ class UserApi private constructor(context: Context) {
     private val sharePreferenceUtil: SharePreferenceUtil =
         SharePreferenceUtil.getUserInstance(context)
     private val userEntity: UserEntity
+    var login = isLogin
     init {
         userEntity = sharePreferenceUtil.getAllDto(UserEntity::class.java)
         isLogin = isLogin(userEntity.token)
+
     }
 
     private fun isLogin(token:String): Boolean {
-        return !TextUtils.isEmpty(token)
+        login = !TextUtils.isEmpty(token)
+        return login
     }
 
     fun login(it: SignEntity): UserEntity {

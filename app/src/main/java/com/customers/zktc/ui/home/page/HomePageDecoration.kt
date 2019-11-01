@@ -5,10 +5,7 @@ import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.binding.model.App
-import com.binding.model.adapter.GridInflate
-import com.binding.model.inflate.inter.Inflate
 import com.customers.zktc.R
-import timber.log.Timber
 
 /**
  * Company: 中科同创
@@ -26,7 +23,6 @@ class HomePageDecoration : RecyclerView.ItemDecoration() {
         val position = parent.getChildAdapterPosition(view)
         val index = layoutManager.spanSizeLookup.getSpanIndex(position, spanCount)
         val itemSpan = layoutManager.spanSizeLookup.getSpanSize(position)
-//        Timber.i("position=$position,index=$index,itemSpan=$itemSpan,spanCount=$spanCount")
         if (view.id == R.id.home_page_layout) {
             if (itemSpan != spanCount) {
                 if (index == 0)

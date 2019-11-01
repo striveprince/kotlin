@@ -114,7 +114,7 @@ class VerificationCodeView
                 }
             }
         })
-        this.editText!!.setOnFocusChangeListener { param1View, hasFocus ->
+        this.editText!!.setOnFocusChangeListener { _, hasFocus ->
             val str = editText!!.text.toString().trim { it <= ' ' }
             if (hasFocus) {
                 if (TextUtils.isEmpty(str)) {

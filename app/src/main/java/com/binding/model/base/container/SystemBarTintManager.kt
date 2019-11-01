@@ -235,7 +235,8 @@ constructor(activity: Activity) {
      */
     @TargetApi(11)
     fun setStatusBarAlpha(alpha: Float) {
-        if (mStatusBarAvailable && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+//        && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
+        if (mStatusBarAvailable ) {
             mStatusBarTintView!!.alpha = alpha
         }
     }

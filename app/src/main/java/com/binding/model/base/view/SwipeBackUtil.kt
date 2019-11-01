@@ -20,7 +20,10 @@ object SwipeBackUtil {
     fun canViewScrollUp(mView: View?, x: Float, y: Float, defaultValueForNull: Boolean): Boolean {
         return if (mView == null || !contains(mView, x, y)) {
             defaultValueForNull
-        } else ViewCompat.canScrollVertically(mView, -1)
+        } else
+            mView.canScrollVertically(-1)
+//            View#canScrollVertically(int)
+//            ViewCompat.canScrollVertically(mView, -1)
     }
 
     fun canViewScrollDown(mView: View?, x: Float, y: Float, defaultValueForNull: Boolean): Boolean {

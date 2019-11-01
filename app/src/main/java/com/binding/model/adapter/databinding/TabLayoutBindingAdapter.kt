@@ -40,16 +40,16 @@ object TabLayoutBindingAdapter {
     ) {
         val newValue = object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                if (listener != null) listener!!.onTabSelected(tab)
-                if (positionAttrChanged != null) positionAttrChanged!!.onChange()
+                listener?.onTabSelected(tab)
+                positionAttrChanged?.onChange()
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
-                if (listener != null) listener!!.onTabUnselected(tab)
+                listener?.onTabUnselected(tab)
             }
 
            override fun onTabReselected(tab: TabLayout.Tab) {
-                if (listener != null) listener!!.onTabReselected(tab)
+                listener?.onTabReselected(tab)
             }
         }
         val oldValue = ListenerUtil.trackListener(layout, newValue, R.id.tab_layout)

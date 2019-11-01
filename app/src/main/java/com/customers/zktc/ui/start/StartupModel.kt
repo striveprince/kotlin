@@ -37,9 +37,3 @@ class StartupModel @Inject constructor() : ViewModel<StartupActivity, ActivitySt
     }
 
 }
-/**
- *   val androidId = Settings.Secure.getString(
-getContentResolver(),
-Settings.Secure.ANDROID_ID
-)
- * */

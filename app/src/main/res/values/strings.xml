@@ -44,6 +44,10 @@
     <string name="more">查看更多</string>
     <string name="recommend_for_you">为你推荐</string>
     <string name="assemble_every_day">每日拼团</string>
+    <string name="loading">加载中..</string>
+    <string name="loading_success">加载成功</string>
+    <string name="pulling_to_refresh">下拉刷新</string>
+    <string name="release_to_refresh">松开刷新</string>
 </resources>
 <!--        <string name="add_bank_car_zhu">"注：-->
 <!--1、一卡通绑定，可同时用于支付和提现-->

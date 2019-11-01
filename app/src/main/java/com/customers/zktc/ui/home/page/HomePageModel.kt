@@ -3,21 +3,24 @@ package com.customers.zktc.ui.home.page
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.ObservableField
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.binding.model.adapter.recycler.DiffUtilCallback
 import com.binding.model.adapter.recycler.GridSizeLookup
 import com.binding.model.annoation.LayoutView
+import com.binding.model.base.view.NoFlashItemAnimator
 import com.binding.model.inflate.model.RecyclerModel
 import com.binding.model.inflate.obj.RecyclerStatus
 import com.binding.model.subscribeNormal
 import com.customers.zktc.R
 import com.customers.zktc.databinding.FragmentHomePageBinding
 import com.customers.zktc.inject.data.Api
+import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.simple.SimpleMultiListener
 import io.reactivex.android.schedulers.AndroidSchedulers
-import timber.log.Timber
 import javax.inject.Inject
 
 @LayoutView(layout = [R.layout.fragment_home_page])
@@ -26,8 +29,7 @@ class HomePageModel @Inject constructor() :
     val city = ObservableField<String>("定位中...")
     private val banner = HomePageBanner(arrayListOf())
     private val list = ArrayList<HomePageInflate<*>>()
-    @Inject
-    lateinit var api: Api
+    @Inject lateinit var api: Api
     private val spanCount = 2520
     override fun attachView(savedInstanceState: Bundle?, t: HomePageFragment) {
         super.attachView(savedInstanceState, t)
@@ -38,12 +40,16 @@ class HomePageModel @Inject constructor() :
         http = { offset, _ ->
             api.getRecommend(offset, pageCount)
                 .observeOn(AndroidSchedulers.mainThread())
-                .map { it.goodsRecommends }
         }
         initHttp()
-        binding?.recyclerView?.addItemDecoration(HomePageDecoration())
+        binding.recyclerView.itemAnimator =null// NoFlashItemAnimator()
+//        binding.recyclerView?.itemAnimator?.let {//经过测试还是会有闪烁
+//            if(it is SimpleItemAnimator)it.supportsChangeAnimations = false
+//            if(it is SimpleItemAnimator)it.changeDuration= 0
+//        }
+        binding.recyclerView.addItemDecoration(HomePageDecoration())
         api.locationCity(t.dataActivity).subscribeNormal(t, { city.set(it) })
-        binding?.smartRefreshLayout?.setOnMultiListener(object : SimpleMultiListener() {
+        binding.smartRefreshLayout.setOnMultiListener(object : SimpleMultiListener() {
             override fun onRefresh(refreshLayout: RefreshLayout) {
                 super.onRefresh(refreshLayout)
                 initHttp()
@@ -52,13 +58,13 @@ class HomePageModel @Inject constructor() :
             override fun onLoadMore(refreshLayout: RefreshLayout) {
                 super.onLoadMore(refreshLayout)
                 val position = layoutManager.findLastVisibleItemPosition()
-                binding?.recyclerView?.let { onHttp(position, RecyclerStatus.loadBottom) }
+                onHttp(position, RecyclerStatus.loadBottom)
             }
         })
     }
 
     private fun initHttp() {
-        return api.homePage(1, refresh, pageCount, banner)
+        return api.homePage(1, pageCount, banner)
             .doOnSuccess { addHeadIndex(it) }
             .map { DiffUtil.calculateDiff(DiffUtilCallback(adapter.holderList, it)) }
             .observeOn(AndroidSchedulers.mainThread())
@@ -74,22 +80,24 @@ class HomePageModel @Inject constructor() :
         list.addAll(it)
         var size = it.size
         for (homePageInflate in it.asReversed()) {
-            if(homePageInflate is HomeGoodsRecommendEntity){
+            if (homePageInflate is HomeGoodsRecommendEntity) {
                 size--
-            }
+            } else break
         }
         headIndex = size
     }
 
     override fun onComplete() {
         super.onComplete()
-        binding?.smartRefreshLayout?.finishRefresh()
-        binding?.smartRefreshLayout?.finishLoadMore()
+        binding.smartRefreshLayout.finishRefresh()
+        binding.smartRefreshLayout.finishLoadMore()
     }
 
-    fun onSearchClick(v: View) {}
+    fun onSearchClick(v: View) {
+    }
 
-    fun onNoticeClick(v: View) {}
+    fun onNoticeClick(v: View) {
+    }
 
     fun onLocationClick(v: View) {}
 }

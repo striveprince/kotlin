@@ -34,37 +34,31 @@ class SignCodeModel @Inject constructor() : ViewModel<SignCodeFragment, Fragment
     override fun attachView(savedInstanceState: Bundle?, t: SignCodeFragment) {
         super.attachView(savedInstanceState, t)
         bindingParams(t)
-        binding?.codeView?.codeListener = { if (it.length == 4) loginCode(it) }
+        binding.codeView.codeListener = { if (it.length == 4) loginCode(it) }
     }
 
     private fun bindingParams(t: SignCodeFragment) {
-        t.arguments?.getParcelable<SignParams>(Constant.params)?.let { binding?.params = it }
+        t.arguments?.getParcelable<SignParams>(Constant.params)?.let { binding.params = it }
         receiveSignEvent()
-            .subscribeNormal(t, { binding?.params = it.signParams })
+            .subscribeNormal(t, { binding.params = it.signParams })
     }
 
     fun onInputFinish(s: Editable) {
         enablePhone.set(getPhoneError(s.toString()) == null)
-        binding?.inputEditMobile?.error = getPhoneError(s.toString())
+        binding.inputEditMobile.error = getPhoneError(s.toString())
     }
 
     fun onPasswordLoginClick(v: View) {
-        signEvent(login, binding!!.params!!)
+        signEvent(login, binding.params!!)
     }
 
     fun onCodeClick(v: View) {
         v.isEnabled = false
-        binding?.params?.let { params ->
-            api.loginCode(params)
-                .subscribeNormal(this,
-                    { timing(v as TextView, it) },
-                    {
-                        toast(it)
-                        v.isEnabled = true
-                    })
+        binding.params?.let { params ->
+            api.loginCode(params).subscribeNormal(t,{timing(v as TextView, it)},{toast(it)
+                        v.isEnabled = true})
         }
     }
-
 
     private fun timing(view: TextView, it: CodeEntity) {
         timingEntity.time = 60
@@ -77,13 +71,13 @@ class SignCodeModel @Inject constructor() : ViewModel<SignCodeFragment, Fragment
         }
         TimeUtil.add(timingEntity)
         enableCodeInput.set(!TextUtils.isEmpty(it.uid))
-        binding?.params?.uid = it.uid
+        binding.params?.uid = it.uid
         showInputMethod(view.context)
     }
 
 
     private fun loginCode(code: String) {
-        binding?.params?.let { params ->
+        binding.params?.let { params ->
             params.smsCode = code
             api.codeLogin(params)
                 .subscribeNormal(t, {

@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.ObservableBoolean
+import com.binding.model.App
 import com.binding.model.annoation.LayoutView
 import com.binding.model.base.rotate.TimeUtil
 import com.binding.model.base.rotate.TimingEntity
@@ -53,30 +54,28 @@ class RegisterModel @Inject constructor() : ViewModel<RegisterFragment, Fragment
         super.attachView(savedInstanceState, t)
         t.lifecycle.addObserver(timingEntity)
         bindingParams(t)
-        val color = ContextCompat.getColor(t.dataActivity, R.color.z_ee2d40)
-        binding?.checkbox?.let {
-            SpannableUtil(it)
-                .addText("我已阅读并同意《")
-                .addClick("用户协议", "", { showAgreement() }, { ds ->
-                    ds.color = color
-                    ds.isUnderlineText = true
-                })
-                .addText("》")
-                .build()
-        }
+        val color = App.getColor(R.color.z_ee2d40)
+        SpannableUtil(binding.checkbox)
+            .addText("我已阅读并同意《")
+            .addClick("用户协议", "#ee2d40", { showAgreement() }, { ds ->
+                ds.color = color
+                ds.isUnderlineText = true
+            })
+            .addText("》")
+            .build()
     }
 
     fun onRegisterClick(v: View) {
-        api.register(binding!!.params!!)
-            .subscribeNormal(t,{
+        api.register(binding.params!!)
+            .subscribeNormal(t, {
                 finish()
-                loginEvent(true,it)
+                loginEvent(true, it)
             })
     }
 
     fun onCodeClick(v: View) {
         v.isEnabled = false
-        binding?.params?.let { params ->
+        binding.params?.let { params ->
             api.registerCode(params)
                 .subscribeNormal(t, { timing(v as TextView, it) },
                     {
@@ -99,12 +98,12 @@ class RegisterModel @Inject constructor() : ViewModel<RegisterFragment, Fragment
         }
         TimeUtil.add(timingEntity)
         enableCodeInput.set(!TextUtils.isEmpty(it.uid))
-        binding?.params?.uid = it.uid
-        binding?.textInputCode?.findFocus()
-        binding?.textInputCode?.requestFocus()
-        binding?.inputEditCode?.findFocus()
-        binding?.inputEditCode?.requestFocus()
-        binding?.inputEditCode?.setSelection(0)
+        binding.params?.uid = it.uid
+        binding.textInputCode.findFocus()
+        binding.textInputCode.requestFocus()
+        binding.inputEditCode.findFocus()
+        binding.inputEditCode.requestFocus()
+        binding.inputEditCode.setSelection(0)
         showInputMethod(view.context)
     }
 
@@ -113,24 +112,24 @@ class RegisterModel @Inject constructor() : ViewModel<RegisterFragment, Fragment
     }
 
     private fun bindingParams(t: RegisterFragment) {
-        t.arguments?.getParcelable<SignParams>(Constant.params)?.let { binding?.params = it }
-        receiveSignEvent().subscribeNormal(t, { binding?.params = it.signParams })
+        t.arguments?.getParcelable<SignParams>(Constant.params)?.let { binding.params = it }
+        receiveSignEvent().subscribeNormal(t, { binding.params = it.signParams })
     }
 
 
     fun onCodeFinish(s: Editable) {
         enableCode.set(getCodeError(s.toString()) == null)
-        binding?.inputEditCode?.error = getCodeError(s.toString())
+        binding.inputEditCode.error = getCodeError(s.toString())
     }
 
     fun onPhoneFinish(s: Editable) {
         enablePhone.set(getPhoneError(s.toString()) == null)
-        binding?.inputEditMobile?.error = getPhoneError(s.toString())
+        binding.inputEditMobile.error = getPhoneError(s.toString())
     }
 
     fun onPasswordFinish(s: Editable) {
         enablePassword.set(getPasswordError(s.toString()) == null)
-        binding?.inputPassword?.error = getPasswordError(s.toString())
+        binding.inputPassword.error = getPasswordError(s.toString())
     }
 
 
@@ -139,9 +138,9 @@ class RegisterModel @Inject constructor() : ViewModel<RegisterFragment, Fragment
      * confirm password compare
      * */
     fun onPasswordConfirmFinish(s: Editable) {
-        binding?.params?.let {
+        binding.params?.let {
             if (it.password != it.confirmPassword)
-                binding?.inputConfirmPassword?.error = "两次输入的密码不一致"
+                binding.inputConfirmPassword.error = "两次输入的密码不一致"
             enableConfirm.set(true)
         }
     }
@@ -154,6 +153,6 @@ class RegisterModel @Inject constructor() : ViewModel<RegisterFragment, Fragment
      * password login
      * */
     fun onPasswordLoginClick(v: View) {
-        binding?.params?.let { signEvent(LoginFragment.login, it) }
+        signEvent(LoginFragment.login, binding.params!!)
     }
 }

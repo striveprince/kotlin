@@ -43,7 +43,7 @@ class SpannableSelectUtil<E : SpannableSelectRecycler<*>>(
     fun init() {
         val builder = StringBuilder()
         for (text in es) {
-            text.iEventAdapter = iEventAdapter
+            text.setEventAdapter(iEventAdapter)
             builder.append(text.name()).append(format)
         }
         builder.delete(builder.lastIndexOf(format), builder.length)

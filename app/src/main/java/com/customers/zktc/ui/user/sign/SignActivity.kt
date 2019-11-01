@@ -4,6 +4,9 @@ import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.customers.zktc.base.cycle.BaseActivity
 import com.customers.zktc.inject.component.ActivityComponent
+import com.customers.zktc.inject.data.preference.user.UserApi
+import com.customers.zktc.inject.data.preference.user.UserEntity
+import com.customers.zktc.ui.loginEvent
 import com.customers.zktc.ui.user.sign.login.LoginFragment
 
 /**
@@ -17,4 +20,9 @@ class SignActivity :BaseActivity<SignModel>(){
     companion object { const val sign = ActivityComponent.Config.zktc + "sign" }
     @JvmField @Autowired
     var path:String = LoginFragment.login
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if(!UserApi.isLogin)loginEvent(false, UserEntity())
+    }
 }

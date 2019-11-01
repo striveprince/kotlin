@@ -12,13 +12,18 @@ import android.text.TextUtils
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.Lifecycle
 import com.binding.model.annoation.LayoutView
 import com.binding.model.base.RxBus
 import com.binding.model.base.Text
 import com.binding.model.base.container.CycleContainer
+import com.binding.model.inflate.inter.Entity
 import com.binding.model.inflate.model.ViewModel
 import com.binding.model.inflate.observer.NormalObserver
+import com.customers.zktc.inject.data.net.exception.ApiException
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.reactivex.Flowable
@@ -49,9 +54,20 @@ inline fun <reified T> toArray(list: List<T>): Array<T> {
 }
 
 @ImplicitReflectionSerializer
-inline fun <reified T:Any> parse(string: String):T{
+inline fun <reified T : Any> parse(string: String): T {
     return Json.parse(string)
 }
+
+fun <T, R> Observable<List<T>>.concatIterable(block: T.() -> R): Observable<R> =
+    this.concatMap { Observable.fromIterable(it) }
+        .map { block.invoke(it) }
+
+fun <T, R> Observable<List<T>>.concatList(block: T.() -> R): Observable<List<R>> =
+    this.concatMap { Observable.fromIterable(it) }
+        .map { block.invoke(it) }
+        .toList()
+        .toObservable()
+
 
 //
 //@ImplicitReflectionSerializer
@@ -78,8 +94,6 @@ inline fun <reified T:Any> parse(string: String):T{
 //}
 //                c.kotlin
 //                ArrayListSerializer()
-
-
 
 
 //inline fun <reified E> rxBus(owner: LifecycleOwner): Observable<E> {
@@ -162,21 +176,21 @@ fun <T> Observable<T>.subscribeNormal(
     t.cycle.addObserver(observer)
     this.subscribe(observer)
 }
-
-fun <T : Any> Observable<T>.subscribeNormal(
-    t: ViewModel<*, *>,
-    onNext: (T) -> Unit = {},
-    onError: (Throwable) -> Unit = { toast(it) },
-    onComplete: () -> Unit = {},
-    onSubscribe: (Disposable) -> Unit = {}
-) {
-    val observer = NormalObserver(onNext, onError, onComplete, onSubscribe)
-    t.t.cycle.addObserver(observer)
-    if (t.disposable == null || t.disposable?.isDisposed!!) {
-        this.subscribe(observer)
-        t.disposable = observer.disposable.get()
-    }
-}
+//
+//fun <T : Any> Observable<T>.subscribeNormal(
+//    t: ViewModel<*, *>,
+//    onNext: (T) -> Unit = {},
+//    onError: (Throwable) -> Unit = { toast(it) },
+//    onComplete: () -> Unit = {},
+//    onSubscribe: (Disposable) -> Unit = {}
+//) {
+//    val observer = NormalObserver(onNext, onError, onComplete, onSubscribe)
+//    t.t.cycle.addObserver(observer)
+//    if (t.disposable == null || t.disposable?.isDisposed!!) {
+//        this.subscribe(observer)
+//        t.disposable = observer.disposable.get()
+//    }
+//}
 
 //-------------Flowable---------------
 fun <T> Flowable<T>.subscribeNormal(
@@ -210,22 +224,41 @@ fun <T> Single<T>.subscribeNormal(
     this.subscribe(observer)
 }
 
-
-fun <T : Any> Single<T>.subscribeNormal(
-    t: ViewModel<*, *>,
+fun <T> Single<T>.subscribeNormal(
+    v: View,
+    lifecycle: Lifecycle = viewLifeCycle(v),
     onNext: (T) -> Unit = {},
     onError: (Throwable) -> Unit = { toast(it) },
-    onComplete: () -> Unit = {},
-    onSubscribe: (Disposable) -> Unit = {}
-) :Boolean{
+    onComplete: () -> Unit = { v.isEnabled = true },
+    onSubscribe: (Disposable) -> Unit = { v.isEnabled = false }
+) {
     val observer = NormalObserver(onNext, onError, onComplete, onSubscribe)
-    t.t.cycle.addObserver(observer)
-    return if (t.disposable == null || t.disposable?.isDisposed!!) {
-        this.subscribe(observer)
-        t.disposable = observer.disposable.get()
-        true
-    }else false
+    lifecycle.addObserver(observer)
+    this.subscribe(observer)
 }
+
+fun viewLifeCycle(view: View): Lifecycle {
+    val context = view.context
+    if (context is AppCompatActivity) return context.lifecycle
+    else throw ApiException("当前的context不属于AppCompatActivity")
+}
+
+
+//fun <T : Any> Single<T>.subscribeNormal(
+//    t: ViewModel<*, *>,
+//    onNext: (T) -> Unit = {},
+//    onError: (Throwable) -> Unit = { toast(it) },
+//    onComplete: () -> Unit = {},
+//    onSubscribe: (Disposable) -> Unit = {}
+//): Boolean {
+//    val observer = NormalObserver(onNext, onError, onComplete, onSubscribe)
+//    t.t.cycle.addObserver(observer)
+//    return if (t.disposable == null || t.disposable?.isDisposed!!) {
+//        this.subscribe(observer)
+//        t.disposable = observer.disposable.get()
+//        true
+//    } else false
+//}
 
 
 fun toast(e: Throwable) {
@@ -372,5 +405,122 @@ fun h(text: String, color: String = "", big: Int = 0, line: Boolean = false): Te
     return Text(text, color, big, line)
 }
 
+inline fun <reified E : Entity<*, out ViewDataBinding>> Any.toEntity(vararg arrayOfAny:Any?): E {
+    val list:ArrayList<Any?> = arrayListOf(this)
+    list.addAll(arrayOfAny)
+    E::class.constructors.forEach {
+        if (it.parameters.size == list.size) {
+            return it.call(list.toArray())
+        }
+    }
+    throw ApiException("check ${E::class.simpleName} class's constructor")
+}
 
+inline fun <reified E:Entity<*,out ViewDataBinding>> List<Any>.toEntity(vararg arrayOfAny:Any?):List<E>{
+    val list = ArrayList<E>()
+    for (any in this) {
+        list.add(any.toEntity(arrayOfAny))
+    }
+    return list
+}
 
+//CoroutineScope
+//
+//@JvmOverloads
+//@UseExperimental(ExperimentalTypeInference::class, ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
+//fun <E> rxPublisher(
+//    context: CoroutineContext = kotlin.coroutines.EmptyCoroutineContext,
+//    capacity: Int = Channel.RENDEZVOUS,
+//    @BuilderInference block: suspend ProducerScope<E>.() -> Unit
+//): Publisher<E> =
+//    Publisher { subscriber ->
+//        if (subscriber == null) throw NullPointerException("Subscriber cannot be null")
+//        val rxPublisherCoroutine = Rx2PublisherCoroutine(subscriber, context, capacity)
+//        subscriber.onSubscribe(rxPublisherCoroutine)
+//        rxPublisherCoroutine.start(block)
+//    }
+//
+//private class Rx2PublisherCoroutine<E>(val subscriber: Subscriber<E>, context: CoroutineContext, val capacity: Int) : Subscription, CoroutineScope by CoroutineScope(context), ProducerScope<E> {
+//
+//    private val mChannel = Channel<E>(capacity)
+//
+//    private val mutex = Mutex(locked = true)
+//
+//    fun start(block: suspend ProducerScope<E>.() -> Unit) {
+//        launch {
+//            mChannel.consumeEach { elem ->
+//                try {
+//                    if (capacity != Channel.RENDEZVOUS) {
+//                        mutex.lock()
+//                    }
+//                    subscriber.onNext(elem)
+//                } catch (e: Throwable) {
+//                    dispose(e)
+//                    throw e //rethrow
+//                }
+//            }
+//        }
+//
+//        launch {
+//            block()
+//        }
+//    }
+//
+//    fun dispose(cause: Throwable?) {
+//        try {
+//            cancel(if (cause is CancellationException) cause else null) // CoroutineScope.cancel
+//            close(cause) // this.close
+//            if (cause != null && cause !is CancellationException) {
+//                subscriber.onError(cause)
+//            } else {
+//                subscriber.onComplete()
+//            }
+//        } finally {
+//            mutex.unlock()
+//        }
+//    }
+//
+//
+//    override val channel: SendChannel<E>
+//        get() = mChannel
+//
+//    @ExperimentalCoroutinesApi
+//    override val isClosedForSend: Boolean
+//        get() = channel.isClosedForSend
+//
+//    @ExperimentalCoroutinesApi
+//    override val isFull: Boolean
+//        get() = mutex.isLocked
+//
+//    override val onSend: SelectClause2<E, SendChannel<E>>
+//        get() = channel.onSend
+//
+//    override fun close(cause: Throwable?): Boolean {
+//        return channel.close()
+//    }
+//
+//    @ExperimentalCoroutinesApi
+//    override fun invokeOnClose(handler: (cause: Throwable?) -> Unit) {
+//        return channel.invokeOnClose(handler)
+//    }
+//
+//    override fun offer(element: E): Boolean {
+//        if (capacity == Channel.RENDEZVOUS && !mutex.tryLock()) return false
+//        return channel.offer(element)
+//    }
+//
+//    override suspend fun send(element: E) {
+//        if (capacity == Channel.RENDEZVOUS) {
+//            mutex.lock()
+//        }
+//        channel.send(element)
+//    }
+//
+//    override fun cancel() {
+//        dispose(null)
+//    }
+//
+//    override fun request(n: Long) {
+//        mutex.unlock()
+//    }
+//}

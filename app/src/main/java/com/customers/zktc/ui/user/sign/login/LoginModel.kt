@@ -33,45 +33,44 @@ class LoginModel @Inject constructor() : ViewModel<LoginFragment, FragmentLoginB
     }
 
     private fun bindingParams(t: LoginFragment) {
-        t.arguments?.getParcelable<SignParams>(Constant.params)?.let { binding?.params = it }
-//        rxBus<SignEvent>(t).subscribeNormal(this, { binding?.params = it.signParams })
-        receiveSignEvent().subscribeNormal(this)
+        t.arguments?.getParcelable<SignParams>(Constant.params)?.let { binding.params = it }
+//        rxBus<SignEvent>(t).subscribeNormal(this, { binding.params = it.signParams })
+        receiveSignEvent().subscribeNormal(t)
     }
 
     fun onPhoneFinish(s: Editable) {
         enablePhone.set(getPhoneError(s.toString()) == null)
-        binding?.inputEditMobile?.error = getPhoneError(s.toString())
+        binding.inputEditMobile.error = getPhoneError(s.toString())
     }
 
     fun onPasswordFinish(s: Editable) {
         enablePassword.set(getPasswordError(s.toString()) == null)
-        binding?.inputEditPassword?.error = getPasswordError(s.toString())
+        binding.inputEditPassword.error = getPasswordError(s.toString())
     }
 
     fun onForgetClick(v: View) {
-        signEvent(forget, binding!!.params!!)
+        signEvent(forget, binding.params!!)
     }
 
     fun onWechatClick(v: View) {
-        api.wechatLogin(binding!!.params!!)
-            .subscribeNormal(t,{
-
+        api.wechatLogin(binding.params!!)
+            .subscribeNormal(v,t.lifecycle,{
         })
     }
 
     fun onLoginClick(v: View) {
-        api.passwordLogin(binding!!.params!!)
-            .subscribeNormal(t,{
+        api.passwordLogin(binding.params!!)
+            .subscribeNormal(v,t.lifecycle,{
                 loginEvent(true,it)
                 finish()})
     }
 
     fun onCodeClick(v: View) {
-        signEvent(signCode, binding!!.params!!)
+        signEvent(signCode, binding.params!!)
     }
 
     fun onRegisterClick(v: View) {
-        signEvent(register, binding!!.params!!)
+        signEvent(register, binding.params!!)
     }
 
 }

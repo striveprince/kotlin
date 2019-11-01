@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import com.alibaba.android.arouter.launcher.ARouter
 
 abstract class DataBindingFragment <T>: Fragment(),CycleContainer<T>{
     override val cycle = lifecycle
@@ -17,6 +18,7 @@ abstract class DataBindingFragment <T>: Fragment(),CycleContainer<T>{
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        ARouter.getInstance().inject(this)
         val rootView = inject(savedInstanceState,container,false)
         return  initView(rootView)
     }

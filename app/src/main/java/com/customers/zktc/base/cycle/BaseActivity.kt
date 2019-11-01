@@ -7,7 +7,6 @@ import com.binding.model.base.container.DataBindingActivity
 import com.binding.model.inflate.model.ViewModel
 import com.customers.zktc.inject.component.ActivityComponent
 import com.customers.zktc.inject.component.DaggerActivityComponent
-import com.customers.zktc.inject.component.FragmentComponent
 import com.customers.zktc.inject.module.ActivityModule
 import com.customers.zktc.ui.ZktcApplication
 import javax.inject.Inject
@@ -26,4 +25,13 @@ abstract class BaseActivity<VM : ViewModel<*, *>> : DataBindingActivity<Activity
         get() =  DaggerActivityComponent.builder()
             .activityModule(ActivityModule(this))
             .appComponent(ZktcApplication.component).build()
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(vm.onSaveInstanceState(outState))
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        vm.onRestoreInstanceState(savedInstanceState)
+    }
 }
