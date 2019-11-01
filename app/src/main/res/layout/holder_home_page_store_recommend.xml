@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="vm"
+            type="com.customers.zktc.ui.home.page.HomeGoodsRecommendListEntity" />
+        <variable
+            name="bean"
+            type="com.customers.zktc.inject.data.net.bean.HomeGoodsRecommendListBean" />
+    </data>
+    <ImageView
+        android:layout_margin="10dp"
+        android:id="@+id/image"
+        android:contentDescription="@{bean.goodsName}"
+        android:src="@{bean.goodsImg}"
+        android:onClick="@{vm::onRouteClick}"
+        app:radius="@{vm.radius}"
+        android:layout_width="110dp"
+        android:layout_height="110dp"/>
+</layout>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="vm"
+            type="com.customers.zktc.ui.home.page.StoreInfoEntity" />
+        <variable
+            name="bean"
+            type="com.customers.zktc.inject.data.net.bean.StoreInfoBean" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{bean.storeName}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|end"
+            android:text="@string/hot"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView">
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                app:addInflates="@{vm.recommendGoodsList}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.customers.zktc.ui.home.page.HomeFloorTypeEntity" />
+        <variable
+            name="bean"
+            type="com.customers.zktc.inject.data.net.bean.HomeFloorTypeBean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/home_page_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:contentDescription="@{bean.floorName}">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/floor_picture"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="1dp"
+            android:contentDescription="@{bean.floorName}"
+            android:onClick="@{vm::onRouteClick}"
+            android:scaleType="centerInside"
+            app:srcCompat="@{bean.floorPicture}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:radius="@{vm.radius}" />
+<!--            app:layout_constraintDimensionRatio="32:32"-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

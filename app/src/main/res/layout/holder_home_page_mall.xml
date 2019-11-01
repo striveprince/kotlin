@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.customers.zktc.ui.home.page.HomeMallEntity" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/rectangle_floor_title"
+            android:drawableLeft="@drawable/rectangle_floor_title"
+            android:drawablePadding="15dp"
+            android:gravity="start|center"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:text="@string/sack_goods"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hot"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:addInflates="@{vm.list}"/>
+        </HorizontalScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

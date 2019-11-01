@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="vm"
+            type="com.customers.zktc.ui.home.page.HomePageOperationEntity" />
+        <variable
+            name="bean"
+            type="com.customers.zktc.inject.data.net.bean.HomePageOperationBean" />
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:onClick="@{vm::onRouteClick}"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_margin="10dp"
+            android:src="@{bean.picture}"
+            app:radius="@{vm.radius}"
+            android:layout_width="100dp"
+            android:layout_height="100dp"/>
+        <TextView
+            android:text="@{bean.name,default=xswl}"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_gravity="center"
+            android:text="@{bean.viceName}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</layout>
