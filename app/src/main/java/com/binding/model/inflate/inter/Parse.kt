@@ -11,7 +11,6 @@ import com.binding.model.base.RxBus
 interface Parse<Binding>{
     val layoutView:LayoutView
     var layoutIndex:Int
-//    var binding:binding
 
     fun <E> setEventAdapter(iEventAdapter: IEventAdapter<E>):Boolean{
         return false
