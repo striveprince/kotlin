@@ -186,9 +186,6 @@ class HomeGoodsRecommendListEntity(recommendListBean: HomeGoodsRecommendListBean
     }
 }
 
-
-
-
 @LayoutView(layout = [R.layout.holder_home_page_marketing_title, R.layout.holder_home_page_recommend_title])
 class HomePageTitle(layoutIndex: Int=0) : HomePageInflate<ViewDataBinding>,ViewInflate<ViewDataBinding>() {
     init { this.layoutIndex = layoutIndex }
@@ -229,7 +226,6 @@ data class HomeAssembleEntity(val goodsVos: List<HomeGoodVosEntity>) :
         binding.viewPager.adapter = adapter
     }
 }
-
 
 @LayoutView(layout = [R.layout.holder_home_page_recommend])
 class HomeGoodsRecommendEntity(

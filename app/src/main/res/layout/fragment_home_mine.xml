@@ -7,6 +7,10 @@
         <variable
             name="vm"
             type="com.customers.zktc.ui.home.mine.HomeMineModel" />
+        
+        <variable
+            name="bean"
+            type="com.customers.zktc.inject.data.preference.user.UserEntity" />
     </data>
 
     <LinearLayout
@@ -18,13 +22,26 @@
             android:layout_width="match_parent"
             android:layout_height="189dp">
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
+                android:contentDescription="@string/empty"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/oval_home_mine_top" />
+
+            <ImageView
+                android:contentDescription="@string/head_portrait"
+                android:src="@{bean.customerImg}"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

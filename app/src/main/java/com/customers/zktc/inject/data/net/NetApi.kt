@@ -68,7 +68,7 @@ class NetApi(private val httpApi: HttpApi) {
             .concatMapIterable { it.goodsVos }
             .map { HomeGoodVosEntity(it) }
             .toList().toObservable()
-            .map { HomeAssembleEntity(it) }
+            .map { convertHomeAssemble(it) }
         val homeGoodRecommend = getRecommend(offset, pageCount)
             .toObservable()
             .concatMap { Observable.fromIterable(converterGoodsRecommends(it)) }
@@ -95,12 +95,18 @@ class NetApi(private val httpApi: HttpApi) {
             }
     }
 
+    private fun convertHomeAssemble(it: List<HomeGoodVosEntity>): HomePageInflate<*> {
+        if(it.isEmpty())throw ApiException()
+        return HomeAssembleEntity(it)
+    }
+
     private fun getRecommendGoodsList(i: Int): Observable<HomePageInflate<*>> =
         httpApi.getRecommendGoodsList(HomeGoodsRecommend(i)).restful()
             .map { convertStoreRecommend(it) }
             .toObservable()
 
     private fun convertStoreRecommend(it: HomePageRecommendData): HomePageInflate<*> {
+        if (it.recommendGoodsList.isEmpty()) throw ApiException()
         val list = ArrayList<HomeGoodsRecommendListEntity>()
         for (homeGoodsRecommendListBean in it.recommendGoodsList)
             list.add(HomeGoodsRecommendListEntity(homeGoodsRecommendListBean))
@@ -120,15 +126,9 @@ class NetApi(private val httpApi: HttpApi) {
 
     fun getRecommend(offset: Int, pageCount: Int): Single<List<HomePageInflate<*>>> =
         httpApi.homeGoodRecommend(
-            HomeRecommendParams(
-                "goods_home_index_1",
-                offset,
-                offset,
-                pageCount
-            )
+            HomeRecommendParams("goods_home_index_1", offset, offset, pageCount)
         )
-            .restful()
-            .toObservable()
+            .restful().toObservable()
             .concatMap { Observable.fromIterable(it.goodsRecommends) }
             .map { HomeGoodsRecommendEntity(it) as HomePageInflate<*> }
             .toList()
@@ -268,7 +268,7 @@ class NetApi(private val httpApi: HttpApi) {
     fun register(signParams: SignParams) = httpApi.register(signParams)
         .restful()
 
-    fun shoppingCartList()=httpApi.shoppingCartList(HomeShoppingParams())
+    fun shoppingCartList() = httpApi.shoppingCartList(HomeShoppingParams())
         .restful()
         .map { it.storeList.toEntity<HomeCartStoreEntity>() }
 }
