@@ -24,9 +24,6 @@ class StartupModel @Inject constructor() : ViewModel<StartupActivity, ActivitySt
                 checkPermission(t, Manifest.permission.READ_PHONE_STATE)
                     .subscribeNormal(t,{
                         SettingApi.deviceId = Settings.Secure.getString(t.contentResolver,Settings.Secure.ANDROID_ID)!!
-                        //                        val tm = t.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-                        //                        SettingApi.deviceId = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) tm.imei
-                        //                            else tm.deviceId
                         ARouterUtil.start()
                         finish()
                     })
@@ -35,5 +32,4 @@ class StartupModel @Inject constructor() : ViewModel<StartupActivity, ActivitySt
             finish()
         }
     }
-
 }

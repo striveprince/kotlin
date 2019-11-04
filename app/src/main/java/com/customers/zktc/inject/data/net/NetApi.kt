@@ -4,7 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import com.binding.model.createWholeDir
 import com.binding.model.ioToMainThread
-import com.binding.model.toEntity
+import com.binding.model.toEntities
 import com.customers.zktc.R
 import com.customers.zktc.base.util.noError
 import com.customers.zktc.base.util.restful
@@ -270,11 +270,12 @@ class NetApi(private val httpApi: HttpApi) {
 
     fun shoppingCartList() = httpApi.shoppingCartList(HomeShoppingParams())
         .restful()
-        .map { it.storeList.toEntity<HomeCartStoreEntity>() }
+        .map { it.storeList.toEntities<HomeCartStoreEntity>() }
 
     fun getUnReadMessage()= httpApi.getUnReadMessage(HomeRushListParams())
             .restful()
 
     fun rank()=httpApi.rank(HomeRushListParams()).restful()
+
     fun getCustomerIndexInfo()=httpApi.getCustomerIndexInfo(HomeRushListParams()).restful()
 }

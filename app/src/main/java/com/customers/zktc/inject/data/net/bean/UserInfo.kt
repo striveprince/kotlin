@@ -1,5 +1,7 @@
 package com.customers.zktc.inject.data.net.bean
 
+import kotlinx.serialization.Serializable
+
 /**
  * Company: 中科同创
  * Description:
@@ -7,17 +9,19 @@ package com.customers.zktc.inject.data.net.bean
  * Email: 1033144294@qq.com
  */
 
+@Serializable
 data class RankBean(
     val availableCommission: Int,
     val commission: Int,
     val commonTotal: Int,
     val depositAmount: Int,
-    val distributionOrderAmount: Any,
+    val distributionOrderAmount: String?,
     val distributionOrderTotal: Int,
     val proposedCommission: Int,
     val vipTotal: Int
 )
 
+@Serializable
 data class CustomerIndexBean(
     val authenticate: Boolean,
     val backMsgCount: Int,
@@ -33,8 +37,11 @@ data class CustomerIndexBean(
     val pointBalance: Int,
     val promotionCode: String,
     val virtualStatus: Int,
-    val virtualStoreInfo: Any,
+    val virtualStoreInfo: String?,
     val waitPayMsgCount: Int,
     val waitReceiveMsgCount: Int,
     val waitSendMsgCount: Int
-)
+){
+    private fun countToString(it: Int) = if (it == 0) "" else it.toString()
+
+}

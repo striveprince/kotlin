@@ -1,15 +1,10 @@
 package com.customers.zktc.ui
 
-import android.annotation.SuppressLint
-import android.os.Parcelable
 import com.binding.model.busPost
 import com.binding.model.rxBus
-import com.customers.zktc.base.util.md5
-import com.customers.zktc.inject.data.net.converter.ApiParams
 import com.customers.zktc.inject.data.preference.user.UserEntity
 import com.customers.zktc.ui.user.sign.SignParams
 import io.reactivex.Observable
-import kotlinx.android.parcel.Parcelize
 
 /**
  * Company: 中科同创
@@ -34,8 +29,7 @@ fun receiveSignEvent(): Observable<SignEvent> {
 }
 
 
-class LoginEvent(val login: Boolean, val userEntity: UserEntity)
-
+data class LoginEvent(val login: Boolean, val userEntity: UserEntity)
 fun loginEvent(boolean: Boolean,userEntity: UserEntity){
     busPost(LoginEvent(boolean, userEntity))
 }
@@ -43,3 +37,7 @@ fun loginEvent(boolean: Boolean,userEntity: UserEntity){
 fun receiveLoginEvent(): Observable<LoginEvent>{
     return rxBus()
 }
+
+
+//data class
+

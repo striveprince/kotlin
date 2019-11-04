@@ -11,6 +11,10 @@
         <variable
             name="bean"
             type="com.customers.zktc.inject.data.preference.user.UserEntity" />
+
+        <variable
+            name="indexBean"
+            type="com.customers.zktc.inject.data.net.bean.CustomerIndexBean" />
         <import type="com.customers.zktc.inject.data.preference.user.UserApi"/>
     </data>
 

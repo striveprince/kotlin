@@ -3,7 +3,6 @@ package com.customers.zktc.ui.home.mine
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.ObservableField
-import androidx.databinding.ObservableInt
 import com.binding.model.annoation.LayoutView
 import com.binding.model.inflate.model.ViewModel
 import com.binding.model.subscribeNormal
@@ -38,9 +37,9 @@ class HomeMineModel @Inject constructor() : ViewModel<HomeMineFragment, Fragment
                 }
                 messageCount.set(messageCountToString(it))
             })
-            name.set(binding.bean?.customerNickname)
-            api.rank().subscribeNormal({})//好友数据
-            api.getCustomerIndexInfo().subscribeNormal({})//待发货
+            name.set(binding.bean!!.customerNickname)
+            api.rank().subscribeNormal({})//好友等数据
+            api.getCustomerIndexInfo().subscribeNormal({binding.indexBean = it})//待发货
         }else{
             name.set(R.string.login_and_register.string())
         }

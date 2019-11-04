@@ -1,6 +1,7 @@
 package com.customers.zktc.inject.module
 
 import android.content.Context
+import cn.jpush.android.api.JPushInterface
 import com.customers.zktc.BuildConfig
 import com.customers.zktc.inject.data.Api
 import com.customers.zktc.inject.data.database.DatabaseApi
@@ -55,19 +56,6 @@ class DataModule {
         return httpClientBuilder.build()
     }
 
-//    @Provides
-//    @ApplicationScope
-//    internal fun provideOssClient(@AppContext context: Context,netApi: HttpApi): OSSClient {
-//        val credentialProvider1 = OssSignCredentialProvider(netApi)
-//        val conf = ClientConfiguration()
-//        conf.connectionTimeout = 15 * 1000
-//        conf.socketTimeout = 15 * 1000
-//        conf.maxConcurrentRequest = 5
-//        conf.maxErrorRetry = 2
-//        return OSSClient(context, BuildConfig.endpoint, credentialProvider1)
-//    }
-
-
     @Provides
     @ApplicationScope
     internal fun provideDataBaseApi():DatabaseApi{
@@ -95,13 +83,9 @@ class DataModule {
     @Provides
     @ApplicationScope
     internal  fun provideApi(@AppContext context: Context, httpApi: HttpApi, databaseApi:DatabaseApi, mapApi:MapApi, ossApi: OssApi, preferenceApi: PreferenceApi):Api{
+        JPushInterface.init(context)
+        JPushInterface.setDebugMode(BuildConfig.DEBUG)
         return Api(context,NetApi(httpApi),databaseApi,mapApi,ossApi,preferenceApi)
     }
-
-//    @Provides
-//    @ApplicationScope
-//    internal  fun provideJpushClient(){
-//
-//    }
 
 }

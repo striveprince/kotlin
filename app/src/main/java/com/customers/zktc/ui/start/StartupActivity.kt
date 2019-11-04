@@ -8,6 +8,7 @@ import com.binding.model.busPost
 import com.binding.model.rxBus
 import com.binding.model.subscribeNormal
 import com.binding.model.toast
+import com.customers.zktc.R
 import com.customers.zktc.base.cycle.BaseActivity
 import com.customers.zktc.inject.component.ActivityComponent
 import com.customers.zktc.inject.component.AppComponent
@@ -25,13 +26,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 class StartupActivity : BaseActivity<StartupModel>() {
     companion object { const val startup = ActivityComponent.Config.zktc + "startup" }
     override fun initView(savedInstanceState: Bundle?) {
+        setContentView(R.layout.activity_startup)
         if (ZktcApplication.component == null) {
             rxBus<AppComponent>()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeNormal({
-                initView(savedInstanceState)
-            })
+                .subscribeNormal(this,{ initView(savedInstanceState) })
         } else super.initView(savedInstanceState)
     }
-
 }

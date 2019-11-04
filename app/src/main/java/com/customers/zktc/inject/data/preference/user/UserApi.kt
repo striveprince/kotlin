@@ -27,6 +27,7 @@ class UserApi private constructor(context: Context) {
     }
 
     private fun isLogin(token:String): Boolean {
+        UserApi.token = token
         login = !TextUtils.isEmpty(token)
         return login
     }
@@ -48,7 +49,7 @@ class UserApi private constructor(context: Context) {
     }
 
     companion object {
-        var token = ""
+        var token: String=""
         var isLogin = false
         private var userApi: UserApi? = null
         fun getInstance(context: Context): UserApi {

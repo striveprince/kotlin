@@ -11,7 +11,7 @@ kapt {
     generateStubs = true
 }
 
-kotlin{
+kotlin {
     experimental.coroutines 'enable'
 }
 
@@ -29,6 +29,15 @@ android {
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        ndk {
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a','x86'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+        }
+        manifestPlaceholders = [
+                JPUSH_PKGNAME : applicationId,
+                JPUSH_APPKEY : "da6b58534ababa0f78a6ff83", //JPush 上注册的包名对应的 Appkey.
+                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+        ]
     }
     androidExtensions {
         experimental = true
@@ -56,7 +65,10 @@ android {
                     GETUI_APP_ID    : "dcOVqxK8Et794QXmNwvW74",
                     GETUI_APP_KEY   : "Gcf6PfMCCgALhTs6XBMkI9",
                     GETUI_APP_SECRET: "7xxRkwX1vH8XvdlLHyPTMA",
-                    ampkey          : "24502a29f5bb1d0a17281a24a77b0a55"
+                    ampkey          : "24502a29f5bb1d0a17281a24a77b0a55",
+                    JPUSH_APPKEY    : "da6b58534ababa0f78a6ff83",
+                    JPUSH_PKGNAME   : "com.customers.zktc.de1",
+                    JPUSH_CHANNEL : "developer-default"
             ]
         }
 
@@ -77,7 +89,10 @@ android {
                     GETUI_APP_ID    : "dcOVqxK8Et794QXmNwvW74",
                     GETUI_APP_KEY   : "Gcf6PfMCCgALhTs6XBMkI9",
                     GETUI_APP_SECRET: "7xxRkwX1vH8XvdlLHyPTMA",
-                    ampkey          : "24502a29f5bb1d0a17281a24a77b0a55"
+                    ampkey          : "24502a29f5bb1d0a17281a24a77b0a55",
+                    JPUSH_APPKEY    : "da6b58534ababa0f78a6ff83",
+                    JPUSH_PKGNAME   : "com.customers.zktc",
+                    JPUSH_CHANNEL : "developer-default"
             ]
         }
 
@@ -98,7 +113,10 @@ android {
                     GETUI_APP_ID    : "pzdl1ky5PL9pi25VqZ8Zi4",
                     GETUI_APP_KEY   : "E1vdMuIuYW91xk3ZP1snk3",
                     GETUI_APP_SECRET: "mY4PPv8Yec7j7SDiJO0db3",
-                    ampkey          : "24502a29f5bb1d0a17281a24a77b0a55"
+                    ampkey          : "24502a29f5bb1d0a17281a24a77b0a55",
+                    JPUSH_APPKEY    : "da6b58534ababa0f78a6ff83",
+                    JPUSH_PKGNAME   : "com.customers.zktc",
+                    JPUSH_CHANNEL : "developer-default"
             ]
         }
     }
@@ -114,7 +132,6 @@ android {
         }
     }
 }
-
 
 
 dependencies {
@@ -149,8 +166,8 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit"
     implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
     implementation 'com.squareup.okhttp3:okhttp:3.14.2'
-    implementation  'com.scwang.smart:refresh-layout-kernel:2.0.0-alpha-1'
-    implementation  'com.scwang.smart:refresh-header-classics:2.0.0-alpha-1'
+    implementation 'com.scwang.smart:refresh-layout-kernel:2.0.0-alpha-1'
+    implementation 'com.scwang.smart:refresh-header-classics:2.0.0-alpha-1'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.alibaba:arouter-api:1.2.4'
@@ -161,7 +178,8 @@ dependencies {
     implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
     implementation 'com.aliyun.dpa:oss-android-sdk:2.9.2'
     implementation 'com.pgyersdk:sdk:3.0.2'
-
+    implementation 'cn.jiguang.sdk:jpush:3.3.9'
+    implementation 'cn.jiguang.sdk:jcore:2.1.6'
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.amap.api:location:4.7.2'
     implementation 'com.amap.api:map2d:5.2.0'

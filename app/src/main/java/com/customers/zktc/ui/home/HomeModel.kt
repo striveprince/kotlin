@@ -2,6 +2,7 @@ package com.customers.zktc.ui.home
 
 import android.os.Bundle
 import androidx.fragment.app.FragmentManager
+import cn.jpush.android.api.JPushInterface
 import com.binding.model.adapter.databinding.TabLayoutBindingAdapter
 import com.binding.model.annoation.LayoutView
 import com.binding.model.inflate.inter.Item

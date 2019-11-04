@@ -417,7 +417,7 @@ inline fun <reified E : Entity<*, out ViewDataBinding>> Any.toEntity(vararg arra
     throw ApiException("check ${E::class.simpleName} class's constructor")
 }
 
-inline fun <reified E:Entity<*,out ViewDataBinding>> List<Any>.toEntity(vararg arrayOfAny:Any?):List<E>{
+inline fun <reified E:Entity<*,out ViewDataBinding>> List<Any>.toEntities(vararg arrayOfAny:Any?):List<E>{
     val list = ArrayList<E>()
     for (any in this) {
         list.add(any.toEntity(arrayOfAny))
