@@ -1,7 +1,8 @@
+@file:Suppress("UNUSED_PARAMETER")
+
 package com.customers.zktc.ui.home.page
 
 import android.content.Context
-import android.renderscript.ScriptGroup
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
@@ -11,7 +12,6 @@ import androidx.lifecycle.OnLifecycleEvent
 import androidx.viewpager2.widget.ViewPager2
 import com.binding.model.App
 import com.binding.model.adapter.GridInflate
-import com.binding.model.adapter.IEventAdapter
 import com.binding.model.adapter.recycler.RecyclerAdapter
 import com.binding.model.adapter.recycler.RecyclerHolder
 import com.binding.model.annoation.LayoutView
@@ -27,7 +27,6 @@ import com.customers.zktc.R
 import com.customers.zktc.base.arouter.ARouterUtil
 import com.customers.zktc.databinding.*
 import com.customers.zktc.inject.data.net.bean.*
-import timber.log.Timber
 
 /**
  * Company: 中科同创
@@ -63,7 +62,6 @@ class HomePageBanner(var operationAds: List<HomePageOperationEntity>) :
         var result = 0
         for (operationAd in operationAds)
             result = 31 * result + operationAd.code()
-        Timber.i("result=$result")
         return result
     }
 

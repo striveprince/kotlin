@@ -14,8 +14,6 @@ interface Inflate<Binding : ViewDataBinding> : Parse<Binding> {
         return binding
     }
 
-    fun bindView(context: Context, viewGroup: ViewGroup?, binding: Binding) {}
-
     private fun bind(layoutId: Int, context: Context, viewGroup: ViewGroup?, attachToParent: Boolean, binding1: Binding?): Binding {
         var b = binding1
         if(binding1 == null)b = DataBindingUtil.inflate(LayoutInflater.from(context), layoutId, viewGroup, attachToParent) as Binding
@@ -24,17 +22,20 @@ interface Inflate<Binding : ViewDataBinding> : Parse<Binding> {
         return b
     }
 
+    fun bindView(context: Context, viewGroup: ViewGroup?, binding: Binding) {}
+
     fun removeBinding() {}
 
     fun getViewId(): Int = 0
 
-    fun attachContainer(context: Context, container: ViewGroup, b: Boolean, any: Any?): Binding {
+    fun attachContainer(context: Context, container: ViewGroup, b: Boolean, any: Any?)=
         @Suppress("UNCHECKED_CAST")
-        return attachView(context,container,b,any as Binding?)
-    }
+         attachView(context,container,b,any as Binding?)
 
-    fun getLayoutId(): Int {
-//        Timber.i("class name=${this.javaClass.name},layoutView.size=${layoutView.layout.size},layoutIndex=${layoutIndex}")
-        return layoutView.layout[layoutIndex]
-    }
+//    fun getLayoutId(): Int {
+////        Timber.i("class name=${this.javaClass.name},layoutView.size=${layoutView.layout.size},layoutIndex=${layoutIndex}")
+//        return layoutView.layout[layoutIndex]
+//    }
+
+    fun getLayoutId()=layoutView.layout[layoutIndex]
 }

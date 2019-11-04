@@ -16,7 +16,7 @@ import com.customers.zktc.ui.user.sign.SignEntity
 class UserApi private constructor(context: Context) {
     private val sharePreferenceUtil: SharePreferenceUtil =
         SharePreferenceUtil.getUserInstance(context)
-    private val userEntity: UserEntity
+    internal val userEntity: UserEntity
     var login = isLogin
     init {
         userEntity = sharePreferenceUtil.getAllDto(UserEntity::class.java)

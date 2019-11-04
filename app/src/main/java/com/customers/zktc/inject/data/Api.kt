@@ -8,6 +8,7 @@ import com.customers.zktc.inject.data.map.MapApi
 import com.customers.zktc.inject.data.net.NetApi
 import com.customers.zktc.inject.data.oss.OssApi
 import com.customers.zktc.inject.data.preference.PreferenceApi
+import com.customers.zktc.inject.data.preference.user.UserEntity
 import com.customers.zktc.ui.home.page.*
 import com.customers.zktc.ui.user.sign.SignParams
 import io.reactivex.*
@@ -60,6 +61,7 @@ class Api(
             else -> Single.just(position) }
 
     fun shoppingCartList()=netApi.shoppingCartList()
+    fun userBean()=preferenceApi.userBean()
 
 
 }

@@ -39,4 +39,6 @@ class PreferenceApi(val context: Context) {
             .flatMap { Single.just(if (it.login) position else currentPosition) }
     }
 
+    fun userBean()=userApi.userEntity
+
 }
