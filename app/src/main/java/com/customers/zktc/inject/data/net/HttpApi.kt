@@ -73,5 +73,13 @@ interface HttpApi {
 
     @POST("/api/v2/shoppingcart/getShoppingCart")
     fun shoppingCartList(@Body homeShoppingParams: HomeShoppingParams):Single<InfoEntity<HomeShoppingData>>
-//    POST /{version}/shoppingcart/getShoppingCart
+
+    @POST("/api/v2/msg/getUnreadMsgCount")
+    fun getUnReadMessage(@Body params: HomeRushListParams): Single<InfoEntity<Int>>
+
+    @POST("/api/v2/customer/rank")
+    fun rank(@Body params: HomeRushListParams): Single<InfoEntity<RankBean>>
+
+    @POST("/api/v2/customer/getCustomerIndexInfo")
+    fun getCustomerIndexInfo(@Body params: HomeRushListParams): Single<InfoEntity<CustomerIndexBean>>
 }

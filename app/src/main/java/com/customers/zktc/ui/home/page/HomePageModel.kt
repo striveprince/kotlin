@@ -43,10 +43,6 @@ class HomePageModel @Inject constructor() :
         }
         initHttp()
         binding.recyclerView.itemAnimator =null// NoFlashItemAnimator()
-//        binding.recyclerView?.itemAnimator?.let {//经过测试还是会有闪烁
-//            if(it is SimpleItemAnimator)it.supportsChangeAnimations = false
-//            if(it is SimpleItemAnimator)it.changeDuration= 0
-//        }
         binding.recyclerView.addItemDecoration(HomePageDecoration())
         api.locationCity(t.dataActivity).subscribeNormal(t, { city.set(it) })
         binding.smartRefreshLayout.setOnMultiListener(object : SimpleMultiListener() {

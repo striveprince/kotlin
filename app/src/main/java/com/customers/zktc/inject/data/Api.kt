@@ -58,10 +58,17 @@ class Api(
     fun selectHomeTab(currentPosition: Int, position: Int, block: (Int) -> Unit) =
         when (position) {
             3 -> preferenceApi.selectHomeTab(currentPosition, position, block)
-            else -> Single.just(position) }
+            else -> Single.just(position)
+        }
 
-    fun shoppingCartList()=netApi.shoppingCartList()
-    fun userBean()=preferenceApi.userBean()
+    fun shoppingCartList() = netApi.shoppingCartList()
 
+    fun userBean(): UserEntity {
+        return preferenceApi.userBean()
+    }
+
+    fun getUnReadMessage() =netApi.getUnReadMessage()
+    fun rank()=netApi.rank()
+    fun getCustomerIndexInfo()=netApi.getCustomerIndexInfo()
 
 }

@@ -50,6 +50,7 @@
     <string name="release_to_refresh">松开刷新</string>
     <string name="empty" />
     <string name="head_portrait">头像</string>
+    <string name="login_and_register">登录/注册</string>
 </resources>
 <!--        <string name="add_bank_car_zhu">"注：-->
 <!--1、一卡通绑定，可同时用于支付和提现-->

@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Lifecycle
+import com.binding.model.App
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
 import com.customers.zktc.R
@@ -35,6 +36,11 @@ import java.util.regex.Pattern
  * Author: created by ArvinWang on 2019/10/11 11:09
  * Email: 1033144294@qq.com
  */
+
+
+fun Int.string(context: Context = App.activity()):String{
+    return context.getString(this)
+}
 
 
 fun checkPermissions(activity: Activity, vararg permissions: String): Boolean {

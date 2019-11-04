@@ -271,4 +271,10 @@ class NetApi(private val httpApi: HttpApi) {
     fun shoppingCartList() = httpApi.shoppingCartList(HomeShoppingParams())
         .restful()
         .map { it.storeList.toEntity<HomeCartStoreEntity>() }
+
+    fun getUnReadMessage()= httpApi.getUnReadMessage(HomeRushListParams())
+            .restful()
+
+    fun rank()=httpApi.rank(HomeRushListParams()).restful()
+    fun getCustomerIndexInfo()=httpApi.getCustomerIndexInfo(HomeRushListParams()).restful()
 }

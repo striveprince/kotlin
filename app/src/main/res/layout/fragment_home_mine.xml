@@ -11,6 +11,7 @@
         <variable
             name="bean"
             type="com.customers.zktc.inject.data.preference.user.UserEntity" />
+        <import type="com.customers.zktc.inject.data.preference.user.UserApi"/>
     </data>
 
     <LinearLayout
@@ -21,6 +22,14 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="189dp">
+
+            <View
+                android:id="@+id/view4"
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:contentDescription="@string/empty"
@@ -42,7 +51,20 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{vm.messageCount,default=10}"
+                android:layout_marginRight="20dp"
+                android:textColor="@android:color/white"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view4" />
+            <TextView
+                android:layout_width="match_parent"
+                android:text="@{vm.name}"
+                android:layout_height="wrap_content"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>

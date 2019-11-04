@@ -21,6 +21,8 @@ class PreferenceApi(val context: Context) {
         return userApi.login(it)
     }
 
+    fun isLogin()=userApi.login
+
     fun selectHomeTab(currentPosition: Int, position: Int, block: (Int) -> Unit): Single<Int> {
         return if (userApi.login) {
             Single.just(position)
