@@ -44,7 +44,7 @@ class HomePageModel @Inject constructor() :
         initHttp()
         binding.recyclerView.itemAnimator =null// NoFlashItemAnimator()
         binding.recyclerView.addItemDecoration(HomePageDecoration())
-        api.locationCity(t.dataActivity).subscribeNormal(t, { city.set(it) })
+        api.locationCity(t.dataActivity).subscribeNormal(t, { city.set(it) },{city.set("")})
         binding.smartRefreshLayout.setOnMultiListener(object : SimpleMultiListener() {
             override fun onRefresh(refreshLayout: RefreshLayout) {
                 super.onRefresh(refreshLayout)
