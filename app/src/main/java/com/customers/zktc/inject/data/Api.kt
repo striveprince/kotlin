@@ -70,5 +70,5 @@ class Api(
     fun getUnReadMessage() =netApi.getUnReadMessage()
     fun rank()=netApi.rank()
     fun getCustomerIndexInfo()=netApi.getCustomerIndexInfo()
-
+    fun logout() = Single.just(true).doOnSuccess { preferenceApi.logout() }
 }

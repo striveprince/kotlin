@@ -1,11 +1,14 @@
 package com.customers.zktc.inject.data.preference
 
 import android.content.Context
+import com.binding.model.busPost
 import com.binding.model.rxBus
+import com.customers.zktc.base.arouter.ARouterUtil
 import com.customers.zktc.inject.data.preference.setting.SettingApi
 import com.customers.zktc.inject.data.preference.user.UserApi
 import com.customers.zktc.inject.data.preference.user.UserEntity
 import com.customers.zktc.ui.LoginEvent
+import com.customers.zktc.ui.loginEvent
 import com.customers.zktc.ui.user.sign.SignEntity
 import io.reactivex.Observable
 import io.reactivex.Scheduler
@@ -42,5 +45,10 @@ class PreferenceApi(val context: Context) {
     }
 
     fun userBean()=userApi.userEntity
+
+    fun logout() {
+        userApi.logout()
+//        ARouterUtil.login()
+    }
 
 }

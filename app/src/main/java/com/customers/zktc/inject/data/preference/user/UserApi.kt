@@ -4,6 +4,8 @@ import android.app.Application
 import android.content.Context
 import android.text.TextUtils
 import com.customers.zktc.inject.data.preference.SharePreferenceUtil
+import com.customers.zktc.ui.LoginEvent
+import com.customers.zktc.ui.loginEvent
 import com.customers.zktc.ui.user.sign.SignEntity
 
 
@@ -36,6 +38,13 @@ class UserApi private constructor(context: Context) {
         sharePreferenceUtil.getAllDto(userEntity)
         isLogin = isLogin(userEntity.token)
         return userEntity
+    }
+
+    fun logout() {
+        sharePreferenceUtil.clear()
+        sharePreferenceUtil.getAllDto(userEntity)
+        isLogin = isLogin(userEntity.token)
+        loginEvent(false,userEntity)
     }
 
     companion object {

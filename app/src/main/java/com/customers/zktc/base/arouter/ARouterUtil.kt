@@ -2,12 +2,14 @@ package com.customers.zktc.base.arouter
 
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import com.alibaba.android.arouter.facade.Postcard
 import com.alibaba.android.arouter.launcher.ARouter
 import com.binding.model.Config
 import com.customers.zktc.R
 import com.customers.zktc.ui.Constant
 import com.customers.zktc.ui.home.HomeActivity
+import com.customers.zktc.ui.user.setting.SettingActivity
 import com.customers.zktc.ui.user.sign.SignActivity
 import com.customers.zktc.ui.user.sign.login.LoginFragment
 import timber.log.Timber
@@ -49,5 +51,9 @@ object ARouterUtil {
             .withTransition(R.anim.push_right_in,R.anim.push_left_out)
             .withString(Config.title,title)
             .navigation()
+    }
+
+    fun setting(view: View) {
+        ARouter.getInstance().build(SettingActivity.setting)
     }
 }

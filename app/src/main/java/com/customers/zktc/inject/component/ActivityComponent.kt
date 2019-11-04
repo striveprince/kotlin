@@ -5,6 +5,7 @@ import com.customers.zktc.inject.scope.ActivityScope
 import com.customers.zktc.ui.home.HomeActivity
 import com.customers.zktc.ui.mall.catagory.MallCategoryActivity
 import com.customers.zktc.ui.start.StartupActivity
+import com.customers.zktc.ui.user.setting.SettingActivity
 import com.customers.zktc.ui.user.sign.SignActivity
 import com.customers.zktc.ui.user.sign.login.LoginFragment
 import dagger.Component
@@ -18,5 +19,6 @@ interface ActivityComponent{
     fun inject(activity: StartupActivity)
     fun inject(activity: SignActivity)
     fun inject(activity: MallCategoryActivity)
+    fun inject(activity: SettingActivity)
 
 }

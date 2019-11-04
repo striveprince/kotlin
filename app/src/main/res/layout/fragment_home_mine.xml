@@ -32,25 +32,34 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:contentDescription="@string/empty"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:contentDescription="@string/empty"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/oval_home_mine_top" />
 
             <ImageView
-                android:contentDescription="@string/head_portrait"
-                android:src="@{bean.customerImg}"
+                android:id="@+id/imageView"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginLeft="20dp"
+                android:contentDescription="@string/head_portrait"
+                android:src="@{bean.customerImg}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageView
+                android:contentDescription="@string/setting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{vm::onSettingClick}"
+                android:padding="20dp"
+                android:src="@mipmap/icon_mine_settings"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view4" />
             <TextView
                 android:id="@+id/textView9"
                 android:layout_width="wrap_content"
@@ -61,10 +70,17 @@
                 android:layout_marginEnd="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view4" />
+
             <TextView
-                android:layout_width="match_parent"
-                android:text="@{vm.name}"
-                android:layout_height="wrap_content"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:text="@{vm.name,default=login}"
+                android:textColor="@android:color/white"
+                android:textSize="24sp"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintTop_toTopOf="@+id/imageView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>

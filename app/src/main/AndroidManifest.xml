@@ -49,6 +49,7 @@
         </activity>
         <activity android:name=".ui.user.sign.SignActivity" />
         <activity android:name=".ui.mall.catagory.MallCategoryActivity" android:label="@string/category" />
+        <activity android:name=".ui.user.setting.SettingActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
