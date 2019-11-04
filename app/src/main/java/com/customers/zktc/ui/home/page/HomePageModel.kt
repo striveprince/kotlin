@@ -95,5 +95,8 @@ class HomePageModel @Inject constructor() :
     fun onNoticeClick(v: View) {
     }
 
-    fun onLocationClick(v: View) {}
+    fun onLocationClick(v: View) {
+//        api.locationCity(t.dataActivity)
+//            .subscribeNormal(t, { city.set(it) },{city.set("")})
+    }
 }

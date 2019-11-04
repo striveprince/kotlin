@@ -80,5 +80,8 @@
                 <category android:name="${JPUSH_PKGNAME}" />
             </intent-filter>
         </receiver>
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="${mapkey}" />
     </application>
 </manifest>
