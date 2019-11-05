@@ -4,6 +4,7 @@ import androidx.multidex.MultiDexApplication
 import com.alibaba.android.arouter.launcher.ARouter
 import com.binding.model.App
 import com.binding.model.busPost
+import com.binding.model.subscribeNormal
 import com.customers.zktc.BR
 import com.customers.zktc.BuildConfig
 import com.customers.zktc.R
@@ -41,14 +42,14 @@ class ZktcApplication : MultiDexApplication() {
         }
         ARouter.init(this)
         App(this)
-        val subscribe = Single.just(this)
+        Single.just(this)
             .subscribeOn(Schedulers.newThread())
-            .subscribe { application ->
+            .subscribeNormal ({ application ->
                 component = DaggerAppComponent.builder()
                     .dataModule(DataModule())
                     .appModule(AppModule(application)).build()
                 component!!.inject(application)
                 busPost(component!!)
-            }
+            })
     }
 }

@@ -5,12 +5,15 @@ import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
 import android.view.View
 import android.widget.TextView
+import com.binding.model.adapter.EventEntity
 
 import com.binding.model.adapter.IEventAdapter
 
 import java.util.ArrayList
 
 import com.binding.model.inflate.obj.EventType.select
+import com.binding.model.subscribeNormal
+import io.reactivex.Single
 
 
 class SpannableSelectUtil<E : SpannableSelectRecycler<*>>(
@@ -75,12 +78,12 @@ class SpannableSelectUtil<E : SpannableSelectRecycler<*>>(
     }
 
 
-    override fun setEntity(position: Int, e: E, type: Int, view: View?): Boolean {
+    override fun setEntity(position: Int, e: E, type: Int, view: View?): Single<EventEntity<*>> {
         when (type) {
             select -> if (!interpolator.invoke(e) && select(e, !checkList.contains(e), isPush(e))) init()
-            else -> eventAdapter.setEntity(position, e, type, view)
+            else ->return eventAdapter.setEntity(position, e, type, view)
         }
-        return false
+        return Single.just(EventEntity<Any>(false))
     }
 
     /**

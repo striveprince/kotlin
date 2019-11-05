@@ -51,6 +51,7 @@
         <activity android:name=".ui.user.sign.SignActivity" />
         <activity android:name=".ui.mall.catagory.MallCategoryActivity" android:label="@string/category" />
         <activity android:name=".ui.user.setting.SettingActivity" />
+        <activity android:name=".ui.user.location.LocationActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

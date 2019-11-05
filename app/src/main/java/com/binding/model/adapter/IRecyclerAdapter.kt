@@ -23,23 +23,23 @@ interface IRecyclerAdapter<E : Inflate<*>> : IModelAdapter<E>, IEventAdapter<E> 
     fun moveToAdapter(position: Int, e: E): Boolean
 
     override fun setIEntity(position: Int, e: E, type: Int, view: View?): Boolean {
-        when(type){
-            add -> return addToAdapter(position,e)
-            set -> return setToAdapter(position,e)
-            remove -> return removeToAdapter(position,e)
-            move -> return moveToAdapter(position,e)
+        return when(type){
+            add -> addToAdapter(position,e)
+            set -> setToAdapter(position,e)
+            remove -> removeToAdapter(position,e)
+            move -> moveToAdapter(position,e)
+            else -> false
         }
-        return false
     }
 
     override fun setList(position: Int, es: List<E>, type: Int): Boolean {
-        when(type){
-            add -> return addListAdapter(position,es)
-            set -> return setListAdapter(position,es)
-            remove -> return removeListAdapter(position,es)
-            move -> return moveListAdapter(position,es)
-            refresh -> return refreshListAdapter(position, es)
+        return when(type){
+            add -> addListAdapter(position,es)
+            set -> setListAdapter(position,es)
+            remove -> removeListAdapter(position,es)
+            move -> moveListAdapter(position,es)
+            refresh -> refreshListAdapter(position, es)
+            else-> false
         }
-        return false
     }
 }

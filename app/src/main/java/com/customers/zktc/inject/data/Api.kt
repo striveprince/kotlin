@@ -3,6 +3,7 @@ package com.customers.zktc.inject.data
 import android.app.Activity
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
+import com.binding.model.inflate.inter.Inflate
 import com.customers.zktc.inject.data.database.DatabaseApi
 import com.customers.zktc.inject.data.map.MapApi
 import com.customers.zktc.inject.data.net.NetApi
@@ -71,4 +72,6 @@ class Api(
     fun rank()=netApi.rank()
     fun getCustomerIndexInfo()=netApi.getCustomerIndexInfo()
     fun logout() = Single.just(true).doOnSuccess { preferenceApi.logout() }
+    fun cities()=netApi.cities()
+    fun location(e: Inflate<*>) =Single.just(true)
 }

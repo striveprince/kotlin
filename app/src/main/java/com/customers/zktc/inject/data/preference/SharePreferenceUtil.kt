@@ -5,10 +5,7 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 
-import com.binding.model.Config
 import com.binding.model.ReflectUtil
-
-import java.lang.reflect.Field
 
 import timber.log.Timber
 
@@ -23,6 +20,7 @@ import timber.log.Timber
  *
  * @version 2.0
  */
+@Suppress("UNCHECKED_CAST")
 class SharePreferenceUtil private constructor(context: Context, name: String) {
     private val share: SharedPreferences
     private val editor: SharedPreferences.Editor
@@ -101,9 +99,9 @@ class SharePreferenceUtil private constructor(context: Context, name: String) {
         val clazz = t.javaClass
         val fields = clazz.declaredFields
         for (f in fields) {
-            val `object` = ReflectUtil.beanGetValue(f, t)
-            if (!ReflectUtil.isFieldNull(`object`))
-                putValue(f.name, `object`, false)
+            val obj = ReflectUtil.beanGetValue(f, t)
+            if (!ReflectUtil.isFieldNull(obj))
+                putValue(f.name, obj, false)
         }
         editor.commit()
     }

@@ -1,10 +1,8 @@
 package com.customers.zktc.inject.data.net.transform
 
-import com.binding.model.toast
 import com.customers.zktc.inject.data.net.exception.ApiException
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
-import io.reactivex.Single
 import io.reactivex.functions.Function
 
 /**
@@ -19,7 +17,7 @@ class NoErrorObservableTransformer <T> : ObservableTransformer<T, T> {
         return upstream
             .onErrorResumeNext(Function{
                 if(it is ApiException){
-                    toast(it)
+                    it.printStackTrace()
                     Observable.create{emitter->emitter.onComplete()}
                 }else Observable.error(it)
             })

@@ -22,25 +22,19 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
-import android.content.res.TypedArray
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.DisplayMetrics
 import android.util.TypedValue
-import android.view.Gravity
-import android.view.View
-import android.view.ViewConfiguration
-import android.view.ViewGroup
-import android.view.Window
-import android.view.WindowManager
+import android.view.*
 import android.widget.FrameLayout.LayoutParams
-
-import java.lang.reflect.Method
+import kotlin.math.min
 
 /**
  * Class to manage status and navigation bar tint effects when using KitKat
  * translucent system UI modes.
  */
+@Suppress("KDocUnresolvedReference")
 class SystemBarTintManager
 /**
  * Constructor. Call this in the host activity onCreate method after its
@@ -75,7 +69,7 @@ constructor(activity: Activity) {
      *
      * @param enabled True to enable tinting, false to disable it (default).
      */
-    var isStatusBarTintEnabled: Boolean = false
+    var isStatusBarTintEnabled = false
         set(enabled) {
             field = enabled
             if (mStatusBarAvailable) {
@@ -224,7 +218,7 @@ constructor(activity: Activity) {
      */
     fun setStatusBarTintDrawable(drawable: Drawable) {
         if (mStatusBarAvailable) {
-            mStatusBarTintView!!.setBackgroundDrawable(drawable)
+            mStatusBarTintView?.background = drawable
         }
     }
 
@@ -270,7 +264,7 @@ constructor(activity: Activity) {
      */
     fun setNavigationBarTintDrawable(drawable: Drawable) {
         if (mNavBarAvailable) {
-            mNavBarTintView!!.setBackgroundDrawable(drawable)
+            mNavBarTintView?.background = drawable
         }
     }
 
@@ -281,7 +275,8 @@ constructor(activity: Activity) {
      */
     @TargetApi(11)
     fun setNavigationBarAlpha(alpha: Float) {
-        if (mNavBarAvailable && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+//        if (mNavBarAvailable && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        if (mNavBarAvailable ) {
             mNavBarTintView!!.alpha = alpha
         }
     }
@@ -335,7 +330,7 @@ constructor(activity: Activity) {
          *
          * @return The height of the action bar (in pixels).
          */
-        val actionBarHeight: Int
+        private val actionBarHeight: Int
         private val mHasNavigationBar: Boolean
         /**
          * Get the height of the system navigation bar.
@@ -401,23 +396,18 @@ constructor(activity: Activity) {
 
         @TargetApi(14)
         private fun getActionBarHeight(context: Context): Int {
-            var result = 0
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                 val tv = TypedValue()
                 context.theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)
-                result = TypedValue.complexToDimensionPixelSize(
-                    tv.data,
-                    context.resources.displayMetrics
-                )
-            }
-            return result
+            //            }
+            return TypedValue.complexToDimensionPixelSize(tv.data, context.resources.displayMetrics)
         }
 
         @TargetApi(14)
         private fun getNavigationBarHeight(context: Context): Int {
             val res = context.resources
             val result = 0
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                 if (hasNavBar(context)) {
                     val key: String
                     if (mInPortrait) {
@@ -426,7 +416,7 @@ constructor(activity: Activity) {
                         key = NAV_BAR_HEIGHT_LANDSCAPE_RES_NAME
                     }
                     return getInternalDimensionSize(res, key)
-                }
+//                }
             }
             return result
         }
@@ -435,11 +425,11 @@ constructor(activity: Activity) {
         private fun getNavigationBarWidth(context: Context): Int {
             val res = context.resources
             val result = 0
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                 if (hasNavBar(context)) {
                     return getInternalDimensionSize(res, NAV_BAR_WIDTH_RES_NAME)
                 }
-            }
+//            }
             return result
         }
 
@@ -480,7 +470,7 @@ constructor(activity: Activity) {
             }
             val widthDp = metrics.widthPixels / metrics.density
             val heightDp = metrics.heightPixels / metrics.density
-            return Math.min(widthDp, heightDp)
+            return min(widthDp, heightDp)
         }
 
         /**
@@ -504,15 +494,16 @@ constructor(activity: Activity) {
 
         companion object {
 
-            private val STATUS_BAR_HEIGHT_RES_NAME = "status_bar_height"
-            private val NAV_BAR_HEIGHT_RES_NAME = "navigation_bar_height"
-            private val NAV_BAR_HEIGHT_LANDSCAPE_RES_NAME = "navigation_bar_height_landscape"
-            private val NAV_BAR_WIDTH_RES_NAME = "navigation_bar_width"
-            private val SHOW_NAV_BAR_RES_NAME = "config_showNavigationBar"
+            private const val STATUS_BAR_HEIGHT_RES_NAME = "status_bar_height"
+            private const val NAV_BAR_HEIGHT_RES_NAME = "navigation_bar_height"
+            private const val NAV_BAR_HEIGHT_LANDSCAPE_RES_NAME = "navigation_bar_height_landscape"
+            private const val NAV_BAR_WIDTH_RES_NAME = "navigation_bar_width"
+            private const val SHOW_NAV_BAR_RES_NAME = "config_showNavigationBar"
         }
 
     }
 
+    @SuppressLint("PrivateApi")
     companion object {
         private var sNavBarOverride: String? = null
 
@@ -537,7 +528,7 @@ constructor(activity: Activity) {
         /**
          * The default system bar tint color value.
          */
-        val DEFAULT_TINT_COLOR = -0x67000000
+        const val DEFAULT_TINT_COLOR = -0x67000000
 
     }
 

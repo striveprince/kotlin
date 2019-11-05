@@ -5,13 +5,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import com.binding.model.adapter.EventEntity
 import com.binding.model.adapter.IEventAdapter
 import com.binding.model.adapter.IModelAdapter
 import com.binding.model.adapter.IRecyclerAdapter
 import com.binding.model.containsList
 import com.binding.model.inflate.inter.Inflate
+import io.reactivex.Single
 
-open class RecyclerAdapter<E : Inflate<out ViewDataBinding>> : RecyclerView.Adapter<RecyclerHolder<E>>()
+open class RecyclerAdapter<E : Inflate<out ViewDataBinding>> :
+    RecyclerView.Adapter<RecyclerHolder<E>>()
     , IRecyclerAdapter<E> {
     private val sparseArray = SparseArray<E>()
     private val iEventAdapter by lazy { this }
@@ -35,9 +38,12 @@ open class RecyclerAdapter<E : Inflate<out ViewDataBinding>> : RecyclerView.Adap
         holder.executePendingBindings(e, iEventAdapter)
     }
 
-    override fun onBindViewHolder(holder: RecyclerHolder<E>, position: Int, payloads: MutableList<Any>) {
-//        if(payloads.isNotEmpty())
-            onBindViewHolder(holder, position)
+    override fun onBindViewHolder(
+        holder: RecyclerHolder<E>,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        onBindViewHolder(holder, position)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -58,19 +64,34 @@ open class RecyclerAdapter<E : Inflate<out ViewDataBinding>> : RecyclerView.Adap
         notifyItemRangeRemoved(0, size)
     }
 
-
-    override fun setEntity(position: Int, e: E, type: Int, view: View?): Boolean {
-        for (eventAdapter in eventAdapters) {
-            if (eventAdapter is IModelAdapter<*>) {
-                return setIEntity(position, e, type, view)
-            } else if (eventAdapter.setEntity(position, e, type, view)) return true
+    override fun setEntity(position: Int, e: E, type: Int, view: View?): Single<EventEntity<*>> {
+        for (eventAdapter in eventAdapters){
+            return if(eventAdapter is IModelAdapter<*>) Single.just(EventEntity<Any>(setIEntity(position, e, type, view)))
+            else eventAdapter.setEntity(position, e, type, view)
         }
-        return false
+        return  Single.just(EventEntity<Any>(setIEntity(position, e, type, view)))
+    }
+
+
+//    fun addEventAdapter(event: (Int, E, Int, View?) -> Single<Boolean>) {
+//        addEventAdapter(object : IEventAdapter<E> {
+//            override fun setEntity(position: Int, e: E, type: Int, view: View?): Single<EventEntity<Any>> {
+//                return event.invoke(position, e, type, view).map { EventEntity<Any>(it) }
+//            }
+//        })
+//    }
+    fun addEventAdapter(event: (Int, E, Int, View?) -> Single<EventEntity<*>>) {
+        addEventAdapter(object : IEventAdapter<E> {
+            override fun setEntity(position: Int, e: E, type: Int, view: View?): Single<EventEntity<*>> {
+                return event.invoke(position, e, type, view)
+            }
+        })
     }
 
     override fun addEventAdapter(eventAdapter: IEventAdapter<E>) {
         eventAdapters.add(0, eventAdapter)
     }
+
 
     override fun setListAdapter(position: Int, es: List<E>): Boolean {
         return when {
@@ -119,9 +140,10 @@ open class RecyclerAdapter<E : Inflate<out ViewDataBinding>> : RecyclerView.Adap
         return true
     }
 
-    fun addListAdapter(es: List<E>): Boolean {
-        return addListAdapter(0, es)
-    }
+//
+//    fun addListAdapter(es: List<E>): Boolean {
+//        return addListAdapter(0, es)
+//    }
 
     override fun refreshListAdapter(position: Int, es: List<E>): Boolean {
         if (position == holderList.size || holderList.isEmpty()) return addListAdapter(position, es)

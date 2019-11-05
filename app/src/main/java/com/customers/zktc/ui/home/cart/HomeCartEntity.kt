@@ -1,6 +1,7 @@
 package com.customers.zktc.ui.home.cart
 
 import androidx.databinding.ViewDataBinding
+import com.binding.model.adapter.IEventAdapter
 import com.binding.model.annoation.LayoutView
 import com.binding.model.inflate.ViewEntity
 import com.binding.model.toEntities
@@ -25,5 +26,10 @@ class HomeCartStoreEntity(homeCartStoreBean: HomeCartStoreBean):
 @LayoutView(layout=[R.layout.holder_home_cart_goods])
 class HomeCartGoodsEntity(bean: HomeCartGoodsBean):
     ViewEntity<HomeCartGoodsBean,ViewDataBinding>(bean){
+    lateinit var iEventAdapter: IEventAdapter<HomeCartGoodsEntity>
+    override fun <E> setEventAdapter(iEventAdapter: IEventAdapter<E>): Boolean {
+//        this.iEventAdapter = iEventAdapter as IEventAdapter<HomeCartGoodsEntity>
+        return false
+    }
 
 }

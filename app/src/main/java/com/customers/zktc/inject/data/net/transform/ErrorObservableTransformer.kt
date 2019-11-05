@@ -68,7 +68,6 @@ class ErrorObservableTransformer<T> : ObservableTransformer<T, T> {
                             logout -> emitter.onError(LogoutException(it.code, it.message))
                             authenticationException -> emitter.onError(AuthenticationException(it.code, it.message))
                             else -> emitter.onError(ApiException(it.code, it.message))
-
                         }
                     }
                 }

@@ -3,6 +3,7 @@ package com.customers.zktc.inject.data.net
 import android.app.Activity
 import android.app.AlertDialog
 import com.binding.model.createWholeDir
+import com.binding.model.inflate.inter.Inflate
 import com.binding.model.ioToMainThread
 import com.binding.model.toEntities
 import com.customers.zktc.R
@@ -278,4 +279,16 @@ class NetApi(private val httpApi: HttpApi) {
     fun rank()=httpApi.rank(HomeRushListParams()).restful()
 
     fun getCustomerIndexInfo()=httpApi.getCustomerIndexInfo(HomeRushListParams()).restful()
+    fun cities()=httpApi.cities().restful().map { converterLocation(it) }
+
+    private fun converterLocation(it: CityTitleBean): List<Inflate<*>>{
+        val list = ArrayList<Inflate<*>>()
+        for (cityTitleEntity in it.cityList) {
+            list.add(cityTitleEntity)
+            list.addAll(cityTitleEntity.list.toEntities())
+        }
+        return list
+    }
+
+    fun location()=httpApi.location().map{}
 }

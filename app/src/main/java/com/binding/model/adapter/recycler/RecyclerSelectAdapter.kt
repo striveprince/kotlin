@@ -35,7 +35,7 @@ constructor(private val max: Int = Int.MAX_VALUE) : RecyclerAdapter<E>() {
         return if (v != null) {
             if (holderList.isEmpty()) return false
             if (!containsList(p, holderList)) p = 0
-            var inE = holderList[p]
+            val inE = holderList[p]
             when (inE.getCheckType()) {
                 enable -> select(inE, !v.isEnabled, isPush(inE))
                 this.check -> if (v is Checkable) {
@@ -101,8 +101,7 @@ constructor(private val max: Int = Int.MAX_VALUE) : RecyclerAdapter<E>() {
             for (e in holderList) {
                 if (checkList.size < max) {
                     select(e, true, isPush(e))
-                } else
-                    break
+                } else break
             }
         } else
             for (i in checkList.indices.reversed()) {

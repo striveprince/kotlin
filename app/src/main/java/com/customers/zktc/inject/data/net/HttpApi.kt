@@ -8,7 +8,6 @@ import com.customers.zktc.ui.home.page.*
 import com.customers.zktc.ui.user.sign.SignParams
 import com.customers.zktc.ui.user.sign.CodeEntity
 import com.customers.zktc.ui.user.sign.SignEntity
-import io.reactivex.Observable
 import io.reactivex.Single
 import okhttp3.ResponseBody
 import retrofit2.http.*
@@ -82,4 +81,10 @@ interface HttpApi {
 
     @POST("/api/v2/customer/getCustomerIndexInfo")
     fun getCustomerIndexInfo(@Body params: HomeRushListParams): Single<InfoEntity<CustomerIndexBean>>
+
+    @POST("/api/v2/address/getGaoDeCityPositioning")
+    fun cities():Single<InfoEntity<CityTitleBean>>
+
+    @POST("/api/v2/address/")
+    fun location(): Single<InfoEntity<String>>
 }
