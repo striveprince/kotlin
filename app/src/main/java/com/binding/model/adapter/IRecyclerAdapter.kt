@@ -14,7 +14,7 @@ interface IRecyclerAdapter<E : Inflate<*>> : IModelAdapter<E>, IEventAdapter<E> 
 
     fun setListAdapter(position: Int, es: List<E>): Boolean=false
     fun removeListAdapter(position: Int, es: List<E>): Boolean=false
-    fun addListAdapter(position: Int=0, es: List<E>): Boolean=false
+    fun addListAdapter(position: Int, es: List<E>): Boolean=false
     fun refreshListAdapter(position: Int, es: List<E>): Boolean=false
     fun moveListAdapter(position: Int, es: List<E>): Boolean=false
 

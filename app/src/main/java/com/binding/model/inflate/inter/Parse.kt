@@ -12,8 +12,7 @@ interface Parse<Binding>{
     val layoutView:LayoutView
     var layoutIndex:Int
 
-    fun <E> setEventAdapter(iEventAdapter: IEventAdapter<E>):Boolean{
-        return false
+    fun <E> setEventAdapter(iEventAdapter: IEventAdapter<E>){
     }
 
     fun attachView(context: Context, viewGroup: ViewGroup?, attachToParent: Boolean, binding1: Binding?): Binding

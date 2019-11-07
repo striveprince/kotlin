@@ -1,7 +1,7 @@
 package com.binding.model.adapter
 
-import com.binding.model.annoation.HandleEve
+import com.binding.model.annoation.HandleEvent
 
 interface IListAdapter<E>{
-    fun setList(position: Int, es: List<E>, @HandleEve type: Int): Boolean
+    fun setList(position: Int, es: List<E>, @HandleEvent type: Int): Boolean
 }

@@ -12,18 +12,18 @@ import com.amap.api.services.geocoder.GeocodeResult
 import com.amap.api.services.geocoder.GeocodeSearch
 import com.amap.api.services.geocoder.RegeocodeQuery
 import com.amap.api.services.geocoder.RegeocodeResult
-import com.amap.api.services.nearby.NearbySearch
 import com.binding.model.toEntities
 import com.customers.zktc.base.util.checkLocationPermissionWithSetting
 import com.customers.zktc.inject.data.net.exception.ApiException
 import com.customers.zktc.ui.user.address.MapEntity
 import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
 class MapApi(val context: Context) {
     private val mLocationClient = AMapLocationClient(context)
     private val mLocationOption = AMapLocationClientOption()
-    private val search = NearbySearch.getInstance(context)
+//    private val search = NearbySearch.getInstance(context)
 
     init {
         mLocationOption.locationPurpose = AMapLocationClientOption.AMapLocationPurpose.SignIn
@@ -61,7 +61,7 @@ class MapApi(val context: Context) {
                             mLocationClient.unRegisterLocationListener(listener)
                         }
                     }
-                }
+                }. subscribeOn(Schedulers.newThread())
             }
     }
 
@@ -70,7 +70,6 @@ class MapApi(val context: Context) {
         return locationCurrent(activity)
             .map { LatLonPoint(it.latitude, it.longitude) }
             .flatMap { createCoderSearch(it,coderSearch,obj) }
-//            .map { it.toEntities<MapEntity>() }
     }
 
     private fun createCoderSearch(
@@ -86,7 +85,8 @@ class MapApi(val context: Context) {
                         val province = p.regeocodeAddress.province
                         val city = p.regeocodeAddress.city
                         val district= p.regeocodeAddress.district
-                        it.onNext(p.regeocodeAddress.pois.toEntities(province,city,district))
+                        val adCode= p.regeocodeAddress.adCode.toLong()
+                        it.onNext(p.regeocodeAddress.pois.toEntities(province,city,district,adCode))
                         it.onComplete()
                     }
                     override fun onGeocodeSearched(p0: GeocodeResult?, p1: Int) {}

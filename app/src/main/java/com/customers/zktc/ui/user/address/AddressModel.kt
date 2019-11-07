@@ -2,6 +2,7 @@ package com.customers.zktc.ui.user.address
 
 import android.os.Bundle
 import android.view.View
+import com.binding.model.adapter.IEventAdapter
 import com.binding.model.annoation.LayoutView
 import com.binding.model.base.rotate.TimeUtil
 import com.binding.model.inflate.model.ViewModel
@@ -28,7 +29,6 @@ class AddressModel @Inject constructor() : ViewModel<AddressActivity, ActivityAd
     override fun attachView(savedInstanceState: Bundle?, t: AddressActivity) {
         super.attachView(savedInstanceState, t)
         api.searchGeoCode(t){binding.autoComplete.setText(it)}
-            .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeNormal ({
                 val adapter =  FilterAdapter<MapEntity>()
@@ -37,6 +37,10 @@ class AddressModel @Inject constructor() : ViewModel<AddressActivity, ActivityAd
                 binding.autoComplete.showDropDown()
             })
         TimeUtil.handler.postDelayed({ binding.autoComplete.showDropDown() }, 100)
+    }
+
+    override fun <E> setEventAdapter(iEventAdapter: IEventAdapter<E>) {
+//        return super.setEventAdapter(iEventAdapter)
     }
 
     fun onLocationClick(v:View){

@@ -4,6 +4,7 @@ import androidx.databinding.ViewDataBinding
 import com.binding.model.adapter.IEventAdapter
 import com.binding.model.annoation.LayoutView
 import com.binding.model.inflate.ViewEntity
+import com.binding.model.subscribeNormal
 import com.binding.model.toEntities
 import com.customers.zktc.R
 import com.customers.zktc.inject.data.net.bean.HomeCartGoodsBean
@@ -27,9 +28,8 @@ class HomeCartStoreEntity(homeCartStoreBean: HomeCartStoreBean):
 class HomeCartGoodsEntity(bean: HomeCartGoodsBean):
     ViewEntity<HomeCartGoodsBean,ViewDataBinding>(bean){
     lateinit var iEventAdapter: IEventAdapter<HomeCartGoodsEntity>
-    override fun <E> setEventAdapter(iEventAdapter: IEventAdapter<E>): Boolean {
-//        this.iEventAdapter = iEventAdapter as IEventAdapter<HomeCartGoodsEntity>
-        return false
+    override fun <E> setEventAdapter(iEventAdapter: IEventAdapter<E>) {
+//        iEventAdapter.setEntity().subscribeNormal({})
     }
 
 }

@@ -18,13 +18,16 @@ class MapEntity(
     address: PoiItem,
     private val province:String,
     private val city:String,
-    private val district:String
+    private val district:String,
+    private val adCode: Int
 ):ViewEntity<PoiItem,HolderMapTextBinding>(address),Filter<HolderMapTextBinding>{
     override fun compare(text: String)=getAddress().contains(text)
 
     fun getAddress():String{
         return "$province$city$district${bean.title}"
     }
+
+
 
     override fun toString()=getAddress()
 }

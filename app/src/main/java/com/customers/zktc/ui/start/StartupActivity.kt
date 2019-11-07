@@ -26,7 +26,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 class StartupActivity : BaseActivity<StartupModel>() {
     companion object { const val startup = ActivityComponent.Config.zktc + "startup" }
     override fun initView(savedInstanceState: Bundle?) {
-        setContentView(R.layout.activity_startup)
+//        setContentView(R.layout.activity_startup)
         if (ZktcApplication.component == null) {
             rxBus<AppComponent>()
                 .observeOn(AndroidSchedulers.mainThread())

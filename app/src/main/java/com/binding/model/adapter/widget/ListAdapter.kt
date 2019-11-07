@@ -34,6 +34,8 @@ open class ListAdapter<E:Inflate<out ViewDataBinding>>:BaseAdapter(),IRecyclerAd
         return v
     }
 
+
+
     override fun addListAdapter(position: Int, es: List<E>): Boolean {
         var p = position
         if (!containsList(position, holderList)) {

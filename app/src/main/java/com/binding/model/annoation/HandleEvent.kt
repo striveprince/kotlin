@@ -17,4 +17,4 @@ import com.binding.model.inflate.obj.EventType.touch
 @Target(AnnotationTarget.VALUE_PARAMETER)
 @Retention(AnnotationRetention.SOURCE)
 @IntDef(value = [no, add, refresh, remove, set, move, click, long, select, touch])
-annotation class HandleEve
+annotation class HandleEvent
