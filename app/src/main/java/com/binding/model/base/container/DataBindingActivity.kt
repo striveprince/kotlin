@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import com.alibaba.android.arouter.launcher.ARouter
 import com.customers.zktc.R
 import com.binding.model.base.view.SwipeBackLayout
@@ -17,10 +18,11 @@ import com.binding.model.setMeizuStatusBarDarkIcon
 import com.binding.model.setMiuiStatusBarDarkMode
 
 abstract class DataBindingActivity<C> : AppCompatActivity(), CycleContainer<C> {
-    override val dataActivity = this
+    override val dataActivity by lazy { this }
     override val cycle= lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         initView(savedInstanceState)
     }
 
@@ -87,4 +89,6 @@ abstract class DataBindingActivity<C> : AppCompatActivity(), CycleContainer<C> {
         }
         win.attributes = winParams
     }
+
+    override fun fragmentManager()=supportFragmentManager
 }

@@ -69,40 +69,6 @@ fun <T, R> Observable<List<T>>.concatList(block: T.() -> R): Observable<List<R>>
         .toList()
         .toObservable()
 
-
-//
-//@ImplicitReflectionSerializer
-//fun getType(type: Type,clazzs :ArrayList<Class<*>>): ArrayList<Class<*>>{
-//    val kvalue =  serializerByTypeToken(type)
-//    val v = arrayListOf<Class<*>>()
-//
-//    when (type) {
-//        is Class<*> -> v.add(type)
-//        is ParameterizedType -> {
-//            val c: Class<*> = type.rawType as Class<*>
-//            v.add(c)
-//
-//            if (List::class.java.isAssignableFrom(c)) {
-//                v.add(type.rawType as Class<*>)
-//                return getType(type.actualTypeArguments[0],v)
-//            }
-//        }
-//        is GenericArrayType -> {
-//
-//        }
-//    }
-//    return v
-//}
-//                c.kotlin
-//                ArrayListSerializer()
-
-
-//inline fun <reified E> rxBus(owner: LifecycleOwner): Observable<E> {
-//    val provider = AndroidLifecycle.createLifecycleProvider(owner)
-//    return rxBus<E>()
-//        .compose(provider.bindToLifecycle<E>())
-//}
-
 inline fun <reified E> rxBus(): Observable<E> {
     return RxBus.getInstance()
         .toObservable(E::class.java)
@@ -152,11 +118,6 @@ fun createWholeDir(path: String): String {
     return builder.toString()
 }
 
-//-------------Observable---------------
-//inline fun <reified T> Observable<T>.merge(observable: Observable<T>){
-//    this.mergeWith(observable)
-//}
-
 fun <T> Observable<T>.subscribeNormal(
     onNext: (T) -> Unit = {},
     onError: (Throwable) -> Unit = { toast(it) },
@@ -177,21 +138,7 @@ fun <T> Observable<T>.subscribeNormal(
     t.cycle.addObserver(observer)
     this.subscribe(observer)
 }
-//
-//fun <T : Any> Observable<T>.subscribeNormal(
-//    t: ViewModel<*, *>,
-//    onNext: (T) -> Unit = {},
-//    onError: (Throwable) -> Unit = { toast(it) },
-//    onComplete: () -> Unit = {},
-//    onSubscribe: (Disposable) -> Unit = {}
-//) {
-//    val observer = NormalObserver(onNext, onError, onComplete, onSubscribe)
-//    t.t.cycle.addObserver(observer)
-//    if (t.disposable == null || t.disposable?.isDisposed!!) {
-//        this.subscribe(observer)
-//        t.disposable = observer.disposable.get()
-//    }
-//}
+
 
 //-------------Flowable---------------
 fun <T> Flowable<T>.subscribeNormal(
@@ -244,28 +191,14 @@ fun viewLifeCycle(view: View): Lifecycle {
     else throw ApiException("当前的context不属于AppCompatActivity")
 }
 
-
-//fun <T : Any> Single<T>.subscribeNormal(
-//    t: ViewModel<*, *>,
-//    onNext: (T) -> Unit = {},
-//    onError: (Throwable) -> Unit = { toast(it) },
-//    onComplete: () -> Unit = {},
-//    onSubscribe: (Disposable) -> Unit = {}
-//): Boolean {
-//    val observer = NormalObserver(onNext, onError, onComplete, onSubscribe)
-//    t.t.cycle.addObserver(observer)
-//    return if (t.disposable == null || t.disposable?.isDisposed!!) {
-//        this.subscribe(observer)
-//        t.disposable = observer.disposable.get()
-//        true
-//    } else false
-//}
-
-
 fun toast(e: Throwable) {
-    val message = e.message
-    if (!TextUtils.isEmpty(message))
-        Toast.makeText(App.activity(), e.message, Toast.LENGTH_SHORT).show()
+    if(!TextUtils.isEmpty(e.message))
+        toast(e.message!!)
+}
+
+
+fun toast(message: String) {
+    Toast.makeText(App.activity(), message, Toast.LENGTH_SHORT).show()
 }
 
 fun installApkFile(
@@ -411,16 +344,17 @@ inline fun <reified E : Entity<*, out ViewDataBinding>> Any.toEntity(vararg arra
     list.addAll(arrayOfAny)
     E::class.constructors.forEach {
         if (it.parameters.size == list.size) {
-            return it.call(list.toArray())
+            val parameters = list.toArray()
+            return it.call(*parameters!!)
         }
     }
-    throw ApiException("check ${E::class.simpleName} class's constructor")
+    throw ApiException("","check ${E::class.simpleName} class's constructor")
 }
 
 inline fun <reified E:Entity<*,out ViewDataBinding>> List<Any>.toEntities(vararg arrayOfAny:Any?):List<E>{
     val list = ArrayList<E>()
     for (any in this) {
-        list.add(any.toEntity(arrayOfAny))
+        list.add(any.toEntity(*arrayOfAny))
     }
     return list
 }

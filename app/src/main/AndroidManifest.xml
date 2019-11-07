@@ -52,6 +52,9 @@
         <activity android:name=".ui.mall.catagory.MallCategoryActivity" android:label="@string/category" />
         <activity android:name=".ui.user.setting.SettingActivity" />
         <activity android:name=".ui.user.location.LocationActivity" />
+        <activity android:name=".ui.user.address.AddressActivity" >
+
+        </activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -84,5 +87,6 @@
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="${mapkey}" />
+        <service android:name="com.amap.api.location.APSService" />
     </application>
 </manifest>

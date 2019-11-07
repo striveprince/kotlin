@@ -24,6 +24,7 @@ interface Inflate<Binding : ViewDataBinding> : Parse<Binding> {
 
     fun bindView(context: Context, viewGroup: ViewGroup?, binding: Binding) {}
 
+    fun binding():Binding
     fun removeBinding() {}
 
     fun getViewId(): Int = 0
@@ -32,10 +33,6 @@ interface Inflate<Binding : ViewDataBinding> : Parse<Binding> {
         @Suppress("UNCHECKED_CAST")
          attachView(context,container,b,any as Binding?)
 
-//    fun getLayoutId(): Int {
-////        Timber.i("class name=${this.javaClass.name},layoutView.size=${layoutView.layout.size},layoutIndex=${layoutIndex}")
-//        return layoutView.layout[layoutIndex]
-//    }
 
     fun getLayoutId()=layoutView.layout[layoutIndex]
 }

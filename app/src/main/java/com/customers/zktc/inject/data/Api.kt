@@ -3,6 +3,7 @@ package com.customers.zktc.inject.data
 import android.app.Activity
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
+import com.amap.api.location.AMapLocation
 import com.binding.model.inflate.inter.Inflate
 import com.customers.zktc.inject.data.database.DatabaseApi
 import com.customers.zktc.inject.data.map.MapApi
@@ -24,8 +25,6 @@ class Api(
     private val preferenceApi: PreferenceApi
 ) {
     fun checkUpdate(context: Activity) = netApi.checkUpdate(context)
-
-    fun locationCity(activity: AppCompatActivity) = mapApi.locationCity(activity)
 
     fun loginCode(params: SignParams) = netApi.loginCode(params)
 
@@ -74,4 +73,7 @@ class Api(
     fun logout() = Single.just(true).doOnSuccess { preferenceApi.logout() }
     fun cities()=netApi.cities()
     fun location(e: Inflate<*>) =Single.just(true)
+    fun searchGeoCode(activity:AppCompatActivity,obj:(String)->Unit) = mapApi.searchGeoCode(activity,obj)
+    fun locationCurrent(activity: AppCompatActivity) = mapApi.locationCurrent(activity)
+
 }

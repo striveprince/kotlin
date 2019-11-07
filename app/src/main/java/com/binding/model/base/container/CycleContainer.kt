@@ -3,6 +3,7 @@ package com.binding.model.base.container
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 
 /**
@@ -23,4 +24,5 @@ interface CycleContainer<T> : Container {
     val cycle: Lifecycle
     fun inject(savedInstanceState: Bundle?, parent: ViewGroup?, attachToParent: Boolean): View
     fun finish()
+    fun fragmentManager():FragmentManager
 }

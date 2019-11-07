@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import com.alibaba.android.arouter.launcher.ARouter
 
 abstract class DataBindingFragment <T>: Fragment(),CycleContainer<T>{
@@ -23,5 +24,5 @@ abstract class DataBindingFragment <T>: Fragment(),CycleContainer<T>{
         return  initView(rootView)
     }
 
-
+    override fun fragmentManager()= childFragmentManager
 }

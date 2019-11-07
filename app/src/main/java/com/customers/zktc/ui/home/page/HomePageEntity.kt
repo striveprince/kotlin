@@ -65,6 +65,7 @@ class HomePageBanner(var operationAds: List<HomePageOperationEntity>) :
         return result
     }
 
+    override fun binding()=binding
     override fun bindView(context: Context, viewGroup: ViewGroup?, binding: HolderHomePageBannerBinding) {
         this.binding = binding
         adapter.refreshListAdapter(0, operationAds)

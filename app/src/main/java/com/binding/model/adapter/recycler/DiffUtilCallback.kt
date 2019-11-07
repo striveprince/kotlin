@@ -4,7 +4,6 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import com.binding.model.containsList
 import com.binding.model.inflate.inter.Diff
-import com.binding.model.inflate.inter.Recycler
 
 
 /**

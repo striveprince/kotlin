@@ -12,4 +12,6 @@ open class ViewInflate<Binding : ViewDataBinding> : ViewParse<Binding>(), Inflat
         binding =  super.attachView(context, viewGroup, attachToParent, binding1)
         return binding
     }
+
+    override fun binding()=binding
 }

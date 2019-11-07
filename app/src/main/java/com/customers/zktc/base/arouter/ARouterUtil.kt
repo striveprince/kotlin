@@ -9,6 +9,7 @@ import com.binding.model.Config
 import com.customers.zktc.R
 import com.customers.zktc.ui.Constant
 import com.customers.zktc.ui.home.HomeActivity
+import com.customers.zktc.ui.user.address.AddressActivity
 import com.customers.zktc.ui.user.setting.SettingActivity
 import com.customers.zktc.ui.user.sign.SignActivity
 import com.customers.zktc.ui.user.sign.login.LoginFragment
@@ -54,6 +55,10 @@ object ARouterUtil {
     }
 
     fun setting(view: View) {
-        ARouter.getInstance().build(SettingActivity.setting)
+        ARouter.getInstance().build(SettingActivity.setting).navigation()
+    }
+
+    fun navigationAddress() {
+        ARouter.getInstance().build(AddressActivity.address).navigation()
     }
 }

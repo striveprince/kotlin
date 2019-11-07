@@ -3,21 +3,18 @@ package com.customers.zktc.ui.home.page
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.ObservableField
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.SimpleItemAnimator
 import com.binding.model.adapter.recycler.DiffUtilCallback
 import com.binding.model.adapter.recycler.GridSizeLookup
 import com.binding.model.annoation.LayoutView
-import com.binding.model.base.view.NoFlashItemAnimator
 import com.binding.model.inflate.model.RecyclerModel
 import com.binding.model.inflate.obj.RecyclerStatus
 import com.binding.model.subscribeNormal
 import com.customers.zktc.R
+import com.customers.zktc.base.arouter.ARouterUtil
 import com.customers.zktc.databinding.FragmentHomePageBinding
 import com.customers.zktc.inject.data.Api
-import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.simple.SimpleMultiListener
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -42,9 +39,9 @@ class HomePageModel @Inject constructor() :
                 .observeOn(AndroidSchedulers.mainThread())
         }
         initHttp()
-        binding.recyclerView.itemAnimator =null// NoFlashItemAnimator()
+        binding.recyclerView.itemAnimator = null// NoFlashItemAnimator()
         binding.recyclerView.addItemDecoration(HomePageDecoration())
-        api.locationCity(t.dataActivity).subscribeNormal(t, { city.set(it) },{city.set("")})
+        api.locationCurrent(t.dataActivity).subscribeNormal(t, { city.set(it.city) },{city.set("")})
         binding.smartRefreshLayout.setOnMultiListener(object : SimpleMultiListener() {
             override fun onRefresh(refreshLayout: RefreshLayout) {
                 super.onRefresh(refreshLayout)
@@ -96,7 +93,8 @@ class HomePageModel @Inject constructor() :
     }
 
     fun onLocationClick(v: View) {
-//        api.locationCity(t.dataActivity)
+        ARouterUtil.navigationAddress()
+//        api.locationCurrent(t.dataActivity)
 //            .subscribeNormal(t, { city.set(it) },{city.set("")})
     }
 }

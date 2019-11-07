@@ -17,6 +17,6 @@ class LocationModel @Inject constructor() :RecyclerModel<LocationActivity,Activi
         super.attachView(savedInstanceState, t)
         setRxHttp { _, _ ->  api.cities()}
         adapter.addEventAdapter{ _,e,_,_ -> api.location(e).map{ EventEntity<Any>(it) } }
-        api.locationCity(t)
+        api.locationCurrent(t)
     }
 }

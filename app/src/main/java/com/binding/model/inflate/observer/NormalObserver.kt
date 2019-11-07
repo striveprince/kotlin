@@ -62,6 +62,7 @@ class NormalObserver<T> constructor(
 
     override fun onError(t: Throwable) {
         try {
+            t.printStackTrace()
             observer.onError(t)
         } catch (e: Throwable) {
             Exceptions.throwIfFatal(e)
