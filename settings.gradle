@@ -1,2 +1,3 @@
 include ':binding'//,':library'':app',
+include ':app'
 rootProject.name='zktc'
