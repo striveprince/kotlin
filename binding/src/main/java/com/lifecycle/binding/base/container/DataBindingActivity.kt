@@ -10,27 +10,22 @@ import android.view.WindowManager
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModel
 import com.alibaba.android.arouter.launcher.ARouter
-import com.lifecycle.binding.R
+import com.lifecycle.binding.*
 import com.lifecycle.binding.base.view.SwipeBackLayout
 import com.lifecycle.binding.base.view.SwipeBackLayout.Companion.FROM_LEFT
 import com.lifecycle.binding.inflate.inter.Inflate
-import com.lifecycle.binding.setAllUpSixVersion
-import com.lifecycle.binding.setMeizuStatusBarDarkIcon
-import com.lifecycle.binding.setMiuiStatusBarDarkMode
 
-abstract class DataBindingActivity<Binding : ViewDataBinding> : AppCompatActivity(),
+abstract class DataBindingActivity<Model:ViewModel,Binding : ViewDataBinding> : AppCompatActivity(),
     Inflate<Binding> {
     lateinit var binding: Binding
     override fun binding() = binding
-
+    abstract fun getModel():Model
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView(savedInstanceState)
-//        val userViewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
-//        val viewModel = ViewModelProviders.of(this).get(layoutView().)
+        binding.setVariable(Config.vm,getModel())
     }
 
     open fun initView(savedInstanceState: Bundle?) {

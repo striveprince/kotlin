@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProviders
 import com.lifecycle.binding.annoation.LayoutView
 import com.lifecycle.binding.base.RxBus
 import com.lifecycle.binding.base.Text
@@ -145,6 +147,9 @@ fun <T> Single<T>.subscribeNormal(
 ) {
     this.subscribe(NormalObserver(onNext, onError, onComplete, onSubscribe))
 }
+
+inline fun<reified Model:ViewModel> provideViewModel(appCompatActivity: AppCompatActivity) =
+    ViewModelProviders.of(appCompatActivity).get(Model::class.java)
 
 
 fun <T> Single<T>.subscribeNormal(
