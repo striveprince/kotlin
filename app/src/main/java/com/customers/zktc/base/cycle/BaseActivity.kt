@@ -18,7 +18,8 @@ abstract class BaseActivity<VM : ViewModel<*, *>> : DataBindingActivity<Activity
     override fun inject(savedInstanceState: Bundle?, parent: ViewGroup?, attachToParent: Boolean): View {
         val method = ActivityComponent::class.java.getDeclaredMethod("inject",this::class.java)
         method.invoke(component,this)
-        return vm.attachContainer(this, parent, attachToParent, savedInstanceState).root
+        val binding = vm.attachContainer(this, parent, attachToParent, savedInstanceState)
+        return binding.root
     }
 
     override val component: ActivityComponent

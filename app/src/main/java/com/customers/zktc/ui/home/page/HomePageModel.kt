@@ -3,6 +3,7 @@ package com.customers.zktc.ui.home.page
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.ObservableField
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import com.binding.model.adapter.recycler.DiffUtilCallback
@@ -23,7 +24,7 @@ import javax.inject.Inject
 @LayoutView(layout = [R.layout.fragment_home_page])
 class HomePageModel @Inject constructor() :
     RecyclerModel<HomePageFragment, FragmentHomePageBinding, HomePageInflate<*>>() {
-    val city = ObservableField<String>("定位中...")
+    val city = MutableLiveData<String>()
     private val banner = HomePageBanner(arrayListOf())
     private val list = ArrayList<HomePageInflate<*>>()
     @Inject lateinit var api: Api
@@ -34,16 +35,13 @@ class HomePageModel @Inject constructor() :
         layoutManager.spanSizeLookup = GridSizeLookup(recyclerAdapter, spanCount)
         layoutManagerField.set(layoutManager)
         t.lifecycle.addObserver(banner)
-        http = { offset, _ ->
-            api.getRecommend(offset, pageCount)
-                .observeOn(AndroidSchedulers.mainThread())
-        }
+        http = { offset, _ -> api.getRecommend(offset, pageCount).observeOn(AndroidSchedulers.mainThread()) }
         initHttp()
         binding.recyclerView.itemAnimator = null// NoFlashItemAnimator()
         binding.recyclerView.addItemDecoration(HomePageDecoration())
         api.locationCurrent(t.dataActivity)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribeNormal(t, { city.set(it.city) },{city.set("")})
+            .subscribeNormal(t, { city.value = it.city },{city.value = ""})
         binding.smartRefreshLayout.setOnMultiListener(object : SimpleMultiListener() {
             override fun onRefresh(refreshLayout: RefreshLayout) {
                 super.onRefresh(refreshLayout)

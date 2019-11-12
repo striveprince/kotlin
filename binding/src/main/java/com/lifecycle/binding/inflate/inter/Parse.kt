@@ -9,6 +9,4 @@ interface Parse<B>{
     fun layoutView(): LayoutView = findModelView(javaClass)
     fun layoutIndex():Int = 0
     fun attachView(c: Context, v: ViewGroup?, toParent: Boolean, b: B?): B
-
-
 }

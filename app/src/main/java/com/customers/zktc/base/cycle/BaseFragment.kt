@@ -16,14 +16,12 @@ abstract class BaseFragment<VM : ViewModel<*, *>> : DataBindingFragment<Fragment
     @Inject
     lateinit var vm: VM
 
-    override fun inject(
-        savedInstanceState: Bundle?,
-        parent: ViewGroup?,
-        attachToParent: Boolean
-    ): View {
+    override fun inject(savedInstanceState: Bundle?, parent: ViewGroup?, attachToParent: Boolean): View {
         val func = FragmentComponent::class.java.getDeclaredMethod("inject", this::class.java)
         func.invoke(component, this)
-        return vm.attachContainer(this, parent, attachToParent, savedInstanceState).root
+        val binding = vm.attachContainer(this, parent, attachToParent, savedInstanceState)
+        binding.lifecycleOwner = this
+        return binding.root
     }
 
     override val component: FragmentComponent
