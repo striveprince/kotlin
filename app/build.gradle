@@ -77,7 +77,7 @@ android {
                     GETUI_APP_SECRET: "7xxRkwX1vH8XvdlLHyPTMA",
                     mapkey          : "02cde385188f1cc921b9883db746d711",
                     JPUSH_APPKEY    : "da6b58534ababa0f78a6ff83",
-                    JPUSH_PKGNAME   : "com.customers.zktc.de1",
+                    JPUSH_PKGNAME   : "com.customers.zktc.debug",
                     JPUSH_CHANNEL   : "developer-default"
             ]
         }

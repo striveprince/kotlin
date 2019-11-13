@@ -22,7 +22,6 @@ abstract class DataBindingActivity<C> : AppCompatActivity(), CycleContainer<C> {
     override val cycle= lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         initView(savedInstanceState)
     }
 
