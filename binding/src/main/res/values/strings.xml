@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">binding</string>
+    <string name="no_permission">没有权限</string>
+    <string name="location">定位</string>
+    <string name="should_open_gps">打开GPS</string>
+    <string name="cancel">退出</string>
+    <string name="setting">设置</string>
 </resources>

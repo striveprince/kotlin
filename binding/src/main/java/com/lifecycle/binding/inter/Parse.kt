@@ -1,4 +1,4 @@
-package com.lifecycle.binding
+package com.lifecycle.binding.inter
 
 /**
  * Company: 中科同创
@@ -6,3 +6,5 @@ package com.lifecycle.binding
  * Author: created by ArvinWang on 2019/11/14 18:04
  * Email: 1033144294@qq.com
  */
+class Parse {
+}
