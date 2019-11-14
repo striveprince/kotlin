@@ -6,5 +6,6 @@ package com.lifecycle.binding.inter
  * Author: created by ArvinWang on 2019/11/14 18:04
  * Email: 1033144294@qq.com
  */
-class Parse {
+interface Parse<B> {
+    fun attactView()
 }
