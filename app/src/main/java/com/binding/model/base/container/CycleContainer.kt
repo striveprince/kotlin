@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 
 /**
  * project：cutv_ningbo
@@ -19,7 +20,7 @@ import androidx.lifecycle.Lifecycle
  */
 
 
-interface CycleContainer<T> : Container {
+interface CycleContainer<T> : Container, LifecycleOwner {
     val component: T
     val cycle: Lifecycle
     fun inject(savedInstanceState: Bundle?, parent: ViewGroup?, attachToParent: Boolean): View

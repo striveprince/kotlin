@@ -1,7 +1,6 @@
 package com.lifecycle.binding
 
 import androidx.lifecycle.ViewModel
-import com.lifecycle.binding.BR
 
 
 object Config {

@@ -16,16 +16,15 @@ import com.lifecycle.binding.*
 import com.lifecycle.binding.base.view.SwipeBackLayout
 import com.lifecycle.binding.base.view.SwipeBackLayout.Companion.FROM_LEFT
 import com.lifecycle.binding.inflate.inter.Inflate
+import com.lifecycle.demo.R
 
 abstract class DataBindingActivity<Model:ViewModel,Binding : ViewDataBinding> : AppCompatActivity(),
     Inflate<Binding> {
     lateinit var binding: Binding
     override fun binding() = binding
-    abstract fun getModel():Model
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView(savedInstanceState)
-        binding.setVariable(Config.vm,getModel())
     }
 
     open fun initView(savedInstanceState: Bundle?) {
@@ -45,8 +44,6 @@ abstract class DataBindingActivity<Model:ViewModel,Binding : ViewDataBinding> : 
     }
 
     open fun isSwipe() = FROM_LEFT
-
-
     /**
      * modify this status text color and background
      * */

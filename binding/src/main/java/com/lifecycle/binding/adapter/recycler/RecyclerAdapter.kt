@@ -112,7 +112,6 @@ open class RecyclerAdapter<E : Inflate<out ViewDataBinding>> :
         } else for (e in es) {
             removeToAdapter(0, e)
         }
-
         return rang >= 0
     }
 

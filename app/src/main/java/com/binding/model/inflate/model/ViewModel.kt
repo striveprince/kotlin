@@ -27,6 +27,7 @@ abstract class ViewModel<T : CycleContainer<*>, Binding : ViewDataBinding> : Vie
         t = t1
         val binding = attachView(this.t.dataActivity, co, attachToParent, null)
         t.cycle.addObserver(this)
+        binding.lifecycleOwner = t
         t.dataActivity.intent.getStringExtra(Config.path).let { path = it ?: "" }
         t.dataActivity.intent.getBundleExtra(Config.bundle).let { bundle = it ?: Bundle() }
         attachView(savedInstanceState, t)

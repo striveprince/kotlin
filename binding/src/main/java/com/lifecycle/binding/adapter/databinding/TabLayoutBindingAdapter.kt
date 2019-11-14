@@ -6,7 +6,7 @@ import androidx.databinding.InverseBindingMethod
 import androidx.databinding.InverseBindingMethods
 import androidx.databinding.adapters.ListenerUtil
 import com.lifecycle.binding.ReflectUtil
-import com.lifecycle.binding.R
+import com.lifecycle.demo.R
 import com.google.android.material.tabs.TabLayout
 
 /**

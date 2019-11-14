@@ -3,8 +3,8 @@ package com.binding.model.inflate.inter
 import android.content.Context
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.LiveData
 import com.binding.model.Config
-import com.customers.zktc.BR
 
 interface Entity<Bean,Binding:ViewDataBinding>:Inflate<Binding>{
     val bean:Bean

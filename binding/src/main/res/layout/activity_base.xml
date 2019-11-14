@@ -7,7 +7,7 @@
             android:background="@color/windowBackground"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-        <com.binding.model.base.view.SwipeBackLayout
+        <com.lifecycle.binding.base.view.SwipeBackLayout
             android:id="@+id/swipe_back_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

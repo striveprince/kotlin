@@ -11,7 +11,7 @@ import androidx.annotation.IntDef
 import androidx.core.view.MotionEventCompat
 import androidx.core.view.ViewCompat
 import androidx.customview.widget.ViewDragHelper
-import com.lifecycle.binding.R
+import com.lifecycle.demo.R
 import kotlin.math.abs
 
 /**

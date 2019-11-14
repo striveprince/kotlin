@@ -7,7 +7,7 @@ import androidx.databinding.ViewDataBinding
 import com.lifecycle.binding.adapter.IRecyclerAdapter
 import com.lifecycle.binding.containsList
 import com.lifecycle.binding.inflate.inter.Inflate
-import com.lifecycle.binding.R
+import com.lifecycle.demo.R
 
 /**
  * Company: 中科同创
@@ -26,8 +26,10 @@ open class ListAdapter<E:Inflate<out ViewDataBinding>>:BaseAdapter(),IRecyclerAd
         }else{
             val out = convertView.getTag(R.id.inflate) as E
             out.removeBinding()
-            val binding =if(out.getLayoutId()==e.getLayoutId()) out.binding() else null
-            e.attachContainer(parent.context,parent,false,binding).root
+            val outBinding =if(out.getLayoutId()==e.getLayoutId()) out.binding() else null
+            val binding = e.attachContainer(parent.context,parent,false,outBinding)
+//            binding.lifecycleOwner =
+            binding.root
         }
 //        e.setEventAdapter(iEventAdapter)
         v.setTag(R.id.inflate,e)

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lifecycle.binding.adapter.IEventAdapter
 import com.lifecycle.binding.inflate.inter.Inflate
 import com.lifecycle.binding.inflate.inter.Recycler
-import com.lifecycle.binding.R
+import com.lifecycle.demo.R
 
 class RecyclerHolder<E:Inflate<*>>
 private constructor(private val container:ViewGroup, val binding: ViewDataBinding)

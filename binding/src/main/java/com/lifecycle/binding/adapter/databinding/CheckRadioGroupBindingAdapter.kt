@@ -9,7 +9,7 @@ import androidx.databinding.InverseBindingMethods
 import androidx.databinding.adapters.ListenerUtil
 
 import com.lifecycle.binding.base.view.CheckRadioGroup
-import com.lifecycle.binding.R
+import com.lifecycle.demo.R
 
 /**
  * Created by arvin on 2018/1/15.

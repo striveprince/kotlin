@@ -325,7 +325,7 @@ inline fun <reified E : Entity<*, out ViewDataBinding>> Any.toEntity(vararg arra
     E::class.constructors.forEach {
         if (it.parameters.size == list.size) {
             val parameters = list.toArray()
-            return it.call(*parameters!!)
+            return it.call(*parameters)
         }
     }
     throw RuntimeException("check ${E::class.simpleName} class's constructor")

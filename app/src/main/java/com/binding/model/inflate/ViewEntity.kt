@@ -1,6 +1,7 @@
 package com.binding.model.inflate
 
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.LiveData
 import com.binding.model.inflate.inter.Entity
 
 /**

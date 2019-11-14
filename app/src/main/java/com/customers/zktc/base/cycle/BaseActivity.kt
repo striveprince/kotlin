@@ -19,6 +19,7 @@ abstract class BaseActivity<VM : ViewModel<*, *>> : DataBindingActivity<Activity
         val method = ActivityComponent::class.java.getDeclaredMethod("inject",this::class.java)
         method.invoke(component,this)
         val binding = vm.attachContainer(this, parent, attachToParent, savedInstanceState)
+        binding.lifecycleOwner = this
         return binding.root
     }
 

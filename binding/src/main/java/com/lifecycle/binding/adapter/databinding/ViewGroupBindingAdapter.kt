@@ -3,7 +3,7 @@ package com.lifecycle.binding.adapter.databinding
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.BindingAdapter
-import com.lifecycle.binding.R
+import com.lifecycle.demo.R
 import com.lifecycle.binding.adapter.IEventAdapter
 import com.lifecycle.binding.inflate.inter.Inflate
 import com.lifecycle.binding.inflate.inter.Measure
