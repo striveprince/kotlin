@@ -1,11 +1,9 @@
 package com.lifecycle.binding.inter
 
-/**
- * Company: 中科同创
- * Description:
- * Author: created by ArvinWang on 2019/11/14 18:04
- * Email: 1033144294@qq.com
- */
-interface Parse<B> {
-    fun attactView()
+import android.content.Context
+import android.view.View
+import android.view.ViewGroup
+
+interface Parse<T> {
+    fun createView(t:T,context: Context, parent: ViewGroup?=null, attachToParent: Boolean=false): View
 }
