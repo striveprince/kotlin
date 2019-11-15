@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.customers.zktc.R
 import com.google.android.material.tabs.TabLayout
 import com.lifecycle.binding.inter.anko.AnkoParse
+import com.lifecycle.binding.util.observer
 import com.lifecycle.binding.util.tabLayout
 import org.jetbrains.anko.*
 
@@ -19,13 +20,15 @@ import org.jetbrains.anko.*
  */
 class DemoActivity : AppCompatActivity(), AnkoParse<DemoModel, AnkoContext<Context>>
 , TabLayout.OnTabSelectedListener {
+
+    private val demoModel: DemoModel = ViewModelProviders.of(this)[DemoModel::class.java]
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val demoModel = getModel()
+        ViewModelProviders.of(this)[DemoModel::class.java]
         setContentView(createView(demoModel, this))
+        demoModel.currentIndex.observer(this){ checkFragment(it) }
     }
 
-    private fun getModel() = ViewModelProviders.of(this)[DemoModel::class.java]
     fun context(): AppCompatActivity = this
 
     override fun parse(t: DemoModel, context: Context): AnkoContext<Context> {
