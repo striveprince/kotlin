@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModel
  */
 class DemoModel : ViewModel() {
     val name = MutableLiveData<String>("click me")
-
+    val currentIndex = MutableLiveData(-1)
     fun click() {
         name.value = if (name.value === "click") "click me" else "click"
     }

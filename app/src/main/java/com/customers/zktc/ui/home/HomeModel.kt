@@ -65,11 +65,11 @@ class HomeModel
     }
 
 
-    override fun onTabReselected(p0: TabLayout.Tab?) {
+    override fun onTabReselected(tab: TabLayout.Tab?) {
 
     }
 
-    override fun onTabUnselected(p0: TabLayout.Tab?) {
+    override fun onTabUnselected(tab: TabLayout.Tab?) {
 
     }
 
