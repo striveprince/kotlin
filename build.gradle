@@ -31,19 +31,19 @@ task clean(type: Delete) {
 
 
 ext {
-    compile_sdk_version = 28
-    build_tools_version = '28.0.0'
+    compile_sdk_version = 29
+    build_tools_version = '29.0.2'
     min_sdk_version = 17
-    target_sdk_version = 28
+    target_sdk_version = 29
     version_code = 1
     version_name = '1.0'
-    dagger_version = "2.16"
+    dagger_version = '2.25.2'
 //    support_version = '28.0.0'
-    glide_version = "4.9.0"
+    glide_version = '4.10.0'
     retrofit = '2.2.0'
     androidx_version = '1.1.0'
     anko_version = '0.10.8'
     kotlin_coroutines_version = "1.1.1"
     gson = '2.8.1'
-    retrofit = '2.2.0'
+    retrofit = '2.6.2'
 }

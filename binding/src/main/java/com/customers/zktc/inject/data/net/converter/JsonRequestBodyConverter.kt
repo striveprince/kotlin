@@ -6,7 +6,7 @@ import java.io.IOException
 import java.io.OutputStreamWriter
 import java.nio.charset.Charset
 
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okio.Buffer
 import retrofit2.Converter
@@ -30,7 +30,7 @@ class JsonRequestBodyConverter<T> internal constructor(gson: Gson, type: Type) :
     @Suppress("UNCHECKED_CAST")
     private val adapter = gson.getAdapter<T>(TypeToken1.get(type) as TypeToken1<T>)!!
     companion object {
-        private val MEDIA_TYPE = MediaType.parse("application/json; charset=UTF-8")
+        private val MEDIA_TYPE = "application/json; charset=UTF-8".toMediaTypeOrNull()
         private val UTF_8 = Charset.forName("UTF-8")
     }
 

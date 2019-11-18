@@ -8,4 +8,5 @@
     <color name="windowBackground">#FFFFFFFF</color>
     <color name="customer_service_color">#DB4147</color>
     <color name="transparent">#00000000</color>
+    <color name="tab_color_normal">#333</color>
 </resources>

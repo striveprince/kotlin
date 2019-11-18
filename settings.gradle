@@ -1,3 +1,2 @@
 include ':app'
 include ':binding'
-//rootProject.name='zktc'

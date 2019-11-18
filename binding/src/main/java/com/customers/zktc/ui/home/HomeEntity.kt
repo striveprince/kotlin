@@ -1,10 +1,8 @@
-package com.customers.zktc.ui.demo
+package com.customers.zktc.ui.home
 
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.customers.zktc.R
 import com.google.android.material.tabs.TabLayout
-import com.lifecycle.binding.inter.Item
 
 /**
  * Company: 中科同创
@@ -12,7 +10,10 @@ import com.lifecycle.binding.inter.Item
  * Author: created by ArvinWang on 2019/11/15 16:25
  * Email: 1033144294@qq.com
  */
-class HomeEntity(val p: Int) : Item<Fragment> {
+class HomeEntity(p: Int) {
+    fun tab(): TabLayout.Tab =
+        TabLayout.Tab()
+
     val fragment: Fragment = Fragment()
 
     val name = when(p){
@@ -27,9 +28,6 @@ class HomeEntity(val p: Int) : Item<Fragment> {
         1-> R.drawable.ic_launcher_background
         else -> R.drawable.ic_launcher_background
     }
-    val tab = TabLayout.Tab().setText(name).setIcon(icon)
+//    val tab = TabLayout.Tab().setText(name).setIcon(icon)
 
-    override fun getItem(position: Int, container: ViewGroup): Fragment {
-        return fragment
-    }
 }
