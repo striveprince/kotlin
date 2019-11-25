@@ -47,7 +47,7 @@ val gson = Gson()
 fun findModelView(thisCls: Class<*>): LayoutView {
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     return thisCls.getAnnotation(LayoutView::class.java)
-        ?: return findModelView(thisCls = thisCls.superclass)
+        ?: return findModelView(thisCls = thisCls.superclass!!)
 }
 
 inline fun <reified T> toArray(list: List<T>): Array<T> {

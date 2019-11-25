@@ -25,6 +25,8 @@ import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.zipWith
 import okio.Okio
+import okio.buffer
+import okio.sink
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -233,7 +235,8 @@ class NetApi(private val httpApi: HttpApi) {
         return httpApi.download(0, fileName, it.downloadURL)
             .map {
                 val file = File(createWholeDir(fileName))
-                val sink = Okio.buffer(Okio.sink(file))
+                val sink = file.sink().buffer()
+//                val sink = Okio.buffer(Okio.sink(file))
                 sink.writeAll(it.source())
                 sink.close()
                 file

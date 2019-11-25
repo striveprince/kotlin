@@ -32,7 +32,7 @@ class HomeFragmentEntity(val p: Int) : Item<BaseFragment<*>> {
         1->R.drawable.ic_launcher_background
         else ->R.drawable.ic_launcher_background
     }
-    val tab = TabLayout.Tab().setText(name).setIcon(icon)
+//    val tab = TabLayout.Tab().setText(name).setIcon(icon)
 
     override fun getItem(position: Int, container: ViewGroup): BaseFragment<*> {
         return fragment

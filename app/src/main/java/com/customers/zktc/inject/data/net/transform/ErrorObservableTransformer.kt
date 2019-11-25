@@ -38,7 +38,7 @@ class ErrorObservableTransformer<T> : ObservableTransformer<T, T> {
                 when (throwable) {
                     is HttpException -> try {
                         val infoEntity =
-                            throwable.response().errorBody()!!.string().fromJson<InfoEntity<*>>()
+                            throwable.response()?.errorBody()!!.string().fromJson<InfoEntity<*>>()
                         code = "200"
                         msg = infoEntity.message
                     } catch (e: Exception) {
