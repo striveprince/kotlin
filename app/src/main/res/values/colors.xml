@@ -1,26 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!--    <color name="colorPrimary">#008577</color>-->
-<!--    <color name="colorPrimaryDark">#00574B</color>-->
-<!--    <color name="colorAccent">#D81B60</color>-->
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#ffffff</color>
+<!--    <color name="colorAccent">#28CBB5</color>-->
+    <color name="colorAccent">#28CCB6</color>
+    <color name="colorAccentPress">#BEEFE9</color>
+    <color name="font_hint">#F3EBEA</color>
     <color name="windowBackground">#FFFFFFFF</color>
-    <color name="colorAccent">#ffff4081</color>
-    <color name="colorPrimary">#DB4147</color>
-    <color name="colorPrimaryDark">#DB4147</color>
+    <color name="recycler_back_ground">#FFF2F2F2</color>
+
+    <color name="viewLoginLine">#B1ECE5</color>
+
+    <color name="white">#FFFFFFFF</color>
     <color name="customer_service_color">#DB4147</color>
     <color name="transparent">#00000000</color>
-    <color name="z_ff4f61">#ff4f61</color>
-    <color name="z_80ffffff">#80ffffff</color>
-    <color name="gray_line">#EFEFEF</color>
-    <color name="mt_actionbar_bg">#ffffffff</color>
-    <color name="mt_btn_disable_color">#fff4f4f4</color>
-    <color name="mt_front_primary_color">#ff333333</color>
-    <color name="z_999999">#999999</color>
+    <color name="tab_color_normal">#333</color>
+    <color name="green">#8BE60B</color>
+    <color name="colorNormal">#595A5A</color>
+    <color name="back_ground">#EEEEEE</color>
+    <color name="text_color">#333333</color>
     <color name="black">#000000</color>
-    <color name="z_ee6976">#EE6976</color>
-    <color name="z_ee2d40">#ee2d40</color>
-    <color name="zktc_icon_gray">#ffa4aab3</color>
-    <color name="tff941f">#ffff941f</color>
-    <color name="tebebeb">#ffebebeb</color>
-    <color name="z_343434">#343434</color>
+    <color name="item_back_ground_press">#F2F2F2</color>
+    <color name="inquiryTextGray" >#8E9392</color>
+    <color name="inquiryGreen2">#1BC5AE</color>
+    <color name="inquiryRed2">#D0021B</color>
+    <color name="tabTextColorNormal">#595A5A</color>
+
 </resources>

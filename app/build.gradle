@@ -3,41 +3,63 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlinx-serialization'
-
+//apply plugin: 'com.huawei.agconnect'
 kapt {
     arguments {
         arg("moduleName", project.getName())
     }
-    generateStubs = true
+//    generateStubs = true
 }
 
-kotlin {
-    experimental.coroutines 'enable'
-}
-
-
+kotlin.experimental.coroutines = 'enable'
 android {
-    compileSdkVersion compile_sdk_version
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
     dataBinding.enabled = true
-
+//    buildFeatures.dataBinding = true
     defaultConfig {
-        applicationId "com.customers.zktc"
+        applicationId "com.lifecycle.demo"
         minSdkVersion min_sdk_version
-        targetSdkVersion target_sdk_version
-        versionCode version_code
-        versionName version_name
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true
-        ndk {
-            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a','x86'
-            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [
+                        "room.schemaLocation": "$projectDir/schemas".toString(),
+                        "room.incremental": "true"//,
+//                        "room.expandProjection": "true"
+                ]
+            }
         }
-        manifestPlaceholders = [
-                JPUSH_PKGNAME : applicationId,
-                JPUSH_APPKEY : "da6b58534ababa0f78a6ff83", //JPush 上注册的包名对应的 Appkey.
-                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
-        ]
+    }
+
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'x86', 'armeabi-v7a'
+            universalApk true
+        }
+    }
+    buildTypes {
+        debug {
+            applicationIdSuffix ".inquiry.debug"
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "ApiHost", "\"https://api.host.cn\""
+            buildConfigField "String", "endpoint", "\"http://oss-cn-hangzhou.aliyuncs.com\""
+        }
+
+        release {
+            applicationIdSuffix ".wenzhen"
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "ApiHost", "\"https://api.host.cn\""
+            buildConfigField "String", "endpoint", "\"http://oss-cn-hangzhou.aliyuncs.com\""
+        }
     }
     androidExtensions {
         experimental = true
@@ -47,161 +69,115 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    signingConfigs {
-        config {
-            keyAlias 'budai'
-            keyPassword 'budaiJks@2019'
-            storeFile file('../app/jks/budai.jks')
-            storePassword 'budaiJks@2019'
-        }
-    }
-
-
-    buildTypes {
-        debug {
-            applicationIdSuffix ".debug"
-            minifyEnabled false
-            shrinkResources false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "boolean", "LOG_DEBUG", "true"//dug时打开日志
-            buildConfigField "String", "ApiHost", "\"http://dev.zhongketongchuang.com\""
-            buildConfigField "String", "WxAppId", "\"wx278434ee32e2723a\""
-            buildConfigField "String", "WxPublicAppId", "\"wxd7fc85674c6a7a0e\""
-            buildConfigField "String", "endpoint", "\"http://oss-cn-hangzhou.aliyuncs.com\""
-            signingConfig signingConfigs.config
-            debuggable true
-            manifestPlaceholders = [
-                    PGYER_APPID     : "44e9043ccbb21acb3c0ec78b4ba9b3ef",
-                    GETUI_APP_ID    : "dcOVqxK8Et794QXmNwvW74",
-                    GETUI_APP_KEY   : "Gcf6PfMCCgALhTs6XBMkI9",
-                    GETUI_APP_SECRET: "7xxRkwX1vH8XvdlLHyPTMA",
-                    mapkey          : "02cde385188f1cc921b9883db746d711",
-                    JPUSH_APPKEY    : "da6b58534ababa0f78a6ff83",
-                    JPUSH_PKGNAME   : "com.customers.zktc.debug",
-                    JPUSH_CHANNEL   : "developer-default"
-            ]
-        }
-
-        checkout {
-            minifyEnabled false//混淆打包
-            shrinkResources false//去掉不用资源
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "boolean", "LOG_DEBUG", "false"//release时关闭日志
-            buildConfigField "String", "ApiHost", "\"http://dev.zhongketongchuang.com\""
-            buildConfigField "String", "WxAppId", "\"wx278434ee32e2723a\""
-            buildConfigField "String", "WxPublicAppId", "\"wxd7fc85674c6a7a0e\""
-            buildConfigField "String", "endpoint", "\"http://oss-cn-hangzhou.aliyuncs.com\""
-//            signingConfig signingConfigs.config
-            debuggable false
-
-            manifestPlaceholders = [
-                    PGYER_APPID     : "44e9043ccbb21acb3c0ec78b4ba9b3ef",
-                    GETUI_APP_ID    : "dcOVqxK8Et794QXmNwvW74",
-                    GETUI_APP_KEY   : "Gcf6PfMCCgALhTs6XBMkI9",
-                    GETUI_APP_SECRET: "7xxRkwX1vH8XvdlLHyPTMA",
-                    mapkey          : "24502a29f5bb1d0a17281a24a77b0a55",
-                    JPUSH_APPKEY    : "da6b58534ababa0f78a6ff83",
-                    JPUSH_PKGNAME   : "com.customers.zktc",
-                    JPUSH_CHANNEL : "developer-default"
-            ]
-        }
-
-        release {
-            minifyEnabled false//混淆打包
-            shrinkResources false//去掉不用资源
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "boolean", "LOG_DEBUG", "false"//release时关闭日志
-            buildConfigField "String", "ApiHost", "\"http://budai.zhongketongchuang.com\""
-            buildConfigField "String", "WxAppId", "\"wxab74c79cb6353b1f\""
-            buildConfigField "String", "WxPublicAppId", "\"wx7b608c29a34e103f\""
-            buildConfigField "String", "endpoint", "\"http://oss-cn-hangzhou.aliyuncs.com\""
-//            signingConfig signingConfigs.config
-            debuggable false
-
-            manifestPlaceholders = [
-                    PGYER_APPID     : "44e9043ccbb21acb3c0ec78b4ba9b3ef",
-                    GETUI_APP_ID    : "pzdl1ky5PL9pi25VqZ8Zi4",
-                    GETUI_APP_KEY   : "E1vdMuIuYW91xk3ZP1snk3",
-                    GETUI_APP_SECRET: "mY4PPv8Yec7j7SDiJO0db3",
-                    mapkey          : "24502a29f5bb1d0a17281a24a77b0a55",
-                    JPUSH_APPKEY    : "da6b58534ababa0f78a6ff83",
-                    JPUSH_PKGNAME   : "com.customers.zktc",
-                    JPUSH_CHANNEL : "developer-default"
-            ]
-        }
-    }
-
     lintOptions {
         checkReleaseBuilds false
         abortOnError true
     }
-    android.applicationVariants.all { variant ->
-        variant.outputs.all {
-            def time = new Date().format("MMddHHmm", TimeZone.getTimeZone("GMT+08:00"))
-            if (variant.name != 'debug') outputFileName = "zktc_${variant.name}_${variant.versionName}.${time}.apk"
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
+//    sourceSets.main.res.srcDirs = ['src/main/res','src/main/ylRes']
+    sourceSets{
+        main{
+            jniLibs.srcDirs = ['libs']
         }
     }
 }
 
 
 dependencies {
+//    implementation fileTree(dir: 'libs', include: ['*.jar','*.aar'])
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-//    implementation project(path: ':library')
+//    implementation(name: 'ylvideo-release', ext: 'aar')
+    implementation(name: 'ylSdk-release', ext: 'aar')
+    implementation(name: 'ylservicelib-release', ext: 'aar')
+    implementation(name: 'ylbaseui-release', ext: 'aar')
+    implementation(name: 'ylLogic-release', ext: 'aar')
+    implementation(name: 'yltalking-release', ext: 'aar')
+    implementation(name: 'ylvideo-release', ext: 'aar')
+    implementation(name: 'ylResource-release', ext: 'aar')
+    implementation project(path: ':binding')
+    def  room_version =  "2.2.2"
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-rxjava2:$room_version"
+    testImplementation "androidx.room:room-testing:$room_version"
+
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.viewpager2:viewpager2:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     kapt "com.android.databinding:compiler:3.1.4"
     implementation "androidx.appcompat:appcompat:$androidx_version"
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta3'
+    implementation "androidx.gridlayout:gridlayout:1.0.0"
+
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
+    def fragment_version = "1.2.0-rc03"
+    implementation "androidx.fragment:fragment-ktx:$fragment_version"
+    implementation "androidx.fragment:fragment-testing:$fragment_version"
     implementation "androidx.vectordrawable:vectordrawable:$androidx_version"
     implementation "androidx.legacy:legacy-support-v4:1.0.0"
     implementation "androidx.core:core-ktx:$androidx_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-//    implementation "org.jetbrains.anko:anko:$anko_version"
+    implementation "org.jetbrains.anko:anko:$anko_version"
+    implementation "org.jetbrains.anko:anko-design:$anko_version"
+    implementation "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
+    implementation "org.jetbrains.anko:anko-recyclerview-v7:$anko_version"
+    implementation "org.jetbrains.anko:anko-constraint-layout:$anko_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:$kotlin_coroutines_version"
     implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
-
+    def dagger_version = '2.25.2'
     implementation "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.12'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.15'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-//    implementation 'com.trello.rxlifecycle3:rxlifecycle:3.1.0'
-//    implementation 'com.trello.rxlifecycle3:rxlifecycle-android-lifecycle-kotlin:3.1.0'
+    def retrofit = '2.6.2'
     implementation "com.squareup.retrofit2:retrofit:$retrofit"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit"
+
     implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.4.0'
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.13.0"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit"
     implementation 'com.squareup.okhttp3:logging-interceptor:4.2.2'
     implementation 'com.squareup.okhttp3:okhttp:4.2.2'
+
     implementation 'com.scwang.smart:refresh-layout-kernel:2.0.0-alpha-1'
     implementation 'com.scwang.smart:refresh-header-classics:2.0.0-alpha-1'
-    implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.alibaba:arouter-api:1.2.4'
     kapt 'com.alibaba:arouter-compiler:1.1.4'
+    def glide_version = '4.10.0'
     implementation "com.github.bumptech.glide:okhttp3-integration:$glide_version"
     implementation "com.github.bumptech.glide:glide:$glide_version"
     kapt "com.github.bumptech.glide:compiler:$glide_version"
     implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
     implementation 'com.aliyun.dpa:oss-android-sdk:2.9.2'
-    implementation 'com.pgyersdk:sdk:3.0.2'
-    implementation 'cn.jiguang.sdk:jpush:3.3.9'
-    implementation 'cn.jiguang.sdk:jcore:2.1.6'
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.amap.api:location:4.7.2'
     implementation 'com.amap.api:map2d:6.0.0'
     implementation 'com.amap.api:search:7.1.0'
-    implementation 'com.github.chrisbanes:PhotoView:2.1.4'
-    implementation 'androidx.viewpager2:viewpager2:1.0.0'
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
     implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation 'com.afollestad.material-dialogs:core:3.1.1'
+//    implementation 'org.conscrypt:conscrypt-android:2.2.1'
+//    implementation 'com.afollestad.material-dialogs:commons:0.9.1.0'
+//    implementation 'com.pgyersdk:sdk:3.0.2'
+//    implementation 'cn.jiguang.sdk:jpush:3.3.9'
+//    implementation 'cn.jiguang.sdk:jcore:2.1.6'
+//    implementation 'com.android.tools:r8:1.5.68'
+//    implementation 'com.huawei.android.hms:push:2.6.3.301'
+//    implementation 'com.huawei.android.hms:base:2.6.3.301'
+//    implementation "androidx.constraintlayout:constraintlayout:$androidx_version"
+
 }
-//    implementation 'com.squareup.retrofit2:converter-moshi:2.5.0'
-//    implementation 'com.squareup.moshi:moshi:1.8.0'
-//    implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.4.0'
-//    implementation 'com.zhpan.library:bannerview:2.3.4'

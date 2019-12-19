@@ -2,14 +2,16 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-        <ImageView
+        <View
             android:id="@+id/iv_shadow"
-            android:background="@color/windowBackground"
+            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-        <com.binding.model.base.view.SwipeBackLayout
+
+        <com.lifecycle.binding.base.view.SwipeBackLayout
             android:id="@+id/swipe_back_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
+            android:layout_height="match_parent"
+            android:paddingTop="24dp" >
+        </com.lifecycle.binding.base.view.SwipeBackLayout>
 </FrameLayout>

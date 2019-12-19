@@ -1,92 +1,52 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.customers.zktc">
-        <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-        <uses-permission android:name="android.permission.INTERNET"/>
-        <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-        <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    package="com.lifecycle.demo">
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+<!--    <permission android:name="${applicationId}.permission.MIPUSH_RECEIVE"-->
+<!--        android:protectionLevel="signature" /> -->
+
+    <uses-permission android:name="com.xiaomi.mipushdemo.permission.MIPUSH_RECEIVE" />
     <application
-        android:name=".ui.ZktcApplication"
+        android:name=".ui.DemoApplication"
         android:allowBackup="true"
-        android:fullBackupContent="@xml/backup_descriptor"
-        android:networkSecurityConfig="@xml/network_security_config"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity
-            android:name=".base.arouter.SchemaFilterActivity"
-            android:screenOrientation="portrait">
-            <intent-filter>
-<!--                com.tongchuang.budai://catagory?catagory_2=134&catagory_3=135 -->
-                <data
-                    android:host="com.tongchuang.budai"
-                    android:scheme="zktc" />
-                <action android:name="android.intent.action.VIEW" />
+        android:theme="@style/AppTheme"
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".ui.home.HomeActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
-        <activity
-            android:name=".ui.home.cart.HomeCartActivity"
-            android:label="@string/cap_home_car" />
-        <activity
-            android:name=".ui.home.member.HomeMemberActivity"
-            android:label="@string/vip" />
-        <activity android:name=".base.util.PhoneSystemManager" />
-        <activity android:name=".ui.start.StartupActivity" android:label="@string/app_name" >
+        <activity android:name=".ui.home.HomeActivity"/>
+        <activity android:name=".ui.start.StartActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.user.sign.SignActivity" />
-        <activity android:name=".ui.mall.catagory.MallCategoryActivity" android:label="@string/category" />
-        <activity android:name=".ui.user.setting.SettingActivity" />
-        <activity android:name=".ui.user.location.LocationActivity" />
-        <activity android:name=".ui.user.address.AddressActivity" >
 
+        <activity android:name=".base.util.PhoneSystemManager" />
+        <activity android:name=".base.arouter.SchemaFilterActivity">
+            <intent-filter>
+                <data android:host="com.tomtaw.inquiry"
+                    android:scheme="tomtaw" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
         </activity>
-
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.fileProvider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths" />
-        </provider>
-
-        <service android:name="cn.jpush.android.service.PushService"
-            android:process=":multiprocess"
-            tools:node="replace" >
-        </service>
-        <service android:name=".ui.push.JPushService" android:enabled="true"
-            android:exported="false" android:process=":pushcore">
-            <intent-filter>
-                <action android:name="cn.jiguang.user.service.action" />
-            </intent-filter>
-        </service>
-        
-        <receiver android:name=".ui.push.JPushReceiver" android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
-                <category android:name="${JPUSH_PKGNAME}" />
-            </intent-filter>
-        </receiver>
-        <meta-data
-            android:name="com.amap.api.v2.apikey"
-            android:value="${mapkey}" />
-        <service android:name="com.amap.api.location.APSService" />
+        <activity android:name=".ui.user.sign.up.SignUpActivity" android:label="@string/sign_up"/>
+        <activity android:name=".ui.user.sign.login.SignInActivity" android:label="@string/sign_in"
+            android:windowSoftInputMode="adjustPan" />
+<!--            android:windowSoftInputMode="stateVisible|adjustResize"/>-->
+        <activity android:name=".ui.video.VideoActivity" android:label="@string/video"/>
+        <activity android:name=".ui.interrogation.detail.InterrogationDetailActivity" />
     </application>
 </manifest>

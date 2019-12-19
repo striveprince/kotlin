@@ -9,4 +9,7 @@
     <item name="swipe_refresh_layout" type="id"/>
     <item name="radio_group_layout" type="id"/>
     <item name="home_frame_layout" type="id"/>
+    <item name="layout_id" type="id"/>
+    <item name="textError" type="id"/>
+    <item name="recycler_view" type="id" />
 </resources>

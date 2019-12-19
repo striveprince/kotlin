@@ -2,29 +2,49 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowBackground">@color/windowBackground</item>
+<!--        <item name="android:windowBackground">@android:color/transparent</item>-->
+        <item name="android:windowIsTranslucent">true</item>
+<!--        <item name="android:windowAnimationStyle">@null</item>-->
+        <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>
     </style>
-<!--
-    <style name="ActivityTheme"  parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowIsTranslucent">false</item>
+    <style name="bottom_normal_text">
+        <item name="android:textColor">@color/font_hint</item>
+        <item name="android:textSize">14sp</item>
     </style>
--->
+    <style name="bottom_selected_text">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TabLayoutStyle" parent="Base.Widget.Design.TabLayout">
+        <item name="tabIndicatorHeight">3dp</item>
+        <item name="tabIndicatorFullWidth">false</item>
+        <item name="tabSelectedTextColor">@color/tab_color</item>
+    </style>
+    <style name="TextInputAppTheme" parent="Base.TextAppearance.AppCompat.Caption">
+        <item name="android:textColor">@android:color/holo_red_dark</item>
+    </style>
+    <style name="TextInputEditTextStyle">
+        <item name="android:textCursorDrawable">@drawable/cursor_drawable</item>
+        <item name="backgroundTint">@color/colorAccentPress</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="paddingStart">14dp</item>
+        <item name="paddingEnd">14dp</item>
+        <item name="android:paddingLeft">14dp</item>
+        <item name="android:paddingRight">14dp</item>
+        <item name="android:focusable">true</item>
+        <item name="android:drawablePadding">14dp</item>
+    </style>
+<!--        <item name="android:background">@drawable/white_bg_with_indent_bottom_line</item>-->
+
+    <style name="TextInputLayoutStyle">
+        <item name="errorEnabled">true</item>
+        <item name="errorTextAppearance">@style/TextInputAppTheme</item>
+    </style>
 
 
-    <declare-styleable name="VerificationCodeView">
-        <attr name="vCodeBackgroundFocus" format="reference" />
-        <attr name="vCodeBackgroundNormal" format="reference" />
-        <attr name="vCodeDataLength" format="integer" />
-        <attr name="vCodeMargin" format="dimension" />
-        <attr name="vCodeHeight" format="dimension" />
-        <attr name="vCodeTextColor" format="color" />
-        <attr name="vCodeTextSize" format="dimension" />
-        <attr name="vCodeWidth" format="dimension" />
-    </declare-styleable>
 </resources>

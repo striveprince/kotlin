@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.lifecycle.demo.ui.home.interrogation.HomeInterrogationModel" />
+
+        <variable
+            name="parse"
+            type="com.lifecycle.demo.ui.home.interrogation.HomeInterrogationFragment" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/back_ground"
+        android:orientation="vertical"
+        android:paddingTop="24dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:text="@string/task_interrogation"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end|center"
+                android:gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="@string/history_task" />
+        </FrameLayout>
+
+<!--            app:tabMode="scrollable"-->
+<!--            app:tabBackground=""-->
+        <com.google.android.material.tabs.TabLayout
+            android:layout_marginTop="1dp"
+            style="@style/TabLayoutStyle"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:id="@+id/tab_layout"
+            android:background="@color/white">
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_all"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/all_interrogation" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_new"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/new_interrogation" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_wait"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/wait_interrogation" />
+        </com.google.android.material.tabs.TabLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:adapter="@{parse.pager2Adapter}" />
+    </LinearLayout>
+
+</layout>

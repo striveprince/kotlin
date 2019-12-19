@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.lifecycle.demo.ui.user.sign.login.SignInModel" />
+
+        <variable
+            name="parse"
+            type="com.lifecycle.demo.ui.user.sign.login.SignInActivity" />
+
+        <variable
+            name="params"
+            type="com.lifecycle.demo.inject.data.net.SignParams" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:scrollbars="none"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="100dp"
+                android:contentDescription="@string/logo"
+                android:src="@mipmap/ic_launcher"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout"
+                style="@style/TextInputLayoutStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:hint="@string/account"
+                app:counterEnabled="true"
+                app:counterMaxLength="11"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView">
+                <!--            app:passwordToggleDrawable=""-->
+                <!--suppress AndroidUnknownAttribute -->
+                <!--                android:background="@color/transparent"-->
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/input_edit_mobile"
+                    style="@style/TextInputEditTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:checkError="@{vm::checkAccountError}"
+                    android:drawablePadding="14dp"
+                    android:inputType="text"
+                    android:text="@={params.login_name}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout2"
+                style="@style/TextInputLayoutStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/colorAccentPress">
+
+                <!--suppress AndroidUnknownAttribute -->
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/input_edit_password"
+                    style="@style/TextInputEditTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checkError="@{vm::checkPasswordError}"
+                    android:drawableEnd="@mipmap/clear_normal"
+                    android:inputType="textPassword"
+                    android:text="@={params.password}"
+                    android:textColor="@color/black" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <!--        android:checkError="@{vm::checkAccountError}"-->
+            <!--        android:afterTextChanged="@{vm::onPasswordFinish}"-->
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/selector_btn"
+                android:enabled="@{vm.enableAccount&amp;&amp;vm.enablePassword}"
+                android:onClick="@{vm::onLoginClick}"
+                android:text="@string/sign_in"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="17sp"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>
