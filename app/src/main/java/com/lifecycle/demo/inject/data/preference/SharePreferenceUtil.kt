@@ -37,7 +37,6 @@ class SharePreferenceUtil private constructor(context: Context, name: String) {
     }
 
     fun clear() {
-
         editor.clear()
         editor.commit()
     }
