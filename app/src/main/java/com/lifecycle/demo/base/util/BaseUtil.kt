@@ -2,7 +2,6 @@
 
 package com.lifecycle.demo.base.util
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
@@ -11,7 +10,6 @@ import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.pm.PackageManager.GET_META_DATA
 import android.graphics.Color
 import android.os.Build
 import android.text.TextUtils
@@ -31,24 +29,18 @@ import androidx.lifecycle.ViewModelProviders
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
+import com.lifecycle.binding.inter.bind.BindRecycler
+import com.lifecycle.binding.util.ReflectUtil
 import com.lifecycle.demo.R
 import com.lifecycle.demo.base.util.PhoneSystemManager.Companion.permission
 import com.lifecycle.demo.base.util.PhoneSystemManager.Companion.type
-import com.lifecycle.demo.inject.component.ActivityComponent
 import com.lifecycle.demo.inject.data.net.InfoEntity
 import com.lifecycle.demo.inject.data.net.exception.ApiException
 import com.lifecycle.demo.inject.data.net.exception.NoPermissionException
 import com.lifecycle.demo.inject.data.net.transform.ErrorSingleTransformer
 import com.lifecycle.demo.inject.data.net.transform.NoErrorObservableTransformer
 import com.lifecycle.demo.inject.data.net.transform.RestfulSingleTransformer
-import com.lifecycle.binding.inter.bind.BindRecycler
-import com.lifecycle.binding.util.ReflectUtil
 import com.tbruyelle.rxpermissions2.RxPermissions
-import com.yealink.callscreen.ExternalInterface
-import com.yealink.callscreen.TalkConfigure
-import com.yealink.callscreen.data.TalkResource
-import com.yealink.common.listener.OutInterface
-import com.yealink.sdk.YealinkApi
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -57,7 +49,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.security.MessageDigest
 import java.util.regex.Pattern
-import javax.crypto.Cipher
 
 
 /**
@@ -372,31 +363,20 @@ fun setMeizuStatusBarDarkIcon(activity: Activity?, dark: Boolean): Boolean {
 
 
 fun Application.initYealinkSdk() {
-    if (checkPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO))
-        YealinkApi.instance().apply {
-            init(this@initYealinkSdk, filesDir.absolutePath + ActivityComponent.Config.tomtaw, yealinkAppKey())
-            initTalkResource(TalkResource())
-            initTalkConfig(object : TalkConfigure() {init {
-                IS_ENABLE_SHARE_CONFERENCE = false
-                MENU_INVITE_VISIBLE = false
-                MENU_UPGRADE_MEETING_VISIBLE = false
-            }
-            })
-            setExtInterface(object : ExternalInterface() {})
-            setOutInterface(object : OutInterface() {})
-            addIncomingListener {}
-        }
+//    if (checkPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO))
+//        YealinkApi.instance().apply {
+//            init(this@initYealinkSdk, filesDir.absolutePath + ActivityComponent.Config.tomtaw, yealinkAppKey())
+//            initTalkResource(TalkResource())
+//            initTalkConfig(object : TalkConfigure() {init {
+//                IS_ENABLE_SHARE_CONFERENCE = false
+//                MENU_INVITE_VISIBLE = false
+//                MENU_UPGRADE_MEETING_VISIBLE = false
+//            }
+//            })
+//            setExtInterface(object : ExternalInterface() {})
+//            setOutInterface(object : OutInterface() {})
+//            addIncomingListener {}
+//        }
 
 }
 
-fun Context.yealinkAppKey(): String {
-    val packageName = packageManager.getPackageInfo(packageName, GET_META_DATA).packageName
-    packageName.encode()
-    return string(R.string.yealink_app_key)
-}
-
-fun String.encode():String{
-    val cip1 = Cipher.getInstance("RSA/NONE/PKCS1Padding")
-//    cip1.init(2, prk)
-    return ""
-}

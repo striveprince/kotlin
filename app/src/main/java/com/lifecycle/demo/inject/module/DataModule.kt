@@ -17,7 +17,6 @@ import com.lifecycle.demo.inject.data.preference.PreferenceApi
 import com.lifecycle.demo.inject.interceptor.NetInterceptor
 import com.lifecycle.demo.inject.qualifier.AppContext
 import com.lifecycle.demo.inject.scope.ApplicationScope
-import com.yealink.sdk.YealinkApi
 import dagger.Module
 import dagger.Provides
 import io.reactivex.schedulers.Schedulers
@@ -92,7 +91,7 @@ class DataModule {
     @Provides
     @ApplicationScope
     internal fun provideApi(@AppContext context: Context, httpApi: HttpApi, databaseApi: DatabaseApi, mapApi: MapApi, ossApi: OssApi, preferenceApi: PreferenceApi): Api {
-        return Api(context, NetApi(httpApi), databaseApi, mapApi, ossApi, preferenceApi,YealinkApi.instance())
+        return Api(context, NetApi(httpApi), databaseApi, mapApi, ossApi, preferenceApi)
     }
 
 }

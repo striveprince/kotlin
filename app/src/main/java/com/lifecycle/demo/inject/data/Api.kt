@@ -10,7 +10,6 @@ import com.lifecycle.demo.inject.data.net.SignParams
 import com.lifecycle.demo.inject.data.net.bean.TokenBean
 import com.lifecycle.demo.inject.data.oss.OssApi
 import com.lifecycle.demo.inject.data.preference.PreferenceApi
-import com.yealink.sdk.YealinkApi
 import io.reactivex.Single
 
 class Api(
@@ -19,8 +18,7 @@ class Api(
     val databaseApi: DatabaseApi,
     val mapApi: MapApi,
     val ossApi: OssApi,
-    val preferenceApi: PreferenceApi,
-    val yealinkApi: YealinkApi
+    val preferenceApi: PreferenceApi
 ) {
     fun signIn(sign: SignParams) =
         netApi.httpApi
