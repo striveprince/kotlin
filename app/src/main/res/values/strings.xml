@@ -13,7 +13,7 @@
     <string name="wait_interrogation">待回复(%1d)</string>
     <string name="new_interrogation">新问题(%1d)</string>
     <string name="all_interrogation">全部(%1d)</string>
-    <string name="task_interrogation">问诊任务</string>
+    <string name="task_interrogation">问题任务</string>
     <string name="wait_for_event">待办事项</string>
     <string name="history_task">历史任务</string>
     <string name="sign_up">注册</string>
