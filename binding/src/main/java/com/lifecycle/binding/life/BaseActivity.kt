@@ -43,8 +43,8 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
         initView(savedInstanceState)
     }
 
-    fun initView(savedInstanceState: Bundle?) {
-        val layout = if (!App.init) {
+    private fun initView(savedInstanceState: Bundle?) {
+        val injectView = if (!App.init) {
             startView().apply {
                 rxBus<Boolean>()
                     .filter{it}
@@ -54,7 +54,14 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
                     }
             }
         } else inject(savedInstanceState)
-        setContentView(layout)
+        if (isSwipe() != SwipeBackLayout.FROM_NO) {
+            setContentView(R.layout.activity_base)
+            val swipeBackLayout = findViewById<SwipeBackLayout>(R.id.swipe_back_layout)
+            swipeBackLayout.directionMode = isSwipe()
+            val imageView: View = findViewById(R.id.iv_shadow)
+            swipeBackLayout.setOnSwipeBackListener { _, f -> imageView.alpha = 1 - f }
+            swipeBackLayout.addView(injectView, ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT))
+        } else setContentView(injectView)
     }
 
     override fun inject(savedInstanceState: Bundle?): View {

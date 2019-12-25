@@ -95,7 +95,7 @@ publish {
     userOrg = 'arvinwant'
     groupId = 'com.lifecycle'
     artifactId = 'binding'
-    publishVersion = '1.0.0-alpha1'
+    publishVersion = '1.0.0'
     repoName = 'wmt'
     desc = 'you could use it create view, databinding or anko or the normal way'
     website = 'https://github.com/striveprince/kotlin'
