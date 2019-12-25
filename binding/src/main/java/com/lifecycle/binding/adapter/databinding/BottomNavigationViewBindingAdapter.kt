@@ -14,7 +14,6 @@ object BottomNavigationViewBindingAdapter {
     @BindingAdapter("position")
     fun setPosition(bottomNavigationView: BottomNavigationView, position: Int) {
         val currentPosition = getBottomPosition(bottomNavigationView)
-        Timber.i("position=$position,currentPosition=$currentPosition,bottomNavigationView.selectedItemId = ${bottomNavigationView.selectedItemId},currentPositionItemId=${bottomNavigationView.menu.getItem(position).itemId}")
         if (currentPosition != position)
             bottomNavigationView.selectedItemId = bottomNavigationView.menu.getItem(position).itemId
     }
@@ -22,7 +21,8 @@ object BottomNavigationViewBindingAdapter {
     @JvmStatic
     @InverseBindingAdapter(attribute = "position", event = "positionAttrChanged")
     fun getBottomPosition(bottomNavigationView: BottomNavigationView): Int {
-        return bottomNavigationView.getPosition(bottomNavigationView.selectedItemId)
+        return bottomNavigationView.getTag(R.id.bottom_navigation_view) as? Int ?:0
+//        bottomNavigationView.getPosition(bottomNavigationView.selectedItemId)
     }
 
     private fun BottomNavigationView.getPosition(int: Int): Int {
@@ -45,9 +45,12 @@ object BottomNavigationViewBindingAdapter {
 //        onReselectedItemListener: OnReselectedItemListener?,
         positionAttrChanged: InverseBindingListener?
     ) {
+
         val newValue = if (positionAttrChanged == null && onSelectItemListener == null) null
         else BottomNavigationView.OnNavigationItemSelectedListener {
-            onSelectItemListener?.onItemSelected(it.itemId, bottomNavigationView.getPosition(it.itemId))
+            val position = bottomNavigationView.getPosition(it.itemId)
+            onSelectItemListener?.onItemSelected(it.itemId, position)
+            bottomNavigationView.setTag(R.id.bottom_navigation_view,position)
             positionAttrChanged?.onChange()
             true
         }
