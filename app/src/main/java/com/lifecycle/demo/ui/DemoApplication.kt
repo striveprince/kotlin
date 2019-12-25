@@ -47,6 +47,5 @@ class DemoApplication : MultiDexApplication() {
                 //notify base activity application and resource init completed
             }
         }
-        Timber.i("init TomtawApplication")
     }
 }
