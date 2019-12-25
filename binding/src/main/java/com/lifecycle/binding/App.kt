@@ -9,6 +9,7 @@ import android.os.Bundle
 import androidx.core.content.ContextCompat
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.life.LifecycleInit
+import com.lifecycle.binding.util.busPost
 import java.util.*
 
 class App constructor(val application: Application) : Application.ActivityLifecycleCallbacks {
@@ -16,7 +17,7 @@ class App constructor(val application: Application) : Application.ActivityLifecy
         val stack = Stack<Activity>()
         val toolbarList = arrayListOf<Inflate>()
         private val lifeListener = arrayListOf<(LifecycleInit<*>) -> Unit>()
-        var init = false
+        internal var init = false
         lateinit var application: Application
 
         fun activity() = stack.lastElement()
@@ -33,21 +34,28 @@ class App constructor(val application: Application) : Application.ActivityLifecy
         fun colorState(id: Int): ColorStateList = application.resources.getColorStateList(id)
         fun string(strRes: Int, vararg params: Any) = application.getString(strRes, *params)
         fun getDrawable(drawableRes: Int): Drawable? = ContextCompat.getDrawable(application, drawableRes)
-        fun addLifeInit(it: (LifecycleInit<*>) -> Unit) {
-            lifeListener.add(it)
-        }
+
 
         fun startCreate(lifecycleInit: LifecycleInit<*>) {
             for (listener in lifeListener) {
                 listener(lifecycleInit)
             }
         }
+
+        fun addLifeInit(it: (LifecycleInit<*>) -> Unit) {
+            lifeListener.add(it)
+        }
+    }
+
+    fun addLifeInit(it: (LifecycleInit<*>) -> Unit) {
+        lifeListener.add(it)
     }
 
     init {
         App.application = application
         application.registerActivityLifecycleCallbacks(this)
         init = true
+        busPost(init)
     }
 
     override fun onActivityPaused(activity: Activity?) {}

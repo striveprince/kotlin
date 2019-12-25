@@ -13,7 +13,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.internal.disposables.ListCompositeDisposable
 
 @Suppress("UNCHECKED_CAST")
-abstract class LifeViewModel : ViewModel(), Init {
+open class LifeViewModel : ViewModel(), Init {
     private val disposables = ListCompositeDisposable()
     override fun initData(owner: LifecycleOwner, bundle: Bundle?) {
         attachData(owner,  bundle)
