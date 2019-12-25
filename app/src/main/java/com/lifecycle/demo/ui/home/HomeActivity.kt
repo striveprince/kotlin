@@ -3,12 +3,10 @@ package com.lifecycle.demo.ui.home
 import android.content.Context
 import android.os.Bundle
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleOwner
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.lifecycle.demo.R
-import com.lifecycle.demo.base.life.anko.AnkoActivity
+import com.lifecycle.binding.life.anko.AnkoActivity
 import com.lifecycle.demo.inject.component.ActivityComponent
-import com.lifecycle.demo.inject.data.Api
 import com.google.android.material.bottomnavigation.LabelVisibilityMode
 import com.lifecycle.binding.base.view.SwipeBackLayout
 import org.jetbrains.anko.*

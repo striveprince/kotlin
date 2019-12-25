@@ -11,8 +11,8 @@ import android.text.TextUtils
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.core.content.FileProvider
-import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -20,8 +20,8 @@ import com.lifecycle.binding.inter.observer.NormalObserver
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.lifecycle.binding.App
+import com.lifecycle.binding.base.bus.RxBus
 import com.lifecycle.binding.base.rotate.TimeUtil
-import com.lifecycle.binding.inter.bind.BindRecycler
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -42,6 +42,21 @@ import java.io.File
  * Author: created by ArvinWang on 2019/11/14 18:04
  * Email: 1033144294@qq.com
  */
+inline fun <reified E> rxBus(): Observable<E> {
+    return RxBus.getInstance()
+        .toObservable(E::class.java)
+}
+
+inline fun<reified E> rxBusMain():Observable<E>{
+    return rxBus<E>().observeOn(AndroidSchedulers.mainThread())
+}
+
+fun busPost(any: Any) {
+    return RxBus.getInstance().send(any)
+}
+fun Context.string(@StringRes id: Int, vararg any: Any) =
+    getString(id, *any)
+
 
 fun<T> LiveData<T>.observer(owner: LifecycleOwner,block:(T)->Unit){
     observe(owner, Observer { block(it) })
@@ -94,7 +109,7 @@ inline fun <T, R> T.transform(block: T.() -> R): R {
 
 
 //---- file -----
-val srcFileDir = Environment.getExternalStorageDirectory().toString() + "/zktc"
+val srcFileDir = Environment.getExternalStorageDirectory().toString() + "/111"
 
 fun createWholeDir(path: String): String {
     var path1 = path

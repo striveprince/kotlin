@@ -1,6 +1,6 @@
 package com.lifecycle.demo.ui.home.mine
 
-import com.lifecycle.demo.base.life.viewmodel.BaseViewModel
+import com.lifecycle.binding.viewmodel.LifeViewModel
 
-class HomeMineModel: BaseViewModel() {
+class HomeMineModel: LifeViewModel() {
 }

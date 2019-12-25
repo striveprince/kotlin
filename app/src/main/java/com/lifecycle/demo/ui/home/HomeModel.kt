@@ -3,14 +3,15 @@ package com.lifecycle.demo.ui.home
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import com.lifecycle.demo.R
-import com.lifecycle.demo.base.life.viewmodel.BaseLifeViewModel
 import com.lifecycle.demo.base.util.ARouterUtil
 import com.lifecycle.demo.inject.data.Api
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import com.lifecycle.binding.util.observer
+import com.lifecycle.binding.viewmodel.LifeViewModel
 
 /**
  * Company:
@@ -18,7 +19,7 @@ import com.lifecycle.binding.util.observer
  * Author: created by ArvinWang on 2019/11/15 10:23
  * Email: 1033144294@qq.com
  */
-class HomeModel : BaseLifeViewModel<HomeActivity>() , TabLayout.OnTabSelectedListener, BottomNavigationView.OnNavigationItemSelectedListener {
+class HomeModel : LifeViewModel() , TabLayout.OnTabSelectedListener, BottomNavigationView.OnNavigationItemSelectedListener {
     val newCount= MutableLiveData(0)
     val waitCount= MutableLiveData(0)
     val allCount= MutableLiveData(0)
@@ -32,10 +33,12 @@ class HomeModel : BaseLifeViewModel<HomeActivity>() , TabLayout.OnTabSelectedLis
         HomeEntity(R.id.home_mine)
     )
 
-    override fun attachData(owner: HomeActivity, api: Api, bundle: Bundle?) {
-        super.attachData(owner, api, bundle)
-        currentIndex.observer(owner){ checkFragment(it,owner.supportFragmentManager) }
-        bundle.restoreFragment()
+    override fun initData(owner: LifecycleOwner, bundle: Bundle?) {
+        super.initData(owner, bundle)
+        (owner as HomeActivity ).apply {
+            currentIndex.observer(this){ checkFragment(it,supportFragmentManager) }
+            bundle.restoreFragment()
+        }
     }
 
     fun restoreFragmentState(savedInstanceState: Bundle) = savedInstanceState.restoreFragment()

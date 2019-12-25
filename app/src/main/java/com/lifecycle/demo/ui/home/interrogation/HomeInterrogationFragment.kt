@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.lifecycle.demo.R
-import com.lifecycle.demo.base.life.binding.DataBindingFragment
+import com.lifecycle.binding.life.binding.data.DataBindingFragment
 import com.lifecycle.demo.base.util.OnPageChange
 import com.lifecycle.demo.base.util.viewModel
 import com.lifecycle.demo.databinding.FragmentHomeIntrrogationBinding
@@ -14,7 +14,8 @@ import com.lifecycle.demo.inject.data.Api
 import com.lifecycle.demo.ui.home.HomeModel
 import com.lifecycle.demo.ui.home.interrogation.HomeInterrogationFragment.Companion.interrogation
 import com.lifecycle.binding.adapter.databinding.TabLayoutBindingAdapter
-import com.lifecycle.binding.adapter.pager.FragmentPager2Adapter
+import com.lifecycle.binding.adapter.pager.FragmentOpenPager2Adapter
+import com.lifecycle.binding.adapter.pager.impl.FragmentPager2Adapter
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
 import com.lifecycle.binding.util.observer
 
@@ -28,8 +29,8 @@ class HomeInterrogationFragment : DataBindingFragment<HomeInterrogationModel, Fr
     val pager2Adapter by lazy { FragmentPager2Adapter<HomeInterrogationEntity>(childFragmentManager, lifecycle) }
 
     private val pageChange by lazy { OnPageChange(model) }
-    override fun initData(api: Api, owner: LifecycleOwner, bundle: Bundle?) {
-        super.initData(api, owner, bundle)
+    override fun initData(owner: LifecycleOwner, bundle: Bundle?) {
+        super.initData(owner, bundle)
         pager2Adapter.addList(model.items)
         binding.apply {
             viewPager.registerOnPageChangeCallback(pageChange)
@@ -46,7 +47,6 @@ class HomeInterrogationFragment : DataBindingFragment<HomeInterrogationModel, Fr
             }
         }
     }
-
     override fun onDestroy() {
         super.onDestroy()
         binding.viewPager.unregisterOnPageChangeCallback(pageChange)

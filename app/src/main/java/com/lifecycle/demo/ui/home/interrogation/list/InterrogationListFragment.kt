@@ -2,7 +2,6 @@ package com.lifecycle.demo.ui.home.interrogation.list
 
 import androidx.fragment.app.FragmentActivity
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.lifecycle.demo.base.life.recycler.RecyclerFragment
 import com.lifecycle.demo.base.util.launchMain
 import com.lifecycle.demo.base.util.restful
 import com.lifecycle.demo.base.util.toEntities
@@ -14,6 +13,8 @@ import com.lifecycle.demo.inject.data.net.bean.InterrogationDataBean
 import com.lifecycle.demo.ui.home.HomeModel
 import com.lifecycle.demo.ui.home.interrogation.list.InterrogationListFragment.Companion.interrogationList
 import com.lifecycle.binding.Constant
+import com.lifecycle.binding.life.binding.data.recycler.diff.RecyclerFragment
+import com.lifecycle.demo.ui.DemoApplication.Companion.api
 import io.reactivex.Single
 
 @Route(path = interrogationList)

@@ -5,13 +5,13 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.viewpager.widget.ViewPager
 import com.lifecycle.demo.R
-import com.lifecycle.demo.base.life.viewmodel.BaseViewModel
+import com.lifecycle.binding.viewmodel.LifeViewModel
 import com.lifecycle.demo.inject.data.Api
 import com.google.android.material.tabs.TabLayout
 import com.lifecycle.binding.App
 import com.lifecycle.binding.util.observer
 
-class HomeInterrogationModel:BaseViewModel() ,ViewPager.OnPageChangeListener, TabLayout.OnTabSelectedListener {
+class HomeInterrogationModel:LifeViewModel() ,ViewPager.OnPageChangeListener, TabLayout.OnTabSelectedListener {
 
     val position = MutableLiveData(0)
     val items = arrayListOf(
@@ -19,9 +19,6 @@ class HomeInterrogationModel:BaseViewModel() ,ViewPager.OnPageChangeListener, Ta
         HomeInterrogationEntity(R.string.new_interrogation),
         HomeInterrogationEntity(R.string.wait_interrogation)
     )
-    override fun initData(api: Api, owner: LifecycleOwner, bundle: Bundle?) {
-        super.initData(api, owner, bundle)
-    }
 
     override fun onPageScrollStateChanged(state: Int) {
 

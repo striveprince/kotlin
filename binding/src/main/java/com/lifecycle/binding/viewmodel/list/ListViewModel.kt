@@ -5,9 +5,9 @@ import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import com.lifecycle.binding.adapter.AdapterType
-import com.lifecycle.binding.adapter.IEvent
-import com.lifecycle.binding.adapter.IListAdapter
-import com.lifecycle.binding.adapter.recycler.RecyclerAdapter
+import com.lifecycle.binding.adapter.event.IEvent
+import com.lifecycle.binding.adapter.inter.IListAdapter
+import com.lifecycle.binding.adapter.recycler.impl.RecyclerAdapter
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.inter.observer.NormalObserver
 import com.lifecycle.binding.util.ioToMainThread
@@ -18,33 +18,30 @@ import io.reactivex.Observer
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
-import kotlin.properties.Delegates
-import kotlin.reflect.KProperty
 
-abstract class ListViewModel<Owner : LifecycleOwner, E : Inflate, Api>(val adapter: IListAdapter<E> = RecyclerAdapter()) :
-    LifeViewModel<Owner, Api>(), IListAdapter<E>, Observer<MutableList<E>> {
+open class ListViewModel<E : Inflate>(val adapter: IListAdapter<E> = RecyclerAdapter()) :
+    LifeViewModel(), IListAdapter<E>, Observer<MutableList<E>> {
     var pageWay = true
     var pageCount = 10
     var headIndex = 0
     var offset = 0
     val loadingState= MutableLiveData(AdapterType.no)
-
     val error = MutableLiveData<Throwable>()
     override val adapterList: MutableList<E> = adapter.adapterList
     private var disposable: Disposable? = null
     var enable = MutableLiveData<Boolean>(true)
-    lateinit var httpData :(Api,Int,Int)->Single<List<E>>
-    override fun attachData(owner: Owner, api: Api, bundle: Bundle?) {
-        super.attachData(owner, api, bundle)
-        loadingState.observer(owner) { doGetData(it,api) }
+    lateinit var httpData :(Int,Int)->Single<List<E>>
+    override fun attachData(owner: LifecycleOwner,  bundle: Bundle?) {
+        super.attachData(owner, bundle)
+        loadingState.observer(owner) { doGetData(it) }
         loadingState.value = AdapterType.refresh
     }
 
-    fun doGetData(it:Int,api: Api){
+    fun doGetData(it:Int){
         Timber.i("it=$it")
         if (it!=0 && enable.value!!) {
             enable.value = false
-            httpData(api, getStartOffset(), loadingState.value!!)
+            httpData(getStartOffset(), loadingState.value!!)
                 .ioToMainThread()
                 .doFinally { enable.value = true }
                 .doFinally { loadingState.value = AdapterType.no}
@@ -52,6 +49,7 @@ abstract class ListViewModel<Owner : LifecycleOwner, E : Inflate, Api>(val adapt
                 .subscribe(NormalObserver(this))
         }
     }
+
 
     override fun onNext(t: MutableList<E>) {
         setList(getEndOffset(), t, loadingState.value!!)
@@ -160,7 +158,8 @@ abstract class ListViewModel<Owner : LifecycleOwner, E : Inflate, Api>(val adapt
         return adapter.removeList(position, from, size)
     }
 
-    override fun addEventAdapter(event: IEvent<E>) {
+
+    override fun addEventAdapter(event: IEvent<E, Observable<Any>>) {
         adapter.addEventAdapter(event)
     }
 

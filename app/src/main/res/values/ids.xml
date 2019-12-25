@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="smart_refresh_layout" type="id"/>
-    <item name="smart_refresh_layout_state" type="id"/>
+
     <item name="holder_position" type="id"/>
     <item name="inflate" type="id"/>
     <item name="parse" type="id"/>

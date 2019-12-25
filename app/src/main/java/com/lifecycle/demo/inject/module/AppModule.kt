@@ -27,7 +27,6 @@ class AppModule(val app: DemoApplication) {
         ARouter.init(app)
         SmartRefreshLayout.setDefaultRefreshHeaderCreator { context, _ -> ClassicsHeader(context).setDrawableSize(20f) }
         SmartRefreshLayout.setDefaultRefreshFooterCreator { context, _ -> ClassicsFooter(context).setDrawableSize(20f) }
-        App(app)
 //        app.initYealinkSdk()
         Constant.vm = BR.vm
         Constant.parse = BR.parse

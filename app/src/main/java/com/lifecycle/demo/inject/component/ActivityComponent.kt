@@ -15,12 +15,12 @@ import dagger.Subcomponent
 interface ActivityComponent{
     object Config{ const val tomtaw = "/tomtaw/" }
 //    fun inject(activity_video: AnkoActivity<out ViewModel>)
-    fun inject(activity: StartActivity)
-    fun inject(activity: SignInActivity)
-    fun inject(activity: SignUpActivity)
-    fun inject(activity: HomeActivity)
-    fun inject(activity: InterrogationDetailActivity)
-    fun inject(activity: VideoActivity)
+//    fun inject(activity: StartActivity)
+//    fun inject(activity: SignInActivity)
+//    fun inject(activity: SignUpActivity)
+//    fun inject(activity: HomeActivity)
+//    fun inject(activity: InterrogationDetailActivity)
+//    fun inject(activity: VideoActivity)
 
     @Subcomponent.Builder
     interface Builder{

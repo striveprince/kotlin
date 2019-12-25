@@ -1,7 +1,7 @@
 package com.lifecycle.demo.ui.home.browse
 
-import com.lifecycle.demo.base.life.viewmodel.BaseViewModel
+import com.lifecycle.binding.viewmodel.LifeViewModel
 
-class HomeBrowseModel : BaseViewModel(){
+class HomeBrowseModel : LifeViewModel(){
 
 }

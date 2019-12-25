@@ -1,6 +1,6 @@
 package com.lifecycle.demo.ui.interrogation.detail
 
-import com.lifecycle.demo.base.life.viewmodel.BaseViewModel
+import com.lifecycle.binding.viewmodel.LifeViewModel
 
-class InterrogationDetailModel:BaseViewModel() {
+class InterrogationDetailModel:LifeViewModel() {
 }

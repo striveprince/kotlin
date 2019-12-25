@@ -13,10 +13,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.internal.disposables.ListCompositeDisposable
 
 @Suppress("UNCHECKED_CAST")
-abstract class LifeViewModel<Owner : LifecycleOwner, Api> : ViewModel(), Init<Api> {
+abstract class LifeViewModel : ViewModel(), Init {
     private val disposables = ListCompositeDisposable()
-    override fun initData(api: Api, owner: LifecycleOwner, bundle: Bundle?) {
-        attachData(owner as Owner, api, bundle)
+    override fun initData(owner: LifecycleOwner, bundle: Bundle?) {
+        attachData(owner,  bundle)
     }
 
     fun <T> Single<T>.doSubscribe(v: View? = null,value:ValueAnimator?=null):Single<T> {
@@ -51,7 +51,7 @@ abstract class LifeViewModel<Owner : LifecycleOwner, Api> : ViewModel(), Init<Ap
      * It's not recommended to use it init data
      * @param owner it have activity_video object,please don't give it to property otherwise,it will leak
      * */
-    open fun attachData(owner: Owner, api: Api, bundle: Bundle?) {}
+    open fun attachData(owner: LifecycleOwner, bundle: Bundle?) {}
 
     override fun onCleared() {
         super.onCleared()

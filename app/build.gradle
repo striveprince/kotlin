@@ -16,7 +16,14 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     dataBinding.enabled = true
-//    buildFeatures.dataBinding = true
+    viewBinding.enabled = true
+//    buildFeatures{
+//        dataBinding = true
+//        viewBinding = true
+////        compose = true
+//    }
+    kotlinOptions.jvmTarget = "1.8"
+
     defaultConfig {
         applicationId "com.lifecycle.demo"
         minSdkVersion min_sdk_version
@@ -170,6 +177,17 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.afollestad.material-dialogs:core:3.1.1'
+
+//    def compose_version = '0.1.0-dev03'
+//    implementation "androidx.compose:compose-runtime:$compose_version"
+//    implementation "androidx.ui:ui-framework:$compose_version"
+//    implementation "androidx.ui:ui-layout:$compose_version"
+//    implementation "androidx.ui:ui-material:$compose_version"
+//    implementation "androidx.ui:ui-foundation:$compose_version"
+//    implementation "androidx.ui:ui-animation:$compose_version"
+//    implementation "androidx.ui:ui-tooling:$compose_version"
+//    androidTestImplementation "androidx.ui:ui-platform:$compose_version"
+//    androidTestImplementation "androidx.ui:ui-test:$compose_version"
 //    implementation 'org.conscrypt:conscrypt-android:2.2.1'
 //    implementation 'com.afollestad.material-dialogs:commons:0.9.1.0'
 //    implementation 'com.pgyersdk:sdk:3.0.2'

@@ -3,19 +3,15 @@ package com.lifecycle.demo.ui.user.sign.login
 import android.text.Editable
 import android.view.View
 import androidx.lifecycle.MutableLiveData
-import com.lifecycle.demo.base.life.viewmodel.BaseViewModel
+import com.lifecycle.binding.util.subscribeObserver
+import com.lifecycle.binding.viewmodel.LifeViewModel
 import com.lifecycle.demo.base.util.ARouterUtil
 import com.lifecycle.demo.base.util.getAccountError
 import com.lifecycle.demo.base.util.getPasswordError
-import com.lifecycle.demo.base.util.restful
-import com.lifecycle.demo.inject.data.Api
-import com.lifecycle.demo.inject.data.net.SignParams
-import com.lifecycle.demo.inject.data.net.bean.TokenBean
-import com.lifecycle.binding.util.subscribeObserver
-import io.reactivex.Single
+import com.lifecycle.demo.ui.DemoApplication.Companion.api
 
 
-class SignInModel:BaseViewModel() {
+class SignInModel:LifeViewModel() {
     val enableAccount = MutableLiveData(true)
     val enablePassword = MutableLiveData(true)
     val sign by lazy { api.preferenceApi.signParams() }

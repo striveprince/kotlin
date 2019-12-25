@@ -12,4 +12,5 @@
     <item name="layout_id" type="id"/>
     <item name="textError" type="id"/>
     <item name="recycler_view" type="id" />
+    <item name="smart_refresh_layout_state" type="id"/>
 </resources>

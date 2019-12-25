@@ -10,13 +10,13 @@ import com.lifecycle.demo.inject.data.net.bean.InterrogationBean
 import com.lifecycle.binding.App
 import com.lifecycle.binding.base.rotate.TimeEntity
 import com.lifecycle.binding.base.rotate.TimeUtil
-import com.lifecycle.binding.inter.bind.BindRecycler
+import com.lifecycle.binding.inter.bind.data.DataBindRecycler
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
 import com.lifecycle.binding.inter.inflate.DiffInflate
 import com.lifecycle.binding.inter.inflate.Recycler
 
 @LayoutView(layout = [R.layout.holder_interrogation])
-class InterrogationListEntity(private val bean: InterrogationBean) : BindRecycler<InterrogationBean, ViewDataBinding>, DiffInflate,Recycler,TimeEntity {
+class InterrogationListEntity(private val bean: InterrogationBean) : DataBindRecycler<InterrogationBean, ViewDataBinding>, DiffInflate,Recycler,TimeEntity {
     override fun t() = bean
     var t:RecyclerView.ViewHolder? = null
     val state = MutableLiveData(interrogationState())

@@ -29,7 +29,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
-import com.lifecycle.binding.inter.bind.BindRecycler
+import com.lifecycle.binding.inter.bind.data.DataBindRecycler
 import com.lifecycle.binding.util.ReflectUtil
 import com.lifecycle.demo.R
 import com.lifecycle.demo.base.util.PhoneSystemManager.Companion.permission
@@ -79,7 +79,7 @@ fun launchIo(block: () -> Unit) {
     CoroutineScope(Dispatchers.IO).launch { block() }
 }
 
-inline fun <reified E : BindRecycler<*, out ViewDataBinding>> Any.toEntity(vararg arrayOfAny: Any?): E {
+inline fun <reified E : DataBindRecycler<*, out ViewDataBinding>> Any.toEntity(vararg arrayOfAny: Any?): E {
     val clazz = E::class
     val list: ArrayList<Any?> = arrayListOf(this)
     list.addAll(arrayOfAny)
@@ -92,7 +92,7 @@ inline fun <reified E : BindRecycler<*, out ViewDataBinding>> Any.toEntity(varar
     throw ApiException(0, "check ${E::class.simpleName} class's constructor")
 }
 
-inline fun <reified E : BindRecycler<*, out ViewDataBinding>> List<Any>.toEntities(vararg arrayOfAny: Any?): List<E> {
+inline fun <reified E : DataBindRecycler<*, out ViewDataBinding>> List<Any>.toEntities(vararg arrayOfAny: Any?): List<E> {
     val list = ArrayList<E>()
     for (any in this) {
         list.add(any.toEntity(*arrayOfAny))
@@ -280,8 +280,8 @@ fun isShowing(context: Context): Boolean {
 
 @SuppressLint("PrivateApi")
 fun applyKitKatTranslucency(activity: AppCompatActivity, color: Int) {
-//    setMeizuStatusBarDarkIcon(activity, true)//确定状态栏的字体演示是否为黑色,false为白色，true为黑色，目前6.0以下仅仅适配了两个机型
-//    setMiuiStatusBarDarkMode(activity, true)
+    setMeizuStatusBarDarkIcon(activity, true)//确定状态栏的字体演示是否为黑色,false为白色，true为黑色，目前6.0以下仅仅适配了两个机型
+    setMiuiStatusBarDarkMode(activity, true)
     setAllUpSixVersion(activity) //6.0以上系统
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
         setTranslucentStatus(activity)
