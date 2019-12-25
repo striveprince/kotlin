@@ -63,10 +63,6 @@ class App constructor(val application: Application) : Application.ActivityLifecy
     override fun onActivityStarted(activity: Activity?) {}
     override fun onActivityDestroyed(activity: Activity?) {
         stack.remove(activity)
-        if (stack.isEmpty()) {
-            lifeListener.clear()
-            toolbarList.clear()
-        }
     }
 
     override fun onActivitySaveInstanceState(activity: Activity?, outState: Bundle?) {}

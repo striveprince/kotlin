@@ -11,7 +11,6 @@ import com.lifecycle.binding.adapter.event.ObservableEvent
 interface IList<E,R> : IEvent<E,R>, ListUpdateCallback {
 
     val adapterList: MutableList<E>
-        get() = ArrayList()
 
     fun addEventAdapter(event: IEvent<E,R>) {}
 

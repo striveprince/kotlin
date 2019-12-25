@@ -16,10 +16,9 @@ import com.lifecycle.binding.inter.bind.annotation.LayoutView
 class SignInActivity: DataBindingActivity<SignInModel, ActivitySignInBinding>() {
     companion object{ const val signIn = tomtaw+"signIn"}
 
+    override fun initData(owner: LifecycleOwner, bundle: Bundle?) {
+        super.initData(owner, bundle)
+        binding.params = model.sign
+    }
 
-
-    //    override fun initData(api: Api, owner: LifecycleOwner, bundle: Bundle?) {
-//        super.initData(api, owner, bundle)
-//
-//    }
 }

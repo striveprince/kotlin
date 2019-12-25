@@ -39,12 +39,12 @@ class HomeActivity : AnkoActivity<HomeModel>() {
         model.restoreFragmentState(savedInstanceState)
     }
 
-
     override fun parse(t: HomeModel, context: Context): AnkoContext<Context> {
         return AnkoContext.create(this).apply {
             this.verticalLayout {
                 frameLayout {
                     id = R.id.home_frame_layout
+                    backgroundColorResource = R.color.colorAccent
                 }.lparams(matchParent, wrapContent, weight = 1f)
                 bottomNavigationView {
                     backgroundColorResource = R.color.colorAccent

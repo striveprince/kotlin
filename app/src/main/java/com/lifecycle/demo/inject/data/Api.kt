@@ -25,6 +25,4 @@ class Api(
             .signIn(sign)
             .restful()
             .map { preferenceApi.userApi.login(it) }
-
-
 }

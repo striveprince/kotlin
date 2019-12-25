@@ -10,7 +10,7 @@ import com.lifecycle.binding.inter.inflate.Inflate
 
 abstract class RecyclerOpenAdapter<E : Inflate,R> : RecyclerView.Adapter<RecyclerHolder<E,R>>(), IList<E, R> {
     private val sparseArray = SparseArray<E>()
-
+    override val adapterList: MutableList<E> = ArrayList()
     private val event: IEvent<E,R> by lazy { this }
     val events: ArrayList<IEvent<E,R>> = ArrayList()
 

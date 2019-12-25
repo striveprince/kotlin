@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-abstract class ListDiffViewModel<E : DiffInflate> : ListViewModel<E>() {
+open class ListDiffViewModel<E : DiffInflate> : ListViewModel<E>() {
     var diff: Job? = null
     override fun refreshList(es: List<E>, position: Int): Boolean {
         enable.value = false

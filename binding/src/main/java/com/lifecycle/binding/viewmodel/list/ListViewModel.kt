@@ -30,7 +30,7 @@ open class ListViewModel<E : Inflate>(val adapter: IListAdapter<E> = RecyclerAda
     override val adapterList: MutableList<E> = adapter.adapterList
     private var disposable: Disposable? = null
     var enable = MutableLiveData<Boolean>(true)
-    lateinit var httpData :(Int,Int)->Single<List<E>>
+    var httpData :(Int,Int)->Single<List<E>> = {_,_->Single.just(ArrayList())}
     override fun attachData(owner: LifecycleOwner,  bundle: Bundle?) {
         super.attachData(owner, bundle)
         loadingState.observer(owner) { doGetData(it) }

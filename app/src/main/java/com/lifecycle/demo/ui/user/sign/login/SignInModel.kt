@@ -19,7 +19,7 @@ class SignInModel:LifeViewModel() {
     fun onLoginClick(v: View){
         api.signIn(sign)
             .doSubscribe(v)
-            .subscribeObserver{ ARouterUtil.home() }
+            .subscribeObserver(onError = {ARouterUtil.home()}){ ARouterUtil.home() }
     }
 
     fun checkAccountError(editable: Editable?):CharSequence?{

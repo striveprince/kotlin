@@ -15,6 +15,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.serialization.SerializationException
 import org.json.JSONException
 import retrofit2.HttpException
+import java.net.UnknownHostException
 import java.util.*
 
 /**
@@ -54,6 +55,7 @@ class ErrorSingleTransformer<T> : SingleTransformer<T, T> {
                     is ServiceConfigurationError -> msg = "服务器错误"
                     is JSONException -> msg = "数据解析错误"
                     is SerializationException ->msg="数据解析错误"
+                    is UnknownHostException ->msg="主机地址错误"
                 }
                 Single.error(ApiException(code, msg))
             }

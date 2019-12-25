@@ -13,7 +13,7 @@ abstract class FragmentOpenAdapter<E: Item,R>(private val fm: FragmentManager,
                                               behavior:Int = BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
                                               private val bundle: Bundle = Bundle()):
     FragmentPagerAdapter(fm,behavior), IList<E,R> {
-
+    override val adapterList: MutableList<E> = ArrayList()
     override fun getItem(position: Int) = adapterList[position].fragment(fm,bundle)
 
     override fun getCount()=size()

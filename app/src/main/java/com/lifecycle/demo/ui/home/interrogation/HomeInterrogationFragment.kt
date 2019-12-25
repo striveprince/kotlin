@@ -26,16 +26,16 @@ class HomeInterrogationFragment : DataBindingFragment<HomeInterrogationModel, Fr
         const val interrogation = FragmentComponent.Config.fragment + "interrogation"
     }
 
-    val pager2Adapter by lazy { FragmentPager2Adapter<HomeInterrogationEntity>(childFragmentManager, lifecycle) }
+    val pager2Adapter by lazy {
+        FragmentPager2Adapter<HomeInterrogationEntity>(childFragmentManager, lifecycle)
+//            .apply { addList(model.items) }
+    }
 
-    private val pageChange by lazy { OnPageChange(model) }
     override fun initData(owner: LifecycleOwner, bundle: Bundle?) {
         super.initData(owner, bundle)
         pager2Adapter.addList(model.items)
         binding.apply {
-            viewPager.registerOnPageChangeCallback(pageChange)
             viewPager.offscreenPageLimit = 3
-            tabLayout.addOnTabSelectedListener(model)
             (activity as AppCompatActivity).viewModel<HomeModel>().apply {
                 newCount.observer(owner()) { tabLayout.getTabAt(1)?.text = R.string.new_interrogation.stringRes(it) }
                 waitCount.observer(owner()) { tabLayout.getTabAt(2)?.text = R.string.wait_interrogation.stringRes(it) }
@@ -47,9 +47,9 @@ class HomeInterrogationFragment : DataBindingFragment<HomeInterrogationModel, Fr
             }
         }
     }
+
     override fun onDestroy() {
         super.onDestroy()
-        binding.viewPager.unregisterOnPageChangeCallback(pageChange)
     }
 }
 

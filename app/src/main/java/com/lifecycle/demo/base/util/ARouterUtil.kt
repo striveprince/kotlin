@@ -36,7 +36,6 @@ object ARouterUtil {
     fun home() {
         build(HomeActivity.home)
             .navigation()
-        finish()
     }
 
     private fun buildFragment(route: String,bundle: Bundle = Bundle()): Fragment {

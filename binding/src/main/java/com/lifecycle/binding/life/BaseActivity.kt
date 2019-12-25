@@ -44,7 +44,7 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
     }
 
     fun initView(savedInstanceState: Bundle?) {
-        val layout = if (App.init) {
+        val layout = if (!App.init) {
             startView().apply {
                 rxBus<Boolean>()
                     .filter{it}
@@ -64,7 +64,7 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
     }
 
     override fun initData(owner: LifecycleOwner, bundle: Bundle?) {
-        model.let { if(it is LifeViewModel)it.attachData(this,bundle) }
+        model.let { if(it is LifeViewModel)it.initData(this,bundle) }
     }
     open fun toolbarView(): ViewGroup {
         return if (App.toolbarList.isEmpty()) FrameLayout(this).apply { layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT) }

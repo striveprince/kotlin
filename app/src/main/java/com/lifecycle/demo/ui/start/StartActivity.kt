@@ -35,7 +35,7 @@ class StartActivity : AnkoActivity<LifeViewModel>() {
     }
 
     private fun start(){
-        ARouterUtil.start()
+        ARouterUtil.home()
         TimeUtil.handler.postDelayed({ finish() }, 500)
     }
 

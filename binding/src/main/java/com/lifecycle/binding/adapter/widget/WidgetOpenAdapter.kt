@@ -15,7 +15,7 @@ abstract class WidgetOpenAdapter<E:Inflate,T> : BaseAdapter(), IList<E,T> {
 
     private val observableEvent: IEvent<E,T> by lazy { this }
     val events: ArrayList<IEvent<E,T>> = ArrayList()
-
+    override val adapterList: MutableList<E> = ArrayList()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val e = adapterList[position]

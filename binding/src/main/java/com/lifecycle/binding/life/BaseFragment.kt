@@ -16,15 +16,14 @@ import kotlin.reflect.jvm.javaType
 
 @Suppress("UNCHECKED_CAST")
 abstract class BaseFragment<Model:ViewModel,B>:Fragment(),Parse<Model,B>, LifecycleInit<Model> {
-    lateinit var model: Model
+    val model: Model by lazy { initModel() }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         App.startCreate(this)
-        initData(this,savedInstanceState)
-        return inject(savedInstanceState)
+        return inject(savedInstanceState).apply { initData(this@BaseFragment,savedInstanceState) }
     }
 
     override fun initData(owner: LifecycleOwner, bundle: Bundle?) {
-        model.let { if(it is LifeViewModel)it.attachData(this,bundle) }
+        model.let { if(it is LifeViewModel)it.initData(this,bundle) }
     }
 
     override fun inject(savedInstanceState: Bundle?)= createView(model, activity!!)
@@ -36,6 +35,4 @@ abstract class BaseFragment<Model:ViewModel,B>:Fragment(),Parse<Model,B>, Lifecy
 
     override fun t() = model
     override fun owner()=this
-
-
 }

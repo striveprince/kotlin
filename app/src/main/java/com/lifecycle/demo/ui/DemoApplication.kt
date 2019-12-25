@@ -1,9 +1,12 @@
 package com.lifecycle.demo.ui
 
+import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.multidex.MultiDexApplication
 import com.alibaba.android.arouter.launcher.ARouter
 import com.lifecycle.binding.App
 import com.lifecycle.demo.base.util.ARouterUtil
+import com.lifecycle.demo.base.util.applyKitKatTranslucency
 import com.lifecycle.demo.base.util.busPost
 import com.lifecycle.demo.inject.component.ActivityComponent
 import com.lifecycle.demo.inject.component.DaggerAppComponent
@@ -41,7 +44,11 @@ class DemoApplication : MultiDexApplication() {
                 .inject(application)
             launch(Dispatchers.Main) {
                 DemoApplication.api = api
-                App(application).addLifeInit {ARouter.getInstance().inject(it)}
+                App(application).addLifeInit {
+                    ARouter.getInstance().inject(it)
+                    if(it is AppCompatActivity)
+                        applyKitKatTranslucency(it,android.R.color.transparent)
+                }
                 //notify base activity application and resource init completed
             }
         }
