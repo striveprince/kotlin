@@ -44,7 +44,7 @@ class HomeActivity : AnkoActivity<HomeModel>() {
             this.verticalLayout {
                 frameLayout {
                     id = R.id.home_frame_layout
-                    backgroundColorResource = R.color.colorAccent
+//                    backgroundColorResource = R.color.colorAccent
                 }.lparams(matchParent, wrapContent, weight = 1f)
                 bottomNavigationView {
                     backgroundColorResource = R.color.colorAccent

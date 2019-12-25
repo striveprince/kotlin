@@ -35,8 +35,8 @@ class StartActivity : AnkoActivity<LifeViewModel>() {
     }
 
     private fun start(){
-//        ARouterUtil.home()
-//        TimeUtil.handler.postDelayed({ finish() }, 500)
+        ARouterUtil.home()
+        TimeUtil.handler.postDelayed({ finish() }, 500)
     }
 
     override fun parse(t: LifeViewModel, context: Context): AnkoContext<Context> {
