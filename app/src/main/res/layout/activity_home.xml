@@ -21,8 +21,8 @@
             app:labelVisibilityMode="labeled"
             app:itemTextColor="@color/tab_color"
             app:itemIconTint="@color/tab_color"
-            app:navigationItemSelected="@{vm::onNavigationItemSelected}"
-            app:position="@{vm.currentIndex}"
+            app:onItemSelected="@{vm::onNavigationItemSelected}"
+            app:position="@={vm.currentIndex}"
             app:menu="@menu/home_tab"
             app:itemBackground="@color/white"
             android:layout_height="48dp"/>

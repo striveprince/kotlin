@@ -16,6 +16,7 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.lifecycle.binding.inter.observer.NormalObserver
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -42,6 +43,8 @@ import java.io.File
  * Author: created by ArvinWang on 2019/11/14 18:04
  * Email: 1033144294@qq.com
  */
+
+
 inline fun <reified E> rxBus(): Observable<E> {
     return RxBus.getInstance()
         .toObservable(E::class.java)

@@ -1,29 +1,31 @@
 package com.lifecycle.binding.adapter.databinding
 
-import androidx.databinding.BindingAdapter
-import androidx.databinding.InverseBindingAdapter
-import androidx.databinding.InverseBindingListener
+import androidx.databinding.*
 import androidx.databinding.adapters.ListenerUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.lifecycle.binding.R
-import com.lifecycle.binding.adapter.databinding.inter.OnNavigationItemSelectedListener
+import com.lifecycle.binding.adapter.databinding.inter.OnReselectedItemListener
+import com.lifecycle.binding.adapter.databinding.inter.OnSelectItemListener
+import timber.log.Timber
 
 object BottomNavigationViewBindingAdapter {
+
     @JvmStatic
-    @BindingAdapter("check")
-    fun setCheck(bottomNavigationView: BottomNavigationView, check: Int) {
-        if (getCheck(bottomNavigationView) == check)
-            bottomNavigationView.selectedItemId = bottomNavigationView.menu.getItem(check).itemId
+    @BindingAdapter("position")
+    fun setPosition(bottomNavigationView: BottomNavigationView, position: Int) {
+        val currentPosition = getBottomPosition(bottomNavigationView)
+        Timber.i("position=$position,currentPosition=$currentPosition,bottomNavigationView.selectedItemId = ${bottomNavigationView.selectedItemId},currentPositionItemId=${bottomNavigationView.menu.getItem(position).itemId}")
+        if (currentPosition != position)
+            bottomNavigationView.selectedItemId = bottomNavigationView.menu.getItem(position).itemId
     }
 
     @JvmStatic
-    @InverseBindingAdapter(attribute = "check", event = "checkAttrChanged")
-    fun getCheck(bottomNavigationView: BottomNavigationView): Int {
-        return bottomNavigationView.getCheck(bottomNavigationView.selectedItemId)
+    @InverseBindingAdapter(attribute = "position", event = "positionAttrChanged")
+    fun getBottomPosition(bottomNavigationView: BottomNavigationView): Int {
+        return bottomNavigationView.getPosition(bottomNavigationView.selectedItemId)
     }
 
-    @JvmStatic
-    fun BottomNavigationView.getCheck(int: Int): Int {
+    private fun BottomNavigationView.getPosition(int: Int): Int {
         menu.apply {
             for (index in 0..size()) {
                 if (getItem(index).itemId == int)
@@ -32,21 +34,25 @@ object BottomNavigationViewBindingAdapter {
         }
         return -1
     }
-    
+
+
     @JvmStatic
-    @BindingAdapter(value = ["navigationItemSelected", "checkAttrChanged"], requireAll = false)
+    @BindingAdapter(value = ["onItemSelected", "positionAttrChanged"], requireAll = false)
+//    @BindingAdapter(value = ["onItemSelected", "onItemReselected", "positionAttrChanged"], requireAll = false)
     fun setOnNavigationItemSelectedListener(
         bottomNavigationView: BottomNavigationView,
-        listener: OnNavigationItemSelectedListener?,
-        checkAttrChanged: InverseBindingListener?
+        onSelectItemListener: OnSelectItemListener?,
+//        onReselectedItemListener: OnReselectedItemListener?,
+        positionAttrChanged: InverseBindingListener?
     ) {
-        val newValue = if (checkAttrChanged == null && listener == null) null
+        val newValue = if (positionAttrChanged == null && onSelectItemListener == null) null
         else BottomNavigationView.OnNavigationItemSelectedListener {
-            checkAttrChanged?.onChange()
-            listener?.onNavigationItemSelected(bottomNavigationView.selectedItemId, bottomNavigationView.getCheck(it.itemId))
+            onSelectItemListener?.onItemSelected(it.itemId, bottomNavigationView.getPosition(it.itemId))
+            positionAttrChanged?.onChange()
             true
         }
-        ListenerUtil.trackListener(bottomNavigationView, newValue, R.id.bottom_navigation_view)?.let {
+
+        ListenerUtil.trackListener(bottomNavigationView, newValue, R.id.bottom_navigation_view_selected)?.let {
             bottomNavigationView.setOnNavigationItemSelectedListener(null)
         }
         bottomNavigationView.setOnNavigationItemSelectedListener(newValue)
