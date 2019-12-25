@@ -4,20 +4,16 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.lifecycle.demo.R
+import com.lifecycle.binding.adapter.pager.impl.FragmentPager2Adapter
+import com.lifecycle.binding.inter.bind.annotation.LayoutView
 import com.lifecycle.binding.life.binding.data.DataBindingFragment
-import com.lifecycle.demo.base.util.OnPageChange
+import com.lifecycle.binding.util.observer
+import com.lifecycle.demo.R
 import com.lifecycle.demo.base.util.viewModel
 import com.lifecycle.demo.databinding.FragmentHomeIntrrogationBinding
 import com.lifecycle.demo.inject.component.FragmentComponent
-import com.lifecycle.demo.inject.data.Api
 import com.lifecycle.demo.ui.home.HomeModel
 import com.lifecycle.demo.ui.home.interrogation.HomeInterrogationFragment.Companion.interrogation
-import com.lifecycle.binding.adapter.databinding.TabLayoutBindingAdapter
-import com.lifecycle.binding.adapter.pager.FragmentOpenPager2Adapter
-import com.lifecycle.binding.adapter.pager.impl.FragmentPager2Adapter
-import com.lifecycle.binding.inter.bind.annotation.LayoutView
-import com.lifecycle.binding.util.observer
 
 @Route(path = interrogation)
 @LayoutView(layout = [R.layout.fragment_home_intrrogation])

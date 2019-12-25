@@ -24,7 +24,7 @@ data class HomeEntity(val id: Int) {
     }
 
 //    val name: Int = when (id) {
-//        R.id.home_interrogation->R.string.interrogation
+//        R.id.home_interrogation->R.home_page
 //        R.id.home_browse->R.string.browse
 //        R.id.home_message->R.string.message
 //        else->R.string.mine

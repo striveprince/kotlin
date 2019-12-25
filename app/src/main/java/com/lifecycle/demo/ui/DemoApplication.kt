@@ -1,16 +1,11 @@
 package com.lifecycle.demo.ui
 
-import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.multidex.MultiDexApplication
 import com.alibaba.android.arouter.launcher.ARouter
 import com.lifecycle.binding.App
-import com.lifecycle.demo.base.util.ARouterUtil
 import com.lifecycle.demo.base.util.applyKitKatTranslucency
-import com.lifecycle.demo.base.util.busPost
-import com.lifecycle.demo.inject.component.ActivityComponent
 import com.lifecycle.demo.inject.component.DaggerAppComponent
-import com.lifecycle.demo.inject.component.FragmentComponent
 import com.lifecycle.demo.inject.data.Api
 import com.lifecycle.demo.inject.module.AppModule
 import kotlinx.coroutines.CoroutineScope
@@ -46,7 +41,7 @@ class DemoApplication : MultiDexApplication() {
                 DemoApplication.api = api
                 App(application).addLifeInit {
                     ARouter.getInstance().inject(it)
-                    if(it is AppCompatActivity)
+                    if(it is AppCompatActivity)//this method is not run at start view
                         applyKitKatTranslucency(it,android.R.color.transparent)
                 }
                 //notify base activity application and resource init completed
