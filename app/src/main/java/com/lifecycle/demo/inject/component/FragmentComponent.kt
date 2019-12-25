@@ -16,12 +16,6 @@ interface FragmentComponent {
     object Config {
         const val fragment = tomtaw + "fragment/"
     }
-
-//    fun inject(homePageFragment: HomeInterrogationFragment)
-//    fun inject(homePageFragment: InterrogationListFragment)
-//    fun inject(homePageFragment: HomeBrowseFragment)
-//    fun inject(homePageFragment: HomeMessageFragment)
-//    fun inject(homePageFragment: HomeMineFragment)
     @Subcomponent.Builder
     interface Builder {
         fun applyFragmentModule(fragmentModule: FragmentModule): Builder
