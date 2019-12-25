@@ -2,11 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-
+        <variable
+            name="vm"
+            type="com.lifecycle.demo.ui.home.HomeModel" />
     </data>
     <LinearLayout
         android:orientation="vertical"
-        android:paddingTop="24dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <FrameLayout
@@ -15,12 +16,13 @@
             android:layout_weight="1"
             android:layout_height="0dp"/>
         <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:layout_marginBottom="50dp"
             android:id="@+id/bottomView"
             android:layout_width="match_parent"
             app:labelVisibilityMode="labeled"
             app:itemTextColor="@color/tab_color"
             app:itemIconTint="@color/tab_color"
+            app:navigationItemSelected="@{vm::onNavigationItemSelected}"
+            app:position="@{vm.currentIndex}"
             app:menu="@menu/home_tab"
             app:itemBackground="@color/white"
             android:layout_height="48dp"/>

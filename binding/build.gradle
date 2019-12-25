@@ -7,8 +7,8 @@ apply plugin: 'kotlinx-serialization'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
-    dataBinding.enabled = true
-    viewBinding.enabled = true
+//    dataBinding.enabled = true
+//    viewBinding.enabled = true
     buildFeatures{
         dataBinding = true
         viewBinding = true

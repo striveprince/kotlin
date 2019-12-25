@@ -1,11 +1,11 @@
 package com.lifecycle.binding.adapter.databinding
 
-import androidx.databinding.*
+import androidx.databinding.BindingAdapter
+import androidx.databinding.InverseBindingAdapter
+import androidx.databinding.InverseBindingListener
 import androidx.databinding.adapters.ListenerUtil
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.android.material.tabs.TabItem
-import com.lifecycle.binding.R
 import com.google.android.material.tabs.TabLayout
+import com.lifecycle.binding.R
 import com.lifecycle.binding.adapter.databinding.inter.OnTabReselectedListener
 import com.lifecycle.binding.adapter.databinding.inter.OnTabSelectedListener
 import com.lifecycle.binding.adapter.databinding.inter.OnTabUnselectedListener
