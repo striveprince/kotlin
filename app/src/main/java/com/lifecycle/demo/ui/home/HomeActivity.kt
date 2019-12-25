@@ -1,16 +1,13 @@
 package com.lifecycle.demo.ui.home
 
-import android.content.Context
 import android.os.Bundle
-import androidx.core.content.ContextCompat
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.lifecycle.demo.R
-import com.lifecycle.binding.life.anko.AnkoActivity
-import com.lifecycle.demo.inject.component.ActivityComponent
-import com.google.android.material.bottomnavigation.LabelVisibilityMode
 import com.lifecycle.binding.base.view.SwipeBackLayout
-import org.jetbrains.anko.*
-import org.jetbrains.anko.design.bottomNavigationView
+import com.lifecycle.binding.inter.bind.annotation.LayoutView
+import com.lifecycle.binding.life.binding.data.DataBindingActivity
+import com.lifecycle.demo.R
+import com.lifecycle.demo.databinding.ActivityHomeBinding
+import com.lifecycle.demo.inject.component.ActivityComponent
 
 /**
  * Company:
@@ -18,8 +15,9 @@ import org.jetbrains.anko.design.bottomNavigationView
  * Author: created by ArvinWang on 2019/11/15 9:51
  * Email: 1033144294@qq.com
  */
+@LayoutView(R.layout.activity_home)
 @Route(path = HomeActivity.home)
-class HomeActivity : AnkoActivity<HomeModel>() {
+class HomeActivity : DataBindingActivity<HomeModel,ActivityHomeBinding>() {
     companion object {
         const val home = ActivityComponent.Config.tomtaw + "home"
         const val fragmentIndex = "route"
@@ -38,6 +36,10 @@ class HomeActivity : AnkoActivity<HomeModel>() {
         super.onRestoreInstanceState(savedInstanceState)
         model.restoreFragmentState(savedInstanceState)
     }
+
+}
+
+/*
 
     override fun parse(t: HomeModel, context: Context): AnkoContext<Context> {
         return AnkoContext.create(this).apply {
@@ -59,4 +61,4 @@ class HomeActivity : AnkoActivity<HomeModel>() {
             }
         }
     }
-}
+* */
