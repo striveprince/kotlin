@@ -20,18 +20,17 @@ import io.reactivex.Single
 @Route(path = interrogationList)
 class InterrogationListFragment : RecyclerFragment<InterrogationListEntity>() {
 
-
     companion object {
         const val interrogationList = FragmentComponent.Config.fragment + "interrogationList"
     }
 
-    override fun apiData(offset: Int, type: Int): Single<List<InterrogationListEntity>> {
+    override fun apiData(offset: Int, state: Int): Single<List<InterrogationListEntity>> {
         val taskCategory = when (arguments?.getString(Constant.params)) {
             "new" -> 1
             "wait" -> 2
             else -> 0
         }
-        return api.getInterrogationList(taskCategory, offset, type)
+        return api.getInterrogationList(taskCategory, offset, state)
     }
 
     private fun Api.getInterrogationList(taskCategory: Int, position: Int, state: Int): Single<List<InterrogationListEntity>> {
