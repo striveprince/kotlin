@@ -18,7 +18,7 @@ import com.lifecycle.binding.util.ReflectUtil
 object TabLayoutBindingAdapter {
     @JvmStatic
     @BindingAdapter("position")
-    fun setScrollPosition(layout: TabLayout, position: Int) {
+    fun setPosition(layout: TabLayout, position: Int) {
         val current = getSelectedTabPosition(layout)
         if (current == position || position < 0) return
         val tab = layout.getTabAt(position)!!

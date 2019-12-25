@@ -15,12 +15,12 @@ object ViewPager2BindingAdapter {
     @JvmStatic
     @BindingAdapter("position")
     fun setCurrentItem(view: ViewPager2, position: Int) {
-        if (getSelectedTabPosition(view) != position) view.currentItem = position
+        if (getPosition(view) != position) view.currentItem = position
     }
 
     @JvmStatic
     @InverseBindingAdapter(attribute = "position", event = "positionAttrChanged")
-    fun getSelectedTabPosition(view: ViewPager2): Int {
+    fun getPosition(view: ViewPager2): Int {
         return view.currentItem
     }
 
@@ -47,6 +47,7 @@ object ViewPager2BindingAdapter {
 
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
+                positionAttrChanged?.onChange()
                 onPageSelectedListener?.onPageSelected(position)
             }
         }
