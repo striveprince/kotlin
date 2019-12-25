@@ -37,8 +37,8 @@ open class ListViewModel<E : Inflate>(val adapter: IListAdapter<E> = RecyclerAda
         loadingState.value = AdapterType.refresh
     }
 
-    fun doGetData(it:Int){
-        Timber.i("it=$it")
+    private fun doGetData(it:Int){
+//        Timber.i("it=$it")
         if (it!=0 && enable.value!!) {
             enable.value = false
             httpData(getStartOffset(), loadingState.value!!)
