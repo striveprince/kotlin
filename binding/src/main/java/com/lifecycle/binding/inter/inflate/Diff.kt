@@ -1,7 +1,6 @@
 package com.lifecycle.binding.inter.inflate
 
-interface Diff {
+interface Diff:Inflate {
     fun key():Int = 0
     fun value():Int = hashCode()
-
 }

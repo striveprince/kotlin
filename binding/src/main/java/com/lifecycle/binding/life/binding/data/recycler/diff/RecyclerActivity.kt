@@ -1,13 +1,13 @@
 package com.lifecycle.binding.life.binding.data.recycler.diff
 
 import androidx.lifecycle.ViewModelProviders
-import com.lifecycle.binding.inter.inflate.DiffInflate
+import com.lifecycle.binding.inter.inflate.Diff
 import com.lifecycle.binding.life.binding.data.recycler.RecyclerActivity
 import com.lifecycle.binding.viewmodel.list.ListDiffViewModel
 import com.lifecycle.binding.viewmodel.list.ListViewModel
 
 
-abstract class RecyclerActivity<E : DiffInflate> : RecyclerActivity<E>() {
+abstract class RecyclerActivity<E : Diff> : RecyclerActivity<E>() {
 
 
     @Suppress("UNCHECKED_CAST")

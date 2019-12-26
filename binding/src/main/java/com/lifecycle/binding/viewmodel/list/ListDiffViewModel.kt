@@ -3,13 +3,13 @@ package com.lifecycle.binding.viewmodel.list
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
 import com.lifecycle.binding.adapter.recycler.DiffUtilCallback
-import com.lifecycle.binding.inter.inflate.DiffInflate
+import com.lifecycle.binding.inter.inflate.Diff
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-open class ListDiffViewModel<E : DiffInflate> : ListViewModel<E>() {
+open class ListDiffViewModel<E : Diff> : ListViewModel<E>() {
     var diff: Job? = null
     override fun refreshList(es: List<E>, position: Int): Boolean {
         enable.value = false

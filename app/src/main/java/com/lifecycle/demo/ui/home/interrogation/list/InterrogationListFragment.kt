@@ -14,20 +14,18 @@ import com.lifecycle.demo.ui.home.HomeModel
 import com.lifecycle.demo.ui.home.interrogation.list.InterrogationListFragment.Companion.interrogationList
 import com.lifecycle.binding.Constant
 import com.lifecycle.binding.inter.inflate.Diff
-import com.lifecycle.binding.inter.inflate.DiffInflate
-import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.life.binding.data.recycler.diff.RecyclerFragment
 import com.lifecycle.demo.ui.DemoApplication.Companion.api
 import io.reactivex.Single
 
 @Route(path = interrogationList)
-class InterrogationListFragment : RecyclerFragment<DiffInflate>() {
+class InterrogationListFragment : RecyclerFragment<Diff>() {
 
     companion object {
         const val interrogationList = FragmentComponent.Config.fragment + "interrogationList"
     }
 
-    override fun apiData(offset: Int, state: Int): Single<List<DiffInflate>> {
+    override fun apiData(offset: Int, state: Int): Single<List<Diff>> {
         val taskCategory = when (arguments?.getString(Constant.params)) {
             "new" -> 1
             "wait" -> 2
@@ -36,7 +34,7 @@ class InterrogationListFragment : RecyclerFragment<DiffInflate>() {
         return api.getInterrogationList(taskCategory, offset, state)
     }
 
-    private fun Api.getInterrogationList(taskCategory: Int, position: Int, state: Int): Single<List<DiffInflate>> {
+    private fun Api.getInterrogationList(taskCategory: Int, position: Int, state: Int): Single<List<Diff>> {
         val params = InterrogationParams(taskCategory, position)
         return if (taskCategory == 0) netApi.httpApi.getInterrogationList(params).restful()
             .doOnSuccess { notifyCount(taskCategory, it) }
