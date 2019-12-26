@@ -54,7 +54,7 @@ inline fun<reified E> rxBusMain():Observable<E>{
 }
 
 fun busPost(any: Any) {
-    return RxBus.getInstance().send(any)
+    RxBus.getInstance().send(any)
 }
 fun Context.string(@StringRes id: Int, vararg any: Any) =
     getString(id, *any)
