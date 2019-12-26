@@ -1,12 +1,12 @@
 package com.lifecycle.binding.adapter.databinding
 
-import androidx.databinding.*
+import androidx.databinding.BindingAdapter
+import androidx.databinding.InverseBindingAdapter
+import androidx.databinding.InverseBindingListener
 import androidx.databinding.adapters.ListenerUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.lifecycle.binding.R
-import com.lifecycle.binding.adapter.databinding.inter.OnReselectedItemListener
 import com.lifecycle.binding.adapter.databinding.inter.OnSelectItemListener
-import timber.log.Timber
 
 object BottomNavigationViewBindingAdapter {
 
@@ -22,7 +22,6 @@ object BottomNavigationViewBindingAdapter {
     @InverseBindingAdapter(attribute = "position", event = "positionAttrChanged")
     fun getBottomPosition(bottomNavigationView: BottomNavigationView): Int {
         return bottomNavigationView.getTag(R.id.bottom_navigation_view) as? Int ?:0
-//        bottomNavigationView.getPosition(bottomNavigationView.selectedItemId)
     }
 
     private fun BottomNavigationView.getPosition(int: Int): Int {
@@ -38,14 +37,11 @@ object BottomNavigationViewBindingAdapter {
 
     @JvmStatic
     @BindingAdapter(value = ["onItemSelected", "positionAttrChanged"], requireAll = false)
-//    @BindingAdapter(value = ["onItemSelected", "onItemReselected", "positionAttrChanged"], requireAll = false)
     fun setOnNavigationItemSelectedListener(
         bottomNavigationView: BottomNavigationView,
         onSelectItemListener: OnSelectItemListener?,
-//        onReselectedItemListener: OnReselectedItemListener?,
         positionAttrChanged: InverseBindingListener?
     ) {
-
         val newValue = if (positionAttrChanged == null && onSelectItemListener == null) null
         else BottomNavigationView.OnNavigationItemSelectedListener {
             val position = bottomNavigationView.getPosition(it.itemId)
@@ -54,7 +50,6 @@ object BottomNavigationViewBindingAdapter {
             positionAttrChanged?.onChange()
             true
         }
-
         ListenerUtil.trackListener(bottomNavigationView, newValue, R.id.bottom_navigation_view_selected)?.let {
             bottomNavigationView.setOnNavigationItemSelectedListener(null)
         }

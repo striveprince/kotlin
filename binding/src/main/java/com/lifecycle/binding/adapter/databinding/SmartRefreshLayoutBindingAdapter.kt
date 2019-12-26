@@ -51,7 +51,7 @@ object SmartRefreshLayoutBindingAdapter {
         return when {
             view.isRefreshing -> AdapterType.refresh
             view.isLoading -> AdapterType.load
-            else -> view.getTag(R.id.smart_refresh_layout_state).let { if (it is Int) it else 0 }
+            else -> view.getTag(R.id.smart_refresh_layout_state) as? Int ?:0
         }
     }
 

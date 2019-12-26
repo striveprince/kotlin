@@ -9,6 +9,7 @@
     <item name="tab_layout" type="id"/>
     <item name="swipe_refresh_layout" type="id"/>
     <item name="radio_group_layout" type="id"/>
+    <item name="radio_group_id" type="id"/>
     <item name="bottom_navigation_view_selected" type="id"/>
     <item name="bottom_navigation_view" type="id"/>
     <item name="bottom_navigation_view_reselected" type="id"/>

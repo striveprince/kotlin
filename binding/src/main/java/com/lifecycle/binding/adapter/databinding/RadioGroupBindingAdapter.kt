@@ -29,9 +29,11 @@ object RadioGroupBindingAdapter {
     @JvmStatic
     @InverseBindingAdapter(attribute = "position", event = "positionAttrChanged")
     fun getPosition(radioGroup: RadioGroup): Int {
-        radioGroup.apply {
+        return radioGroup.getTag(R.id.radio_group_id) as? Int ?:0
+    }
+
+    private fun RadioGroup.radioGroupPosition():Int {
             return if (checkedRadioButtonId == -1) -1 else indexOfChild(findViewById(checkedRadioButtonId))
-        }
     }
 
     @JvmStatic
@@ -42,6 +44,7 @@ object RadioGroupBindingAdapter {
     ) {
         val newValue = RadioGroup.OnCheckedChangeListener { group, checkedId ->
             listener?.onCheckedChanged(group, checkedId)
+            group.setTag(R.id.radio_group_id,radioGroup.radioGroupPosition())
             positionAttrChanged?.onChange()
         }
         ListenerUtil.trackListener(radioGroup, newValue, R.id.radio_group_layout)?.let {
