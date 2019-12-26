@@ -3,7 +3,6 @@ package com.lifecycle.demo.ui
 import androidx.appcompat.app.AppCompatActivity
 import androidx.multidex.MultiDexApplication
 import com.alibaba.android.arouter.launcher.ARouter
-import com.lifecycle.binding.Constant
 import com.lifecycle.binding.life.AppLifecycle
 import com.lifecycle.demo.BR
 import com.lifecycle.demo.base.util.applyKitKatTranslucency
@@ -32,11 +31,7 @@ class DemoApplication : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         val application = this
-        val appLifecycle = AppLifecycle(application,BR.parse,BR.vm).addCreateListener {
-            ARouter.getInstance().inject(it)
-            if (it is AppCompatActivity)//this method is not run at start view
-                applyKitKatTranslucency(it, android.R.color.transparent)
-        }
+        val appLifecycle = AppLifecycle(application,BR.parse,BR.vm)
         CoroutineScope(Dispatchers.Default).launch {
             DaggerAppComponent.builder()
                 .appModule(AppModule(application))
@@ -44,7 +39,11 @@ class DemoApplication : MultiDexApplication() {
                 .inject(application)
             launch(Dispatchers.Main) {
                 DemoApplication.api = api
-                appLifecycle.postInitFinish()
+                appLifecycle.addCreateListener {
+                    ARouter.getInstance().inject(it)
+                    if (it is AppCompatActivity)//this method is not run at start view
+                        applyKitKatTranslucency(it, android.R.color.transparent)
+                }.postInitFinish()
                 //notify base activity application and resource init completed
             }
         }

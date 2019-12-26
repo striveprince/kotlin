@@ -25,18 +25,18 @@ class AppLifecycle constructor(val application: Application,val parse: Int =1,va
         internal var initFinish = false
         lateinit var application: Application
         fun activity(): Activity { return stack.lastElement() }
-        fun floatToPx(dp: Float) = application.resources.displayMetrics.density * dp
-        fun getDrawable(drawableRes: Int): Drawable? = ContextCompat.getDrawable(application, drawableRes)
+//        fun floatToPx(dp: Float) = application.resources.displayMetrics.density * dp
+//        fun getDrawable(drawableRes: Int): Drawable? = ContextCompat.getDrawable(application, drawableRes)
     }
 
     init {
         Companion.application = application
         appLifecycle = this
         application.registerActivityLifecycleCallbacks(this)
-        initFinish = true
     }
 
     fun postInitFinish() {
+        initFinish = true
         busPost(initFinish)
     }
 

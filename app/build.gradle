@@ -53,7 +53,7 @@ android {
     }
     buildTypes {
         debug {
-            applicationIdSuffix ".inquiry.debug"
+            applicationIdSuffix ".debug"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField "String", "ApiHost", "\"https://api.host.cn\""
@@ -97,16 +97,8 @@ android {
 dependencies {
 //    implementation fileTree(dir: 'libs', include: ['*.jar','*.aar'])
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-//    implementation(name: 'ylvideo-release', ext: 'aar')
-//    implementation(name: 'ylSdk-release', ext: 'aar')
-//    implementation(name: 'ylservicelib-release', ext: 'aar')
-//    implementation(name: 'ylbaseui-release', ext: 'aar')
-//    implementation(name: 'ylLogic-release', ext: 'aar')
-//    implementation(name: 'yltalking-release', ext: 'aar')
-//    implementation(name: 'ylvideo-release', ext: 'aar')
-//    implementation(name: 'ylResource-release', ext: 'aar')
-    implementation project(path: ':binding')
-//    implementation 'com.lifecycle:binding:1.0.1'
+    implementation 'com.lifecycle:binding:1.1.0-RC2'
+//    implementation project(path: ':binding')
     def  room_version =  "2.2.3"
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
@@ -132,11 +124,6 @@ dependencies {
     implementation "androidx.core:core-ktx:$androidx_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-//    implementation "org.jetbrains.anko:anko:$anko_version"
-//    implementation "org.jetbrains.anko:anko-design:$anko_version"
-//    implementation "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
-//    implementation "org.jetbrains.anko:anko-recyclerview-v7:$anko_version"
-//    implementation "org.jetbrains.anko:anko-constraint-layout:$anko_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:$kotlin_coroutines_version"
@@ -179,6 +166,19 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.afollestad.material-dialogs:core:3.1.1'
 
+//    implementation(name: 'ylvideo-release', ext: 'aar')
+//    implementation(name: 'ylSdk-release', ext: 'aar')
+//    implementation(name: 'ylservicelib-release', ext: 'aar')
+//    implementation(name: 'ylbaseui-release', ext: 'aar')
+//    implementation(name: 'ylLogic-release', ext: 'aar')
+//    implementation(name: 'yltalking-release', ext: 'aar')
+//    implementation(name: 'ylvideo-release', ext: 'aar')
+//    implementation(name: 'ylResource-release', ext: 'aar')
+//    implementation "org.jetbrains.anko:anko:$anko_version"
+//    implementation "org.jetbrains.anko:anko-design:$anko_version"
+//    implementation "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
+//    implementation "org.jetbrains.anko:anko-recyclerview-v7:$anko_version"
+//    implementation "org.jetbrains.anko:anko-constraint-layout:$anko_version"
 //    def compose_version = '0.1.0-dev03'
 //    implementation "androidx.compose:compose-runtime:$compose_version"
 //    implementation "androidx.ui:ui-framework:$compose_version"

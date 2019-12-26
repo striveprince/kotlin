@@ -11,7 +11,10 @@ import android.text.TextUtils
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
@@ -59,6 +62,16 @@ fun busPost(any: Any) {
 fun Context.string(@StringRes id: Int, vararg any: Any) =
     getString(id, *any)
 
+fun Context.drawable(@DrawableRes id:Int)
+        = ContextCompat.getDrawable(this,id)
+
+fun Context.color(@ColorRes id:Int)
+        = ContextCompat.getColor(this,id)
+
+fun Context.floatToPx(float: Float)= resources.displayMetrics.density*float
+fun Context.floatToDp(float: Float)= float/resources.displayMetrics.density
+fun Context.screenWidth()= resources.displayMetrics.widthPixels
+fun Context.screenHeight()= resources.displayMetrics.heightPixels
 
 fun<T> LiveData<T>.observer(owner: LifecycleOwner,block:(T)->Unit){
     observe(owner, Observer { block(it) })

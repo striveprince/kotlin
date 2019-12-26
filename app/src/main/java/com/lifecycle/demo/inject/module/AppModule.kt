@@ -23,11 +23,9 @@ import java.io.File
 @Module(subcomponents = [ActivityComponent::class, FragmentComponent::class])
 class AppModule(val app: DemoApplication) {
     init {
-        ARouter.init(app)
         SmartRefreshLayout.setDefaultRefreshHeaderCreator { context, _ -> ClassicsHeader(context).setDrawableSize(20f) }
         SmartRefreshLayout.setDefaultRefreshFooterCreator { context, _ -> ClassicsFooter(context).setDrawableSize(20f) }
-//        app.initYealinkSdk()
-
+        ARouter.init(app)
         if (BuildConfig.DEBUG) {
             ARouter.openDebug()
             ARouter.openLog()
