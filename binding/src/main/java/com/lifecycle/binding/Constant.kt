@@ -11,6 +11,4 @@ object Constant {
     const val id: String = "id"
     const val params: String = "params"
     const val title: String = "title"
-    var vm = 1
-    var parse = 1
 }

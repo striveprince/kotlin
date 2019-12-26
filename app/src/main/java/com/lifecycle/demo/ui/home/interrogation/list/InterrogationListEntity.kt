@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lifecycle.demo.R
 import com.lifecycle.demo.base.util.ARouterUtil
 import com.lifecycle.demo.inject.data.net.bean.InterrogationBean
-import com.lifecycle.binding.App
+import com.lifecycle.binding.life.AppLifecycle
 import com.lifecycle.binding.base.rotate.TimeEntity
 import com.lifecycle.binding.base.rotate.TimeUtil
 import com.lifecycle.binding.inter.bind.data.DataBindRecycler
@@ -61,7 +61,7 @@ class InterrogationListEntity(private val bean: InterrogationBean) : DataBindRec
     }
 
     val img = MutableLiveData(
-        App.getDrawable(
+        AppLifecycle.getDrawable(
             when (bean.evaluate?.score) {
                 1 -> R.mipmap.rate1__ic
                 2 -> R.mipmap.rate2__ic

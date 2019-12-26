@@ -10,10 +10,8 @@ import com.lifecycle.demo.inject.data.preference.user.UserApi
 import com.lifecycle.demo.ui.home.HomeActivity
 import com.lifecycle.demo.ui.interrogation.detail.InterrogationDetailActivity
 import com.lifecycle.demo.ui.user.sign.login.SignInActivity
-import com.lifecycle.demo.ui.video.VideoActivity
-import com.lifecycle.binding.App
+import com.lifecycle.binding.life.AppLifecycle
 import com.lifecycle.binding.Constant
-import com.lifecycle.binding.base.rotate.TimeUtil
 
 object ARouterUtil {
 
@@ -30,7 +28,7 @@ object ARouterUtil {
     }
 
     fun finish() {
-        App.activity().finish()
+        AppLifecycle.activity().finish()
     }
 
     fun home() {

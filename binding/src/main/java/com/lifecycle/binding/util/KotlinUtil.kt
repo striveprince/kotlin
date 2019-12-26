@@ -16,11 +16,10 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.lifecycle.binding.inter.observer.NormalObserver
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.lifecycle.binding.App
+import com.lifecycle.binding.life.AppLifecycle
 import com.lifecycle.binding.base.bus.RxBus
 import com.lifecycle.binding.base.rotate.TimeUtil
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
@@ -210,7 +209,7 @@ fun toast(e: Throwable) {
 
 fun toast(message: String?) {
     if(message?.trim()?.isNotEmpty() == true)
-        Toast.makeText(App.activity(), message, Toast.LENGTH_SHORT).show()
+        Toast.makeText(AppLifecycle.activity(), message, Toast.LENGTH_SHORT).show()
 }
 
 fun installApkFile(

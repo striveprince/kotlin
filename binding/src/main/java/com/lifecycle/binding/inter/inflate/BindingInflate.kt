@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import com.lifecycle.binding.Constant
 import com.lifecycle.binding.R
+import com.lifecycle.binding.life.AppLifecycle.Companion.appLifecycle
 
 interface BindingInflate<Binding : ViewDataBinding> : Inflate, Recycler {
     override fun createView(context: Context, parent: ViewGroup?, convertView: View?): View {
@@ -29,14 +29,14 @@ interface BindingInflate<Binding : ViewDataBinding> : Inflate, Recycler {
             val layoutId = convertView?.getTag(R.id.inflate)?.let { (it as Inflate).layoutId() }
             convertView?.getTag(R.id.dataBinding).let {
                 if (it is ViewDataBinding && layoutId == layoutId()) {
-                    it.setVariable(Constant.parse, this)
-                    it.setVariable(Constant.vm, this)
+                    it.setVariable(appLifecycle.parse, this)
+                    it.setVariable(appLifecycle.vm, this)
                     it.executePendingBindings()
                     it as Binding
                 } else {
                     val b = DataBindingUtil.inflate(LayoutInflater.from(context), layoutId(), parent, false) as ViewDataBinding
-                    b.setVariable(Constant.parse, this)
-                    b.setVariable(Constant.vm, this)
+                    b.setVariable(appLifecycle.parse, this)
+                    b.setVariable(appLifecycle.vm, this)
                     b as Binding
                 }
             }

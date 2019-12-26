@@ -9,10 +9,9 @@ import androidx.lifecycle.LifecycleOwner
 import com.lifecycle.binding.inter.Init
 import com.lifecycle.binding.util.string
 
-interface LifecycleInit <Model>:Init{
+interface LifecycleInit <Model>:Init,LifecycleOwner{
     fun initModel():Model
-    fun owner():LifecycleOwner
-    fun getLifecycle():Lifecycle
+    fun owner():LifecycleOwner = this
     fun getActivity(): FragmentActivity?
     fun inject(savedInstanceState: Bundle?):View
     fun Int.stringRes(vararg any: Any)= getActivity()!!.string(this,*any)

@@ -4,10 +4,10 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
-import com.lifecycle.binding.Constant
 import com.lifecycle.binding.R
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.inter.inflate.Recycler
+import com.lifecycle.binding.life.AppLifecycle.Companion.appLifecycle
 import com.lifecycle.binding.util.findLayoutView
 
 /**
@@ -22,8 +22,8 @@ interface DataBindRecycler<T, Binding : ViewDataBinding> : DataBinding<T, Bindin
         val layoutId = convertView?.getTag(R.id.inflate)?.let { (it as Inflate).layoutId() }
         val binding = convertView?.getTag(R.id.dataBinding).let {
             if (it is ViewDataBinding && layoutId() == layoutId) {
-                it.setVariable(Constant.parse, this)
-                it.setVariable(Constant.vm, t())
+                it.setVariable(appLifecycle.parse, this)
+                it.setVariable(appLifecycle.vm, t())
                 it.executePendingBindings()
                 it
             }else parse(t(),context,parent,false)

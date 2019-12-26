@@ -10,7 +10,6 @@ import com.lifecycle.demo.inject.component.FragmentComponent
 import com.lifecycle.demo.inject.qualifier.AppContext
 import com.lifecycle.demo.inject.scope.ApplicationScope
 import com.lifecycle.demo.ui.DemoApplication
-import com.lifecycle.binding.App
 import com.lifecycle.binding.Constant
 import com.scwang.smart.refresh.footer.ClassicsFooter
 import com.scwang.smart.refresh.header.ClassicsHeader
@@ -28,8 +27,7 @@ class AppModule(val app: DemoApplication) {
         SmartRefreshLayout.setDefaultRefreshHeaderCreator { context, _ -> ClassicsHeader(context).setDrawableSize(20f) }
         SmartRefreshLayout.setDefaultRefreshFooterCreator { context, _ -> ClassicsFooter(context).setDrawableSize(20f) }
 //        app.initYealinkSdk()
-        Constant.vm = BR.vm
-        Constant.parse = BR.parse
+
         if (BuildConfig.DEBUG) {
             ARouter.openDebug()
             ARouter.openLog()

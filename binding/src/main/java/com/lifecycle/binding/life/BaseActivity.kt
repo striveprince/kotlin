@@ -13,12 +13,9 @@ import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
-import com.lifecycle.binding.App
 import com.lifecycle.binding.R
 import com.lifecycle.binding.base.view.SwipeBackLayout
-import com.lifecycle.binding.inter.Init
 import com.lifecycle.binding.inter.Parse
-import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.util.rxBus
 import com.lifecycle.binding.util.subscribeNormal
 import com.lifecycle.binding.viewmodel.LifeViewModel
@@ -39,12 +36,11 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
     override fun t() = model
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        App.startCreate(this)
         initView(savedInstanceState)
     }
 
     private fun initView(savedInstanceState: Bundle?) {
-        val injectView = if (!App.init) {
+        val injectView = if (!AppLifecycle.initFinish) {
             startView().apply {
                 rxBus<Boolean>()
                     .filter{it}
@@ -74,8 +70,8 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
         model.let { if(it is LifeViewModel)it.initData(this,bundle) }
     }
     open fun toolbarView(): ViewGroup {
-        return if (App.toolbarList.isEmpty()) FrameLayout(this).apply { layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT) }
-        else App.toolbarList[toolbarIndex].createView(this) as ViewGroup
+        return if (AppLifecycle.toolbarList.isEmpty()) FrameLayout(this).apply { layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT) }
+        else AppLifecycle.toolbarList[toolbarIndex].createView(this) as ViewGroup
     }
 
     private fun initToolbar(viewGroup: ViewGroup, injectView: View): View {
