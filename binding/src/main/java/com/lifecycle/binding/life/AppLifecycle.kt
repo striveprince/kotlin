@@ -9,7 +9,7 @@ import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.util.busPost
 import java.util.*
 
-class AppLifecycle constructor(val application: Application,val parse: Int =1,val vm: Int =2) : Application.ActivityLifecycleCallbacks, LifecycleListener {
+class AppLifecycle constructor(application: Application, val parse: Int =1, val vm: Int =2) : Application.ActivityLifecycleCallbacks, LifecycleListener {
 
     private var createBlock: ((LifecycleInit<*>) -> Unit)? = null
     private var startBlock: ((LifecycleInit<*>) -> Unit)? = null
@@ -25,8 +25,6 @@ class AppLifecycle constructor(val application: Application,val parse: Int =1,va
         internal var initFinish = false
         lateinit var application: Application
         fun activity(): Activity { return stack.lastElement() }
-//        fun floatToPx(dp: Float) = application.resources.displayMetrics.density * dp
-//        fun getDrawable(drawableRes: Int): Drawable? = ContextCompat.getDrawable(application, drawableRes)
     }
 
     init {
