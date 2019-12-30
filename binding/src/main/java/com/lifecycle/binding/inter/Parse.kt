@@ -8,7 +8,6 @@ import com.lifecycle.binding.util.findLayoutView
 
 interface Parse<T,B>{
     fun t():T
-//    val model:T
     fun createView(t:T,context: Context, parent: ViewGroup?=null, attachToParent: Boolean=false): View {
         return LayoutInflater.from(context).inflate(findLayoutView(this.javaClass).layout[0],parent,attachToParent)
     }

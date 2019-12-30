@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.lifecycle.binding.life.AppLifecycle.Companion.appLifecycle
 
 import com.lifecycle.binding.inter.Parse
-import com.lifecycle.binding.viewmodel.LifeViewModel
+import com.lifecycle.binding.rx.viewmodel.RxLifeViewModel
 import kotlin.reflect.jvm.javaType
 
 @Suppress("UNCHECKED_CAST")
@@ -24,7 +24,7 @@ abstract class BaseFragment<Model:ViewModel,B>:Fragment(),Parse<Model,B>, Lifecy
     }
 
     override fun initData(owner: LifecycleOwner, bundle: Bundle?) {
-        model.let { if(it is LifeViewModel)it.initData(this,bundle) }
+        model.let { if(it is RxLifeViewModel)it.initData(this,bundle) }
     }
 
     override fun inject(savedInstanceState: Bundle?)= createView(model, activity!!)
@@ -36,7 +36,7 @@ abstract class BaseFragment<Model:ViewModel,B>:Fragment(),Parse<Model,B>, Lifecy
 
     override fun t() = model
     override fun owner()=this
-
+    override fun fragmentManager()=childFragmentManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         appLifecycle.onCreate(this,savedInstanceState)

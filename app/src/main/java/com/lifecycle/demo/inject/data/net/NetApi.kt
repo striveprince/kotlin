@@ -1,7 +1,5 @@
 package com.lifecycle.demo.inject.data.net
 
-import android.view.View
-
 
 /**
  * Company:

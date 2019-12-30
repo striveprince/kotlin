@@ -1,6 +1,6 @@
 package com.lifecycle.demo.base.util
 
-import com.lifecycle.binding.base.bus.RxBus
+import com.lifecycle.binding.rx.bus.RxBus
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 

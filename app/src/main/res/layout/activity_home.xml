@@ -21,7 +21,6 @@
             app:labelVisibilityMode="labeled"
             app:itemTextColor="@color/tab_color"
             app:itemIconTint="@color/tab_color"
-            app:onItemSelected="@{vm::onNavigationItemSelected}"
             app:position="@={vm.currentIndex}"
             app:menu="@menu/home_tab"
             app:itemBackground="@color/white"

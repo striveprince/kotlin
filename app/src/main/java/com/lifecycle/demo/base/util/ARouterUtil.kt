@@ -1,17 +1,23 @@
 package com.lifecycle.demo.base.util
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.alibaba.android.arouter.facade.Postcard
+import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
+import com.lifecycle.binding.Constant
+import com.lifecycle.binding.life.AppLifecycle
+import com.lifecycle.binding.life.LifecycleInit
+import com.lifecycle.demo.BuildConfig.domainUrl
 import com.lifecycle.demo.R
 import com.lifecycle.demo.inject.data.preference.user.UserApi
 import com.lifecycle.demo.ui.home.HomeActivity
 import com.lifecycle.demo.ui.interrogation.detail.InterrogationDetailActivity
 import com.lifecycle.demo.ui.user.sign.login.SignInActivity
-import com.lifecycle.binding.life.AppLifecycle
-import com.lifecycle.binding.Constant
+import java.lang.StringBuilder
+import kotlin.math.min
 
 object ARouterUtil {
 
@@ -22,8 +28,40 @@ object ARouterUtil {
             .with(bundle)
     }
 
+
+    private fun LifecycleInit<*>.navigation(uri: Uri) {
+        val currentPath = javaClass.getAnnotation(Route::class.java)?.path ?: ""
+        uri.pathSegments?.apply {
+            if (size == 2) ARouter.getInstance().build(uri).navigation()
+            else if(currentPath == getSamePath(currentPath)) {
+                fragmentManager()
+            }
+        }
+    }
+
+    private fun List<String>.getSamePath(currentPath: String):String {
+        currentPath.split("/").let {
+            val stringBuilder = StringBuilder("/")
+            for (i in 0..min(size, it.size)) {
+                if (get(i) === it[i]) stringBuilder.append(it[i]).append("/")
+                else break
+            }
+            return stringBuilder.toString()
+        }
+    }
+
+
+    private fun FragmentManager.navigation(uri: Uri) {
+
+
+    }
+
+    fun LifecycleInit<*>.navigation(path: String) {
+        return navigation(Uri.parse("${domainUrl}${path}"))
+    }
+
     fun start() {
-        val path = if(UserApi.isLogin)HomeActivity.home else SignInActivity.signIn
+        val path = if (UserApi.isLogin) HomeActivity.home else SignInActivity.signIn
         build(path).navigation()
     }
 
@@ -36,22 +74,19 @@ object ARouterUtil {
             .navigation()
     }
 
-    private fun buildFragment(route: String,bundle: Bundle = Bundle()): Fragment {
-        return ARouter.getInstance().build(route).with(bundle).navigation() as Fragment
+    private fun buildFragment(route: Uri): Fragment {
+        return ARouter.getInstance().build(route).navigation() as Fragment
     }
 
-    fun findFragmentByTag(fragmentManager: FragmentManager? = null,route: String, params:Bundle= Bundle(), tag:String = route): Fragment {
-        return fragmentManager?.findFragmentByTag(tag) ?: buildFragment(route,params)
-    }
-
-    fun getFragment(fm: FragmentManager, route: String, fragmentState: Bundle, params:Bundle= Bundle(), tag:String = route): Fragment {
-        return fm.getFragment(fragmentState, tag)?: buildFragment(route,params)
+    fun findFragmentByTag(fragmentManager: FragmentManager? = null, route: String): Fragment {
+        return fragmentManager?.findFragmentByTag(route) ?: buildFragment(Uri.parse("${domainUrl}$route"))
     }
 
     fun interrogationDetail(id: String) {
-        build(InterrogationDetailActivity.interrogation_detail)
-            .withString(Constant.id,id)
+        build(InterrogationDetailActivity.interrogationDetail)
+            .withString(Constant.id, id)
             .navigation()
     }
 
 }
+

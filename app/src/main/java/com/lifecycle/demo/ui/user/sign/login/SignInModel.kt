@@ -4,14 +4,14 @@ import android.text.Editable
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import com.lifecycle.binding.util.subscribeObserver
-import com.lifecycle.binding.viewmodel.LifeViewModel
+import com.lifecycle.binding.rx.viewmodel.RxLifeViewModel
 import com.lifecycle.demo.base.util.ARouterUtil
 import com.lifecycle.demo.base.util.getAccountError
 import com.lifecycle.demo.base.util.getPasswordError
 import com.lifecycle.demo.ui.DemoApplication.Companion.api
 
 
-class SignInModel:LifeViewModel() {
+class SignInModel: RxLifeViewModel() {
     val enableAccount = MutableLiveData(true)
     val enablePassword = MutableLiveData(true)
     val sign by lazy { api.preferenceApi.signParams() }

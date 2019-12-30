@@ -4,14 +4,14 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.lifecycle.binding.adapter.pager.impl.FragmentPager2Adapter
+import com.lifecycle.binding.rx.adapter.RxFragmentPager2Adapter
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
 import com.lifecycle.binding.life.binding.data.DataBindingFragment
 import com.lifecycle.binding.util.observer
 import com.lifecycle.demo.R
 import com.lifecycle.demo.base.util.viewModel
 import com.lifecycle.demo.databinding.FragmentHomeIntrrogationBinding
-import com.lifecycle.demo.inject.component.FragmentComponent
+import com.lifecycle.demo.ui.home.HomeActivity.Companion.home
 import com.lifecycle.demo.ui.home.HomeModel
 import com.lifecycle.demo.ui.home.interrogation.HomeInterrogationFragment.Companion.interrogation
 
@@ -19,11 +19,11 @@ import com.lifecycle.demo.ui.home.interrogation.HomeInterrogationFragment.Compan
 @LayoutView(layout = [R.layout.fragment_home_intrrogation])
 class HomeInterrogationFragment : DataBindingFragment<HomeInterrogationModel, FragmentHomeIntrrogationBinding>() {
     companion object {
-        const val interrogation = FragmentComponent.Config.fragment + "interrogation"
+        const val interrogation = "$home/interrogation"
     }
 
     val pager2Adapter by lazy {
-        FragmentPager2Adapter<HomeInterrogationEntity>(childFragmentManager, lifecycle)
+        RxFragmentPager2Adapter<HomeInterrogationEntity>(childFragmentManager, lifecycle)
             .apply { addList(model.items) }
     }
 
@@ -36,68 +36,6 @@ class HomeInterrogationFragment : DataBindingFragment<HomeInterrogationModel, Fr
                 waitCount.observer(owner()) { tabLayout.getTabAt(2)?.text = R.string.wait_interrogation.stringRes(it) }
                 allCount.observer(owner()) { tabLayout.getTabAt(0)?.text = R.string.all_interrogation.stringRes(it) }
             }
-//            model.position.observer(owner()) {
-//                TabLayoutBindingAdapter.setPosition(tabLayout, it)
-//                viewPager.currentItem = it
-//            }
         }
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
 }
-
-/* anko view
-    override fun parse(t: HomeInterrogationModel, context: Context) =
-        AnkoContext.create(context).apply {
-            verticalLayout {
-                backgroundColorResource = R.color.back_ground
-                topPadding = dip(24)
-                frameLayout {
-                    backgroundColorResource = R.color.windowBackground
-                    padding = dip(10)
-                    textView(R.string.task_interrogation) {
-                        textSize = 20f
-                        paint.isFakeBoldText = true
-                    }.lparams(wrapContent, matchParent, gravity = Gravity.CENTER)
-                    textView(R.string.wait_for_event){
-                        gravity = Gravity.CENTER
-                    }.lparams(wrapContent, matchParent, gravity = Gravity.END)
-                }
-                val tabLayout = themedTabLayout(R.style.TabLayoutStyle) {
-                    for (index in 0..2) {
-                        val e = t.items[index]
-                        newTab().apply {
-                            text = App.string(e.strRes, t.newCount.value!! + t.waitCount.value!!)
-                            e.tab = this
-                            addTab(e.tab)
-                        }
-                    }
-                    t.apply {
-                        newCount.observer(getLifecycleOwner()) {
-                            items[1].apply { tab.apply { text = App.string(strRes, it) } }
-                            items[0].apply { tab.apply { text = App.string(strRes, waitCount.value!! + it) } }
-                        }
-                        waitCount.observer(getLifecycleOwner()) {
-                            items[2].apply { tab.apply { text = App.string(strRes, it) } }
-                            items[0].apply { tab.apply { text = App.string(strRes, t.newCount.value!! + it) } }
-                        }
-                    }
-                    tabTextColors = colorState(R.color.tab_color)
-                    addOnTabSelectedListener(t)
-                    lparams(matchParent, dip(48))
-                }
-                viewPager2 {
-                    id = R.id.view_page
-                    registerOnPageChangeCallback(OnPageChange(t))
-                    lparams(matchParent, matchParent)
-                    pager2Adapter.addList(es = t.items)
-                    t.position.observer(getLifecycleOwner()) {
-                        TabLayoutBindingAdapter.setScrollPosition(tabLayout, it)
-                        currentItem = it
-                    }
-                    adapter = pager2Adapter
-                }
-            }
-        }*/

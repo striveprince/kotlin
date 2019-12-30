@@ -14,9 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
-import com.lifecycle.binding.adapter.event.IEvent
-import com.lifecycle.binding.adapter.event.ObservableEvent
-import com.lifecycle.binding.adapter.inter.IList
+import com.lifecycle.binding.IList
 import com.lifecycle.binding.adapter.recycler.RecyclerOpenAdapter
 
 /**
@@ -32,7 +30,7 @@ object ViewBindingAdapter {
 
     @JvmStatic
     @BindingAdapter("adapter")
-    fun setAdapter(view: View, adapter: IList<*,*>?) {
+    fun setAdapter(view: View, adapter: IList<*, *>?) {
         if (adapter == null) return
         if (view is RecyclerView && adapter is RecyclerView.Adapter<*>) {
             view.adapter = adapter

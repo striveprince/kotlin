@@ -16,14 +16,17 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import com.lifecycle.binding.inter.observer.NormalObserver
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import com.lifecycle.binding.rx.observer.NormalObserver
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.lifecycle.binding.life.AppLifecycle
-import com.lifecycle.binding.base.bus.RxBus
+import com.lifecycle.binding.rx.bus.RxBus
 import com.lifecycle.binding.base.rotate.TimeUtil
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
 import io.reactivex.Flowable
@@ -45,6 +48,8 @@ import java.io.File
  * Author: created by ArvinWang on 2019/11/14 18:04
  * Email: 1033144294@qq.com
  */
+fun Fragment.findNavController(): NavController =
+    NavHostFragment.findNavController(this)
 
 
 inline fun <reified E> rxBus(): Observable<E> {

@@ -3,13 +3,13 @@ package com.lifecycle.binding.util
 import com.lifecycle.binding.databinding.LayoutSwipeRecyclerViewBinding
 import com.lifecycle.binding.inter.inflate.Diff
 import com.lifecycle.binding.life.LifecycleInit
-import com.lifecycle.binding.util.inflate.RecyclerParse
-import com.lifecycle.binding.viewmodel.list.ListViewModel
+import com.lifecycle.binding.rx.inflate.RecyclerParse
+import com.lifecycle.binding.rx.viewmodel.list.RxListViewModel
 
 
 fun <E : Diff> recyclerBinding(
     lifecycleInit: LifecycleInit<*>,
-    t: ListViewModel<E> = ListViewModel()
+    t: RxListViewModel<E> = RxListViewModel()
 ): LayoutSwipeRecyclerViewBinding {
     return RecyclerParse(t)
         .parse(t, lifecycleInit.getActivity()!!, null, false)

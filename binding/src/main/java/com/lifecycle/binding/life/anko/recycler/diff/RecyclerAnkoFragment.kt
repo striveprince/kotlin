@@ -5,17 +5,17 @@ import androidx.lifecycle.ViewModelProviders
 import com.lifecycle.binding.inter.inflate.Diff
 import com.lifecycle.binding.life.anko.AnkoFragment
 import com.lifecycle.binding.util.recyclerAnko
-import com.lifecycle.binding.viewmodel.list.ListDiffViewModel
+import com.lifecycle.binding.rx.viewmodel.list.RxListDiffViewModel
 import org.jetbrains.anko.AnkoContext
 
-abstract class RecyclerAnkoFragment<E: Diff>: AnkoFragment<ListDiffViewModel<E>>() {
+abstract class RecyclerAnkoFragment<E: Diff>: AnkoFragment<RxListDiffViewModel<E>>() {
 
-    override fun parse(t: ListDiffViewModel<E>, context: Context): AnkoContext<Context> {
+    override fun parse(t: RxListDiffViewModel<E>, context: Context): AnkoContext<Context> {
         return recyclerAnko(this,t)
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun initModel(): ListDiffViewModel<E> {
-        return ViewModelProviders.of(this)[ListDiffViewModel::class.java] as ListDiffViewModel<E>
+    override fun initModel(): RxListDiffViewModel<E> {
+        return ViewModelProviders.of(this)[RxListDiffViewModel::class.java] as RxListDiffViewModel<E>
     }
 }

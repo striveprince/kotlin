@@ -14,7 +14,7 @@ import androidx.core.content.FileProvider
 import com.lifecycle.demo.BuildConfig
 import com.lifecycle.demo.R
 import com.lifecycle.demo.base.util.FileUtils.filePathByUri
-import com.lifecycle.demo.inject.component.ActivityComponent
+import com.lifecycle.demo.ui.DemoApplication.Companion.tomtaw
 import io.reactivex.Emitter
 import java.io.BufferedReader
 import java.io.File
@@ -138,7 +138,7 @@ class PhoneSystemManager : AppCompatActivity() {
     @Suppress("DEPRECATION")
     private fun takePhoto() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        photoFile = File(Environment.getExternalStorageDirectory().absolutePath + ActivityComponent.Config.tomtaw + System.currentTimeMillis() + ".jpg")
+        photoFile = File(Environment.getExternalStorageDirectory().absolutePath + tomtaw + System.currentTimeMillis() + ".jpg")
         photoFile.parentFile?.apply { mkdirs() }
         val uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".filterProvider", photoFile)
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)

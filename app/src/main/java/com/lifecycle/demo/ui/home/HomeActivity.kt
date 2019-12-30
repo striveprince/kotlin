@@ -5,9 +5,10 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.lifecycle.binding.base.view.SwipeBackLayout
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
 import com.lifecycle.binding.life.binding.data.DataBindingActivity
+import com.lifecycle.demo.BuildConfig
 import com.lifecycle.demo.R
 import com.lifecycle.demo.databinding.ActivityHomeBinding
-import com.lifecycle.demo.inject.component.ActivityComponent
+import com.lifecycle.demo.ui.DemoApplication
 
 /**
  * Company:
@@ -19,7 +20,7 @@ import com.lifecycle.demo.inject.component.ActivityComponent
 @Route(path = HomeActivity.home)
 class HomeActivity : DataBindingActivity<HomeModel,ActivityHomeBinding>() {
     companion object {
-        const val home = ActivityComponent.Config.tomtaw + "home"
+        const val home = DemoApplication.tomtaw + "home"
         const val fragmentIndex = "route"
         const val savedInstance = "savedInstance"
     }
@@ -29,7 +30,6 @@ class HomeActivity : DataBindingActivity<HomeModel,ActivityHomeBinding>() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putInt(fragmentIndex, model.beforeIndex)
-        outState.putBundle(savedInstance, model.fragmentState)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -38,27 +38,3 @@ class HomeActivity : DataBindingActivity<HomeModel,ActivityHomeBinding>() {
     }
 
 }
-
-/*
-
-    override fun parse(t: HomeModel, context: Context): AnkoContext<Context> {
-        return AnkoContext.create(this).apply {
-            this.verticalLayout {
-                frameLayout {
-                    id = R.id.home_frame_layout
-//                    backgroundColorResource = R.color.colorAccent
-                }.lparams(matchParent, wrapContent, weight = 1f)
-                bottomNavigationView {
-                    backgroundColorResource = R.color.colorAccent
-                    labelVisibilityMode = LabelVisibilityMode.LABEL_VISIBILITY_LABELED
-                    itemTextColor = ContextCompat.getColorStateList(context, R.color.tab_color)
-                    itemIconTintList = ContextCompat.getColorStateList(context, R.color.tab_color)
-                    itemBackgroundResource = android.R.color.white
-                    inflateMenu(R.menu.home_tab)
-                    setOnNavigationItemSelectedListener(model)
-                    lparams(matchParent, dip(48))
-                }
-            }
-        }
-    }
-* */

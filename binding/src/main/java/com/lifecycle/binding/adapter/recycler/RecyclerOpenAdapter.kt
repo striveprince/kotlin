@@ -4,15 +4,15 @@ import android.util.SparseArray
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.lifecycle.binding.adapter.AdapterType
-import com.lifecycle.binding.adapter.event.IEvent
-import com.lifecycle.binding.adapter.inter.IList
+import com.lifecycle.binding.IEvent
+import com.lifecycle.binding.IList
 import com.lifecycle.binding.inter.inflate.Inflate
 
 abstract class RecyclerOpenAdapter<E : Inflate,R> : RecyclerView.Adapter<RecyclerHolder<E,R>>(), IList<E, R> {
     private val sparseArray = SparseArray<E>()
     override val adapterList: MutableList<E> = ArrayList()
-    private val event: IEvent<E,R> by lazy { this }
-    val events: ArrayList<IEvent<E,R>> = ArrayList()
+    private val event: IEvent<E, R> by lazy { this }
+    val events: ArrayList<IEvent<E, R>> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerHolder<E,R> {
         return RecyclerHolder(parent, sparseArray.get(viewType))

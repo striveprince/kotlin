@@ -1,12 +1,10 @@
 package com.lifecycle.demo.ui.home.interrogation
 
 import androidx.lifecycle.MutableLiveData
-import androidx.viewpager.widget.ViewPager
-import com.google.android.material.tabs.TabLayout
-import com.lifecycle.binding.viewmodel.LifeViewModel
+import com.lifecycle.binding.rx.viewmodel.RxLifeViewModel
 import com.lifecycle.demo.R
 
-class HomeInterrogationModel:LifeViewModel()  {
+class HomeInterrogationModel: RxLifeViewModel()  {
 
     val position = MutableLiveData(0)
     val items = arrayListOf(

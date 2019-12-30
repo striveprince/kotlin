@@ -18,7 +18,7 @@ import com.lifecycle.binding.base.view.SwipeBackLayout
 import com.lifecycle.binding.inter.Parse
 import com.lifecycle.binding.util.rxBus
 import com.lifecycle.binding.util.subscribeNormal
-import com.lifecycle.binding.viewmodel.LifeViewModel
+import com.lifecycle.binding.rx.viewmodel.RxLifeViewModel
 import kotlin.reflect.jvm.javaType
 
 @Suppress("UNCHECKED_CAST")
@@ -67,7 +67,7 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
     }
 
     override fun initData(owner: LifecycleOwner, bundle: Bundle?) {
-        model.let { if(it is LifeViewModel)it.initData(this,bundle) }
+        model.let { if(it is RxLifeViewModel)it.initData(this,bundle) }
     }
     open fun toolbarView(): ViewGroup {
         return if (AppLifecycle.toolbarList.isEmpty()) FrameLayout(this).apply { layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT) }
@@ -112,6 +112,7 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
         return FrameLayout(this)
     }
 
+    override fun fragmentManager()=supportFragmentManager
     override fun initModel(): Model {
         val clazz = javaClass.kotlin.supertypes[0].arguments[0].type!!.javaType as Class<Model>
         return ViewModelProviders.of(this)[clazz]

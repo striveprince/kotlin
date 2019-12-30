@@ -22,26 +22,4 @@ data class HomeEntity(val id: Int) {
         R.id.home_mine->mine
         else->mine
     }
-
-//    val name: Int = when (id) {
-//        R.id.home_interrogation->R.home_page
-//        R.id.home_browse->R.string.browse
-//        R.id.home_message->R.string.message
-//        else->R.string.mine
-//    }
-//    val icon: Int = when (id){
-//        R.id.home_interrogation->R.drawable.inquiry
-//        R.id.home_browse->R.drawable.retrieval
-//        R.id.home_message->R.mipmap.ic_launcher
-//        else->R.mipmap.ic_launcher
-//    }
-//    val fragment: Fragment = when(id) {
-//        R.id.home_interrogation->HomeInterrogationFragment()
-//        R.id.home_browse->HomeBrowseFragment()
-//        R.id.home_message->HomeMessageFragment()
-//        else ->HomeMineFragment()
-//    }
-
-
-
 }

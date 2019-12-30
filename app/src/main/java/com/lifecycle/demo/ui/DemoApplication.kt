@@ -25,6 +25,7 @@ class DemoApplication : MultiDexApplication() {
     lateinit var api: Api
 
     companion object {
+        const val tomtaw = "/tomtaw/"
         lateinit var api: Api
     }
 

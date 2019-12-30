@@ -3,8 +3,6 @@ package com.lifecycle.demo.inject.module
 import android.content.Context
 import androidx.room.Room
 import com.lifecycle.demo.BuildConfig
-import com.lifecycle.demo.inject.component.ActivityComponent
-import com.lifecycle.demo.inject.component.FragmentComponent
 import com.lifecycle.demo.inject.data.Api
 import com.lifecycle.demo.inject.data.database.DatabaseApi
 import com.lifecycle.demo.inject.data.database.DatabaseApi.Companion.DATABASE_NAME
@@ -27,7 +25,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-@Module(subcomponents = [ActivityComponent::class, FragmentComponent::class])
+@Module()
 class DataModule {
     init {
         Timber.i("DataModule init")
@@ -36,7 +34,7 @@ class DataModule {
     @ApplicationScope
     internal fun provideNetApi(okHttpClient: OkHttpClient): HttpApi {
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.ApiHost)
+            .baseUrl(BuildConfig.domainUrl)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
             .addConverterFactory(JsonConverterFactory())
             .callFactory(okHttpClient)

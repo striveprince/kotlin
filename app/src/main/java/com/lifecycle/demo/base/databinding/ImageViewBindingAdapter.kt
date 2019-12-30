@@ -8,6 +8,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.lifecycle.binding.life.AppLifecycle
+import com.lifecycle.binding.util.floatToPx
 
 /**
  * Company:
@@ -31,7 +32,7 @@ object ImageViewBindingAdapter {
     @JvmStatic
     @BindingAdapter("android:src","radius")
     fun seImage(imageView: ImageView, url: String, radius: Int){
-        val radiusDp = AppLifecycle.floatToPx(radius.toFloat()).toInt()
+        val radiusDp = imageView.context.floatToPx(radius.toFloat()).toInt()
         val options2 = RequestOptions()
             .priority(Priority.HIGH)//优先级
             .diskCacheStrategy(DiskCacheStrategy.NONE)//缓存策略
@@ -46,7 +47,7 @@ object ImageViewBindingAdapter {
     @JvmStatic
     @BindingAdapter("srcCompat","radius")
     fun seImageWrap(imageView: ImageView,url: String,radius: Int){
-        val radiusDp = AppLifecycle.floatToPx(radius.toFloat()).toInt()
+        val radiusDp =  imageView.context.floatToPx(radius.toFloat()).toInt()
         val options2 = RequestOptions()
             .priority(Priority.HIGH)//优先级
             .diskCacheStrategy(DiskCacheStrategy.NONE)//缓存策略

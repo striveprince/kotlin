@@ -1,7 +1,7 @@
 package com.lifecycle.demo.ui.video
 
-import com.lifecycle.binding.viewmodel.LifeViewModel
+import com.lifecycle.binding.rx.viewmodel.RxLifeViewModel
 
-class VideoModel :LifeViewModel(){
+class VideoModel : RxLifeViewModel(){
 
 }

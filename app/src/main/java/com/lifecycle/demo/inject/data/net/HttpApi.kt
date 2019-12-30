@@ -19,6 +19,6 @@ interface HttpApi {
     @POST("/login")
     fun signIn(@Body value: SignParams): Single<InfoEntity<TokenBean>>
 
-    @POST("getList")
+    @POST("/getList")
     fun getInterrogationList(@Body value: InterrogationParams): Single<InfoEntity<InterrogationDataBean>>
 }

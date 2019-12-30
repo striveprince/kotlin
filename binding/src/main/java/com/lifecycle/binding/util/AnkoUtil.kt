@@ -13,12 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemAnimator
 import androidx.viewpager2.widget.ViewPager2
 import com.lifecycle.binding.adapter.AdapterType
-import com.lifecycle.binding.adapter.recycler.RecyclerOpenAdapter
-import com.lifecycle.binding.adapter.recycler.impl.RecyclerAdapter
+import com.lifecycle.binding.rx.adapter.RxRecyclerAdapter
 import com.lifecycle.binding.inter.inflate.ErrorInflate
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.life.LifecycleInit
-import com.lifecycle.binding.viewmodel.list.ListViewModel
+import com.lifecycle.binding.rx.viewmodel.list.RxListViewModel
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.simple.SimpleMultiListener
@@ -49,7 +48,7 @@ inline fun ViewManager.smartRefreshLayout(init: SmartRefreshLayout.() -> Unit): 
 
 fun <E : Inflate> recyclerAnko(
     lifecycleInit: LifecycleInit<*>,
-    t: ListViewModel<E>,
+    t: RxListViewModel<E>,
     recyclerManager: RecyclerView.LayoutManager = LinearLayoutManager(lifecycleInit.getActivity()),
     animator: ItemAnimator? = null,
     errorInflate: ErrorInflate = errorInflate(),
@@ -63,7 +62,7 @@ fun <E : Inflate> recyclerAnko(
                 frameLayout {
                     recyclerView {
                         lparams(matchParent, matchParent)
-                        adapter = t.adapter as RecyclerAdapter
+                        adapter = t.adapter as RxRecyclerAdapter
                         layoutManager = LinearLayoutManager(context)
                         itemAnimator = animator
                         lparams(matchParent, matchParent)

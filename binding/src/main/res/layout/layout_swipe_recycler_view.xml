@@ -4,7 +4,7 @@
     <data>
         <variable
             name="vm"
-            type="com.lifecycle.binding.viewmodel.list.ListViewModel" />
+            type="com.lifecycle.binding.rx.viewmodel.list.RxListViewModel" />
         <import type="android.view.View"/>
     </data>
     <FrameLayout

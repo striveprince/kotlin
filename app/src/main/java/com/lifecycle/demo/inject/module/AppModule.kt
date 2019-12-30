@@ -3,14 +3,10 @@ package com.lifecycle.demo.inject.module
 import android.content.Context
 import android.content.res.Resources
 import com.alibaba.android.arouter.launcher.ARouter
-import com.lifecycle.demo.BR
 import com.lifecycle.demo.BuildConfig
-import com.lifecycle.demo.inject.component.ActivityComponent
-import com.lifecycle.demo.inject.component.FragmentComponent
 import com.lifecycle.demo.inject.qualifier.AppContext
 import com.lifecycle.demo.inject.scope.ApplicationScope
 import com.lifecycle.demo.ui.DemoApplication
-import com.lifecycle.binding.Constant
 import com.scwang.smart.refresh.footer.ClassicsFooter
 import com.scwang.smart.refresh.header.ClassicsHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
@@ -20,7 +16,7 @@ import timber.log.Timber
 import java.io.File
 
 
-@Module(subcomponents = [ActivityComponent::class, FragmentComponent::class])
+@Module
 class AppModule(val app: DemoApplication) {
     init {
         SmartRefreshLayout.setDefaultRefreshHeaderCreator { context, _ -> ClassicsHeader(context).setDrawableSize(20f) }

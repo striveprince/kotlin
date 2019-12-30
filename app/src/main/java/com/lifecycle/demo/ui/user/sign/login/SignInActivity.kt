@@ -6,10 +6,9 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.lifecycle.demo.R
 import com.lifecycle.binding.life.binding.data.DataBindingActivity
 import com.lifecycle.demo.databinding.ActivitySignInBinding
-import com.lifecycle.demo.inject.component.ActivityComponent.Config.tomtaw
-import com.lifecycle.demo.inject.data.Api
 import com.lifecycle.demo.ui.user.sign.login.SignInActivity.Companion.signIn
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
+import com.lifecycle.demo.ui.DemoApplication.Companion.tomtaw
 
 @Route(path = signIn)
 @LayoutView(layout = [R.layout.activity_sign_in])
@@ -20,5 +19,4 @@ class SignInActivity: DataBindingActivity<SignInModel, ActivitySignInBinding>() 
         super.initData(owner, bundle)
         binding.params = model.sign
     }
-
 }
