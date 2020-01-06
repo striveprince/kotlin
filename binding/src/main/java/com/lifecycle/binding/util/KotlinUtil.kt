@@ -75,9 +75,6 @@ fun findLayoutView(thisCls: Class<*>): LayoutView {
         ?: findLayoutView(thisCls = thisCls.superclass!!)
 }
 
-fun Bus.busPost(any: Any) {
-    send(any)
-}
 
 val gson = Gson()
 

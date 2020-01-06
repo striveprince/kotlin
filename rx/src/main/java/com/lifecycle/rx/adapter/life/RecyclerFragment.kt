@@ -8,15 +8,15 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.lifecycle.binding.databinding.LayoutSwipeRecyclerViewBinding
 import com.lifecycle.binding.inter.inflate.Diff
 import com.lifecycle.binding.life.BaseFragment
+import com.lifecycle.rx.databinding.LayoutSwipeRecyclerViewBinding
 import com.lifecycle.rx.util.recyclerBinding
 import com.lifecycle.rx.viewmodel.list.ListViewModel
 import io.reactivex.Single
 
 
-abstract class RecyclerFragment<E : Diff> : BaseFragment<ListViewModel<E>,LayoutSwipeRecyclerViewBinding>() {
+abstract class RecyclerFragment<E : Diff> : BaseFragment<ListViewModel<E>, LayoutSwipeRecyclerViewBinding>() {
     override fun createView(t: ListViewModel<E>, context: Context, parent: ViewGroup?, attachToParent: Boolean): View {
         val binding = parse(t, context, parent, attachToParent)
         binding.lifecycleOwner = this

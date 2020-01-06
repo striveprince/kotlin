@@ -7,10 +7,11 @@ import com.lifecycle.binding.base.bus.Bus
 import com.lifecycle.binding.inter.inflate.Inflate
 import java.util.*
 
-class AppLifecycle constructor(application: Application,
-                               private val bus: Bus<Boolean,*>,
-                               val parse: Int =1,
-                               val vm: Int =2) : Application.ActivityLifecycleCallbacks, LifecycleListener {
+@Suppress("UNCHECKED_CAST")
+open class AppLifecycle constructor(application: Application,
+                                       bus: Bus<*>,
+                                       val parse: Int =1,
+                                       val vm: Int =2) : Application.ActivityLifecycleCallbacks, LifecycleListener {
 
     private var createBlock: ((LifecycleInit<*>) -> Unit)? = null
     private var startBlock: ((LifecycleInit<*>) -> Unit)? = null
@@ -20,6 +21,7 @@ class AppLifecycle constructor(application: Application,
     private var destroyBlock: ((LifecycleInit<*>) -> Unit)? = null
 
     companion object {
+        lateinit var bus :Bus<*>
         lateinit var appLifecycle: AppLifecycle
         private val stack = Stack<Activity>()
         val toolbarList = arrayListOf<Inflate>()
@@ -29,44 +31,40 @@ class AppLifecycle constructor(application: Application,
     }
 
     init {
-        Companion.application = application
+        AppLifecycle.bus = bus
         appLifecycle = this
+        Companion.application = application
         application.registerActivityLifecycleCallbacks(this)
     }
+
 
     fun postInitFinish() {
         initFinish = true
         bus.send(initFinish)
     }
 
-    fun addCreateListener(createBlock: (LifecycleInit<*>) -> Unit): AppLifecycle {
+    fun addCreateListener(createBlock: (LifecycleInit<*>) -> Unit){
         this.createBlock = createBlock
-        return this
     }
 
-    fun addResumeListener(createBlock: (LifecycleInit<*>) -> Unit): AppLifecycle {
+    fun addResumeListener(createBlock: (LifecycleInit<*>) -> Unit){
         this.resumeBlock = createBlock
-        return this
     }
 
-    fun addStartListener(createBlock: (LifecycleInit<*>) -> Unit): AppLifecycle {
+    fun addStartListener(createBlock: (LifecycleInit<*>) -> Unit){
         this.startBlock = createBlock
-        return this
     }
 
-    fun addPauseListener(createBlock: (LifecycleInit<*>) -> Unit): AppLifecycle {
+    fun addPauseListener(createBlock: (LifecycleInit<*>) -> Unit){
         this.pauseBlock = createBlock
-        return this
     }
 
-    fun addStopListener(createBlock: (LifecycleInit<*>) -> Unit): AppLifecycle {
+    fun addStopListener(createBlock: (LifecycleInit<*>) -> Unit){
         this.stopBlock = createBlock
-        return this
     }
 
-    fun addDestroyListener(createBlock: (LifecycleInit<*>) -> Unit): AppLifecycle {
+    fun addDestroyListener(createBlock: (LifecycleInit<*>) -> Unit){
         this.destroyBlock = createBlock
-        return this
     }
 
     override fun onCreate(lifecycle: LifecycleInit<*>, savedInstanceBundle: Bundle?) {

@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.lifecycle.rx.adapter.RxFragmentPager2Adapter
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
 import com.lifecycle.binding.life.binding.data.DataBindingFragment
 import com.lifecycle.binding.util.observer
@@ -14,6 +13,7 @@ import com.lifecycle.demo.databinding.FragmentHomeIntrrogationBinding
 import com.lifecycle.demo.ui.home.HomeActivity.Companion.home
 import com.lifecycle.demo.ui.home.HomeModel
 import com.lifecycle.demo.ui.home.interrogation.HomeInterrogationFragment.Companion.interrogation
+import com.lifecycle.rx.adapter.FragmentPager2Adapter
 
 @Route(path = interrogation)
 @LayoutView(layout = [R.layout.fragment_home_intrrogation])
@@ -23,7 +23,7 @@ class HomeInterrogationFragment : DataBindingFragment<HomeInterrogationModel, Fr
     }
 
     val pager2Adapter by lazy {
-        RxFragmentPager2Adapter<HomeInterrogationEntity>(childFragmentManager, lifecycle)
+        FragmentPager2Adapter<HomeInterrogationEntity>(childFragmentManager, lifecycle)
             .apply { addList(model.items) }
     }
 

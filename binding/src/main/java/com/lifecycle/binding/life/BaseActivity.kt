@@ -38,16 +38,16 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
         initView(savedInstanceState)
     }
 
+    open fun ViewGroup.waitFinish(savedInstanceState: Bundle?){
+        AppLifecycle.bus.receiver {
+            removeAllViews()
+            addView(inject(savedInstanceState))
+        }
+    }
+
     private fun initView(savedInstanceState: Bundle?) {
         val injectView = if (!AppLifecycle.initFinish) {
-            startView().apply {
-//                rxBus<Boolean>()
-//                        .filter{it}
-//                    .subscribeNormal {
-//                        removeAllViews()
-//                        addView(inject(savedInstanceState))
-//                    }
-            }
+            startView().apply { waitFinish(savedInstanceState) }
         } else inject(savedInstanceState)
         if (isSwipe() != SwipeBackLayout.FROM_NO) {
             setContentView(R.layout.activity_base)

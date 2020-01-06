@@ -2,21 +2,22 @@ package com.lifecycle.demo.ui.start
 
 import android.Manifest
 import android.os.Bundle
+import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.lifecycle.binding.base.rotate.TimeUtil
 import com.lifecycle.binding.life.binding.BindingActivity
-import com.lifecycle.binding.util.subscribeObserver
-import com.lifecycle.rx.viewmodel.RxLifeViewModel
 import com.lifecycle.demo.base.util.ARouterUtil
 import com.lifecycle.demo.base.util.checkPermissions
 import com.lifecycle.demo.base.util.rxPermissions
 import com.lifecycle.demo.databinding.ActivityStartBinding
 import com.lifecycle.demo.ui.DemoApplication.Companion.tomtaw
 import com.lifecycle.demo.ui.start.StartActivity.Companion.start
+import com.lifecycle.rx.util.subscribeObserver
+import com.lifecycle.rx.viewmodel.LifeViewModel
 
 @Route(path = start)
-class StartActivity : BindingActivity<RxLifeViewModel,ActivityStartBinding>() {
+class StartActivity : BindingActivity<LifeViewModel,ActivityStartBinding>() {
     companion object {
         const val start = tomtaw + "start"
     }
@@ -34,7 +35,6 @@ class StartActivity : BindingActivity<RxLifeViewModel,ActivityStartBinding>() {
                 }
         }else start()
     }
-
 
 
 }

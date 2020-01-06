@@ -2,10 +2,9 @@ package com.lifecycle.rx.bus
 
 import com.lifecycle.binding.base.bus.Bus
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.internal.operators.single.SingleInternalHelper.toObservable
 import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
 
 /**
  * Company:
@@ -13,19 +12,30 @@ import io.reactivex.subjects.PublishSubject
  * Author: created by ArvinWang on 2019/10/12 12:43
  * Email: 1033144294@qq.com
  */
-class RxBus<E>  :Bus<E,Disposable> {
-    private val bus  = PublishSubject.create<E>().toSerialized()
+class RxBus private constructor() :Bus<Disposable> {
+    private val bus  = PublishSubject.create<Any>().toSerialized()
+    companion object {
+        private val rxBus = RxBus()
+        fun getInstance()= rxBus
+    }
 
-    override fun send(any: E){
+    override fun send(any: Any){
         bus.onNext(any)
     }
 
-    override fun receiver(block: (E) -> Unit):Disposable {
+    override fun receiver(block: (Any) -> Unit):Disposable {
         return bus.subscribe(block)
     }
 
-
+    fun<E> ofType(clazz: Class<E>):Observable<E>{
+        return bus.ofType(clazz)
+    }
 }
+
+
+
+
+
 //val rxBus = RxBus<Boolean>()
 //    companion object {
 //        private val rxBus = RxBus<Any>()
@@ -41,10 +51,6 @@ class RxBus<E>  :Bus<E,Disposable> {
 //    return toObservableType(E::class.java)
 //}
 //
-//inline fun <reified E> rxBus(): Observable<E> {
-//    return RxBus.getInstance()
-//        .toObservableType(E::class.java)
-//}
 //
 //
 //inline fun<reified E> rxBusMain():Observable<E>{

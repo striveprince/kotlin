@@ -12,4 +12,5 @@ open class FragmentPager2Adapter<E : Item>(fm: FragmentManager, lifecycle: Lifec
     override fun setEvent(position: Int, e: E, type: Int, view: View?): Any {
         return false
     }
+
 }

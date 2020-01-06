@@ -8,15 +8,15 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.lifecycle.binding.databinding.LayoutSwipeRecyclerViewBinding
 import com.lifecycle.binding.inter.inflate.Diff
 import com.lifecycle.binding.life.BaseActivity
+import com.lifecycle.rx.databinding.LayoutSwipeRecyclerViewBinding
 import com.lifecycle.rx.util.recyclerBinding
 import com.lifecycle.rx.viewmodel.list.ListViewModel
 import io.reactivex.Single
 
 
-abstract class RecyclerActivity<E : Diff> : BaseActivity<ListViewModel<E>,LayoutSwipeRecyclerViewBinding>() {
+abstract class RecyclerActivity<E : Diff> : BaseActivity<ListViewModel<E>, LayoutSwipeRecyclerViewBinding>() {
 
     override fun initData(owner: LifecycleOwner, bundle: Bundle?) {
         super.initData(owner, bundle)

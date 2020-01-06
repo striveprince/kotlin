@@ -1,7 +1,7 @@
 package com.lifecycle.binding.base.bus
 
-interface Bus<E,R> {
-    fun send(any: E)
-    fun receiver(block:(E)->Unit):R
+interface Bus<R> {
+    fun send(any: Any)
+    fun receiver(block:(Any)->Unit):R
 }
 

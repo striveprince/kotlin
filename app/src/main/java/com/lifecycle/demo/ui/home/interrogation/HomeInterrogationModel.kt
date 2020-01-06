@@ -1,10 +1,10 @@
 package com.lifecycle.demo.ui.home.interrogation
 
 import androidx.lifecycle.MutableLiveData
-import com.lifecycle.rx.viewmodel.RxLifeViewModel
 import com.lifecycle.demo.R
+import com.lifecycle.rx.viewmodel.LifeViewModel
 
-class HomeInterrogationModel: RxLifeViewModel()  {
+class HomeInterrogationModel: LifeViewModel()  {
 
     val position = MutableLiveData(0)
     val items = arrayListOf(

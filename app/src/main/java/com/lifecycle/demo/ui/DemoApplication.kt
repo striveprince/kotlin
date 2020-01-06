@@ -3,13 +3,12 @@ package com.lifecycle.demo.ui
 import androidx.appcompat.app.AppCompatActivity
 import androidx.multidex.MultiDexApplication
 import com.alibaba.android.arouter.launcher.ARouter
-import com.lifecycle.binding.life.AppLifecycle
 import com.lifecycle.demo.BR
 import com.lifecycle.demo.base.util.applyKitKatTranslucency
 import com.lifecycle.demo.inject.component.DaggerAppComponent
 import com.lifecycle.demo.inject.data.Api
 import com.lifecycle.demo.inject.module.AppModule
-import com.lifecycle.rx.bus.RxBus
+import com.lifecycle.rx.life.AppRxLifecycle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,7 +32,7 @@ class DemoApplication : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         val application = this
-        val appLifecycle = AppLifecycle(application,RxBus(),BR.parse,BR.vm)
+        val appLifecycle = AppRxLifecycle(application, BR.parse, BR.vm)
         CoroutineScope(Dispatchers.Default).launch {
             DaggerAppComponent.builder()
                 .appModule(AppModule(application))
@@ -41,11 +40,14 @@ class DemoApplication : MultiDexApplication() {
                 .inject(application)
             launch(Dispatchers.Main) {
                 DemoApplication.api = api
-                appLifecycle.addCreateListener {
-                    ARouter.getInstance().inject(it)
-                    if (it is AppCompatActivity)//this method is not run at start view
-                        applyKitKatTranslucency(it, android.R.color.transparent)
-                }.postInitFinish()
+                appLifecycle.apply {
+                    addCreateListener {
+                        ARouter.getInstance().inject(it)
+                        if (it is AppCompatActivity)//this method is not run at start view
+                            applyKitKatTranslucency(it, android.R.color.transparent)
+                    }
+                    postInitFinish()
+                }
                 //notify base activity application and resource init completed
             }
         }

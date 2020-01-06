@@ -10,8 +10,8 @@ import com.lifecycle.rx.IListAdapter
 import com.lifecycle.rx.adapter.RecyclerAdapter
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.rx.observer.NormalObserver
-import com.lifecycle.binding.util.ioToMainThread
 import com.lifecycle.binding.util.observer
+import com.lifecycle.rx.util.ioToMainThread
 import com.lifecycle.rx.viewmodel.LifeViewModel
 import io.reactivex.Observable
 import io.reactivex.Observer

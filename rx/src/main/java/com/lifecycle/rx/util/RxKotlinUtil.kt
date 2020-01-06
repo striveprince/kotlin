@@ -36,7 +36,6 @@ fun <T> Observable<T>.subscribeObserver(
     this.subscribe(observer)
 }
 
-
 //-------------Single---------------
 
 fun <T> Single<T>.subscribeNormal(
