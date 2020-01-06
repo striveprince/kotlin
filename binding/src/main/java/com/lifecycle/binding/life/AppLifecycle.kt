@@ -2,14 +2,15 @@ package com.lifecycle.binding.life
 
 import android.app.Activity
 import android.app.Application
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import androidx.core.content.ContextCompat
+import com.lifecycle.binding.base.bus.Bus
 import com.lifecycle.binding.inter.inflate.Inflate
-import com.lifecycle.binding.util.busPost
 import java.util.*
 
-class AppLifecycle constructor(application: Application, val parse: Int =1, val vm: Int =2) : Application.ActivityLifecycleCallbacks, LifecycleListener {
+class AppLifecycle constructor(application: Application,
+                               private val bus: Bus<Boolean,*>,
+                               val parse: Int =1,
+                               val vm: Int =2) : Application.ActivityLifecycleCallbacks, LifecycleListener {
 
     private var createBlock: ((LifecycleInit<*>) -> Unit)? = null
     private var startBlock: ((LifecycleInit<*>) -> Unit)? = null
@@ -35,7 +36,7 @@ class AppLifecycle constructor(application: Application, val parse: Int =1, val 
 
     fun postInitFinish() {
         initFinish = true
-        busPost(initFinish)
+        bus.send(initFinish)
     }
 
     fun addCreateListener(createBlock: (LifecycleInit<*>) -> Unit): AppLifecycle {

@@ -15,10 +15,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import com.lifecycle.binding.R
 import com.lifecycle.binding.base.view.SwipeBackLayout
+import com.lifecycle.binding.inter.Init
 import com.lifecycle.binding.inter.Parse
-import com.lifecycle.binding.util.rxBus
-import com.lifecycle.binding.util.subscribeNormal
-import com.lifecycle.binding.rx.viewmodel.RxLifeViewModel
+
 import kotlin.reflect.jvm.javaType
 
 @Suppress("UNCHECKED_CAST")
@@ -42,12 +41,12 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
     private fun initView(savedInstanceState: Bundle?) {
         val injectView = if (!AppLifecycle.initFinish) {
             startView().apply {
-                rxBus<Boolean>()
-                    .filter{it}
-                    .subscribeNormal {
-                        removeAllViews()
-                        addView(inject(savedInstanceState))
-                    }
+//                rxBus<Boolean>()
+//                        .filter{it}
+//                    .subscribeNormal {
+//                        removeAllViews()
+//                        addView(inject(savedInstanceState))
+//                    }
             }
         } else inject(savedInstanceState)
         if (isSwipe() != SwipeBackLayout.FROM_NO) {
@@ -67,8 +66,9 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
     }
 
     override fun initData(owner: LifecycleOwner, bundle: Bundle?) {
-        model.let { if(it is RxLifeViewModel)it.initData(this,bundle) }
+        model.let { if(it is Init)it.initData(this,bundle) }
     }
+
     open fun toolbarView(): ViewGroup {
         return if (AppLifecycle.toolbarList.isEmpty()) FrameLayout(this).apply { layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT) }
         else AppLifecycle.toolbarList[toolbarIndex].createView(this) as ViewGroup

@@ -13,7 +13,7 @@ import com.lifecycle.demo.ui.home.HomeModel
 import com.lifecycle.demo.ui.home.interrogation.list.InterrogationListFragment.Companion.interrogationList
 import com.lifecycle.binding.Constant
 import com.lifecycle.binding.inter.inflate.Diff
-import com.lifecycle.binding.rx.adapter.life.diff.RxRecyclerDiffFragment
+import com.lifecycle.rx.adapter.life.diff.RxRecyclerDiffFragment
 import com.lifecycle.demo.ui.DemoApplication.Companion.api
 import com.lifecycle.demo.ui.home.interrogation.HomeInterrogationFragment.Companion.interrogation
 import io.reactivex.Single

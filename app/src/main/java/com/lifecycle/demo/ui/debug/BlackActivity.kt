@@ -11,13 +11,13 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
 import com.lifecycle.binding.life.binding.data.DataBindingActivity
-import com.lifecycle.binding.rx.viewmodel.RxLifeViewModel
 import com.lifecycle.binding.util.observer
 import com.lifecycle.demo.R
 import com.lifecycle.demo.databinding.ActivityBlankBinding
+import com.lifecycle.rx.viewmodel.LifeViewModel
 
 @LayoutView(layout = [R.layout.activity_blank])
-class BlackActivity : DataBindingActivity<RxLifeViewModel, ActivityBlankBinding>() {
+class BlackActivity : DataBindingActivity<LifeViewModel, ActivityBlankBinding>() {
     val position = MutableLiveData(0)
     private val navController: LiveData<NavController> = MutableLiveData()
 

@@ -7,7 +7,7 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.lifecycle.binding.base.rotate.TimeUtil
 import com.lifecycle.binding.life.binding.BindingActivity
 import com.lifecycle.binding.util.subscribeObserver
-import com.lifecycle.binding.rx.viewmodel.RxLifeViewModel
+import com.lifecycle.rx.viewmodel.RxLifeViewModel
 import com.lifecycle.demo.base.util.ARouterUtil
 import com.lifecycle.demo.base.util.checkPermissions
 import com.lifecycle.demo.base.util.rxPermissions

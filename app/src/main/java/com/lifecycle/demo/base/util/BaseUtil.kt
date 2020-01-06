@@ -360,23 +360,3 @@ fun setMeizuStatusBarDarkIcon(activity: Activity?, dark: Boolean): Boolean {
     }
     return result
 }
-
-
-fun Application.initYealinkSdk() {
-//    if (checkPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO))
-//        YealinkApi.instance().apply {
-//            init(this@initYealinkSdk, filesDir.absolutePath + ActivityComponent.Config.tomtaw, yealinkAppKey())
-//            initTalkResource(TalkResource())
-//            initTalkConfig(object : TalkConfigure() {init {
-//                IS_ENABLE_SHARE_CONFERENCE = false
-//                MENU_INVITE_VISIBLE = false
-//                MENU_UPGRADE_MEETING_VISIBLE = false
-//            }
-//            })
-//            setExtInterface(object : ExternalInterface() {})
-//            setOutInterface(object : OutInterface() {})
-//            addIncomingListener {}
-//        }
-
-}
-

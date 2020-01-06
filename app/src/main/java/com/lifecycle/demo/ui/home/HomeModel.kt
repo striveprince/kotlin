@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.lifecycle.demo.R
 import com.lifecycle.demo.base.util.ARouterUtil
 import com.lifecycle.binding.util.observer
-import com.lifecycle.binding.rx.viewmodel.RxLifeViewModel
+import com.lifecycle.rx.viewmodel.LifeViewModel
 
 /**
  * Company:
@@ -15,7 +15,7 @@ import com.lifecycle.binding.rx.viewmodel.RxLifeViewModel
  * Author: created by ArvinWang on 2019/11/15 10:23
  * Email: 1033144294@qq.com
  */
-class HomeModel : RxLifeViewModel() {
+class HomeModel : LifeViewModel() {
     val newCount = MutableLiveData(0)
     val waitCount = MutableLiveData(0)
     val allCount = MutableLiveData(0)

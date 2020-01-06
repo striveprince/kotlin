@@ -22,11 +22,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import com.lifecycle.binding.rx.observer.NormalObserver
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.lifecycle.binding.base.bus.Bus
 import com.lifecycle.binding.life.AppLifecycle
-import com.lifecycle.binding.rx.bus.RxBus
 import com.lifecycle.binding.base.rotate.TimeUtil
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
 import io.reactivex.Flowable
@@ -52,18 +51,6 @@ fun Fragment.findNavController(): NavController =
     NavHostFragment.findNavController(this)
 
 
-inline fun <reified E> rxBus(): Observable<E> {
-    return RxBus.getInstance()
-        .toObservable(E::class.java)
-}
-
-inline fun<reified E> rxBusMain():Observable<E>{
-    return rxBus<E>().observeOn(AndroidSchedulers.mainThread())
-}
-
-fun busPost(any: Any) {
-    RxBus.getInstance().send(any)
-}
 fun Context.string(@StringRes id: Int, vararg any: Any) =
     getString(id, *any)
 
@@ -88,6 +75,9 @@ fun findLayoutView(thisCls: Class<*>): LayoutView {
         ?: findLayoutView(thisCls = thisCls.superclass!!)
 }
 
+fun Bus.busPost(any: Any) {
+    send(any)
+}
 
 val gson = Gson()
 
@@ -99,15 +89,6 @@ inline fun <reified T> toArray(list: List<T>): Array<T> {
 inline fun <reified T : Any> parse(string: String): T {
     return Json.parse(string)
 }
-
-fun <T, R> Observable<List<T>>.concatIterable(block: T.() -> R): Observable<R> =
-    this.concatMapIterable {it}
-        .map { block(it) }
-
-fun <T, R> Observable<List<T>>.concatList(block: T.() -> R): Observable<List<R>> =
-    this.concatIterable(block)
-        .toList()
-        .toObservable()
 
 
 inline fun <reified T> Gson.fromJson(json: String) =
@@ -149,75 +130,6 @@ fun createWholeDir(path: String): String {
     return builder.toString()
 }
 
-fun <T> Observable<T>.subscribeNormal(
-
-    onError: (Throwable) -> Unit = { toast(it) },
-    onComplete: () -> Unit = {},
-    onSubscribe: (Disposable) -> Unit = {},
-    onNext: (T) -> Unit = {}
-):Disposable{
-    val observer = NormalObserver(onNext, onError, onComplete, onSubscribe)
-    this.subscribe(observer)
-    return observer.disposable.get()
-}
-
-fun <T> Observable<T>.subscribeObserver(
-    onError: (Throwable) -> Unit = { toast(it) },
-    onComplete: () -> Unit = {},
-    onSubscribe: (Disposable) -> Unit = {},
-    onNext: (T) -> Unit = {}
-){
-    val observer = NormalObserver(onNext, onError, onComplete, onSubscribe)
-    this.subscribe(observer)
-}
-
-
-//-------------Single---------------
-
-fun <T> Single<T>.subscribeNormal(
-    onSubscribe: (Disposable) -> Unit = {},
-    onError: (Throwable) -> Unit = { toast(it) },
-    onComplete: () -> Unit = {},
-    onNext: (T) -> Unit = {}
-) :Disposable{
-    val observer = NormalObserver(onNext, onError, onComplete, onSubscribe)
-    this.subscribe(observer)
-    return observer.disposable.get()
-}
-
-
-fun <T> Single<T>.subscribeObserver(
-    onSubscribe: (Disposable) -> Unit = {},
-    onError: (Throwable) -> Unit = { toast(it) },
-    onComplete: () -> Unit = {},
-    onNext: (T) -> Unit = {}
-) {
-    subscribe(NormalObserver(onNext, onError, onComplete, onSubscribe))
-}
-
-
-fun <T> Flowable<T>.subscribeObserver(
-    onSubscribe: (Disposable) -> Unit = {},
-    onError: (Throwable) -> Unit = { toast(it) },
-    onComplete: () -> Unit = {},
-    onNext: (T) -> Unit = {}
-) {
-
-    val disposable = subscribe(Consumer(onNext), Consumer(onError), Action(onComplete))
-    onSubscribe.invoke(disposable)
-}
-
-
-fun <T> Flowable<T>.subscribeNormal(
-    onNext: (T) -> Unit = {},
-    onError: (Throwable) -> Unit = { toast(it) },
-    onComplete: () -> Unit = {},
-    onSubscribe: (Disposable) -> Unit = {}
-):Disposable {
-    val disposable = subscribe(Consumer(onNext), Consumer(onError), Action(onComplete))
-    onSubscribe.invoke(disposable)
-    return disposable
-}
 
 fun toast(e: Throwable) {
     if(!TextUtils.isEmpty(e.message))
@@ -343,15 +255,6 @@ fun setAllUpSixVersion(activity: Activity) {
     }
 }
 
-fun <T> Single<T>.ioToMainThread(): Single<T> {
-    return this.subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-}
-
-fun <T> Single<T>.newToMainThread(): Single<T> {
-    return this.subscribeOn(Schedulers.newThread())
-        .observeOn(AndroidSchedulers.mainThread())
-}
 
 fun post(delayMillis:Long=0, block: () -> Unit){
     if(delayMillis<=0)TimeUtil.handler.post(Runnable(block))

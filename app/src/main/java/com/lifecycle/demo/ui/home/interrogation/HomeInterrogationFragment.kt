@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.lifecycle.binding.rx.adapter.RxFragmentPager2Adapter
+import com.lifecycle.rx.adapter.RxFragmentPager2Adapter
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
 import com.lifecycle.binding.life.binding.data.DataBindingFragment
 import com.lifecycle.binding.util.observer

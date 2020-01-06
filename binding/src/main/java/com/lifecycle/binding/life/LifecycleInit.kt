@@ -25,4 +25,6 @@ interface LifecycleInit <Model>:Init,LifecycleOwner{
     fun toDp(px: Int) = (px.toFloat().floatToDp() + 0.5).toInt()
     fun screenWidth() = getActivity()!!.screenWidth()
     fun screenHeight() = getActivity()!!.screenHeight()
+
+
 }

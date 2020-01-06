@@ -1,6 +1,6 @@
 package com.lifecycle.demo.ui.user.sign.up
 
-import com.lifecycle.binding.rx.viewmodel.RxLifeViewModel
+import com.lifecycle.rx.viewmodel.RxLifeViewModel
 
 class SignUpModel: RxLifeViewModel() {
 

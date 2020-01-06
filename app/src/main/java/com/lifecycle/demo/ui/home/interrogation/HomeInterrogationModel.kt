@@ -1,7 +1,7 @@
 package com.lifecycle.demo.ui.home.interrogation
 
 import androidx.lifecycle.MutableLiveData
-import com.lifecycle.binding.rx.viewmodel.RxLifeViewModel
+import com.lifecycle.rx.viewmodel.RxLifeViewModel
 import com.lifecycle.demo.R
 
 class HomeInterrogationModel: RxLifeViewModel()  {

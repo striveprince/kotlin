@@ -105,7 +105,8 @@ dependencies {
 //    implementation fileTree(dir: 'libs', include: ['*.jar','*.aar'])
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 //    implementation 'com.lifecycle:binding:1.1.0-RC2'
-    implementation project(path: ':binding')
+    implementation project(path: ':rx')
+//    implementation project(path: ':binding')
     implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.1.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0'
@@ -181,5 +182,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.afollestad.material-dialogs:core:3.1.1'
 
-
+    def anko_version = '0.10.8'
+    implementation "org.jetbrains.anko:anko:$anko_version"
+    implementation "org.jetbrains.anko:anko-design:$anko_version"
+    implementation "org.jetbrains.anko:anko-recyclerview-v7:$anko_version"
 }
