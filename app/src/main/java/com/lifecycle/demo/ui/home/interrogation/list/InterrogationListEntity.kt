@@ -1,6 +1,7 @@
 package com.lifecycle.demo.ui.home.interrogation.list
 
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
@@ -61,7 +62,7 @@ class InterrogationListEntity(private val bean: InterrogationBean) : DataBindRec
     }
 
     val img = MutableLiveData(
-        AppLifecycle.activity().getDrawable(
+        ContextCompat.getDrawable(AppLifecycle.application,
             when (bean.evaluate?.score) {
                 1 -> R.mipmap.rate1__ic
                 2 -> R.mipmap.rate2__ic
@@ -69,8 +70,7 @@ class InterrogationListEntity(private val bean: InterrogationBean) : DataBindRec
                 4 -> R.mipmap.rate4__ic
                 5 -> R.mipmap.rate5__ic
                 else -> R.color.transparent
-            }
-        )
+            })
     )
 
     fun onItemClick(v: View) {
