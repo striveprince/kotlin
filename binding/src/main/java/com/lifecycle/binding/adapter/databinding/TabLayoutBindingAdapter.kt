@@ -9,7 +9,7 @@ import com.lifecycle.binding.R
 import com.lifecycle.binding.adapter.databinding.inter.OnTabReselectedListener
 import com.lifecycle.binding.adapter.databinding.inter.OnTabSelectedListener
 import com.lifecycle.binding.adapter.databinding.inter.OnTabUnselectedListener
-import com.lifecycle.binding.util.ReflectUtil
+import com.lifecycle.binding.util.invoke
 
 /**
  * Created by arvin on 2018/1/17.
@@ -22,7 +22,7 @@ object TabLayoutBindingAdapter {
         val current = getSelectedTabPosition(layout)
         if (current == position || position < 0) return
         val tab = layout.getTabAt(position)!!
-        ReflectUtil.invoke("selectTab", layout, tab)
+        invoke("selectTab", layout, tab)
         layout.setScrollPosition(position, 0f, true)
     }
 
