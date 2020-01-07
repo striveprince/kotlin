@@ -61,7 +61,7 @@ class InterrogationListEntity(private val bean: InterrogationBean) : DataBindRec
     }
 
     val img = MutableLiveData(
-        AppLifecycle.getDrawable(
+        AppLifecycle.activity().getDrawable(
             when (bean.evaluate?.score) {
                 1 -> R.mipmap.rate1__ic
                 2 -> R.mipmap.rate2__ic

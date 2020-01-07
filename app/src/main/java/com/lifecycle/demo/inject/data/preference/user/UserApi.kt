@@ -2,6 +2,7 @@ package com.lifecycle.demo.inject.data.preference.user
 
 import android.content.Context
 import com.lifecycle.binding.util.get
+import com.lifecycle.binding.util.put
 import com.lifecycle.binding.util.sharedPreferences
 import com.lifecycle.demo.inject.data.net.bean.TokenBean
 
@@ -21,6 +22,11 @@ class UserApi private constructor(context: Context) {
         UserApi.token = token?:""
         UserApi.token_type = token_type?:""
         return (UserApi.token.isNotEmpty()&&UserApi.token_type.isNotEmpty()).apply { login = this }
+    }
+
+    fun login(tokenBean: TokenBean):TokenBean{
+        sharedPreferences.put(tokenBean,true)
+        return sharedPreferences.get(tokenBean)
     }
 
 

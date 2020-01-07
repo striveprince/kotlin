@@ -30,7 +30,6 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
 import com.lifecycle.binding.inter.bind.data.DataBindRecycler
-import com.lifecycle.binding.util.ReflectUtil
 import com.lifecycle.demo.R
 import com.lifecycle.demo.base.util.PhoneSystemManager.Companion.permission
 import com.lifecycle.demo.base.util.PhoneSystemManager.Companion.type
@@ -147,11 +146,11 @@ fun <T> Observable<T>.noError(): Observable<T> {
     return this.compose(NoErrorObservableTransformer())
 }
 
-fun <T> Any?.beanFieldGet(fieldName: String, default: T): T {
-    return this?.let {
-        ReflectUtil.beanFieldGet(fieldName, it) as T
-    } ?: default
-}
+//fun <T> Any?.beanFieldGet(fieldName: String, default: T): T {
+//    return this?.let {
+//        beanFieldGet(fieldName, it) as T
+//    } ?: default
+//}
 
 
 fun <T> Single<InfoEntity<T>>.restful(): Single<T> {
