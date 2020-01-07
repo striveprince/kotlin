@@ -80,7 +80,7 @@ fun <E : Inflate> recyclerAnko(
                         }
                     }
                     t.error.observer(lifecycleInit.owner()) { if (it != null) errorInflate.set(onLoad, it) }
-                    t.enable.observer(lifecycleInit.owner()) { (this as View).isEnabled = it }
+//                    t.enable.observer(lifecycleInit.owner()) { (this as View).isEnabled = it }
                     t.loadingState.observer(lifecycleInit.owner()) {
                         when (it) {
                             0 -> {

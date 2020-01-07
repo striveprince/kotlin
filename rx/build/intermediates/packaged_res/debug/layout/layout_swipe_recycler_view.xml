@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+                                                        
+    
+                 
+                     
+                                                                   
+                                          
+           
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" android:tag="layout/layout_swipe_recycler_view_0" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+        <com.scwang.smart.refresh.layout.SmartRefreshLayout
+            android:id="@+id/smart_refresh_layout"
+            android:layout_width="match_parent"
+            android:tag="binding_1"                  
+                                           
+            android:layout_height="match_parent">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:tag="binding_2"    
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <FrameLayout
+                    android:visibility="gone"                                                 
+                    android:id="@+id/frame_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:tag="binding_3">
+                    <TextView
+
+                        android:layout_width="match_parent"
+                        android:gravity="center"
+                        android:tag="binding_4"           
+                        android:layout_height="match_parent"/>
+                </FrameLayout>
+            </FrameLayout>
+        </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+    </FrameLayout>
+         

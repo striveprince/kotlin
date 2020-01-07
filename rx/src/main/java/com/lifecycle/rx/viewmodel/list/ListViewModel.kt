@@ -28,7 +28,7 @@ open class ListViewModel<E : Inflate>(val adapter: IListAdapter<E> = RecyclerAda
     val error = MutableLiveData<Throwable>()
     override val adapterList: MutableList<E> = adapter.adapterList
     private var disposable: Disposable? = null
-    var enable = MutableLiveData<Boolean>(true)
+//    var enable = MutableLiveData<Boolean>(true)
     var httpData :(Int,Int)->Single<List<E>> = {_,_->Single.just(ArrayList())}
     override fun attachData(owner: LifecycleOwner,  bundle: Bundle?) {
         super.attachData(owner, bundle)
@@ -36,13 +36,12 @@ open class ListViewModel<E : Inflate>(val adapter: IListAdapter<E> = RecyclerAda
         loadingState.value = AdapterType.refresh
     }
 
-    private fun doGetData(it:Int){
-//        Timber.i("it=$it")
-        if (it!=0 && enable.value!!) {
-            enable.value = false
+    open fun doGetData(it:Int){
+        if (it!=0 && loadingState.value == AdapterType.no) {
+//            enable.value = false
             httpData(getStartOffset(), loadingState.value!!)
                 .ioToMainThread()
-                .doFinally { enable.value = true }
+//                .doFinally { enable.value = true }
                 .doFinally { loadingState.value = AdapterType.no}
                 .map { if(it is ArrayList)it else ArrayList(it) }
                 .subscribe(NormalObserver(this))
@@ -67,7 +66,7 @@ open class ListViewModel<E : Inflate>(val adapter: IListAdapter<E> = RecyclerAda
         error.value = e
     }
 
-    private fun getStartOffset(): Int {
+    fun getStartOffset(): Int {
         offset = if (loadingState.value == AdapterType.refresh) 0 else size()
         val p = if (offset > headIndex) offset - headIndex else 0
         return if (pageWay) p / pageCount + 1 else p

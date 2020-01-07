@@ -2,8 +2,10 @@ package com.lifecycle.binding.util
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -64,7 +66,28 @@ fun Context.floatToPx(float: Float)= resources.displayMetrics.density*float
 fun Context.floatToDp(float: Float)= float/resources.displayMetrics.density
 fun Context.screenWidth()= resources.displayMetrics.widthPixels
 fun Context.screenHeight()= resources.displayMetrics.heightPixels
+fun Context.application():Context{
+    return if(this is Application)this else applicationContext
+}
 
+fun <T> T?.toJson():String{
+    return gson.toJson(this)
+}
+
+fun <T,R> List<T>.converter(block: T.() -> R):List<R>{
+    val list = ArrayList<R>()
+    for (t in this) list.add( t.block())
+    return list
+}
+
+fun <T,R> Set<T>.converter(block: T.() -> R):Set<R>{
+    val list = HashSet<R>()
+    for (t in this) list.add( t.block())
+    return list
+}
+fun Context.sharedPreferences(name:String): SharedPreferences {
+    return application().getSharedPreferences(name,Activity.MODE_PRIVATE)
+}
 fun<T> LiveData<T>.observer(owner: LifecycleOwner,block:(T)->Unit){
     observe(owner, Observer { block(it) })
 }
