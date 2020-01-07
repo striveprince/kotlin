@@ -1,12 +1,8 @@
-package com.lifecycle.binding.util.preference
+package com.lifecycle.binding.util
 
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.core.content.edit
-import com.lifecycle.binding.util.beanFieldSet
-import com.lifecycle.binding.util.converter
-import com.lifecycle.binding.util.getAllFields
-import com.lifecycle.binding.util.toJson
 
 
 fun SharedPreferences.putBundle(bundle: Bundle, commit: Boolean = false) {

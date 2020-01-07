@@ -1,7 +1,7 @@
 package com.lifecycle.demo.inject.data.preference.user
 
 import android.content.Context
-import com.lifecycle.binding.util.preference.get
+import com.lifecycle.binding.util.get
 import com.lifecycle.binding.util.sharedPreferences
 import com.lifecycle.demo.inject.data.net.bean.TokenBean
 

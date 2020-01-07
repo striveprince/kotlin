@@ -2,8 +2,8 @@ package com.lifecycle.demo.inject.data.preference.setting
 
 import android.content.Context
 import androidx.core.os.bundleOf
-import com.lifecycle.binding.util.preference.get
-import com.lifecycle.binding.util.preference.putBundle
+import com.lifecycle.binding.util.get
+import com.lifecycle.binding.util.putBundle
 import com.lifecycle.binding.util.sharedPreferences
 
 
