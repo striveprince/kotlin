@@ -97,9 +97,6 @@ dependencies {
 //    implementation "androidx.ui:ui-tooling:$compose_version"
 //    androidTestImplementation "androidx.ui:ui-platform:$compose_version"
 //    androidTestImplementation "androidx.ui:ui-test:$compose_version"
-//    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutines_version"
-//    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
-//    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:$kotlin_coroutines_version"
 }
 subprojects {
     tasks.withType(Javadoc).all { enabled = false }
@@ -110,7 +107,7 @@ subprojects {
 //    userOrg = 'arvinwant'
 //    groupId = 'com.lifecycle'
 //    artifactId = 'binding'
-//    publishVersion = '1.0.0'
+//    publishVersion = properties.getProperty('version')
 //    repoName = 'wmt'
 //    desc = 'you could use it create view, databinding or anko or the normal way'
 //    website = 'https://github.com/striveprince/kotlin'
