@@ -9,8 +9,8 @@ package com.lifecycle.binding.adapter.databinding
  * Company:
  * Description:
  * Author: created by Arvin on 2019/9/29 17:09
- * Email: wkz0917@163.com
- * Phone: 15390395799
+
+
  */
 object ViewGroupBindingAdapter {
 //    @JvmStatic

@@ -23,6 +23,8 @@ class JsonResponseBodyConverter<T> internal constructor(
 //        val msg = jsonObject.optString("msg")
 //        val code = jsonObject.optInt("code")
 //        val infoJson = """{"msg":$msg,code:$code,"result":$result}"""
-        json.parse(kSerializer,result) as T
+        value.string().let { json.parse(kSerializer,result) as T }
+
+
     }
 }

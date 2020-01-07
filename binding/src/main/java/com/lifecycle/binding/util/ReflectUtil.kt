@@ -3,7 +3,6 @@ package com.lifecycle.binding.util
 import android.text.TextUtils
 import timber.log.Timber
 import java.lang.reflect.Field
-import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
 import java.util.*
 import kotlin.collections.ArrayList
@@ -11,166 +10,123 @@ import kotlin.collections.ArrayList
 /**
  * Company:
  * Description:
- * Author: created by WangKeZe on 2019/9/30 12:33
- * Email: wkz0917@163.com
- * Phone: 15390395799
  */
-object ReflectUtil {
 
-    inline fun <reified T> toArray(list: List<T>): Array<T> {
-        return ArrayList<T>(list).toArray(arrayOf())
+fun invoke(methodName: String, bean: Any, vararg args: Any) {
+    val cl = ArrayList<Class<*>>()
+    for (arg in args) cl.add(arg.javaClass)
+    val cs = toArray(cl)
+    val method = bean.javaClass.getAllMethod(methodName, cs)
+    if (method != null) {
+        method.isAccessible = true
+        invoke(method, bean, *args)
     }
+}
 
-    fun invoke(methodName: String, o: Any, vararg args: Any) {
-        val cl = ArrayList<Class<*>>()
-        for (arg in args) cl.add(arg.javaClass)
-        val cs = toArray(cl)
-        val method = getAllClassMethod(
-            o.javaClass,
-            methodName,
-            cs
-        )
-        if (method != null) {
-            method.isAccessible = true
-            invoke(method, o, *args)
+fun Class<*>.getAllMethod(methodName: String, cs: Array<Class<*>>): Method? {
+    return try {
+        if (methodName.isEmpty()) null else getDeclaredMethod(methodName, *cs)
+    } catch (e: Exception) {
+        Timber.v("no such method method:%1s", methodName)
+        for (declareMethod in declaredMethods) {
+            if (isValid(methodName, declareMethod, cs)) return declareMethod
         }
+        if (this == Any::class.java) null else superclass!!.getAllMethod(methodName, cs)
     }
+}
 
-    private fun getAllClassMethod(c: Class<*>?, methodName: String, cs: Array<Class<*>>): Method? {
-        if (TextUtils.isEmpty(methodName)) return null
-        var method: Method? = null
-        try {
-            method = c?.getDeclaredMethod(methodName, *cs)
-        } catch (e: Exception) {
-            Timber.v("no such method method:%1s", methodName)
+fun Class<*>.getAllFields(): List<Field> {
+    val list = ArrayList<Field>()
+    for (declaredField in declaredFields) {
+        list.add(declaredField)
+    }
+    if (this != Any::class.java) list.addAll(superclass!!.getAllFields())
+    return list
+}
+
+fun invoke(method: Method, t: Any, vararg args: Any) {
+    try {
+        method.invoke(t, *args)
+    } catch (e: Exception) {
+        Timber.v("$method function invoke failed")
+    }
+}
+
+
+private fun isValid(methodName: String, declareMethod: Method, cs: Array<Class<*>>): Boolean {
+    if (declareMethod.name != methodName) return false
+    val params = declareMethod.parameterTypes
+    if (cs.size != params.size) return false
+    var index = -1
+    for (param in params) {
+        if (!param.isAssignableFrom(cs[++index])) return false
+    }
+    return true
+}
+
+fun isFieldNull(o: Any?): Boolean {
+    return when {
+        o == null -> true
+        o is Int -> Integer.valueOf(o) == 0
+        o is Double -> java.lang.Double.valueOf(o) == 0.0
+        o is Long -> java.lang.Long.valueOf(o) == 0L
+        o is Char -> o == '\u0000'
+        o is String -> TextUtils.isEmpty(o.toString())
+        o is Collection<*> -> o.isEmpty()
+        o.javaClass.isArray -> (o as Array<*>).size == 0
+        else -> false
+    }
+}
+
+fun beanGetValue(f: Field, bean: Any): Any? {
+    return runCatching { beanGetMethod(f, bean.javaClass)?.invoke(bean) }.getOrNull()
+}
+
+
+fun beanGetMethod(f: Field, c: Class<*>): Method? {
+    val prefix = if (f.type == Boolean::class.javaPrimitiveType && f.name.toLowerCase(Locale.getDefault()).startsWith("is")) "is" else "get"
+    return beanMethod(f, c, prefix, arrayOf())
+}
+
+private fun beanSetMethod(f: Field, c: Class<*>): Method? {
+    return beanMethod(f, c, "set", arrayOf(f.type))
+}
+
+private fun beanMethod(f: Field, c: Class<*>, prefix: String, params: Array<Class<*>>): Method? {
+    f.isAccessible = true
+    var fieldName = f.name
+    if (fieldName.toLowerCase(Locale.getDefault()).startsWith("is"))
+        fieldName = f.name.substring(2, f.name.length)
+    val cs = fieldName.toCharArray()
+    if (cs[0].toInt() in 97..122)
+        cs[0] = (cs[0].toInt() - 32).toChar()
+    return c.getAllMethod(prefix + String(cs), params)
+}
+
+fun beanSetValue(f: Field, bean: Any, value: Any) {
+    runCatching { beanSetMethod(f, bean.javaClass)?.invoke(bean, value) }
+}
+
+fun beanFieldGet(fieldName: String, bean: Any): Any? {
+    return runCatching {
+        bean.javaClass.getDeclaredField(fieldName).let {
+            it.isAccessible = true
+            it.get(bean)
         }
-        if (method == null) {
-            for (declareMethod in c!!.declaredMethods) {
-                if (isValid(
-                        methodName,
-                        declareMethod,
-                        cs
-                    )
-                ) {
-                    method = declareMethod
-                    break
-                }
+    }.getOrNull()
+}
+
+fun beanFieldSet(fieldName: String, bean: Any, value: Any?) {
+    beanFieldSet(bean.javaClass.getDeclaredField(fieldName),bean,value)
+}
+
+fun beanFieldSet(field: Field, bean: Any, value: Any?) {
+    value?.apply {
+        runCatching {
+            field.let {
+                it.isAccessible = true
+                it.set(bean, it)
             }
         }
-        return if (method == null && c != Any::class.java) getAllClassMethod(
-            c!!.superclass,
-            methodName,
-            cs
-        ) else method
     }
-
-
-    operator fun invoke(method: Method, t: Any, vararg args: Any) {
-        try {
-            method.invoke(t, *args)
-        } catch (e: Exception) {
-
-        }
-
-    }
-
-
-    private fun isValid(methodName: String, declareMethod: Method, cs: Array<Class<*>>): Boolean {
-        if (declareMethod.name != methodName) return false
-        val params = declareMethod.parameterTypes
-        if (cs.size != params.size) return false
-        var index = -1
-        for (param in params) {
-            if (!param.isAssignableFrom(cs[++index])) return false
-        }
-        return true
-    }
-
-    fun isFieldNull(o: Any?): Boolean {
-        val value = o.toString()
-        return when {
-            o == null -> true
-            o is Int -> Integer.valueOf(value) == 0
-            o is Double -> java.lang.Double.valueOf(value) == 0.0
-            o is Long -> java.lang.Long.valueOf(value) == 0L
-            o is Char -> o == '\u0000'
-            o is String -> TextUtils.isEmpty(o.toString())
-            o is Collection<*> -> o.isEmpty()
-            o.javaClass.isArray -> (o as Array<*>).size == 0
-            else -> false
-        }
-    }
-
-    fun beanGetValue(f: Field, bean: Any): Any? {
-        try {
-            val method = beanGetMethod(
-                f,
-                bean.javaClass
-            )
-            return method?.invoke(bean)
-        } catch (e: IllegalAccessException) {
-            e.printStackTrace()
-        } catch (e: InvocationTargetException) {
-            e.printStackTrace()
-        }
-
-        return null
-    }
-
-    fun beanFieldGet(fieldName: String, any: Any): Any? {
-        return try {
-//            val clazz = any.javaClass
-            val field = any.javaClass.getDeclaredField(fieldName)
-            field.isAccessible = true
-            field.get(any)
-        } catch (e: Throwable) {
-            e.printStackTrace()
-            null
-        }
-    }
-
-    fun beanGetMethod(f: Field, c: Class<*>): Method? {
-        val prefix = if (f.type == Boolean::class.javaPrimitiveType && f.name.toLowerCase(Locale.getDefault()).startsWith("is")) "is" else "get"
-        return beanMethod(f, c, prefix, arrayOf())
-    }
-
-    private fun beanSetMethod(f: Field, c: Class<*>): Method? {
-        return beanMethod(
-            f,
-            c,
-            "set",
-            arrayOf(f.type)
-        )
-    }
-
-    private fun beanMethod(f: Field, c: Class<*>, prefix: String, params: Array<Class<*>>): Method? {
-        f.isAccessible = true
-        var fieldName = f.name
-        if (fieldName.toLowerCase(Locale.getDefault()).startsWith("is"))
-            fieldName = f.name.substring(2, f.name.length)
-        val cs = fieldName.toCharArray()
-        if (cs[0].toInt() in 97..122) {
-            cs[0] = (cs[0].toInt() - 32).toChar()
-        }
-        return getAllClassMethod(
-            c,
-            prefix + String(cs),
-            params
-        )
-    }
-
-    fun beanSetValue(f: Field, bean: Any, value: Any) {
-        try {
-            val method = beanSetMethod(
-                f,
-                bean.javaClass
-            )
-            method?.invoke(bean, value)
-        } catch (e: IllegalAccessException) {
-            e.printStackTrace()
-        } catch (e: InvocationTargetException) {
-            e.printStackTrace()
-        }
-    }
-
 }

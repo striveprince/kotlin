@@ -2,8 +2,10 @@ package com.lifecycle.binding.util
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -46,10 +48,25 @@ import java.io.File
  * Email: 1033144294@qq.com
  */
 
+val gson = Gson()
+
+inline fun <reified T> String.fromJson() = gson.fromJson<T>(this)
+fun <T> T?.toJson():String{
+     return gson.toJson(this)
+}
+
 
 inline fun <reified E> rxBus(): Observable<E> {
     return RxBus.getInstance()
         .toObservable(E::class.java)
+}
+
+fun Context.application():Context{
+    return if(this is Application)this else applicationContext
+}
+
+fun Context.sharedPreferences(name:String):SharedPreferences{
+    return application().getSharedPreferences(name,Activity.MODE_PRIVATE)
 }
 
 inline fun<reified E> rxBusMain():Observable<E>{
@@ -84,7 +101,20 @@ fun findLayoutView(thisCls: Class<*>): LayoutView {
 }
 
 
-val gson = Gson()
+
+fun <T,R> List<T>.converter(block: T.() -> R):List<R>{
+    val list = ArrayList<R>()
+    for (t in this) list.add( t.block())
+    return list
+}
+
+
+
+fun <T,R> Set<T>.converter(block: T.() -> R):Set<R>{
+    val list = HashSet<R>()
+    for (t in this) list.add( t.block())
+    return list
+}
 
 inline fun <reified T> toArray(list: List<T>): Array<T> {
     return ArrayList<T>(list).toArray(arrayOf())
@@ -107,8 +137,6 @@ fun <T, R> Observable<List<T>>.concatList(block: T.() -> R): Observable<List<R>>
 
 inline fun <reified T> Gson.fromJson(json: String) =
     this.fromJson<T>(json, object : TypeToken<T>() {}.type)!!
-
-inline fun <reified T> String.fromJson() = gson.fromJson<T>(this)
 
 fun contain(value: Int, min: Int, max: Int): Boolean {
     return value in min until max

@@ -1,8 +1,10 @@
 package com.lifecycle.demo.inject.data.preference.setting
 
-import android.app.Application
 import android.content.Context
-import com.lifecycle.demo.inject.data.preference.SharePreferenceUtil
+import androidx.core.os.bundleOf
+import com.lifecycle.binding.util.preference.get
+import com.lifecycle.binding.util.preference.putBundle
+import com.lifecycle.binding.util.sharedPreferences
 
 
 /**
@@ -11,40 +13,21 @@ import com.lifecycle.demo.inject.data.preference.SharePreferenceUtil
  * Author: created by ArvinWang on 2019/10/11 17:13
  * Email: 1033144294@qq.com
  */
-class SettingApi private constructor(context: Context) {
-    private val sharePreferenceUtil = SharePreferenceUtil.getSettingInstance(context)
-    private val settingEntity : SettingEntity
-    init {
-        settingEntity = sharePreferenceUtil.getAllDto(SettingEntity::class.java)
-        deviceId = settingEntity.deviceId
-    }
+class SettingApi(context: Context) {
+    private val sharedPreferences = context.sharedPreferences("setting")
+    private val settingEntity = sharedPreferences.get(SettingEntity())
+    init { deviceId = settingEntity.deviceId }
 
     companion object {
-        var deviceId: String = ""
-        set(value) { settingApi?.sharePreferenceUtil?.setValue("deviceId",value) }
         private var settingApi: SettingApi? = null
         fun getInstance(context: Context): SettingApi {
-            var util: SettingApi? = settingApi
-            if (util == null) {
-                synchronized(SettingApi::class.java) {
-                    util = settingApi
-                    if (util == null) {
-                        var context1 = context
-                        if (context !is Application)
-                            context1 = context.applicationContext
-                        util = SettingApi(context1)
-                        settingApi = util
-                    }
-                }
-            }
-
-            return util!!
+            return settingApi ?: synchronized(SettingApi::class.java) { settingApi?:SettingApi(context) }
         }
+
+        var deviceId: String = ""
+            set(value) {
+                settingApi?.sharedPreferences?.putBundle(bundleOf("deviceId" to value))
+                field = value
+            }
     }
-
-
-
-
-
-
 }
