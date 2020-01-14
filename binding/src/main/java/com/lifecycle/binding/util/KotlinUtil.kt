@@ -18,6 +18,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.os.bundleOf
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -40,6 +41,8 @@ import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.parse
 import java.io.File
+import kotlin.properties.Delegates
+import kotlin.properties.ReadWriteProperty
 
 /**
  * Company:
@@ -47,6 +50,12 @@ import java.io.File
  * Author: created by ArvinWang on 2019/11/14 18:04
  * Email: 1033144294@qq.com
  */
+
+
+
+
+
+
 
 val gson = Gson()
 
@@ -79,16 +88,14 @@ fun busPost(any: Any) {
 fun Context.string(@StringRes id: Int, vararg any: Any) =
     getString(id, *any)
 
-fun Context.drawable(@DrawableRes id:Int)
-        = ContextCompat.getDrawable(this,id)
+fun Context.drawable(@DrawableRes id:Int) = ContextCompat.getDrawable(this,id)
+fun Context.color(@ColorRes id:Int) = ContextCompat.getColor(this,id)
 
-fun Context.color(@ColorRes id:Int)
-        = ContextCompat.getColor(this,id)
-
-fun Context.floatToPx(float: Float)= resources.displayMetrics.density*float
-fun Context.floatToDp(float: Float)= float/resources.displayMetrics.density
-fun Context.screenWidth()= resources.displayMetrics.widthPixels
-fun Context.screenHeight()= resources.displayMetrics.heightPixels
+val density by lazy { AppLifecycle.application.resources.displayMetrics.density }
+val screenWidth by lazy { AppLifecycle.application.resources.displayMetrics.widthPixels }
+val screenHeight by lazy { AppLifecycle.application.resources.displayMetrics.heightPixels }
+fun dip(int: Int) = (density*int).toInt()
+fun pxToDip(int: Int) = (int/density+0.5).toInt()
 
 fun<T> LiveData<T>.observer(owner: LifecycleOwner,block:(T)->Unit){
     observe(owner, Observer { block(it) })

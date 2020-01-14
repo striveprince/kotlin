@@ -16,11 +16,4 @@ interface LifecycleInit <Model>:Init,LifecycleOwner{
     fun Int.stringRes(vararg any: Any)= getActivity()!!.string(this,*any)
     fun Int.drawable() = getActivity()!!.drawable(this)
     fun Int.color() = getActivity()!!.color(this)
-
-    fun Float.floatToPx() = getActivity()!!.floatToPx(this)
-    fun Float.floatToDp() = getActivity()!!.floatToDp(this)
-    fun toPx(dp: Int): Int = (dp.toFloat().floatToPx() + 0.5).toInt()
-    fun toDp(px: Int) = (px.toFloat().floatToDp() + 0.5).toInt()
-    fun screenWidth() = getActivity()!!.screenWidth()
-    fun screenHeight() = getActivity()!!.screenHeight()
 }

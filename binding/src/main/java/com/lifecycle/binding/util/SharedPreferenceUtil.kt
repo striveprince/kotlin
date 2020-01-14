@@ -3,6 +3,9 @@ package com.lifecycle.binding.util
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.core.content.edit
+import androidx.core.os.bundleOf
+import kotlin.properties.Delegates
+import kotlin.properties.ReadWriteProperty
 
 
 fun SharedPreferences.putBundle(bundle: Bundle, commit: Boolean = false) {
@@ -23,6 +26,14 @@ fun <T> SharedPreferences.Editor.putValue(key: String, it: T) {
         is Set<*> -> putStringSet(key, it.converter { it.toJson() })
         else -> putString(key, it.toJson())
     }
+}
+
+fun<T> SharedPreferences.vetoable(t:T,commit: Boolean= false,block: (T,T) -> Boolean = {o,n->o!=n}): ReadWriteProperty<Any?, T> {
+    return Delegates.vetoable(t){ k, o, n-> block(o,n).apply { putPair(k.name to n as Any,commit = commit) } }
+}
+
+fun SharedPreferences.putPair(vararg pairs: Pair<String, Any>, commit: Boolean = false){
+    putBundle(bundleOf(*pairs),commit)
 }
 
 fun SharedPreferences.put(any: Any, commit: Boolean = false) {
