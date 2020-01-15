@@ -12,6 +12,7 @@ import com.lifecycle.demo.ui.interrogation.detail.InterrogationDetailActivity
 import com.lifecycle.demo.ui.user.sign.login.SignInActivity
 import com.lifecycle.binding.life.AppLifecycle
 import com.lifecycle.binding.Constant
+import com.lifecycle.demo.ui.push.TestActivity
 
 object ARouterUtil {
 
@@ -51,6 +52,11 @@ object ARouterUtil {
     fun interrogationDetail(id: String) {
         build(InterrogationDetailActivity.interrogation_detail)
             .withString(Constant.id,id)
+            .navigation()
+    }
+
+    fun startTest() {
+        build(TestActivity.test)
             .navigation()
     }
 

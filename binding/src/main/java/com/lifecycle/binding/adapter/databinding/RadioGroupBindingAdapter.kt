@@ -33,7 +33,7 @@ object RadioGroupBindingAdapter {
     }
 
     private fun RadioGroup.radioGroupPosition():Int {
-            return if (checkedRadioButtonId == -1) -1 else indexOfChild(findViewById(checkedRadioButtonId))
+        return if (checkedRadioButtonId == -1) -1 else indexOfChild(findViewById(checkedRadioButtonId))
     }
 
     @JvmStatic

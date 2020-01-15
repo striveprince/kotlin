@@ -18,7 +18,6 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.os.bundleOf
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -41,8 +40,6 @@ import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.parse
 import java.io.File
-import kotlin.properties.Delegates
-import kotlin.properties.ReadWriteProperty
 
 /**
  * Company:
@@ -61,9 +58,14 @@ val gson = Gson()
 
 inline fun <reified T> String.fromJson() = gson.fromJson<T>(this)
 fun <T> T?.toJson():String{
-     return gson.toJson(this)
+    return this?.let { gson.toJson(it) }?:""
 }
 
+fun <T,R> Collection<T>.converter(block: (T) -> R):Set<R>{
+    val set = HashSet<R>()
+    for (t in this) set.add(block(t))
+    return set
+}
 
 inline fun <reified E> rxBus(): Observable<E> {
     return RxBus.getInstance()
@@ -117,11 +119,6 @@ fun <T,R> List<T>.converter(block: T.() -> R):List<R>{
 
 
 
-fun <T,R> Set<T>.converter(block: T.() -> R):Set<R>{
-    val list = HashSet<R>()
-    for (t in this) list.add( t.block())
-    return list
-}
 
 inline fun <reified T> toArray(list: List<T>): Array<T> {
     return ArrayList<T>(list).toArray(arrayOf())

@@ -1,11 +1,21 @@
-package com.lifecycle.binding.util
+@file:Suppress("PROTECTED_CALL_FROM_PUBLIC_INLINE")
+
+package  com.lifecycle.binding.util
 
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
+import androidx.databinding.adapters.NumberPickerBindingAdapter.setValue
+import androidx.lifecycle.MutableLiveData
+import com.lifecycle.binding.util.fromJson
+import com.lifecycle.binding.util.toJson
+import timber.log.Timber
 import kotlin.properties.Delegates
+import kotlin.properties.ObservableProperty
 import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
+import kotlin.reflect.full.superclasses
 
 
 fun SharedPreferences.putBundle(bundle: Bundle, commit: Boolean = false) {
@@ -23,31 +33,104 @@ fun <T> SharedPreferences.Editor.putValue(key: String, it: T) {
         is Boolean -> putBoolean(key, it)
         is Float -> putFloat(key, it)
         is Long -> putLong(key, it)
-        is Set<*> -> putStringSet(key, it.converter { it.toJson() })
-        else -> putString(key, it.toJson())
+        is Collection<*> -> putStringSet(key, it.converter { toJsonWithoutBaseType(it) })
+        is ObservableProperty<*> -> it.value()?.let { putValue(key, it) }
+//        else -> putString(key, it.toJson())
     }
 }
 
-fun<T> SharedPreferences.vetoable(t:T,commit: Boolean= false,block: (T,T) -> Boolean = {o,n->o!=n}): ReadWriteProperty<Any?, T> {
-    return Delegates.vetoable(t){ k, o, n-> block(o,n).apply { putPair(k.name to n as Any,commit = commit) } }
+fun ObservableProperty<*>.value(): Any? = runCatching { javaClass.kotlin.superclasses[0].java.declaredFields[0].apply { isAccessible = true }.get(this@value) }.getOrNull()
+
+
+//private fun <T, R> Collection<T>.converter(block: (T) -> R): Set<R> {
+//    val set = HashSet<R>()
+//    for (t in this) set.add(block(t))
+//    return set
+//}
+
+private fun <T> toJsonWithoutBaseType(it: T): String {
+    return when (it) {
+        null -> ""
+        is Int, Boolean, Double, Float, Byte, Long, String, Char -> it.toString()
+        else -> it.toJson()
+    }
 }
 
-fun SharedPreferences.putPair(vararg pairs: Pair<String, Any>, commit: Boolean = false){
-    putBundle(bundleOf(*pairs),commit)
+
+fun <T> SharedPreferences.vetoable(t: T, commit: Boolean = false, block: (T, T) -> Boolean = { o, n -> o != n }): ReadWriteProperty<Any?, T> {
+    return Delegates.vetoable(t) { k, o, n ->
+        block(o, n).apply { if (this) putPair(k.name to n as Any, commit = commit) }
+    }
+}
+
+fun SharedPreferences.putPair(vararg pairs: Pair<String, Any>, commit: Boolean = false) {
+    putBundle(bundleOf(*pairs), commit)
+}
+
+fun SharedPreferences.putValue(key: String, value: Any, commit: Boolean = false) {
+    edit(commit) { putValue(key, value) }
 }
 
 fun SharedPreferences.put(any: Any, commit: Boolean = false) {
     edit(commit) {
         for (field in any.javaClass.getAllFields()) {
             field.isAccessible = true
-            runCatching { putValue(field.name, field[any]) }
+            runCatching { putValue(field.noDelegateName(), field[any]) }
         }
+        Timber.i("$all")
     }
 }
 
-inline fun <reified T> SharedPreferences.get(t:T = T::class.java.newInstance()):T{
+fun SharedPreferences.clear(commit: Boolean = false) {
+    edit(commit) { clear() }
+}
+
+inline fun <reified T> SharedPreferences.get(t: T = T::class.java.newInstance()): T {
     for (field in T::class.java.getAllFields()) {
-        beanFieldSet(field, t as Any, all[field.name])
+//        beanFieldSet(field, t as Any, all[field.name])
+//        Timber.i("field noDelegateName=${field.noDelegateName()},name=${field.name}")
+        all[field.noDelegateName()]?.let {
+            //            setReflateValue(field.noDelegateName(),t as Any,it)
+            beanSetValue(field.noDelegateName(), t as Any, it)
+        }
     }
     return t
 }
+
+inline fun <reified T> SharedPreferences.get(key: String, t: T? = null): T {
+    return when (T::class) {
+        Boolean::class -> getBoolean(key, t as Boolean) as T
+        Int::class -> getInt(key, t as Int) as T
+        Float::class -> getFloat(key, t as Float) as T
+        String::class -> getString(key, t as String) as T
+        Long::class -> getLong(key, t as Long) as T
+        Set::class -> getStringSet(key, defaultSet(t)) as T
+        else -> getString(key, t?.toJson())?.fromJson<T>() ?: get()
+    }
+}
+
+fun <T> defaultSet(t: T?): Set<String>? {
+    return if (t !is Collection<*>) setOf(toJsonWithoutBaseType(t))
+    else return HashSet<String>().apply { forEach { add(toJsonWithoutBaseType(it)) } }
+}
+
+
+inline fun <reified T> SharedPreferences.liveData(key: String, t: T): MutableLiveData<T> {
+    return object : MutableLiveData<T>() {
+        override fun getValue() = super.getValue() ?: get(key, t).apply { setValue(t) }
+        override fun setValue(value: T) {
+            super.setValue(value)
+            putValue(key, value as Any)
+        }
+    }
+}
+//
+//open class SharedPreferenceLiveData<T>:LiveData<T>(){
+//    override fun getValue()=super.getValue()
+//
+//    public override fun setValue(value: T) {
+//        super.setValue(value)
+//    }
+//}
+
+
