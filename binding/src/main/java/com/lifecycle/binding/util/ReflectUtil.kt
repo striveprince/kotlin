@@ -1,11 +1,16 @@
 package com.lifecycle.binding.util
 
+import android.os.Build
 import android.text.TextUtils
+import androidx.annotation.RequiresApi
+import com.lifecycle.binding.util.toArray
 import timber.log.Timber
+import java.lang.StringBuilder
 import java.lang.reflect.Field
 import java.lang.reflect.Method
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /**
  * Company:
@@ -27,12 +32,18 @@ fun Class<*>.getAllMethod(methodName: String, cs: Array<Class<*>>): Method? {
     return try {
         if (methodName.isEmpty()) null else getDeclaredMethod(methodName, *cs)
     } catch (e: Exception) {
-        Timber.v("no such method method:%1s", methodName)
+        Timber.v("no such method method: $methodName(${cs.params()})")
         for (declareMethod in declaredMethods) {
             if (isValid(methodName, declareMethod, cs)) return declareMethod
         }
         if (this == Any::class.java) null else superclass!!.getAllMethod(methodName, cs)
     }
+}
+
+fun Array<Class<*>>.params(): String {
+    val b = StringBuilder()
+    forEachIndexed { index, clazz -> b.append(clazz.simpleName).append(":").append("arg").append(index) }
+    return b.toString()
 }
 
 fun Class<*>.getAllFields(): List<Field> {
@@ -57,11 +68,16 @@ private fun isValid(methodName: String, declareMethod: Method, cs: Array<Class<*
     if (declareMethod.name != methodName) return false
     val params = declareMethod.parameterTypes
     if (cs.size != params.size) return false
-    var index = -1
-    for (param in params) {
-        if (!param.isAssignableFrom(cs[++index])) return false
-    }
+    params.forEachIndexed { index, param -> if (cs[index].let { !param.isAssignableFrom(it)&&!it.baseType() }) return false  }
     return true
+}
+private fun Class<*>.baseType():Boolean{
+    return when(kotlin){
+//        int.class
+        Int::class,Double::class,Long::class,Char::class,Byte::class,Float::class,Boolean::class,Short::class-> true
+        else -> false
+    }
+
 }
 
 fun isFieldNull(o: Any?): Boolean {
@@ -92,19 +108,64 @@ private fun beanSetMethod(f: Field, c: Class<*>): Method? {
     return beanMethod(f, c, "set", arrayOf(f.type))
 }
 
+
 private fun beanMethod(f: Field, c: Class<*>, prefix: String, params: Array<Class<*>>): Method? {
     f.isAccessible = true
-    var fieldName = f.name
-    if (fieldName.toLowerCase(Locale.getDefault()).startsWith("is"))
-        fieldName = f.name.substring(2, f.name.length)
-    val cs = fieldName.toCharArray()
-    if (cs[0].toInt() in 97..122)
-        cs[0] = (cs[0].toInt() - 32).toChar()
-    return c.getAllMethod(prefix + String(cs), params)
+    return beanMethod(f.name, c, prefix, params)
+//    var fieldName = f.noDelegateName()
+//    if (fieldName.toLowerCase(Locale.getDefault()).startsWith("is"))
+//        fieldName = f.noDelegateName().substring(2, f.name.length)
+//    val cs = fieldName.toCharArray()
+//    if (cs[0].toInt() in 97..122)
+//        cs[0] = (cs[0].toInt() - 32).toChar()
+//    return c.getAllMethod(prefix + String(cs), params)
 }
 
 fun beanSetValue(f: Field, bean: Any, value: Any) {
     runCatching { beanSetMethod(f, bean.javaClass)?.invoke(bean, value) }
+}
+
+fun beanSetValue(f: String, bean: Any, value: Any) {
+    runCatching { beanSetMethod(f, bean.javaClass, value.javaClass)?.invoke(bean, value) }
+}
+
+private fun beanSetMethod(f: String, c: Class<*>, type: Class<*>): Method? {
+    return beanMethod(f, c, "set", arrayOf(type))
+}
+
+
+private fun beanMethod(fieldName: String, c: Class<*>, prefix: String, params: Array<Class<*>>): Method? {
+    return with(fieldName.toLowerCase(Locale.getDefault())) {
+        substring(if (startsWith("is")) 2 else 0)
+            .toCharArray()
+            .toUpperChar()
+            .let { c.getAllMethod(prefix + String(it), params) }
+    }
+}
+
+fun CharArray.toUpperChar(): CharArray {
+    return let {
+        if (it[0].toInt() in 97..122) {
+            it[0] = (it[0].toInt() - 32).toChar()
+        }
+        it
+    }
+}
+
+
+fun Field.noDelegateName() = name.replace("\$delegate", "")
+
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+inline fun <reified T, reified R> T.copy(r: R): T {
+    val map = HashMap<String, Any>()
+    R::class.java.declaredFields.forEach { runCatching { map[it.name] = it.get(r) } }
+    T::class.java.declaredFields.forEach { field ->
+        field.apply {
+            isAccessible = true
+            map[name]?.let { set(this@copy, it) }
+        }
+    }
+    return this
 }
 
 fun beanFieldGet(fieldName: String, bean: Any): Any? {
@@ -117,7 +178,7 @@ fun beanFieldGet(fieldName: String, bean: Any): Any? {
 }
 
 fun beanFieldSet(fieldName: String, bean: Any, value: Any?) {
-    beanFieldSet(bean.javaClass.getDeclaredField(fieldName),bean,value)
+    beanFieldSet(bean.javaClass.getDeclaredField(fieldName), bean, value)
 }
 
 fun beanFieldSet(field: Field, bean: Any, value: Any?) {

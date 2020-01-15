@@ -18,16 +18,14 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
+import com.lifecycle.binding.inter.observer.NormalObserver
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.lifecycle.binding.base.bus.Bus
 import com.lifecycle.binding.life.AppLifecycle
+import com.lifecycle.binding.base.bus.RxBus
 import com.lifecycle.binding.base.rotate.TimeUtil
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
 import io.reactivex.Flowable
@@ -49,45 +47,58 @@ import java.io.File
  * Author: created by ArvinWang on 2019/11/14 18:04
  * Email: 1033144294@qq.com
  */
-fun Fragment.findNavController(): NavController =
-    NavHostFragment.findNavController(this)
 
 
-fun Context.string(@StringRes id: Int, vararg any: Any) =
-    getString(id, *any)
 
-fun Context.drawable(@DrawableRes id:Int)
-        = ContextCompat.getDrawable(this,id)
 
-fun Context.color(@ColorRes id:Int)
-        = ContextCompat.getColor(this,id)
 
-fun Context.floatToPx(float: Float)= resources.displayMetrics.density*float
-fun Context.floatToDp(float: Float)= float/resources.displayMetrics.density
-fun Context.screenWidth()= resources.displayMetrics.widthPixels
-fun Context.screenHeight()= resources.displayMetrics.heightPixels
+
+
+val gson = Gson()
+
+inline fun <reified T> String.fromJson() = gson.fromJson<T>(this)
+fun <T> T?.toJson():String{
+    return this?.let { gson.toJson(it) }?:""
+}
+
+fun <T,R> Collection<T>.converter(block: (T) -> R):Set<R>{
+    val set = HashSet<R>()
+    for (t in this) set.add(block(t))
+    return set
+}
+
+inline fun <reified E> rxBus(): Observable<E> {
+    return RxBus.getInstance()
+        .toObservable(E::class.java)
+}
+
 fun Context.application():Context{
     return if(this is Application)this else applicationContext
 }
 
-fun <T> T?.toJson():String{
-    return gson.toJson(this)
-}
-
-fun <T,R> List<T>.converter(block: T.() -> R):List<R>{
-    val list = ArrayList<R>()
-    for (t in this) list.add( t.block())
-    return list
-}
-
-fun <T,R> Set<T>.converter(block: T.() -> R):Set<R>{
-    val list = HashSet<R>()
-    for (t in this) list.add( t.block())
-    return list
-}
-fun Context.sharedPreferences(name:String): SharedPreferences {
+fun Context.sharedPreferences(name:String):SharedPreferences{
     return application().getSharedPreferences(name,Activity.MODE_PRIVATE)
 }
+
+inline fun<reified E> rxBusMain():Observable<E>{
+    return rxBus<E>().observeOn(AndroidSchedulers.mainThread())
+}
+
+fun busPost(any: Any) {
+    RxBus.getInstance().send(any)
+}
+fun Context.string(@StringRes id: Int, vararg any: Any) =
+    getString(id, *any)
+
+fun Context.drawable(@DrawableRes id:Int) = ContextCompat.getDrawable(this,id)
+fun Context.color(@ColorRes id:Int) = ContextCompat.getColor(this,id)
+
+val density by lazy { AppLifecycle.application.resources.displayMetrics.density }
+val screenWidth by lazy { AppLifecycle.application.resources.displayMetrics.widthPixels }
+val screenHeight by lazy { AppLifecycle.application.resources.displayMetrics.heightPixels }
+fun dip(int: Int) = (density*int).toInt()
+fun pxToDip(int: Int) = (int/density+0.5).toInt()
+
 fun<T> LiveData<T>.observer(owner: LifecycleOwner,block:(T)->Unit){
     observe(owner, Observer { block(it) })
 }
@@ -99,7 +110,15 @@ fun findLayoutView(thisCls: Class<*>): LayoutView {
 }
 
 
-val gson = Gson()
+
+fun <T,R> List<T>.converter(block: T.() -> R):List<R>{
+    val list = ArrayList<R>()
+    for (t in this) list.add( t.block())
+    return list
+}
+
+
+
 
 inline fun <reified T> toArray(list: List<T>): Array<T> {
     return ArrayList<T>(list).toArray(arrayOf())
@@ -110,11 +129,18 @@ inline fun <reified T : Any> parse(string: String): T {
     return Json.parse(string)
 }
 
+fun <T, R> Observable<List<T>>.concatIterable(block: T.() -> R): Observable<R> =
+    this.concatMapIterable {it}
+        .map { block(it) }
+
+fun <T, R> Observable<List<T>>.concatList(block: T.() -> R): Observable<List<R>> =
+    this.concatIterable(block)
+        .toList()
+        .toObservable()
+
 
 inline fun <reified T> Gson.fromJson(json: String) =
     this.fromJson<T>(json, object : TypeToken<T>() {}.type)!!
-
-inline fun <reified T> String.fromJson() = gson.fromJson<T>(this)
 
 fun contain(value: Int, min: Int, max: Int): Boolean {
     return value in min until max
@@ -150,6 +176,75 @@ fun createWholeDir(path: String): String {
     return builder.toString()
 }
 
+fun <T> Observable<T>.subscribeNormal(
+
+    onError: (Throwable) -> Unit = { toast(it) },
+    onComplete: () -> Unit = {},
+    onSubscribe: (Disposable) -> Unit = {},
+    onNext: (T) -> Unit = {}
+):Disposable{
+    val observer = NormalObserver(onNext, onError, onComplete, onSubscribe)
+    this.subscribe(observer)
+    return observer.disposable.get()
+}
+
+fun <T> Observable<T>.subscribeObserver(
+    onError: (Throwable) -> Unit = { toast(it) },
+    onComplete: () -> Unit = {},
+    onSubscribe: (Disposable) -> Unit = {},
+    onNext: (T) -> Unit = {}
+){
+    val observer = NormalObserver(onNext, onError, onComplete, onSubscribe)
+    this.subscribe(observer)
+}
+
+
+//-------------Single---------------
+
+fun <T> Single<T>.subscribeNormal(
+    onSubscribe: (Disposable) -> Unit = {},
+    onError: (Throwable) -> Unit = { toast(it) },
+    onComplete: () -> Unit = {},
+    onNext: (T) -> Unit = {}
+) :Disposable{
+    val observer = NormalObserver(onNext, onError, onComplete, onSubscribe)
+    this.subscribe(observer)
+    return observer.disposable.get()
+}
+
+
+fun <T> Single<T>.subscribeObserver(
+    onSubscribe: (Disposable) -> Unit = {},
+    onError: (Throwable) -> Unit = { toast(it) },
+    onComplete: () -> Unit = {},
+    onNext: (T) -> Unit = {}
+) {
+    subscribe(NormalObserver(onNext, onError, onComplete, onSubscribe))
+}
+
+
+fun <T> Flowable<T>.subscribeObserver(
+    onSubscribe: (Disposable) -> Unit = {},
+    onError: (Throwable) -> Unit = { toast(it) },
+    onComplete: () -> Unit = {},
+    onNext: (T) -> Unit = {}
+) {
+
+    val disposable = subscribe(Consumer(onNext), Consumer(onError), Action(onComplete))
+    onSubscribe.invoke(disposable)
+}
+
+
+fun <T> Flowable<T>.subscribeNormal(
+    onNext: (T) -> Unit = {},
+    onError: (Throwable) -> Unit = { toast(it) },
+    onComplete: () -> Unit = {},
+    onSubscribe: (Disposable) -> Unit = {}
+):Disposable {
+    val disposable = subscribe(Consumer(onNext), Consumer(onError), Action(onComplete))
+    onSubscribe.invoke(disposable)
+    return disposable
+}
 
 fun toast(e: Throwable) {
     if(!TextUtils.isEmpty(e.message))
@@ -275,6 +370,15 @@ fun setAllUpSixVersion(activity: Activity) {
     }
 }
 
+fun <T> Single<T>.ioToMainThread(): Single<T> {
+    return this.subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+}
+
+fun <T> Single<T>.newToMainThread(): Single<T> {
+    return this.subscribeOn(Schedulers.newThread())
+        .observeOn(AndroidSchedulers.mainThread())
+}
 
 fun post(delayMillis:Long=0, block: () -> Unit){
     if(delayMillis<=0)TimeUtil.handler.post(Runnable(block))

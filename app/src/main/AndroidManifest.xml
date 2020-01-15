@@ -51,5 +51,6 @@
 <!--            android:windowSoftInputMode="stateVisible|adjustResize"/>-->
         <activity android:name=".ui.video.VideoActivity" android:label="@string/video"/>
         <activity android:name=".ui.interrogation.detail.InterrogationDetailActivity" />
+        <activity android:name=".ui.push.TestActivity" />
     </application>
 </manifest>
