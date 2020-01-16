@@ -1,12 +1,8 @@
 package com.lifecycle.binding.util
 
-import android.os.Build
 import android.text.TextUtils
-import androidx.annotation.RequiresApi
 import com.lifecycle.binding.BuildConfig
-import com.lifecycle.binding.util.toArray
 import timber.log.Timber
-import java.lang.StringBuilder
 import java.lang.reflect.Field
 import java.lang.reflect.Method
 import java.util.*
