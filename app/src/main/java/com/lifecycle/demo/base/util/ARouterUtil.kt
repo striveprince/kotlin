@@ -34,7 +34,7 @@ object ARouterUtil {
         uri.pathSegments?.apply {
             if (size == 2) ARouter.getInstance().build(uri).navigation()
             else if(currentPath == getSamePath(currentPath)) {
-                fragmentManager()
+//                fragmentManager()
             }
         }
     }

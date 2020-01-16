@@ -21,11 +21,11 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import com.lifecycle.binding.inter.observer.NormalObserver
+//import com.lifecycle.binding.inter.observer.NormalObserver
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.lifecycle.binding.life.AppLifecycle
-import com.lifecycle.binding.base.bus.RxBus
+//import com.lifecycle.binding.base.bus.RxBus
 import com.lifecycle.binding.base.rotate.TimeUtil
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
 import io.reactivex.Flowable
@@ -67,10 +67,10 @@ fun <T,R> Collection<T>.converter(block: (T) -> R):Set<R>{
     return set
 }
 
-inline fun <reified E> rxBus(): Observable<E> {
-    return RxBus.getInstance()
-        .toObservable(E::class.java)
-}
+//inline fun <reified E> rxBus(): Observable<E> {
+//    return RxBus.getInstance()
+//        .toObservable(E::class.java)
+//}
 
 fun Context.application():Context{
     return if(this is Application)this else applicationContext
@@ -80,13 +80,13 @@ fun Context.sharedPreferences(name:String):SharedPreferences{
     return application().getSharedPreferences(name,Activity.MODE_PRIVATE)
 }
 
-inline fun<reified E> rxBusMain():Observable<E>{
-    return rxBus<E>().observeOn(AndroidSchedulers.mainThread())
-}
+//inline fun<reified E> rxBusMain():Observable<E>{
+//    return rxBus<E>().observeOn(AndroidSchedulers.mainThread())
+//}
 
-fun busPost(any: Any) {
-    RxBus.getInstance().send(any)
-}
+//fun busPost(any: Any) {
+//    RxBus.getInstance().send(any)
+//}
 fun Context.string(@StringRes id: Int, vararg any: Any) =
     getString(id, *any)
 
@@ -176,75 +176,75 @@ fun createWholeDir(path: String): String {
     return builder.toString()
 }
 
-fun <T> Observable<T>.subscribeNormal(
+//fun <T> Observable<T>.subscribeNormal(
+//
+//    onError: (Throwable) -> Unit = { toast(it) },
+//    onComplete: () -> Unit = {},
+//    onSubscribe: (Disposable) -> Unit = {},
+//    onNext: (T) -> Unit = {}
+//):Disposable{
+//    val observer = NormalObserver(onNext, onError, onComplete, onSubscribe)
+//    this.subscribe(observer)
+//    return observer.disposable.get()
+//}
 
-    onError: (Throwable) -> Unit = { toast(it) },
-    onComplete: () -> Unit = {},
-    onSubscribe: (Disposable) -> Unit = {},
-    onNext: (T) -> Unit = {}
-):Disposable{
-    val observer = NormalObserver(onNext, onError, onComplete, onSubscribe)
-    this.subscribe(observer)
-    return observer.disposable.get()
-}
-
-fun <T> Observable<T>.subscribeObserver(
-    onError: (Throwable) -> Unit = { toast(it) },
-    onComplete: () -> Unit = {},
-    onSubscribe: (Disposable) -> Unit = {},
-    onNext: (T) -> Unit = {}
-){
-    val observer = NormalObserver(onNext, onError, onComplete, onSubscribe)
-    this.subscribe(observer)
-}
+//fun <T> Observable<T>.subscribeObserver(
+//    onError: (Throwable) -> Unit = { toast(it) },
+//    onComplete: () -> Unit = {},
+//    onSubscribe: (Disposable) -> Unit = {},
+//    onNext: (T) -> Unit = {}
+//){
+//    val observer = NormalObserver(onNext, onError, onComplete, onSubscribe)
+//    this.subscribe(observer)
+//}
 
 
 //-------------Single---------------
+//
+//fun <T> Single<T>.subscribeNormal(
+//    onSubscribe: (Disposable) -> Unit = {},
+//    onError: (Throwable) -> Unit = { toast(it) },
+//    onComplete: () -> Unit = {},
+//    onNext: (T) -> Unit = {}
+//) :Disposable{
+//    val observer = NormalObserver(onNext, onError, onComplete, onSubscribe)
+//    this.subscribe(observer)
+//    return observer.disposable.get()
+//}
 
-fun <T> Single<T>.subscribeNormal(
-    onSubscribe: (Disposable) -> Unit = {},
-    onError: (Throwable) -> Unit = { toast(it) },
-    onComplete: () -> Unit = {},
-    onNext: (T) -> Unit = {}
-) :Disposable{
-    val observer = NormalObserver(onNext, onError, onComplete, onSubscribe)
-    this.subscribe(observer)
-    return observer.disposable.get()
-}
-
-
-fun <T> Single<T>.subscribeObserver(
-    onSubscribe: (Disposable) -> Unit = {},
-    onError: (Throwable) -> Unit = { toast(it) },
-    onComplete: () -> Unit = {},
-    onNext: (T) -> Unit = {}
-) {
-    subscribe(NormalObserver(onNext, onError, onComplete, onSubscribe))
-}
-
-
-fun <T> Flowable<T>.subscribeObserver(
-    onSubscribe: (Disposable) -> Unit = {},
-    onError: (Throwable) -> Unit = { toast(it) },
-    onComplete: () -> Unit = {},
-    onNext: (T) -> Unit = {}
-) {
-
-    val disposable = subscribe(Consumer(onNext), Consumer(onError), Action(onComplete))
-    onSubscribe.invoke(disposable)
-}
-
-
-fun <T> Flowable<T>.subscribeNormal(
-    onNext: (T) -> Unit = {},
-    onError: (Throwable) -> Unit = { toast(it) },
-    onComplete: () -> Unit = {},
-    onSubscribe: (Disposable) -> Unit = {}
-):Disposable {
-    val disposable = subscribe(Consumer(onNext), Consumer(onError), Action(onComplete))
-    onSubscribe.invoke(disposable)
-    return disposable
-}
+//
+//fun <T> Single<T>.subscribeObserver(
+//    onSubscribe: (Disposable) -> Unit = {},
+//    onError: (Throwable) -> Unit = { toast(it) },
+//    onComplete: () -> Unit = {},
+//    onNext: (T) -> Unit = {}
+//) {
+//    subscribe(NormalObserver(onNext, onError, onComplete, onSubscribe))
+//}
+//
+//
+//fun <T> Flowable<T>.subscribeObserver(
+//    onSubscribe: (Disposable) -> Unit = {},
+//    onError: (Throwable) -> Unit = { toast(it) },
+//    onComplete: () -> Unit = {},
+//    onNext: (T) -> Unit = {}
+//) {
+//
+//    val disposable = subscribe(Consumer(onNext), Consumer(onError), Action(onComplete))
+//    onSubscribe.invoke(disposable)
+//}
+//
+//
+//fun <T> Flowable<T>.subscribeNormal(
+//    onNext: (T) -> Unit = {},
+//    onError: (Throwable) -> Unit = { toast(it) },
+//    onComplete: () -> Unit = {},
+//    onSubscribe: (Disposable) -> Unit = {}
+//):Disposable {
+//    val disposable = subscribe(Consumer(onNext), Consumer(onError), Action(onComplete))
+//    onSubscribe.invoke(disposable)
+//    return disposable
+//}
 
 fun toast(e: Throwable) {
     if(!TextUtils.isEmpty(e.message))

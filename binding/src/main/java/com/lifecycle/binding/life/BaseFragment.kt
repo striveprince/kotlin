@@ -36,7 +36,7 @@ abstract class BaseFragment<Model:ViewModel,B>:Fragment(),Parse<Model,B>, Lifecy
 
     override fun t() = model
     override fun owner()=this
-    override fun fragmentManager()=childFragmentManager
+//    override fun fragmentManager()=childFragmentManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         appLifecycle.onCreate(this,savedInstanceState)

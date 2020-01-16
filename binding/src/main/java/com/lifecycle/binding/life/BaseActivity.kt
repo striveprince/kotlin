@@ -112,7 +112,7 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
         return FrameLayout(this)
     }
 
-    override fun fragmentManager()=supportFragmentManager
+//    override fun fragmentManager()=supportFragmentManager
     override fun initModel(): Model {
         val clazz = javaClass.kotlin.supertypes[0].arguments[0].type!!.javaType as Class<Model>
         return ViewModelProviders.of(this)[clazz]
