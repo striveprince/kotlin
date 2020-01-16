@@ -61,11 +61,6 @@ fun <T> T?.toJson():String{
     return this?.let { gson.toJson(it) }?:""
 }
 
-fun <T,R> Collection<T>.converter(block: (T) -> R):Set<R>{
-    val set = HashSet<R>()
-    for (t in this) set.add(block(t))
-    return set
-}
 
 inline fun <reified E> rxBus(): Observable<E> {
     return RxBus.getInstance()

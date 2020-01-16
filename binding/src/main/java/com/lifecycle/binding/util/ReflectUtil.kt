@@ -3,6 +3,7 @@ package com.lifecycle.binding.util
 import android.os.Build
 import android.text.TextUtils
 import androidx.annotation.RequiresApi
+import com.lifecycle.binding.BuildConfig
 import com.lifecycle.binding.util.toArray
 import timber.log.Timber
 import java.lang.StringBuilder
@@ -32,7 +33,7 @@ fun Class<*>.getAllMethod(methodName: String, cs: Array<Class<*>>): Method? {
     return try {
         if (methodName.isEmpty()) null else getDeclaredMethod(methodName, *cs)
     } catch (e: Exception) {
-        Timber.v("no such method method: $methodName(${cs.params()})")
+        if(BuildConfig.DEBUG)Timber.v("no such method method: $methodName(${cs.params()})")
         for (declareMethod in declaredMethods) {
             if (isValid(methodName, declareMethod, cs)) return declareMethod
         }
@@ -41,9 +42,7 @@ fun Class<*>.getAllMethod(methodName: String, cs: Array<Class<*>>): Method? {
 }
 
 fun Array<Class<*>>.params(): String {
-    val b = StringBuilder()
-    forEachIndexed { index, clazz -> b.append(clazz.simpleName).append(":").append("arg").append(index) }
-    return b.toString()
+    return StringBuilder().let { forEachIndexed { index, clazz -> it.append(clazz.simpleName).append(":").append("arg").append(index) } } .toString()
 }
 
 fun Class<*>.getAllFields(): List<Field> {
@@ -68,16 +67,12 @@ private fun isValid(methodName: String, declareMethod: Method, cs: Array<Class<*
     if (declareMethod.name != methodName) return false
     val params = declareMethod.parameterTypes
     if (cs.size != params.size) return false
-    params.forEachIndexed { index, param -> if (cs[index].let { !param.isAssignableFrom(it)&&!it.baseType() }) return false  }
+    params.forEachIndexed { index, param -> if (cs[index].let { !param.isAssignableFrom(it)&&!it.baseType(param) }) return false  }
     return true
 }
-private fun Class<*>.baseType():Boolean{
-    return when(kotlin){
-//        int.class
-        Int::class,Double::class,Long::class,Char::class,Byte::class,Float::class,Boolean::class,Short::class-> true
-        else -> false
-    }
 
+private fun  Class<*>.baseType(param: Class<*>): Boolean {
+    return kotlin == param.kotlin
 }
 
 fun isFieldNull(o: Any?): Boolean {

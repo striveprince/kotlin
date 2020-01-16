@@ -35,18 +35,17 @@ fun <T> SharedPreferences.Editor.putValue(key: String, it: T) {
         is Long -> putLong(key, it)
         is Collection<*> -> putStringSet(key, it.converter { toJsonWithoutBaseType(it) })
         is ObservableProperty<*> -> it.value()?.let { putValue(key, it) }
-//        else -> putString(key, it.toJson())
+        else -> putString(key, it.toJson())
     }
 }
 
+fun <T,R> Collection<T>.converter(block: (T) -> R):Set<R>{
+    val set = HashSet<R>()
+    for (t in this) set.add(block(t))
+    return set
+}
+
 fun ObservableProperty<*>.value(): Any? = runCatching { javaClass.kotlin.superclasses[0].java.declaredFields[0].apply { isAccessible = true }.get(this@value) }.getOrNull()
-
-
-//private fun <T, R> Collection<T>.converter(block: (T) -> R): Set<R> {
-//    val set = HashSet<R>()
-//    for (t in this) set.add(block(t))
-//    return set
-//}
 
 private fun <T> toJsonWithoutBaseType(it: T): String {
     return when (it) {
@@ -88,9 +87,7 @@ fun SharedPreferences.clear(commit: Boolean = false) {
 inline fun <reified T> SharedPreferences.get(t: T = T::class.java.newInstance()): T {
     for (field in T::class.java.getAllFields()) {
 //        beanFieldSet(field, t as Any, all[field.name])
-//        Timber.i("field noDelegateName=${field.noDelegateName()},name=${field.name}")
         all[field.noDelegateName()]?.let {
-            //            setReflateValue(field.noDelegateName(),t as Any,it)
             beanSetValue(field.noDelegateName(), t as Any, it)
         }
     }
