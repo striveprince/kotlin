@@ -29,7 +29,7 @@ fun Class<*>.getAllMethod(methodName: String, cs: Array<Class<*>>): Method? {
     return try {
         if (methodName.isEmpty()) null else getDeclaredMethod(methodName, *cs)
     } catch (e: Exception) {
-        if(BuildConfig.DEBUG)Timber.v("no such method method: $methodName(${cs.params()})")
+        if (BuildConfig.DEBUG) Timber.v("no such method method: $methodName(${cs.params()})")
         for (declareMethod in declaredMethods) {
             if (isValid(methodName, declareMethod, cs)) return declareMethod
         }
@@ -38,7 +38,7 @@ fun Class<*>.getAllMethod(methodName: String, cs: Array<Class<*>>): Method? {
 }
 
 fun Array<Class<*>>.params(): String {
-    return StringBuilder().let { forEachIndexed { index, clazz -> it.append(clazz.simpleName).append(":").append("arg").append(index) } } .toString()
+    return StringBuilder().let { forEachIndexed { index, clazz -> it.append(clazz.simpleName).append(":").append("arg").append(index) } }.toString()
 }
 
 fun Class<*>.getAllFields(): List<Field> {
@@ -63,11 +63,11 @@ private fun isValid(methodName: String, declareMethod: Method, cs: Array<Class<*
     if (declareMethod.name != methodName) return false
     val params = declareMethod.parameterTypes
     if (cs.size != params.size) return false
-    params.forEachIndexed { index, param -> if (cs[index].let { !param.isAssignableFrom(it)&&!it.baseType(param) }) return false  }
+    params.forEachIndexed { index, param -> if (cs[index].let { !param.isAssignableFrom(it) && !it.baseType(param) }) return false }
     return true
 }
 
-private fun  Class<*>.baseType(param: Class<*>): Boolean {
+private fun Class<*>.baseType(param: Class<*>): Boolean {
     return kotlin == param.kotlin
 }
 
@@ -103,13 +103,6 @@ private fun beanSetMethod(f: Field, c: Class<*>): Method? {
 private fun beanMethod(f: Field, c: Class<*>, prefix: String, params: Array<Class<*>>): Method? {
     f.isAccessible = true
     return beanMethod(f.name, c, prefix, params)
-//    var fieldName = f.noDelegateName()
-//    if (fieldName.toLowerCase(Locale.getDefault()).startsWith("is"))
-//        fieldName = f.noDelegateName().substring(2, f.name.length)
-//    val cs = fieldName.toCharArray()
-//    if (cs[0].toInt() in 97..122)
-//        cs[0] = (cs[0].toInt() - 32).toChar()
-//    return c.getAllMethod(prefix + String(cs), params)
 }
 
 fun beanSetValue(f: Field, bean: Any, value: Any) {
@@ -146,39 +139,48 @@ fun CharArray.toUpperChar(): CharArray {
 
 fun Field.noDelegateName() = name.replace("\$delegate", "")
 
+//@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+//inline fun <reified T, reified R> T.copy(r: R): T {
+//    val map = HashMap<String, Any>()
+//    R::class.java.declaredFields.forEach { runCatching { map[it.name] = it.get(r) } }
+//    T::class.java.declaredFields.forEach { field ->
+//        field.apply {
+//            isAccessible = true
+//            map[name]?.let { set(this@copy, it) }
+//        }
+//    }
+//    return this
+//}
+
+
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 inline fun <reified T, reified R> T.copy(r: R): T {
     val map = HashMap<String, Any>()
-    R::class.java.declaredFields.forEach { runCatching { map[it.name] = it.get(r) } }
-    T::class.java.declaredFields.forEach { field ->
-        field.apply {
-            isAccessible = true
-            map[name]?.let { set(this@copy, it) }
-        }
-    }
+    R::class.java.declaredFields.forEach { it.beanSetField { map[name] = get(r) } }
+    T::class.java.declaredFields.forEach { it -> it.beanField { map[name]?.let { set(this@copy, it) } } }
     return this
 }
 
-fun beanFieldGet(fieldName: String, bean: Any): Any? {
-    return runCatching {
-        bean.javaClass.getDeclaredField(fieldName).let {
-            it.isAccessible = true
-            it.get(bean)
-        }
-    }.getOrNull()
+
+
+fun Field.beanSetField(block: Field.() -> Unit) {
+    isAccessible = true
+    runCatching { block() }
 }
 
+fun Field.beanField(block: Field.() -> Any?): Any? {
+    isAccessible = true
+    return runCatching { block() }.getOrNull()
+}
+
+fun beanFieldGet(fieldName: String, bean: Any): Any? =
+    runCatching { bean.javaClass.getDeclaredField(fieldName).beanField { get(bean) } }.getOrNull()
+
+
 fun beanFieldSet(fieldName: String, bean: Any, value: Any?) {
-    beanFieldSet(bean.javaClass.getDeclaredField(fieldName), bean, value)
+    runCatching { beanFieldSet(bean.javaClass.getDeclaredField(fieldName), bean, value) }
 }
 
 fun beanFieldSet(field: Field, bean: Any, value: Any?) {
-    value?.apply {
-        runCatching {
-            field.let {
-                it.isAccessible = true
-                it.set(bean, it)
-            }
-        }
-    }
+    field.beanField { value?.let { set(bean, it) } }
 }
