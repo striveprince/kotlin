@@ -22,8 +22,8 @@ class StartActivity : BindingActivity<LifeViewModel,ActivityStartBinding>() {
     }
 
     private fun start(){
-//        ARouterUtil.home()
-        ARouterUtil.startTest()
+        ARouterUtil.home()
+//        ARouterUtil.startTest()
         TimeUtil.handler.postDelayed({ finish() }, 500)
     }
 
@@ -36,7 +36,4 @@ class StartActivity : BindingActivity<LifeViewModel,ActivityStartBinding>() {
                 }
         }else start()
     }
-
-
-
 }
