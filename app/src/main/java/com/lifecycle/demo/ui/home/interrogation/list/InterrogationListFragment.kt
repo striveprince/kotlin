@@ -15,7 +15,7 @@ import com.lifecycle.demo.ui.home.interrogation.list.InterrogationListFragment.C
 import com.lifecycle.binding.Constant
 import com.lifecycle.binding.inter.inflate.Diff
 import com.lifecycle.binding.life.binding.data.recycler.diff.RecyclerFragment
-import com.lifecycle.demo.ui.DemoApplication.Companion.api
+import com.lifecycle.demo.ui.api
 import io.reactivex.Single
 
 @Route(path = interrogationList)

@@ -20,13 +20,10 @@ import javax.inject.Inject
  * Author: created by ArvinWang on 2019/11/15 10:50
  * Email: 1033144294@qq.com
  */
+lateinit var api: Api
 class DemoApplication : MultiDexApplication() {
     @Inject
-    lateinit var api: Api
-
-    companion object {
-        lateinit var api: Api
-    }
+    lateinit var dataApi: Api
 
     override fun onCreate() {
         super.onCreate()
@@ -38,7 +35,7 @@ class DemoApplication : MultiDexApplication() {
                 .build()
                 .inject(application)
             launch(Dispatchers.Main) {
-                DemoApplication.api = api
+                api = dataApi
                 appLifecycle.addCreateListener {
                     ARouter.getInstance().inject(it)
                     if (it is AppCompatActivity)//this method is not run at start view

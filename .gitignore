@@ -11,4 +11,5 @@
 *.properties
 /schemas
 *.log
+
 gradle.properties

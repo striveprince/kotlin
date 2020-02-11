@@ -40,16 +40,14 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
     }
 
     private fun initView(savedInstanceState: Bundle?) {
-        val injectView = if (!AppLifecycle.initFinish) {
+        val injectView = if(AppLifecycle.initFinish){
             startView().apply {
-                rxBus<Boolean>()
-                    .filter{it}
-                    .subscribeNormal {
-                        removeAllViews()
-                        addView(inject(savedInstanceState))
-                    }
+                AppLifecycle.appInit = {
+                    removeAllViews()
+                    addView(inject(savedInstanceState))
+                }
             }
-        } else inject(savedInstanceState)
+        }else inject(savedInstanceState)
         if (isSwipe() != SwipeBackLayout.FROM_NO) {
             setContentView(R.layout.activity_base)
             val swipeBackLayout = findViewById<SwipeBackLayout>(R.id.swipe_back_layout)

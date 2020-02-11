@@ -2,6 +2,7 @@
 
 buildscript {
     ext.kotlin_version = kotlin_version
+    ext.gradle_version = gradle_version
     repositories {
         google()
         jcenter()
@@ -9,7 +10,8 @@ buildscript {
 
     }
     dependencies {
-        classpath gradle_path
+//        classpath 'com.android.tools.build:gradle:3.6.0-rc03'
+        classpath "com.android.tools.build:gradle:$gradle_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
 //        classpath 'com.huawei.agconnect:agcp:1.0.0.300'
@@ -62,6 +64,7 @@ ext {
   
     androidx_version = '1.1.0'
     anko_version = '0.10.8'
+
 //    kotlin_coroutines_version = "1.2.1"
     kotlin_coroutines_version = "1.3.0"
 

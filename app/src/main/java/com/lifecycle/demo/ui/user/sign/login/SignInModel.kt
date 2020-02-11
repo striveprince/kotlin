@@ -8,7 +8,7 @@ import com.lifecycle.binding.viewmodel.LifeViewModel
 import com.lifecycle.demo.base.util.ARouterUtil
 import com.lifecycle.demo.base.util.getAccountError
 import com.lifecycle.demo.base.util.getPasswordError
-import com.lifecycle.demo.ui.DemoApplication.Companion.api
+import com.lifecycle.demo.ui.api
 
 
 class SignInModel:LifeViewModel() {
