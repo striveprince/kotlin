@@ -4,7 +4,6 @@ import com.lifecycle.binding.base.bus.Bus
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
 
 /**
  * Company:
@@ -33,26 +32,3 @@ class RxBus private constructor() :Bus<Disposable> {
 }
 
 
-
-
-
-//val rxBus = RxBus<Boolean>()
-//    companion object {
-//        private val rxBus = RxBus<Any>()
-//        fun getInstance(): RxBus<Any> {
-//            return rxBus
-//        }
-//    }
-//    private val bus  = PublishRelay.create<Any>().toSerialized()
-//    fun <T> toObservableType(eventType: Class<T>): Observable<T> {
-//        return bus.ofType(eventType)
-//    }
-//inline fun <reified E> RxBus<E>.rxBus(): Observable<E> {
-//    return toObservableType(E::class.java)
-//}
-//
-//
-//
-//inline fun<reified E> rxBusMain():Observable<E>{
-//    return rxBus<E>().observeOn(AndroidSchedulers.mainThread())
-//}

@@ -1,4 +1,4 @@
-package com.lifecycle.binding.adapter.databinding
+package com.lifecycle.binding.adapter.databinding.smartrefresh
 
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
@@ -24,7 +24,9 @@ object SmartRefreshLayoutBindingAdapter {
     @JvmStatic
     @BindingAdapter("state")
     fun setState(view: SmartRefreshLayout, state: Int) {
-        Timber.i("view.id = ${view.id} getRefreshing(view) = ${getState(view)} setRefreshing(view,refreshing=$state)")
+        Timber.i("view.id = ${view.id} getRefreshing(view) = ${getState(
+            view
+        )} setRefreshing(view,refreshing=$state)")
         if (getState(view) != state) {
             view.setTag(R.id.smart_refresh_layout_state, state)
             when (state) {

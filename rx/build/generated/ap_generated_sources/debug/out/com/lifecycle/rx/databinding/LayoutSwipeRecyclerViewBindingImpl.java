@@ -29,7 +29,7 @@ public class LayoutSwipeRecyclerViewBindingImpl extends LayoutSwipeRecyclerViewB
         public void onChange() {
             // Inverse of vm.loadingState.getValue()
             //         is vm.loadingState.setValue((java.lang.Integer) callbackArg_0)
-            int callbackArg_0 = com.lifecycle.binding.adapter.databinding.SmartRefreshLayoutBindingAdapter.getState(smartRefreshLayout);
+            int callbackArg_0 = com.lifecycle.binding.adapter.databinding.smartrefresh.SmartRefreshLayoutBindingAdapter.getState(smartRefreshLayout);
             // localize variables for thread safety
             // vm.loadingState
             androidx.lifecycle.MutableLiveData<java.lang.Integer> vmLoadingState = null;
@@ -253,12 +253,12 @@ public class LayoutSwipeRecyclerViewBindingImpl extends LayoutSwipeRecyclerViewB
             // api target 1
 
             this.smartRefreshLayout.setEnabled(vmLoadingStateInt0);
-            com.lifecycle.binding.adapter.databinding.SmartRefreshLayoutBindingAdapter.setState(this.smartRefreshLayout, androidxDatabindingViewDataBindingSafeUnboxVmLoadingStateGetValue);
+            com.lifecycle.binding.adapter.databinding.smartrefresh.SmartRefreshLayoutBindingAdapter.setState(this.smartRefreshLayout, androidxDatabindingViewDataBindingSafeUnboxVmLoadingStateGetValue);
         }
         if ((dirtyFlags & 0x8L) != 0) {
             // api target 1
 
-            com.lifecycle.binding.adapter.databinding.SmartRefreshLayoutBindingAdapter.setRefreshingListener(this.smartRefreshLayout, (com.scwang.smart.refresh.layout.listener.OnLoadMoreListener)null, (com.scwang.smart.refresh.layout.listener.OnRefreshListener)null, smartRefreshLayoutandroidStateAttrChanged);
+            com.lifecycle.binding.adapter.databinding.smartrefresh.SmartRefreshLayoutBindingAdapter.setRefreshingListener(this.smartRefreshLayout, (com.scwang.smart.refresh.layout.listener.OnLoadMoreListener)null, (com.scwang.smart.refresh.layout.listener.OnRefreshListener)null, smartRefreshLayoutandroidStateAttrChanged);
         }
     }
     // Listener Stub Implementations

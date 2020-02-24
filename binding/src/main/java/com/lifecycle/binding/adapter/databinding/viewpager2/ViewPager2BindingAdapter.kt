@@ -1,4 +1,4 @@
-package com.lifecycle.binding.adapter.databinding
+package com.lifecycle.binding.adapter.databinding.viewpager2
 
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
