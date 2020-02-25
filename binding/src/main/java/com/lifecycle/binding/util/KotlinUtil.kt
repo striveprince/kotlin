@@ -21,12 +21,10 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-//import com.lifecycle.binding.inter.observer.NormalObserver
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.lifecycle.binding.adapter.AdapterEvent
 import com.lifecycle.binding.life.AppLifecycle
-//import com.lifecycle.binding.base.bus.RxBus
 import com.lifecycle.binding.base.rotate.TimeUtil
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
 import kotlinx.serialization.ImplicitReflectionSerializer

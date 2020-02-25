@@ -39,12 +39,6 @@ fun <T> SharedPreferences.Editor.putValue(key: String, it: T) {
     }
 }
 
-fun <T,R> Collection<T>.converter(block: (T) -> R):Set<R>{
-    val set = HashSet<R>()
-    for (t in this) set.add(block(t))
-    return set
-}
-
 fun ObservableProperty<*>.value(): Any? = runCatching { javaClass.kotlin.superclasses[0].java.declaredFields[0].apply { isAccessible = true }.get(this@value) }.getOrNull()
 
 private fun <T> toJsonWithoutBaseType(it: T): String {
