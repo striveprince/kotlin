@@ -49,6 +49,5 @@ abstract class RecyclerActivity<E : Diff> : BaseActivity<ListViewModel<E>, Layou
     @Suppress("UNCHECKED_CAST")
     override fun initModel(): ListViewModel<E> {
         return ViewModelProvider(this)[ListViewModel::class.java]  as ListViewModel<E>
-//        return ViewModelProviders.of(this)[ListViewModel::class.java] as ListViewModel<E>
     }
 }
