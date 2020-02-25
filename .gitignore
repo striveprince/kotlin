@@ -1,6 +1,7 @@
 *.iml
 .gradle
 *.idea
+*.zip
 .DS_Store
 /build
 /gradlew
