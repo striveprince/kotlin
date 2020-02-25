@@ -10,7 +10,6 @@ import com.alibaba.android.arouter.launcher.ARouter
 import com.lifecycle.binding.Constant
 import com.lifecycle.binding.life.AppLifecycle
 import com.lifecycle.binding.life.LifecycleInit
-import com.lifecycle.demo.BuildConfig.domainUrl
 import com.lifecycle.demo.R
 import com.lifecycle.demo.inject.data.preference.user.UserApi
 import com.lifecycle.demo.ui.home.HomeActivity
@@ -52,7 +51,8 @@ object ARouterUtil {
 
 
     fun LifecycleInit<*>.navigation(path: String) {
-        return navigation(Uri.parse("${domainUrl}${path}"))
+//        return navigation(Uri.parse("${domainUrl}${path}"))
+        return navigation(Uri.parse(path))
     }
 
     fun start() {
@@ -74,7 +74,8 @@ object ARouterUtil {
     }
 
     fun findFragmentByTag(fragmentManager: FragmentManager? = null, route: String): Fragment {
-        return fragmentManager?.findFragmentByTag(route) ?: buildFragment(Uri.parse("${domainUrl}$route"))
+        return fragmentManager?.findFragmentByTag(route) ?: buildFragment(Uri.parse(route))
+//        return fragmentManager?.findFragmentByTag(route) ?: buildFragment(Uri.parse("${domainUrl}$route"))
     }
 
     fun interrogationDetail(id: String) {

@@ -34,7 +34,7 @@ class DataModule {
     @ApplicationScope
     internal fun provideNetApi(okHttpClient: OkHttpClient): HttpApi {
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.domainUrl)
+            .baseUrl("https://api.host.cn")
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
             .addConverterFactory(JsonConverterFactory())
             .callFactory(okHttpClient)
