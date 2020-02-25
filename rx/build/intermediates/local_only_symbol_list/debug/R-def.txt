@@ -1,6 +1,2 @@
 R_DEF: Internal format may change without notice
 local
-id frame_layout
-id recycler_view
-id smart_refresh_layout
-layout layout_swipe_recycler_view

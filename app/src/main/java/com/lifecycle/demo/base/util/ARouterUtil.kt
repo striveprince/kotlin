@@ -51,11 +51,6 @@ object ARouterUtil {
     }
 
 
-    private fun FragmentManager.navigation(uri: Uri) {
-
-
-    }
-
     fun LifecycleInit<*>.navigation(path: String) {
         return navigation(Uri.parse("${domainUrl}${path}"))
     }

@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlinx-serialization'
-//apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'com.novoda.bintray-release'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -48,15 +48,16 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
 
     kapt "com.android.databinding:compiler:3.6.0-rc03"
-    implementation "androidx.legacy:legacy-support-v4:1.0.0"
+
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     def androidx_version = '1.1.0'
     implementation "androidx.appcompat:appcompat:$androidx_version"
     implementation "androidx.vectordrawable:vectordrawable:$androidx_version"
     implementation "androidx.recyclerview:recyclerview:$androidx_version"
     implementation "androidx.core:core-ktx:1.2.0"
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+    def lifecycle_version = '2.2.0'
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     //kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
@@ -65,13 +66,6 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
     implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.4.0'
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.13.0"
-
-//    implementation 'io.reactivex.rxjava2:rxjava:2.2.15'
-//    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-//    implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
-
-//    implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
-//    implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.1'
 
     implementation 'com.scwang.smart:refresh-layout-kernel:2.0.0-alpha-1'
     implementation 'com.scwang.smart:refresh-header-classics:2.0.0-alpha-1'
@@ -106,18 +100,18 @@ subprojects {
 //    androidTestImplementation "androidx.ui:ui-platform:$compose_version"
 //    androidTestImplementation "androidx.ui:ui-test:$compose_version"
 
-//Properties properties = new Properties()
-//properties.load( project.rootProject.file('local.properties').newDataInputStream() )
-//publish {
-//    userOrg = 'arvinwant'
-//    groupId = 'com.lifecycle'
-//    artifactId = 'binding'
-//    publishVersion = properties.getProperty('version')
-//    repoName = 'wmt'
-//    desc = 'you could use it create view, databinding or anko or the normal way'
-//    website = 'https://github.com/striveprince/kotlin'
-//    bintrayUser = properties.getProperty('user')
-//    bintrayKey = properties.getProperty('key')
-////    gradlew clean build generatePomFileForReleasePublication bintrayUpload -PdryRun=false
-////    gradlew clean build bintrayUpload -PdryRun=false
-//}
+Properties properties = new Properties()
+properties.load( project.rootProject.file('local.properties').newDataInputStream() )
+publish {
+    userOrg = 'arvinwant'
+    groupId = 'com.lifecycle'
+    artifactId = 'binding'
+    publishVersion = properties.getProperty('version')
+    repoName = 'wmt'
+    desc = 'you could use it create view, databinding or anko or the normal way'
+    website = 'https://github.com/striveprince/kotlin'
+    bintrayUser = properties.getProperty('user')
+    bintrayKey = properties.getProperty('key')
+//    gradlew clean build generatePomFileForReleasePublication bintrayUpload -PdryRun=false
+//    gradlew clean build bintrayUpload -PdryRun=false
+}

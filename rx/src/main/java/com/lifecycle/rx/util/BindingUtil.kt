@@ -2,7 +2,7 @@ package com.lifecycle.rx.util
 
 import com.lifecycle.binding.inter.inflate.Diff
 import com.lifecycle.binding.life.LifecycleInit
-import com.lifecycle.rx.databinding.LayoutSwipeRecyclerViewBinding
+import com.lifecycle.binding.databinding.LayoutSwipeRecyclerViewBinding
 import com.lifecycle.rx.inflate.RecyclerParse
 import com.lifecycle.rx.viewmodel.list.ListViewModel
 

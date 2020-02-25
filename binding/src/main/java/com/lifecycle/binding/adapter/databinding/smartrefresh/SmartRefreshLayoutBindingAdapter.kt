@@ -6,6 +6,9 @@ import androidx.databinding.InverseBindingListener
 import androidx.databinding.adapters.ListenerUtil
 import com.lifecycle.binding.R
 import com.lifecycle.binding.adapter.AdapterType
+import com.lifecycle.binding.util.isStateRunning
+import com.lifecycle.binding.util.stateOriginal
+import com.lifecycle.binding.util.stateStart
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener
@@ -24,26 +27,27 @@ object SmartRefreshLayoutBindingAdapter {
     @JvmStatic
     @BindingAdapter("state")
     fun setState(view: SmartRefreshLayout, state: Int) {
-        Timber.i("view.id = ${view.id} getRefreshing(view) = ${getState(
-            view
-        )} setRefreshing(view,refreshing=$state)")
+        Timber.i("view.id = ${view.id} getRefreshing(view) = ${getState(view)} setRefreshing(view,refreshing=$state)")
         if (getState(view) != state) {
             view.setTag(R.id.smart_refresh_layout_state, state)
-            when (state) {
-                AdapterType.refresh -> {
-                    view.finishLoadMore()
-                    view.autoRefresh()
+            if (isStateRunning(state)) {
+                when(stateOriginal(state)){
+                    AdapterType.refresh -> {
+                        view.finishLoadMore()
+                        view.autoRefresh()
+                    }
+                    AdapterType.load, AdapterType.add -> {
+                        view.finishRefresh()
+                        view.autoLoadMore()
+                    }
                 }
-                AdapterType.load, AdapterType.add ->{
-                    view.finishRefresh()
-                    view.autoLoadMore()
-                }
-                else -> {
-                    view.finishLoadMore()
-                    view.finishRefresh()
-                }
+            }else{
+                view.finishLoadMore()
+                view.finishRefresh()
             }
         }
+
+
     }
 
     @JvmStatic
@@ -51,9 +55,9 @@ object SmartRefreshLayoutBindingAdapter {
     fun getState(view: SmartRefreshLayout): Int {
         Timber.i("view.id = ${view.id}")
         return when {
-            view.isRefreshing -> AdapterType.refresh
-            view.isLoading -> AdapterType.load
-            else -> view.getTag(R.id.smart_refresh_layout_state) as? Int ?:0
+            view.isRefreshing -> stateStart(AdapterType.refresh)
+            view.isLoading -> stateStart(AdapterType.load)
+            else -> view.getTag(R.id.smart_refresh_layout_state) as? Int ?: 0
         }
     }
 

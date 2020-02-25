@@ -733,7 +733,6 @@ int color mtrl_textinput_filled_box_default_background_color 0x0
 int color mtrl_textinput_hovered_box_stroke_color 0x0
 int color notification_action_color_filter 0x0
 int color notification_icon_bg_color 0x0
-int color notification_material_background_media_default_color 0x0
 int color primary_dark_material_dark 0x0
 int color primary_dark_material_light 0x0
 int color primary_material_dark 0x0
@@ -969,10 +968,6 @@ int dimen notification_small_icon_size_as_large 0x0
 int dimen notification_subtext_size 0x0
 int dimen notification_top_pad 0x0
 int dimen notification_top_pad_large_text 0x0
-int dimen subtitle_corner_radius 0x0
-int dimen subtitle_outline_width 0x0
-int dimen subtitle_shadow_offset 0x0
-int dimen subtitle_shadow_radius 0x0
 int dimen tooltip_corner_radius 0x0
 int dimen tooltip_horizontal_padding 0x0
 int dimen tooltip_margin 0x0
@@ -1141,7 +1136,6 @@ int id accessibility_custom_action_6 0x0
 int id accessibility_custom_action_7 0x0
 int id accessibility_custom_action_8 0x0
 int id accessibility_custom_action_9 0x0
-int id action0 0x0
 int id action_bar 0x0
 int id action_bar_activity_content 0x0
 int id action_bar_container 0x0
@@ -1171,7 +1165,6 @@ int id bottom_navigation_view 0x0
 int id bottom_navigation_view_reselected 0x0
 int id bottom_navigation_view_selected 0x0
 int id buttonPanel 0x0
-int id cancel_action 0x0
 int id center 0x0
 int id checkbox 0x0
 int id checked 0x0
@@ -1193,7 +1186,6 @@ int id design_navigation_view 0x0
 int id dialog_button 0x0
 int id edit_query 0x0
 int id end 0x0
-int id end_padder 0x0
 int id expand_activities_button 0x0
 int id expanded_menu 0x0
 int id fill 0x0
@@ -1201,6 +1193,7 @@ int id filled 0x0
 int id fixed 0x0
 int id forever 0x0
 int id fragment_container_view_tag 0x0
+int id frame_layout 0x0
 int id ghost_view 0x0
 int id group_divider 0x0
 int id holder_position 0x0
@@ -1223,7 +1216,6 @@ int id line3 0x0
 int id listMode 0x0
 int id list_item 0x0
 int id masked 0x0
-int id media_actions 0x0
 int id message 0x0
 int id mini 0x0
 int id mtrl_child_content_container 0x0
@@ -1294,7 +1286,6 @@ int id srl_classics_title 0x0
 int id srl_classics_update 0x0
 int id srl_tag 0x0
 int id start 0x0
-int id status_bar_latest_event_content 0x0
 int id stretch 0x0
 int id submenuarrow 0x0
 int id submit_area 0x0
@@ -1413,21 +1404,13 @@ int layout design_navigation_item_subheader 0x0
 int layout design_navigation_menu 0x0
 int layout design_navigation_menu_item 0x0
 int layout design_text_input_password_icon 0x0
+int layout layout_swipe_recycler_view 0x0
 int layout mtrl_layout_snackbar 0x0
 int layout mtrl_layout_snackbar_include 0x0
 int layout notification_action 0x0
 int layout notification_action_tombstone 0x0
-int layout notification_media_action 0x0
-int layout notification_media_cancel_action 0x0
-int layout notification_template_big_media 0x0
-int layout notification_template_big_media_custom 0x0
-int layout notification_template_big_media_narrow 0x0
-int layout notification_template_big_media_narrow_custom 0x0
 int layout notification_template_custom_big 0x0
 int layout notification_template_icon_group 0x0
-int layout notification_template_lines_media 0x0
-int layout notification_template_media 0x0
-int layout notification_template_media_custom 0x0
 int layout notification_template_part_chronometer 0x0
 int layout notification_template_part_time 0x0
 int layout select_dialog_item_material 0x0
@@ -1797,14 +1780,9 @@ int style TextAppearance_AppCompat_Widget_Switch 0x0
 int style TextAppearance_AppCompat_Widget_TextView_SpinnerItem 0x0
 int style TextAppearance_Compat_Notification 0x0
 int style TextAppearance_Compat_Notification_Info 0x0
-int style TextAppearance_Compat_Notification_Info_Media 0x0
 int style TextAppearance_Compat_Notification_Line2 0x0
-int style TextAppearance_Compat_Notification_Line2_Media 0x0
-int style TextAppearance_Compat_Notification_Media 0x0
 int style TextAppearance_Compat_Notification_Time 0x0
-int style TextAppearance_Compat_Notification_Time_Media 0x0
 int style TextAppearance_Compat_Notification_Title 0x0
-int style TextAppearance_Compat_Notification_Title_Media 0x0
 int style TextAppearance_Design_CollapsingToolbar_Expanded 0x0
 int style TextAppearance_Design_Counter 0x0
 int style TextAppearance_Design_Counter_Overflow 0x0

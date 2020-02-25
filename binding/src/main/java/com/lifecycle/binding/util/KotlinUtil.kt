@@ -24,18 +24,11 @@ import androidx.lifecycle.Observer
 //import com.lifecycle.binding.inter.observer.NormalObserver
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.lifecycle.binding.adapter.AdapterEvent
 import com.lifecycle.binding.life.AppLifecycle
 //import com.lifecycle.binding.base.bus.RxBus
 import com.lifecycle.binding.base.rotate.TimeUtil
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
-import io.reactivex.Flowable
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Action
-import io.reactivex.functions.Consumer
-import io.reactivex.schedulers.Schedulers
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.parse
@@ -49,9 +42,38 @@ import java.io.File
  */
 
 
+/**
+ *  error   http    state
+ *  FF FF   FF      FF
+ */
+
+fun isStateRunning(@AdapterEvent state :Int):Boolean{
+    return state.shr(8) and 1 == 1
+}
+fun stateStart(@AdapterEvent state :Int):Int{
+    return state or 0x100
+}
+
+fun stateEnd(@AdapterEvent state :Int):Int{
+    return state and 0x100FF
+}
 
 
+fun stateError(state :Int):Int{
+    return state or 0x10000
+}
 
+fun stateSuccess(state :Int):Int{
+    return state and 0x1ff
+}
+
+fun stateOriginal(state: Int):Int{
+    return state and 0xff
+}
+
+fun Int.stateEqual(@AdapterEvent state: Int):Boolean{
+    return (this and 0xff) == state
+}
 
 
 val gson = Gson()
@@ -67,11 +89,6 @@ fun <T,R> Collection<T>.converter(block: (T) -> R):Set<R>{
     return set
 }
 
-//inline fun <reified E> rxBus(): Observable<E> {
-//    return RxBus.getInstance()
-//        .toObservable(E::class.java)
-//}
-
 fun Context.application():Context{
     return if(this is Application)this else applicationContext
 }
@@ -80,6 +97,10 @@ fun Context.sharedPreferences(name:String):SharedPreferences{
     return application().getSharedPreferences(name,Activity.MODE_PRIVATE)
 }
 
+//inline fun <reified E> rxBus(): Observable<E> {
+//    return RxBus.getInstance()
+//        .toObservable(E::class.java)
+//}
 //inline fun<reified E> rxBusMain():Observable<E>{
 //    return rxBus<E>().observeOn(AndroidSchedulers.mainThread())
 //}
@@ -128,15 +149,6 @@ inline fun <reified T> toArray(list: List<T>): Array<T> {
 inline fun <reified T : Any> parse(string: String): T {
     return Json.parse(string)
 }
-
-fun <T, R> Observable<List<T>>.concatIterable(block: T.() -> R): Observable<R> =
-    this.concatMapIterable {it}
-        .map { block(it) }
-
-fun <T, R> Observable<List<T>>.concatList(block: T.() -> R): Observable<List<R>> =
-    this.concatIterable(block)
-        .toList()
-        .toObservable()
 
 
 inline fun <reified T> Gson.fromJson(json: String) =
@@ -368,16 +380,6 @@ fun setAllUpSixVersion(activity: Activity) {
         activity.window.decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
     }
-}
-
-fun <T> Single<T>.ioToMainThread(): Single<T> {
-    return this.subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-}
-
-fun <T> Single<T>.newToMainThread(): Single<T> {
-    return this.subscribeOn(Schedulers.newThread())
-        .observeOn(AndroidSchedulers.mainThread())
 }
 
 fun post(delayMillis:Long=0, block: () -> Unit){

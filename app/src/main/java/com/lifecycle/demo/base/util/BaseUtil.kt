@@ -5,7 +5,6 @@ package com.lifecycle.demo.base.util
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
-import android.app.Application
 import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
@@ -25,7 +24,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
@@ -43,9 +42,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import io.reactivex.schedulers.Schedulers
 import java.security.MessageDigest
 import java.util.regex.Pattern
 
@@ -62,20 +59,8 @@ fun Context.string(@StringRes id: Int, vararg any: Any) =
 
 
 inline fun <reified T : ViewModel> LifecycleOwner.viewModel(): T {
-    return if (this is Fragment) ViewModelProviders.of(this)[T::class.java]
-    else ViewModelProviders.of(this as FragmentActivity)[T::class.java]
-}
-
-fun launchMain(block: () -> Unit) {
-    CoroutineScope(Dispatchers.Main).launch { block() }
-}
-
-fun launchDefault(block: () -> Unit) {
-    CoroutineScope(Dispatchers.Default).launch { block() }
-}
-
-fun launchIo(block: () -> Unit) {
-    CoroutineScope(Dispatchers.IO).launch { block() }
+    return if (this is Fragment) ViewModelProvider(this)[T::class.java]
+    else ViewModelProvider(this as FragmentActivity)[T::class.java]
 }
 
 inline fun <reified E : DataBindRecycler<*, out ViewDataBinding>> Any.toEntity(vararg arrayOfAny: Any?): E {
@@ -358,4 +343,23 @@ fun setMeizuStatusBarDarkIcon(activity: Activity?, dark: Boolean): Boolean {
         }
     }
     return result
+}
+
+fun <T, R> Observable<List<T>>.concatIterable(block: T.() -> R): Observable<R> =
+    this.concatMapIterable {it}
+        .map { block(it) }
+
+fun <T, R> Observable<List<T>>.concatList(block: T.() -> R): Observable<List<R>> =
+    this.concatIterable(block)
+        .toList()
+        .toObservable()
+
+fun <T> Single<T>.ioToMainThread(): Single<T> {
+    return this.subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+}
+
+fun <T> Single<T>.newToMainThread(): Single<T> {
+    return this.subscribeOn(Schedulers.newThread())
+        .observeOn(AndroidSchedulers.mainThread())
 }

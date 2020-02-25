@@ -2,7 +2,7 @@ package com.lifecycle.coroutines.util
 
 import com.lifecycle.binding.inter.inflate.Diff
 import com.lifecycle.binding.life.LifecycleInit
-import com.lifecycle.coroutines.databinding.LayoutSwipeRecyclerViewBinding
+import com.lifecycle.binding.databinding.LayoutSwipeRecyclerViewBinding
 import com.lifecycle.coroutines.viewmodel.list.ListViewModel
 import com.lifecycle.coroutines.inflate.RecyclerParse
 

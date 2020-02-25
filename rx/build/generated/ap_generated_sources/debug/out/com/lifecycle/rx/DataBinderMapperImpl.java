@@ -6,8 +6,6 @@ import android.view.View;
 import androidx.databinding.DataBinderMapper;
 import androidx.databinding.DataBindingComponent;
 import androidx.databinding.ViewDataBinding;
-import com.lifecycle.rx.databinding.LayoutSwipeRecyclerViewBindingImpl;
-import java.lang.IllegalArgumentException;
 import java.lang.Integer;
 import java.lang.Object;
 import java.lang.Override;
@@ -18,12 +16,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class DataBinderMapperImpl extends DataBinderMapper {
-  private static final int LAYOUT_LAYOUTSWIPERECYCLERVIEW = 1;
-
-  private static final SparseIntArray INTERNAL_LAYOUT_ID_LOOKUP = new SparseIntArray(1);
+  private static final SparseIntArray INTERNAL_LAYOUT_ID_LOOKUP = new SparseIntArray(0);
 
   static {
-    INTERNAL_LAYOUT_ID_LOOKUP.put(com.lifecycle.rx.R.layout.layout_swipe_recycler_view, LAYOUT_LAYOUTSWIPERECYCLERVIEW);
   }
 
   @Override
@@ -33,14 +28,6 @@ public class DataBinderMapperImpl extends DataBinderMapper {
       final Object tag = view.getTag();
       if(tag == null) {
         throw new RuntimeException("view must have a tag");
-      }
-      switch(localizedLayoutId) {
-        case  LAYOUT_LAYOUTSWIPERECYCLERVIEW: {
-          if ("layout/layout_swipe_recycler_view_0".equals(tag)) {
-            return new LayoutSwipeRecyclerViewBindingImpl(component, view);
-          }
-          throw new IllegalArgumentException("The tag for layout_swipe_recycler_view is invalid. Received: " + tag);
-        }
       }
     }
     return null;
@@ -96,10 +83,9 @@ public class DataBinderMapperImpl extends DataBinderMapper {
   }
 
   private static class InnerLayoutIdLookup {
-    static final HashMap<String, Integer> sKeys = new HashMap<String, Integer>(1);
+    static final HashMap<String, Integer> sKeys = new HashMap<String, Integer>(0);
 
     static {
-      sKeys.put("layout/layout_swipe_recycler_view_0", com.lifecycle.rx.R.layout.layout_swipe_recycler_view);
     }
   }
 }

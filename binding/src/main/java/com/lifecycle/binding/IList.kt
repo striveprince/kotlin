@@ -4,6 +4,7 @@ import android.view.View
 import androidx.recyclerview.widget.ListUpdateCallback
 import com.lifecycle.binding.adapter.AdapterEvent
 import com.lifecycle.binding.adapter.AdapterType
+import com.lifecycle.binding.util.stateOriginal
 
 
 interface IList<E,R> : IEvent<E, R>, ListUpdateCallback {
@@ -19,7 +20,7 @@ interface IList<E,R> : IEvent<E, R>, ListUpdateCallback {
 
     fun size(): Int = adapterList.size
     fun setIEntity(e: E, position: Int, @AdapterEvent type: Int, view: View?): Boolean {
-        return when (type) {
+        return when (stateOriginal(type)) {
             AdapterType.add -> add(e, position)
             AdapterType.load -> add(e, position)
             AdapterType.set -> set(e, position)
@@ -31,7 +32,7 @@ interface IList<E,R> : IEvent<E, R>, ListUpdateCallback {
 
     fun setList(position: Int, es: MutableList<E>, type: Int): Boolean {
         if (es.isEmpty()) return false
-        return when (type) {
+        return when (stateOriginal(type)) {
             AdapterType.add -> addList(es,position)
             AdapterType.move -> moveList(position, adapterList.indexOf(es.first()), es.size)
             AdapterType.remove -> removeList(position, adapterList.indexOf(es.first()), es.size)

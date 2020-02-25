@@ -13,7 +13,7 @@ import io.reactivex.internal.disposables.ListCompositeDisposable
 
 @Suppress("UNCHECKED_CAST")
 open class LifeViewModel : ViewModel(), Init {
-    private val disposables = ListCompositeDisposable()
+    internal val disposables = ListCompositeDisposable()
     override fun initData(owner: LifecycleOwner, bundle: Bundle?) {
         attachData(owner,  bundle)
     }

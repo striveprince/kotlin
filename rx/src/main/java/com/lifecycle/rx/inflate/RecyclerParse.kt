@@ -3,7 +3,7 @@ package com.lifecycle.rx.inflate
 import com.lifecycle.binding.inter.bind.data.DataBinding
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.rx.R
-import com.lifecycle.rx.databinding.LayoutSwipeRecyclerViewBinding
+import com.lifecycle.binding.databinding.LayoutSwipeRecyclerViewBinding
 import com.lifecycle.rx.viewmodel.list.ListViewModel
 
 class RecyclerParse<E : Inflate>(

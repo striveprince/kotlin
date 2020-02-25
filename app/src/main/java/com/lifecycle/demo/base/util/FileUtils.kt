@@ -24,7 +24,6 @@ object FileUtils {
 
     @JvmStatic
     fun Context.realPathFromURI(contentUri: Uri): String? {
-        var res: String? = null
         val pro = arrayOf(MediaStore.Images.Media.DATA)
         val cursor = contentResolver.query(contentUri, pro, null, null, null)
         return cursor?.use {

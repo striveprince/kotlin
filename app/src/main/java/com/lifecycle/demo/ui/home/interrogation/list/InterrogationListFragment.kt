@@ -2,7 +2,6 @@ package com.lifecycle.demo.ui.home.interrogation.list
 
 import androidx.fragment.app.FragmentActivity
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.lifecycle.demo.base.util.launchMain
 import com.lifecycle.demo.base.util.restful
 import com.lifecycle.demo.base.util.toEntities
 import com.lifecycle.demo.base.util.viewModel
@@ -17,6 +16,7 @@ import com.lifecycle.demo.ui.DemoApplication.Companion.api
 import com.lifecycle.demo.ui.home.interrogation.HomeInterrogationFragment.Companion.interrogation
 import com.lifecycle.rx.adapter.life.diff.RecyclerDiffFragment
 import io.reactivex.Single
+import com.lifecycle.coroutines.util.launchMain
 
 @Route(path = interrogationList)
 class InterrogationListFragment : RecyclerDiffFragment<Diff>() {

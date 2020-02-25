@@ -5,12 +5,12 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.lifecycle.binding.inter.inflate.Diff
 import com.lifecycle.binding.life.BaseActivity
-import com.lifecycle.rx.databinding.LayoutSwipeRecyclerViewBinding
+import com.lifecycle.binding.databinding.LayoutSwipeRecyclerViewBinding
 import com.lifecycle.rx.util.recyclerBinding
 import com.lifecycle.rx.viewmodel.list.ListViewModel
 import io.reactivex.Single
@@ -49,6 +49,6 @@ abstract class RecyclerActivity<E : Diff> : BaseActivity<ListViewModel<E>, Layou
 
     @Suppress("UNCHECKED_CAST")
     override fun initModel(): ListViewModel<E> {
-        return ViewModelProviders.of(this)[ListViewModel::class.java] as ListViewModel<E>
+        return ViewModelProvider(this)[ListViewModel::class.java] as ListViewModel<E>
     }
 }

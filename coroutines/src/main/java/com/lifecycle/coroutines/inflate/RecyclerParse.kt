@@ -3,8 +3,8 @@ package com.lifecycle.coroutines.inflate
 import com.lifecycle.binding.inter.bind.data.DataBinding
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.coroutines.R
-import com.lifecycle.coroutines.databinding.LayoutSwipeRecyclerViewBinding
 import com.lifecycle.coroutines.viewmodel.list.ListViewModel
+import com.lifecycle.binding.databinding.LayoutSwipeRecyclerViewBinding
 
 class RecyclerParse<E : Inflate>(
     private val t: ListViewModel<E>

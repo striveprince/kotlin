@@ -14,17 +14,17 @@ import com.lifecycle.binding.adapter.AdapterType.set
 import com.lifecycle.binding.adapter.AdapterType.touch
 
 object AdapterType {
-    const val no = 0
-    const val load = 1
-    const val add = 2
-    const val refresh = 3
-    const val remove = 4
-    const val set = 5
-    const val move = 6
-    const val click = 7
-    const val long = 8
-    const val select = 9
-    const val touch = 10
+    const val no = 0x00
+    const val load = 0x01
+    const val add = 0x02
+    const val refresh = 0x03
+    const val remove = 0x04
+    const val set = 0x05
+    const val move = 0x06
+    const val click = 0x07
+    const val long = 0x08
+    const val select = 0x09
+    const val touch = 0x0a
 }
 
 @Target(AnnotationTarget.VALUE_PARAMETER)
