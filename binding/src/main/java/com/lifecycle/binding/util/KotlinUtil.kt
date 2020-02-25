@@ -75,10 +75,13 @@ fun Int.stateEqual(@AdapterEvent state: Int):Boolean{
     return (this and 0xff) == state
 }
 
-
 val gson = Gson()
 
+inline fun <reified T> Gson.fromJson(json: String) =
+    this.fromJson<T>(json, object : TypeToken<T>() {}.type)!!
+
 inline fun <reified T> String.fromJson() = gson.fromJson<T>(this)
+
 fun <T> T?.toJson():String{
     return this?.let { gson.toJson(it) }?:""
 }
@@ -150,9 +153,6 @@ inline fun <reified T : Any> parse(string: String): T {
     return Json.parse(string)
 }
 
-
-inline fun <reified T> Gson.fromJson(json: String) =
-    this.fromJson<T>(json, object : TypeToken<T>() {}.type)!!
 
 fun contain(value: Int, min: Int, max: Int): Boolean {
     return value in min until max

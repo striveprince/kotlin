@@ -1,7 +1,6 @@
 package com.lifecycle.demo.inject.data.net.converter
 
 import com.google.gson.Gson
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody

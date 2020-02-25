@@ -46,14 +46,14 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-
     kapt "com.android.databinding:compiler:3.6.0-rc03"
 
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
     def androidx_version = '1.1.0'
     implementation "androidx.appcompat:appcompat:$androidx_version"
-    implementation "androidx.vectordrawable:vectordrawable:$androidx_version"
+    implementation "com.google.android.material:material:$androidx_version"
     implementation "androidx.recyclerview:recyclerview:$androidx_version"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha03"
     implementation "androidx.core:core-ktx:1.2.0"
     def lifecycle_version = '2.2.0'
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
@@ -66,27 +66,25 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
     implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.4.0'
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.13.0"
-
     implementation 'com.scwang.smart:refresh-layout-kernel:2.0.0-alpha-1'
-    implementation 'com.scwang.smart:refresh-header-classics:2.0.0-alpha-1'
-
-//    def navigation = '2.3.0-alpha02'
-    def navigation = '2.2.1'
-    implementation "androidx.navigation:navigation-runtime:$navigation"
-    implementation "androidx.navigation:navigation-runtime-ktx:$navigation"
-    implementation "androidx.navigation:navigation-fragment:$navigation"
-    implementation "androidx.navigation:navigation-fragment-ktx:$navigation"
-    implementation "androidx.navigation:navigation-ui:$navigation"
-    implementation "androidx.navigation:navigation-ui-ktx:$navigation"
-
-
     implementation 'com.google.code.gson:gson:2.8.6'
-    implementation 'com.jakewharton.timber:timber:4.7.1'
+    api 'com.jakewharton.timber:timber:4.7.1'
 
 }
 subprojects {
     tasks.withType(Javadoc).all { enabled = false }
 }
+
+
+//    def navigation = '2.3.0-alpha02'
+//    def navigation = '2.2.1'
+//    implementation "androidx.navigation:navigation-runtime:$navigation"
+//    implementation "androidx.navigation:navigation-runtime-ktx:$navigation"
+//    implementation "androidx.navigation:navigation-fragment:$navigation"
+//    implementation "androidx.navigation:navigation-fragment-ktx:$navigation"
+//    implementation "androidx.navigation:navigation-ui:$navigation"
+//    implementation "androidx.navigation:navigation-ui-ktx:$navigation"
+
 //    implementation "androidx.constraintlayout:constraintlayout:$androidx_version"
 //    implementation "androidx.constraintlayout:constraintlayout:2.0.0-beta3"
 //    def compose_version = '0.1.0-dev03'
