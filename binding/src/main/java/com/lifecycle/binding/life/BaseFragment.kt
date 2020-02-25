@@ -7,11 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.lifecycle.binding.inter.Init
-import com.lifecycle.binding.life.AppLifecycle.Companion.appLifecycle
-
 import com.lifecycle.binding.inter.Parse
+import com.lifecycle.binding.life.AppLifecycle.Companion.appLifecycle
 import kotlin.reflect.jvm.javaType
 
 @Suppress("UNCHECKED_CAST")
@@ -31,7 +30,7 @@ abstract class BaseFragment<Model:ViewModel,B>:Fragment(),Parse<Model,B>, Lifecy
 
     override fun initModel():Model {
         val clazz = javaClass.kotlin.supertypes[0].arguments[0].type!!.javaType as Class<Model>
-        return ViewModelProviders.of(this)[clazz]
+        return ViewModelProvider(this)[clazz]
     }
 
     override fun t() = model

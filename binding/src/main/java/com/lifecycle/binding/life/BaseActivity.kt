@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.lifecycle.binding.R
 import com.lifecycle.binding.base.view.SwipeBackLayout
 import com.lifecycle.binding.inter.Init
@@ -115,7 +115,7 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
 //    override fun fragmentManager()=supportFragmentManager
     override fun initModel(): Model {
         val clazz = javaClass.kotlin.supertypes[0].arguments[0].type!!.javaType as Class<Model>
-        return ViewModelProviders.of(this)[clazz]
+        return ViewModelProvider(this)[clazz]
     }
 
     open fun possiblyResizeChildOfContent(injectView: View) {
