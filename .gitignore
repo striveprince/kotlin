@@ -13,3 +13,4 @@
 /schemas
 *.log
 gradle.properties
+build
