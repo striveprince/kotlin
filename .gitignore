@@ -1,6 +1,7 @@
 *.iml
 .gradle
 *.idea
+*.zip
 .DS_Store
 /build
 /gradlew
@@ -11,5 +12,4 @@
 *.properties
 /schemas
 *.log
-
 gradle.properties
