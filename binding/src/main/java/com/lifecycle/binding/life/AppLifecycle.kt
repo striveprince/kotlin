@@ -3,13 +3,11 @@ package com.lifecycle.binding.life
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
-import com.lifecycle.binding.base.bus.Bus
 import com.lifecycle.binding.inter.inflate.Inflate
 import java.util.*
 
 @Suppress("UNCHECKED_CAST")
 open class AppLifecycle constructor(application: Application,
-                                       bus: Bus<*>,
                                        val parse: Int =1,
                                        val vm: Int =2) : Application.ActivityLifecycleCallbacks, LifecycleListener {
 
@@ -21,7 +19,6 @@ open class AppLifecycle constructor(application: Application,
     private var destroyBlock: ((LifecycleInit<*>) -> Unit)? = null
 
     companion object {
-        lateinit var bus :Bus<*>
         lateinit var appLifecycle: AppLifecycle
         private val stack = Stack<Activity>()
         val toolbarList = arrayListOf<Inflate>()
@@ -31,7 +28,6 @@ open class AppLifecycle constructor(application: Application,
     }
 
     init {
-        AppLifecycle.bus = bus
         appLifecycle = this
         Companion.application = application
         application.registerActivityLifecycleCallbacks(this)
