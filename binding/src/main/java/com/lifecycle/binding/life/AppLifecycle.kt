@@ -25,6 +25,7 @@ open class AppLifecycle constructor(application: Application,
         internal var initFinish = false
         lateinit var application: Application
         fun activity(): Activity { return stack.lastElement() }
+        var appInit : ()->Unit = {}
     }
 
     init {
@@ -36,7 +37,7 @@ open class AppLifecycle constructor(application: Application,
 
     fun postInitFinish() {
         initFinish = true
-        bus.send(initFinish)
+        appInit()
     }
 
     fun addCreateListener(createBlock: (LifecycleInit<*>) -> Unit){

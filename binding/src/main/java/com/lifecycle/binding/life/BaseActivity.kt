@@ -39,7 +39,7 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
     }
 
     open fun ViewGroup.waitFinish(savedInstanceState: Bundle?){
-        AppLifecycle.bus.receiver {
+        AppLifecycle.appInit =  {
             removeAllViews()
             addView(inject(savedInstanceState))
         }

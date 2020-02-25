@@ -3,12 +3,10 @@ package com.lifecycle.rx.viewmodel.list
 import android.os.Bundle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
-import com.lifecycle.binding.IList
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.util.isStateRunning
 import com.lifecycle.binding.util.observer
-import com.lifecycle.binding.util.stateEnd
 import com.lifecycle.binding.viewmodel.ListModel
 import com.lifecycle.rx.IListAdapter
 import com.lifecycle.rx.adapter.RecyclerAdapter
@@ -42,7 +40,6 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
         if (it!=0 && !isStateRunning(it)) {
             httpData(getStartOffset(it), it)
                 .ioToMainThread()
-                .doFinally { loadingState.value = stateEnd(it)}
                 .map { if(it is ArrayList)it else ArrayList(it) }
                 .subscribe(NormalObserver(this))
         }
@@ -53,6 +50,7 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
     }
 
     override fun onComplete() {
+        super.onComplete()
         job?.dispose()
     }
 

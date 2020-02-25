@@ -8,7 +8,7 @@ import com.lifecycle.demo.base.util.applyKitKatTranslucency
 import com.lifecycle.demo.inject.component.DaggerAppComponent
 import com.lifecycle.demo.inject.data.Api
 import com.lifecycle.demo.inject.module.AppModule
-import com.lifecycle.rx.life.AppRxLifecycle
+import com.lifecycle.binding.life.AppLifecycle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,7 +32,7 @@ class DemoApplication : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         val application = this
-        val appLifecycle = AppRxLifecycle(application, BR.parse, BR.vm)
+        val appLifecycle = AppLifecycle(application, BR.parse, BR.vm)
         CoroutineScope(Dispatchers.Default).launch {
             DaggerAppComponent.builder()
                 .appModule(AppModule(application))

@@ -5,10 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.lifecycle.binding.IEvent
 import com.lifecycle.binding.IList
 import com.lifecycle.binding.adapter.AdapterType
-import com.lifecycle.binding.util.isStateRunning
-import com.lifecycle.binding.util.stateEqual
-import com.lifecycle.binding.util.stateError
-import com.lifecycle.binding.util.stateSuccess
+import com.lifecycle.binding.util.*
 
 interface ListModel<E,R,Job>: IList<E,R>,Obtain<MutableList<E>,Job> {
     var pageWay:Boolean
@@ -34,7 +31,7 @@ interface ListModel<E,R,Job>: IList<E,R>,Obtain<MutableList<E>,Job> {
     }
 
     override fun onComplete() {
-
+        loadingState.value = stateEnd(loadingState.value!!)
     }
 
     fun getStartOffset(state: Int): Int {

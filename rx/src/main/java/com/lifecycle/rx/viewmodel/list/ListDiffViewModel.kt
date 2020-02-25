@@ -18,12 +18,12 @@ open class ListDiffViewModel<E : Diff> : ListViewModel<E>() {
             httpData(getStartOffset(state), state)
                 .map { if (it is ArrayList) it else ArrayList(it) }
                 .doOnSuccess { es.addAll(it) }
-                .map { DiffUtil.calculateDiff(DiffUtilCallback(adapter.adapterList, it)) }
+                .map { DiffUtil.calculateDiff(DiffUtilCallback(adapterList, it)) }
                 .ioToMainThread()
                 .doFinally { loadingState.value = AdapterType.no }
                 .subscribe(NormalObserver({
-                    adapter.adapterList.clear()
-                    adapter.adapterList.addAll(es)
+                    adapterList.clear()
+                    adapterList.addAll(es)
                     it.dispatchUpdatesTo(adapter as ListUpdateCallback)
                 }, { onError(it) }, { onComplete() }, { onSubscribe(it) }))
         }

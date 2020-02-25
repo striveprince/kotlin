@@ -1,7 +1,6 @@
 package com.lifecycle.rx.util
 
 import com.lifecycle.binding.util.toast
-import com.lifecycle.rx.bus.RxBus
 import com.lifecycle.rx.observer.NormalObserver
 import io.reactivex.Flowable
 import io.reactivex.Observable
