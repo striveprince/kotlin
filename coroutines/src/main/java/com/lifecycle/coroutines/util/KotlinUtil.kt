@@ -5,9 +5,9 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 
-fun launchMain(context: CoroutineContext = EmptyCoroutineContext,
-               start: CoroutineStart = CoroutineStart.DEFAULT,
-               block: suspend CoroutineScope.() -> Unit):Job {
+fun launchUI(context: CoroutineContext = EmptyCoroutineContext,
+             start: CoroutineStart = CoroutineStart.DEFAULT,
+             block: suspend CoroutineScope.() -> Unit):Job {
     return CoroutineScope(Dispatchers.Main).launch(context, start, block)
 }
 

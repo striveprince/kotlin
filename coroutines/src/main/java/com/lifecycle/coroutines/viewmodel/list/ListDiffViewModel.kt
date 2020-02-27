@@ -6,7 +6,7 @@ import com.lifecycle.binding.adapter.recycler.DiffUtilCallback
 import com.lifecycle.binding.inter.inflate.Diff
 import com.lifecycle.binding.util.isStateRunning
 import com.lifecycle.coroutines.util.launchIo
-import com.lifecycle.coroutines.util.launchMain
+import com.lifecycle.coroutines.util.launchUI
 
 open class ListDiffViewModel<E : Diff> : ListViewModel<E>() {
 
@@ -21,11 +21,11 @@ open class ListDiffViewModel<E : Diff> : ListViewModel<E>() {
                         adapterList.addAll(list)
                         dispatchUpdatesTo(adapter as ListUpdateCallback)
                     }
-                    launchMain { onNext(list) }
+                    launchUI { onNext(list) }
                 } catch (e: Exception) {
-                    launchMain { onError(e) }
+                    launchUI { onError(e) }
                 } finally {
-                    launchMain { onComplete() }
+                    launchUI { onComplete() }
                 }
             })
         }

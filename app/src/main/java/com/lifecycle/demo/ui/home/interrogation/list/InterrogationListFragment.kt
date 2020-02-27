@@ -16,7 +16,7 @@ import com.lifecycle.demo.ui.DemoApplication.Companion.api
 import com.lifecycle.demo.ui.home.interrogation.HomeInterrogationFragment.Companion.interrogation
 import com.lifecycle.rx.adapter.life.diff.RecyclerDiffFragment
 import io.reactivex.Single
-import com.lifecycle.coroutines.util.launchMain
+import com.lifecycle.coroutines.util.launchUI
 
 @Route(path = interrogationList)
 class InterrogationListFragment : RecyclerDiffFragment<Diff>() {
@@ -43,7 +43,7 @@ class InterrogationListFragment : RecyclerDiffFragment<Diff>() {
     }
 
     private fun notifyCount(taskCategory: Int, it: InterrogationDataBean) {
-        launchMain {
+        launchUI {
             (activity as FragmentActivity).viewModel<HomeModel>().apply {
                 when (taskCategory) {
                     0 -> allCount.value = it.count

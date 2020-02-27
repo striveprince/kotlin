@@ -9,8 +9,7 @@ import com.lifecycle.binding.util.*
 import com.lifecycle.binding.viewmodel.ListModel
 import com.lifecycle.coroutines.IListAdapter
 import com.lifecycle.coroutines.adapter.RecyclerAdapter
-import com.lifecycle.coroutines.util.launchIo
-import com.lifecycle.coroutines.util.launchMain
+import com.lifecycle.coroutines.util.launchUI
 import com.lifecycle.coroutines.viewmodel.LifeViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -38,7 +37,7 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
     @ExperimentalCoroutinesApi
     open fun doGetData(it: Int) {
         if (it != 0 && !isStateRunning(it)) {
-            onSubscribe(launchMain {
+            onSubscribe(launchUI {
                 flow { emit(httpData(getStartOffset(it), it)) }
                     .flowOn(Dispatchers.IO)
                     .onCompletion { onComplete() }
