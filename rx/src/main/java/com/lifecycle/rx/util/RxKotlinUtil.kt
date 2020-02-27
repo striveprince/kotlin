@@ -1,5 +1,6 @@
 package com.lifecycle.rx.util
 
+import android.app.Activity
 import com.lifecycle.binding.util.toast
 import com.lifecycle.rx.observer.NormalObserver
 import io.reactivex.Flowable
@@ -88,6 +89,28 @@ fun <T> Single<T>.ioToMainThread(): Single<T> {
         .observeOn(AndroidSchedulers.mainThread())
 }
 
+fun <T> Flowable<T>.ioToMainThread(): Flowable<T> {
+    return this.subscribeOn(Schedulers.io()).toMainThread()
+}
+
+fun <T> Observable<T>.ioToMainThread(): Observable<T> {
+    return this.subscribeOn(Schedulers.io()).toMainThread()
+}
+
+fun<T> Flowable<T>.toMainThread():Flowable<T>{
+    return this.observeOn(AndroidSchedulers.mainThread())
+}
+
+fun<T> Observable<T>.toMainThread():Observable<T>{
+    return this.observeOn(AndroidSchedulers.mainThread())
+}
+
+
+
+fun <T> Single<T>.toMainThread(): Single<T> {
+    return this.observeOn(AndroidSchedulers.mainThread())
+}
+
 fun <T> Single<T>.newToMainThread(): Single<T> {
     return this.subscribeOn(Schedulers.newThread())
         .observeOn(AndroidSchedulers.mainThread())
@@ -102,3 +125,6 @@ fun <T, R> Observable<List<T>>.concatList(block: T.() -> R): Observable<List<R>>
     this.concatIterable(block)
         .toList()
         .toObservable()
+
+
+

@@ -1,4 +1,4 @@
-package com.lifecycle.demo.inject.data.net.transform
+package com.lifecycle.demo.inject.data.net.transform.observable
 
 import com.lifecycle.demo.inject.data.net.exception.ApiException
 import io.reactivex.Observable
@@ -14,8 +14,7 @@ import io.reactivex.functions.Function
 class NoErrorObservableTransformer <T> : ObservableTransformer<T, T> {
 
     override fun apply(upstream: Observable<T>): Observable<T> {
-        return upstream
-            .onErrorResumeNext(Function{
+        return upstream.onErrorResumeNext(Function{
                 if(it is ApiException){
                     it.printStackTrace()
                     Observable.create{emitter->emitter.onComplete()}

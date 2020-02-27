@@ -3,7 +3,7 @@ package com.lifecycle.demo.inject.data.oss
 import android.annotation.SuppressLint
 import com.alibaba.sdk.android.oss.common.auth.OSSCustomSignerCredentialProvider
 import com.lifecycle.demo.inject.data.net.HttpApi
-import com.lifecycle.demo.inject.data.net.transform.ErrorSingleTransformer
+import com.lifecycle.demo.inject.data.net.transform.single.ErrorSingleTransformer
 import timber.log.Timber
 
 

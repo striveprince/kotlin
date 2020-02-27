@@ -84,5 +84,9 @@ object ARouterUtil {
             .navigation()
     }
 
+    fun signIn() {
+        build(SignInActivity.signIn).navigation()
+    }
+
 }
 
