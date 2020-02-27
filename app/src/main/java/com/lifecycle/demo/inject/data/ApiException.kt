@@ -22,7 +22,7 @@ const val tokenExpire = 401
 const val authenticationException = 402
 const val logout = 1
 
-open class ApiException(val code: Int = 0, msg: String = "", val obj: InfoEntity<*>? = null) : RuntimeException(msg)
+open class ApiException(val code: Int = 0,msg: String,  val obj: InfoEntity<*>? = null,throwable: Throwable? = null) : RuntimeException(msg,throwable){
 
 open class ApiEmptyException(code: Int = 0, msg: String = "", obj: InfoEntity<*>? = null) : ApiException(code, msg, obj)
 
@@ -36,13 +36,13 @@ class NoPermissionException(code: Int = 0, msg: String = "请先同意权限再�
 
 fun judgeThrowable(it: Throwable): ApiException {
     return when (it) {
-        is HttpException -> ApiException(it.code(), httpErrorMessage(it), infoEntity(it))
-        is ServiceConfigurationError -> ApiException(0, "服务器错误")
-        is JSONException -> ApiException(0, "数据解析错误")
-        is SerializationException -> ApiException(0, "数据解析错误")
-        is UnknownHostException -> ApiException(0, "无网络")
+        is HttpException -> ApiException(it.code(), httpErrorMessage(it), infoEntity(it),it)
+        is ServiceConfigurationError -> ApiException(0, "服务器错误" ,null, it)
+        is JSONException -> ApiException(0, "数据解析错误" ,null, it)
+        is SerializationException -> ApiException(0, "数据解析错误" ,null, it)
+        is UnknownHostException -> ApiException(0, "无网络" ,null, it)
         is ApiException -> it
-        else -> ApiException(0, it.message ?: "")
+        else -> ApiException(0, it.message?:"" ,null, it)
     }
 }
 
