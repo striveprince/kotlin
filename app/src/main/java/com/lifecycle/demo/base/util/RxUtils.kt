@@ -6,6 +6,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.lifecycle.demo.R
 import com.lifecycle.demo.inject.data.net.InfoEntity
 import com.lifecycle.demo.inject.data.ApiException
+import com.lifecycle.demo.inject.data.NoPermissionException
 import com.lifecycle.demo.inject.data.net.transform.single.DoErrorTransformer
 import com.lifecycle.demo.inject.data.net.transform.single.ErrorSingleTransformer
 import com.lifecycle.demo.inject.data.net.transform.observable.NoErrorObservableTransformer
@@ -111,7 +112,7 @@ fun checkPermission(
 fun Activity.rxPermissions(vararg permissions: String): Observable<Boolean> {
     return RxPermissions(this)
         .request(*permissions)
-        .doOnNext { if (!it) throw ApiException.NoPermissionException() }
+        .doOnNext { if (!it) throw NoPermissionException() }
 }
 
 fun Activity.rxPermissionsDialog(vararg permissions: String): Observable<Boolean> {
