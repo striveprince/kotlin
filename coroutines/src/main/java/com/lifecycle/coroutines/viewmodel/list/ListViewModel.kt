@@ -33,7 +33,7 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
     override var canRun: AtomicBoolean = AtomicBoolean(true)
     var http: HttpData<List<E>> = this
 
-    override suspend fun require(startOffset: Int, it: Int) = ArrayList<E>()
+    override suspend fun require(startOffset: Int, it: Int) = flow { emit(ArrayList<E>()) }
 
     @ExperimentalCoroutinesApi
     override fun attachData(owner: LifecycleOwner, bundle: Bundle?) {
@@ -45,7 +45,7 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
     open fun doGetData(it: Int) {
         if (it != 0 && canRun.getAndSet(false)) {
             onSubscribe(launchUI {
-                flow { emit(http.require(getStartOffset(it), it)) }
+                http.require(getStartOffset(it), it)
                     .flowOn(Dispatchers.IO)
                     .catch{ onError(it) }
                     .onCompletion { onComplete() }
