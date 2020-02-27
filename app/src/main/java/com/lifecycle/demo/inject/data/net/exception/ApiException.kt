@@ -16,17 +16,23 @@ import java.util.*
  * Author: created by ArvinWang on 2019/10/9 17:20
  * Email: 1033144294@qq.com
  */
-open class ApiException(val code: Int = 0, msg: String = "", obj: InfoEntity<*>? = null) : RuntimeException(msg)
 
-open class ApiEmptyException(val code: Int = 0, msg: String = "", obj: InfoEntity<*>? = null) : RuntimeException(msg)
+const val success = 0
+const val tokenExpire = 401
+const val authenticationException = 402
+const val logout = 1
 
-class AuthenticationException(code: Int = authenticationException, msg: String = "", obj: InfoEntity<*>? = null) : ApiException(code, msg)
+open class ApiException(val code: Int = 0, msg: String = "", val obj: InfoEntity<*>? = null) : RuntimeException(msg)
 
-class TokenExpireException(code: Int = tokenExpire, msg: String = "", obj: InfoEntity<*>? = null) : ApiException(code, msg)
+open class ApiEmptyException(code: Int = 0, msg: String = "", obj: InfoEntity<*>? = null) :ApiException(code, msg,obj)
 
-class LogoutException(code: Int = logout, msg: String = "", obj: InfoEntity<*>? = null) : ApiException(code, msg)
+class AuthenticationException(code: Int = authenticationException, msg: String = "", obj: InfoEntity<*>? = null) : ApiException(code, msg,obj)
 
-class NoPermissionException(code: Int = 0, msg: String = "请先同意权限再继续操作", obj: InfoEntity<*>? = null) : ApiException(code, msg)
+class TokenExpireException(code: Int = tokenExpire, msg: String = "", obj: InfoEntity<*>? = null) : ApiException(code, msg,obj)
+
+class LogoutException(code: Int = logout, msg: String = "", obj: InfoEntity<*>? = null) : ApiException(code, msg,obj)
+
+class NoPermissionException(code: Int = 0, msg: String = "请先同意权限再继续操作", obj: InfoEntity<*>? = null) :ApiException(code, msg,obj)
 
 fun judgeThrowable(it: Throwable): ApiException {
     return when (it) {
@@ -40,10 +46,6 @@ fun judgeThrowable(it: Throwable): ApiException {
     }
 }
 
-const val success = 0
-const val tokenExpire = 401
-const val authenticationException = 402
-const val logout = 1
 fun <T> judgeApiThrowable(it: InfoEntity<T>): ApiException {
     return when (it.code) {
         tokenExpire -> TokenExpireException(it.code, httpErrorMessage(it), it)
