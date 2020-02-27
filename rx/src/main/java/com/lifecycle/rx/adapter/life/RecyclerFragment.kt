@@ -28,7 +28,6 @@ abstract class RecyclerFragment<E : Diff> : BaseFragment<ListViewModel<E>, Layou
         model.httpData = {offset,state-> apiData(offset, state) }
     }
 
-
     abstract fun apiData(offset:Int,state:Int): Single<List<E>>
 
     override fun parse(t: ListViewModel<E>, context: Context, parent: ViewGroup?, attachToParent: Boolean): LayoutSwipeRecyclerViewBinding {

@@ -28,7 +28,7 @@ abstract class RecyclerFragment<E : Diff> : BaseFragment<ListViewModel<E>, Layou
     }
 
 
-    abstract fun apiData(offset:Int,state:Int): MutableList<E>
+    abstract fun apiData(offset:Int,state:Int): List<E>
 
     override fun parse(t: ListViewModel<E>, context: Context, parent: ViewGroup?, attachToParent: Boolean): LayoutSwipeRecyclerViewBinding {
         return recyclerBinding(this, t)
