@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
+import java.util.concurrent.atomic.AtomicBoolean
 
 open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E> = RecyclerAdapter()) :
     LifeViewModel(), IListAdapter<E>, ListModel<E, Any, Job> {
@@ -27,6 +28,7 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
     override var job: Job? = null
     override val adapterList: MutableList<E> = adapter.adapterList
     var httpData: (Int, Int) -> List<E> = { _, _ -> ArrayList() }
+    override var canRun: AtomicBoolean = AtomicBoolean(true)
 
     @ExperimentalCoroutinesApi
     override fun attachData(owner: LifecycleOwner, bundle: Bundle?) {
@@ -36,12 +38,12 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
 
     @ExperimentalCoroutinesApi
     open fun doGetData(it: Int) {
-        if (it != 0 && !isStateRunning(it)) {
+        if (it != 0 && canRun.getAndSet(false)) {
             onSubscribe(launchUI {
                 flow { emit(httpData(getStartOffset(it), it)) }
                     .flowOn(Dispatchers.IO)
-                    .onCompletion { onComplete() }
                     .catch{ onError(it) }
+                    .onCompletion { onComplete() }
                     .collect{ onNext(it) }
             })
         }

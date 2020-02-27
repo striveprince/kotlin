@@ -41,15 +41,16 @@ import java.io.File
 
 
 /**
- *  error   http    state
+ *  error   run     state
  *  FF FF   FF      FF
  */
 
 fun isStateRunning(@AdapterEvent state :Int):Boolean{
-    return state.shr(8) and 1 == 1
+    return state.shr(8) and 1 == 1 && state .shr(9) and 1 == 0
 }
+
 fun stateStart(@AdapterEvent state :Int):Int{
-    return state or 0x100
+    return state or 0x300
 }
 
 fun stateEnd(@AdapterEvent state :Int):Int{

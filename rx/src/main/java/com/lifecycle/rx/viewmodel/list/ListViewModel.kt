@@ -17,6 +17,7 @@ import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
+import java.util.concurrent.atomic.AtomicBoolean
 
 open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E> = RecyclerAdapter()) :
     LifeViewModel(), IListAdapter<E>, Observer<List<E>>,ListModel<E,Observable<Any>,Disposable> {
@@ -29,15 +30,16 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
     override val adapterList: MutableList<E> = adapter.adapterList
     override var job: Disposable?=null
     var httpData :(Int,Int)->Single<List<E>> = {_,_->Single.just(ArrayList())}
+    override var canRun: AtomicBoolean = AtomicBoolean(true)
 
-    override fun attachData(owner: LifecycleOwner,  bundle: Bundle?) {
+    override fun attachData(owner: LifecycleOwner, bundle: Bundle?) {
         super.attachData(owner, bundle)
         loadingState.observer(owner) { doGetData(it) }
         loadingState.value = AdapterType.refresh
     }
 
     open fun doGetData(it:Int){
-        if (it!=0 && !isStateRunning(it)) {
+        if (it!=0 && canRun.getAndSet(false)) {
             httpData(getStartOffset(it), it)
                 .ioToMainThread()
                 .map { if(it is ArrayList)it else ArrayList(it) }
