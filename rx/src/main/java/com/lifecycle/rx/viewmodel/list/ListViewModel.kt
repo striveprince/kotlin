@@ -19,7 +19,7 @@ import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 
 open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E> = RecyclerAdapter()) :
-    LifeViewModel(), IListAdapter<E>, Observer<MutableList<E>>,ListModel<E,Observable<Any>,Disposable> {
+    LifeViewModel(), IListAdapter<E>, Observer<List<E>>,ListModel<E,Observable<Any>,Disposable> {
     override var pageWay = true
     override var pageCount = 10
     override var headIndex = 0
@@ -45,7 +45,7 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
         }
     }
 
-    override fun onNext(t: MutableList<E>) {
+    override fun onNext(t: List<E>) {
         super.onNext(t)
     }
 

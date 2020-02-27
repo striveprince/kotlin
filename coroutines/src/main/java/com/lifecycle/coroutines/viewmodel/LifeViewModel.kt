@@ -7,13 +7,16 @@ import com.lifecycle.binding.inter.Init
 import kotlinx.coroutines.Job
 
 open class LifeViewModel: ViewModel(),Init{
-    internal val jobs = ArrayList<Job>()
+    private val jobs = ArrayList<Job>()
     override fun initData(owner: LifecycleOwner, bundle: Bundle?) {
         attachData(owner, bundle)
-
     }
 
     open fun attachData(owner: LifecycleOwner, bundle: Bundle?) {}
+
+    fun addJob(job:Job){
+        jobs.add(job)
+    }
 
     override fun onCleared() {
         super.onCleared()

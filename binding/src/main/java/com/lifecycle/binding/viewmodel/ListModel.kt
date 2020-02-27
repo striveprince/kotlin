@@ -7,7 +7,7 @@ import com.lifecycle.binding.IList
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.util.*
 
-interface ListModel<E,R,Job>: IList<E,R>,Obtain<MutableList<E>,Job> {
+interface ListModel<E,R,Job>: IList<E,R>,Obtain<List<E>,Job> {
     var pageWay:Boolean
     var pageCount :Int
     var headIndex :Int
@@ -18,7 +18,7 @@ interface ListModel<E,R,Job>: IList<E,R>,Obtain<MutableList<E>,Job> {
     val adapter:IList<E,R>
 
 
-    override fun onNext(t: MutableList<E>) {
+    override fun onNext(t: List<E>) {
         loadingState.value?.let {
             setList(getEndOffset(it), t, it)
             loadingState.value = stateSuccess(it)
@@ -83,7 +83,7 @@ interface ListModel<E,R,Job>: IList<E,R>,Obtain<MutableList<E>,Job> {
         return adapter.setIEntity(e, position, type, view)
     }
 
-    override fun setList(position: Int, es: MutableList<E>, type: Int): Boolean {
+    override fun setList(position: Int, es: List<E>, type: Int): Boolean {
         return adapter.setList(position, es, type)
     }
 

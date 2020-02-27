@@ -22,7 +22,8 @@ abstract class RecyclerActivity<E : Diff> : BaseActivity<ListViewModel<E>, Layou
         model.httpData = {offset,state-> apiData(offset, state) }
     }
 
-    abstract fun apiData(offset:Int,state:Int): MutableList<E>
+    abstract fun apiData(offset:Int,state:Int): List<E>
+
     override fun createView(t: ListViewModel<E>, context: Context, parent: ViewGroup?, attachToParent: Boolean): View {
         val binding = parse(t, context, parent, attachToParent)
         binding.lifecycleOwner = this

@@ -30,7 +30,7 @@ interface IList<E,R> : IEvent<E, R>, ListUpdateCallback {
         }
     }
 
-    fun setList(position: Int, es: MutableList<E>, type: Int): Boolean {
+    fun setList(position: Int, es: List<E>, type: Int): Boolean {
         if (es.isEmpty()) return false
         return when (stateOriginal(type)) {
             AdapterType.add -> addList(es,position)
