@@ -5,7 +5,10 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.inter.inflate.Inflate
-import com.lifecycle.binding.util.*
+import com.lifecycle.binding.util.observer
+import com.lifecycle.binding.util.stateError
+import com.lifecycle.binding.util.stateStart
+import com.lifecycle.binding.util.stateSuccess
 import com.lifecycle.binding.viewmodel.ListModel
 import com.lifecycle.coroutines.IListAdapter
 import com.lifecycle.coroutines.adapter.RecyclerAdapter

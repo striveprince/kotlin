@@ -5,7 +5,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.inter.inflate.Inflate
-import com.lifecycle.binding.util.isStateRunning
 import com.lifecycle.binding.util.observer
 import com.lifecycle.binding.viewmodel.ListModel
 import com.lifecycle.rx.IListAdapter
