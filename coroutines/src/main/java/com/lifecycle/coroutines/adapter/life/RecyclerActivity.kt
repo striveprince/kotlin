@@ -11,18 +11,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lifecycle.binding.databinding.LayoutSwipeRecyclerViewBinding
 import com.lifecycle.binding.inter.inflate.Diff
 import com.lifecycle.binding.life.BaseActivity
+import com.lifecycle.coroutines.viewmodel.list.HttpData
 import com.lifecycle.coroutines.util.recyclerBinding
 import com.lifecycle.coroutines.viewmodel.list.ListViewModel
 
 
-abstract class RecyclerActivity<E : Diff> : BaseActivity<ListViewModel<E>, LayoutSwipeRecyclerViewBinding>() {
+abstract class RecyclerActivity<E : Diff> : BaseActivity<ListViewModel<E>, LayoutSwipeRecyclerViewBinding>(),
+    HttpData<List<E>> {
 
     override fun initData(owner: LifecycleOwner, bundle: Bundle?) {
         super.initData(owner, bundle)
-        model.httpData = {offset,state-> apiData(offset, state) }
+        model.http = this
     }
-
-    abstract fun apiData(offset:Int,state:Int): List<E>
 
     override fun createView(t: ListViewModel<E>, context: Context, parent: ViewGroup?, attachToParent: Boolean): View {
         val binding = parse(t, context, parent, attachToParent)

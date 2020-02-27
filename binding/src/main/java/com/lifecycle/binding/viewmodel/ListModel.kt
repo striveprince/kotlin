@@ -18,7 +18,6 @@ interface ListModel<E,R,Job>: IList<E,R>,Obtain<List<E>,Job> {
     var job: Job?
     val adapter:IList<E,R>
     var canRun:AtomicBoolean
-
     override fun onNext(t: List<E>) {
         loadingState.value?.let {
             setList(getEndOffset(it), t, it)
