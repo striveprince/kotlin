@@ -5,8 +5,8 @@ import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.lifecycle.demo.R
 import com.lifecycle.demo.inject.data.net.InfoEntity
-import com.lifecycle.demo.inject.data.net.exception.ApiException
-import com.lifecycle.demo.inject.data.net.exception.NoPermissionException
+import com.lifecycle.demo.inject.data.ApiException
+import com.lifecycle.demo.inject.data.NoPermissionException
 import com.lifecycle.demo.inject.data.net.transform.single.DoErrorTransformer
 import com.lifecycle.demo.inject.data.net.transform.single.ErrorSingleTransformer
 import com.lifecycle.demo.inject.data.net.transform.observable.NoErrorObservableTransformer

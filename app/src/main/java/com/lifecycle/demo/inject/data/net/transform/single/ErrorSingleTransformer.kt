@@ -2,9 +2,9 @@ package com.lifecycle.demo.inject.data.net.transform.single
 
 import com.lifecycle.demo.BuildConfig
 import com.lifecycle.demo.inject.data.net.InfoEntity
-import com.lifecycle.demo.inject.data.net.exception.judgeApiThrowable
-import com.lifecycle.demo.inject.data.net.exception.judgeThrowable
-import com.lifecycle.demo.inject.data.net.exception.success
+import com.lifecycle.demo.inject.data.judgeApiThrowable
+import com.lifecycle.demo.inject.data.judgeThrowable
+import com.lifecycle.demo.inject.data.success
 import io.reactivex.Single
 import io.reactivex.SingleSource
 import io.reactivex.SingleTransformer

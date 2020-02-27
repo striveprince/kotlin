@@ -1,4 +1,4 @@
-package com.lifecycle.demo.inject.data.net.exception
+package com.lifecycle.demo.inject.data
 
 import com.lifecycle.demo.base.util.ARouterUtil
 import com.lifecycle.demo.inject.data.net.InfoEntity
@@ -24,7 +24,7 @@ const val logout = 1
 
 open class ApiException(val code: Int = 0, msg: String = "", val obj: InfoEntity<*>? = null) : RuntimeException(msg)
 
-open class ApiEmptyException(code: Int = 0, msg: String = "", obj: InfoEntity<*>? = null) :ApiException(code, msg,obj)
+open class ApiEmptyException(code: Int = 0, msg: String = "", obj: InfoEntity<*>? = null) : ApiException(code, msg,obj)
 
 class AuthenticationException(code: Int = authenticationException, msg: String = "", obj: InfoEntity<*>? = null) : ApiException(code, msg,obj)
 
@@ -32,11 +32,15 @@ class TokenExpireException(code: Int = tokenExpire, msg: String = "", obj: InfoE
 
 class LogoutException(code: Int = logout, msg: String = "", obj: InfoEntity<*>? = null) : ApiException(code, msg,obj)
 
-class NoPermissionException(code: Int = 0, msg: String = "请先同意权限再继续操作", obj: InfoEntity<*>? = null) :ApiException(code, msg,obj)
+class NoPermissionException(code: Int = 0, msg: String = "请先同意权限再继续操作", obj: InfoEntity<*>? = null) : ApiException(code, msg,obj)
 
 fun judgeThrowable(it: Throwable): ApiException {
     return when (it) {
-        is HttpException -> ApiException(it.code(), httpErrorMessage(it), infoEntity(it))
+        is HttpException -> ApiException(
+            it.code(),
+            httpErrorMessage(it),
+            infoEntity(it)
+        )
         is ServiceConfigurationError -> ApiException(0, "服务器错误")
         is JSONException -> ApiException(0, "数据解析错误")
         is SerializationException -> ApiException(0, "数据解析错误")
@@ -48,9 +52,21 @@ fun judgeThrowable(it: Throwable): ApiException {
 
 fun <T> judgeApiThrowable(it: InfoEntity<T>): ApiException {
     return when (it.code) {
-        tokenExpire -> TokenExpireException(it.code, httpErrorMessage(it), it)
-        authenticationException -> AuthenticationException(it.code, httpErrorMessage(it), it)
-        logout -> LogoutException(it.code, httpErrorMessage(it), it)
+        tokenExpire -> TokenExpireException(
+            it.code,
+            httpErrorMessage(it),
+            it
+        )
+        authenticationException -> AuthenticationException(
+            it.code,
+            httpErrorMessage(it),
+            it
+        )
+        logout -> LogoutException(
+            it.code,
+            httpErrorMessage(it),
+            it
+        )
         else -> ApiException(it.code, httpErrorMessage(it), it)
     }
 }

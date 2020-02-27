@@ -28,7 +28,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
 import com.lifecycle.binding.inter.bind.data.DataBindRecycler
-import com.lifecycle.demo.inject.data.net.exception.ApiException
+import com.lifecycle.demo.inject.data.ApiException
 import java.security.MessageDigest
 import java.util.regex.Pattern
 
