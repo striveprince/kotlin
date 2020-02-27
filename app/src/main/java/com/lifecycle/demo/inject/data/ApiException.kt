@@ -22,7 +22,7 @@ const val tokenExpire = 401
 const val authenticationException = 402
 const val logout = 1
 
-open class ApiException(val code: Int = 0,msg: String,  val obj: InfoEntity<*>? = null,throwable: Throwable? = null) : RuntimeException(msg,throwable){
+open class ApiException(val code: Int = 0,msg: String,  val obj: InfoEntity<*>? = null,throwable: Throwable? = null) : RuntimeException(msg,throwable)
 
 open class ApiEmptyException(code: Int = 0, msg: String = "", obj: InfoEntity<*>? = null) : ApiException(code, msg, obj)
 
