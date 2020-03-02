@@ -57,16 +57,6 @@ fun <T> Single<T>.newToMainThread(): Single<T> {
         .observeOn(AndroidSchedulers.mainThread())
 }
 
-
-fun <T, R> Observable<List<T>>.concatIterable(block: T.() -> R): Observable<R> =
-    this.concatMapIterable {it}
-        .map { block(it) }
-
-fun <T, R> Observable<List<T>>.concatList(block: T.() -> R): Observable<List<R>> =
-    this.concatIterable(block)
-        .toList()
-        .toObservable()
-
 fun <T> Observable<T>.noError(): Observable<T> {
     return this.compose(NoErrorObservableTransformer())
 }

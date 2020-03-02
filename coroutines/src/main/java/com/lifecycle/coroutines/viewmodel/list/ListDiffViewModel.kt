@@ -4,29 +4,26 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
 import com.lifecycle.binding.adapter.recycler.DiffUtilCallback
 import com.lifecycle.binding.inter.inflate.Diff
-import com.lifecycle.binding.util.isStateRunning
-import com.lifecycle.coroutines.util.launchIo
 import com.lifecycle.coroutines.util.launchUI
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.flow.*
 
 open class ListDiffViewModel<E : Diff> : ListViewModel<E>() {
 
     override fun doGetData(it: Int) {
-        val state:Int = loadingState.value!!
-        if (it != 0 && !isStateRunning(state)) {
-            onSubscribe(launchIo {
-                try {
-                    val list = httpData(getStartOffset(it), it)
-                    DiffUtil.calculateDiff(DiffUtilCallback(adapterList,list)).apply {
-                        adapterList.clear()
-                        adapterList.addAll(list)
-                        dispatchUpdatesTo(adapter as ListUpdateCallback)
+        if (it != 0 && canRun.getAndSet(false)) {
+            onSubscribe(launchUI {
+                http.require(getStartOffset(it), it)
+                    .map {
+                        DiffUtil.calculateDiff(DiffUtilCallback(adapterList, it)).apply {
+                            adapterList.clear()
+                            adapterList.addAll(it)
+                        }
                     }
-                    launchUI { onNext(list) }
-                } catch (e: Exception) {
-                    launchUI { onError(e) }
-                } finally {
-                    launchUI { onComplete() }
-                }
+                    .flowOn(IO)
+                    .catch { onError(it) }
+                    .onCompletion { onComplete() }
+                    .collect { it.dispatchUpdatesTo(adapter as ListUpdateCallback) }
             })
         }
     }

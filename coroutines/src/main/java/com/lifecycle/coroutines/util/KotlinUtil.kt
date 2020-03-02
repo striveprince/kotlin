@@ -17,7 +17,7 @@ fun launchDefault(context: CoroutineContext = EmptyCoroutineContext,
     return CoroutineScope(Dispatchers.Default).launch(context, start, block)
 }
 
-fun launchIo(context: CoroutineContext = EmptyCoroutineContext,
+fun launchIO(context: CoroutineContext = EmptyCoroutineContext,
              start: CoroutineStart = CoroutineStart.DEFAULT,
              block: suspend CoroutineScope.() -> Unit):Job {
     return CoroutineScope(Dispatchers.IO).launch(context, start, block)

@@ -5,7 +5,10 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.inter.inflate.Inflate
-import com.lifecycle.binding.util.*
+import com.lifecycle.binding.util.observer
+import com.lifecycle.binding.util.stateError
+import com.lifecycle.binding.util.stateStart
+import com.lifecycle.binding.util.stateSuccess
 import com.lifecycle.binding.viewmodel.ListModel
 import com.lifecycle.coroutines.IListAdapter
 import com.lifecycle.coroutines.adapter.RecyclerAdapter
@@ -15,9 +18,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
+import java.util.concurrent.atomic.AtomicBoolean
 
 open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E> = RecyclerAdapter()) :
-    LifeViewModel(), IListAdapter<E>, ListModel<E, Any, Job> {
+    LifeViewModel(), IListAdapter<E>, ListModel<E, Any, Job> ,HttpData<List<E>>{
     override var pageWay = true
     override var pageCount = 10
     override var headIndex = 0
@@ -26,7 +30,10 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
     override val error = MutableLiveData<Throwable>()
     override var job: Job? = null
     override val adapterList: MutableList<E> = adapter.adapterList
-    var httpData: (Int, Int) -> List<E> = { _, _ -> ArrayList() }
+    override var canRun: AtomicBoolean = AtomicBoolean(true)
+    var http: HttpData<List<E>> = this
+
+    override suspend fun require(startOffset: Int, it: Int) = flow { emit(ArrayList<E>()) }
 
     @ExperimentalCoroutinesApi
     override fun attachData(owner: LifecycleOwner, bundle: Bundle?) {
@@ -36,12 +43,12 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
 
     @ExperimentalCoroutinesApi
     open fun doGetData(it: Int) {
-        if (it != 0 && !isStateRunning(it)) {
+        if (it != 0 && canRun.getAndSet(false)) {
             onSubscribe(launchUI {
-                flow { emit(httpData(getStartOffset(it), it)) }
+                http.require(getStartOffset(it), it)
                     .flowOn(Dispatchers.IO)
-                    .onCompletion { onComplete() }
                     .catch{ onError(it) }
+                    .onCompletion { onComplete() }
                     .collect{ onNext(it) }
             })
         }

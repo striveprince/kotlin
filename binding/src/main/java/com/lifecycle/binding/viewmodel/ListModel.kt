@@ -6,6 +6,7 @@ import com.lifecycle.binding.IEvent
 import com.lifecycle.binding.IList
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.util.*
+import java.util.concurrent.atomic.AtomicBoolean
 
 interface ListModel<E,R,Job>: IList<E,R>,Obtain<List<E>,Job> {
     var pageWay:Boolean
@@ -16,8 +17,7 @@ interface ListModel<E,R,Job>: IList<E,R>,Obtain<List<E>,Job> {
     val error : MutableLiveData<Throwable>
     var job: Job?
     val adapter:IList<E,R>
-
-
+    var canRun:AtomicBoolean
     override fun onNext(t: List<E>) {
         loadingState.value?.let {
             setList(getEndOffset(it), t, it)
@@ -32,6 +32,7 @@ interface ListModel<E,R,Job>: IList<E,R>,Obtain<List<E>,Job> {
 
     override fun onComplete() {
         loadingState.value = stateEnd(loadingState.value!!)
+        canRun.compareAndSet(false,true)
     }
 
     fun getStartOffset(state: Int): Int {

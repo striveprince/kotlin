@@ -1,6 +1,5 @@
 package com.lifecycle.rx.util
 
-import android.app.Activity
 import com.lifecycle.binding.util.toast
 import com.lifecycle.rx.observer.NormalObserver
 import io.reactivex.Flowable
@@ -11,8 +10,6 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Action
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
-
-
 
 
 fun <T> Observable<T>.subscribeNormal(
