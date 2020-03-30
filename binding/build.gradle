@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlinx-serialization'
-apply plugin: 'com.novoda.bintray-release'
+//apply plugin: 'com.novoda.bintray-release'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -47,7 +47,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$androidx_version"
     implementation "com.google.android.material:material:$androidx_version"
     implementation "androidx.recyclerview:recyclerview:$androidx_version"
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha03"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-beta01"
     implementation "androidx.core:core-ktx:1.2.0"
     def lifecycle_version = '2.2.0'
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
@@ -59,7 +59,7 @@ dependencies {
     //rxjava
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
     implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.4.0'
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.13.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0"
     implementation 'com.scwang.smart:refresh-layout-kernel:2.0.0-alpha-1'
     implementation 'com.google.code.gson:gson:2.8.6'
     api 'com.jakewharton.timber:timber:4.7.1'
@@ -91,19 +91,19 @@ subprojects {
 //    implementation "androidx.ui:ui-tooling:$compose_version"
 //    androidTestImplementation "androidx.ui:ui-platform:$compose_version"
 //    androidTestImplementation "androidx.ui:ui-test:$compose_version"
-
-Properties properties = new Properties()
-properties.load( project.rootProject.file('local.properties').newDataInputStream() )
-publish {
-    userOrg = 'arvinwant'
-    groupId = 'com.lifecycle'
-    artifactId = 'binding'
-    publishVersion = properties.getProperty('version')
-    repoName = 'wmt'
-    desc = 'you could use it create view, databinding or anko or the normal way'
-    website = 'https://github.com/striveprince/kotlin'
-    bintrayUser = properties.getProperty('user')
-    bintrayKey = properties.getProperty('key')
-//    gradlew clean build generatePomFileForReleasePublication bintrayUpload -PdryRun=false
-//    gradlew clean build bintrayUpload -PdryRun=false
-}
+//
+//Properties properties = new Properties()
+//properties.load( project.rootProject.file('local.properties').newDataInputStream() )
+//publish {
+//    userOrg = 'arvinwant'
+//    groupId = 'com.lifecycle'
+//    artifactId = 'binding'
+//    publishVersion = properties.getProperty('version')
+//    repoName = 'wmt'
+//    desc = 'you could use it create view, databinding or anko or the normal way'
+//    website = 'https://github.com/striveprince/kotlin'
+//    bintrayUser = properties.getProperty('user')
+//    bintrayKey = properties.getProperty('key')
+////    gradlew clean build generatePomFileForReleasePublication bintrayUpload -PdryRun=false
+////    gradlew clean build bintrayUpload -PdryRun=false
+//}

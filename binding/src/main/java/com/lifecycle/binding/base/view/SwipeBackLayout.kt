@@ -39,21 +39,21 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
     @Retention(AnnotationRetention.SOURCE)
     annotation class DirectionMode
 
-    var directionMode =
-        FROM_LEFT
+    var directionMode = FROM_LEFT
         set(direction) {
             field = direction
             mDragHelper.setEdgeTrackingEnabled(direction)
         }
 
-    private val mDragHelper: ViewDragHelper
-    private var mDragContentView: View? = null
-    private var innerScrollView: View? = null
+    private val mDragHelper: ViewDragHelper by lazy {  ViewDragHelper.create(this, 1f, DragHelperCallback()).apply { setEdgeTrackingEnabled(directionMode)  } }
+
+    private val mDragContentView: View by lazy { getChildAt(0) }
+    private val innerScrollView: View? by lazy {  SwipeBackUtil.findAllScrollViews(this) }
 
     private var swipeWidth: Int = 0
     private var swipeHeight: Int = 0
 
-    private val mTouchSlop: Int
+    private val mTouchSlop: Int by lazy { mDragHelper.touchSlop }
     private var swipeBackFraction: Float = 0.toFloat()
     var isSwipeFromEdge = false
     private var downX: Float = 0.toFloat()
@@ -61,17 +61,9 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
 
     private var leftOffset = 0
     private var topOffset = 0
-    var autoFinishedVelocityLimit = 2000f
-    private var onSwipeBackListener: ((View?, Float) -> Unit)? = null
-    private var onSwipeFinishedListener: ((View?, Boolean) -> Unit)? = null
-
-    fun setOnSwipeBackListener(onSwipeBackListener: ((View?, Float) -> Unit)) {
-        this.onSwipeBackListener = onSwipeBackListener
-    }
-
-    fun setOnSwipeFinishedListener(onSwipeFinishedListener: ((View?, Boolean) -> Unit)) {
-        this.onSwipeFinishedListener = onSwipeFinishedListener
-    }
+    private var autoFinishedVelocityLimit = 2000f
+    var onSwipeBackListener: ((View?, Float) -> Unit) =  { _, swipeBackFraction1 -> this.alpha = 1 - swipeBackFraction1 }
+    var onSwipeFinishedListener: ((View?, Boolean) -> Unit) ={ _, isEnd -> if (isEnd) finish() }
 
     private var touchedEdge = ViewDragHelper.INVALID_POINTER
 
@@ -91,11 +83,6 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
 
     init {
         setWillNotDraw(false)
-        mDragHelper = ViewDragHelper.create(this, 1f, DragHelperCallback())
-        mDragHelper.setEdgeTrackingEnabled(directionMode)
-        mTouchSlop = mDragHelper.touchSlop
-        setOnSwipeFinishedListener { _, isEnd -> if (isEnd) finish() }
-        setOnSwipeBackListener { _, swipeBackFraction1 -> this.alpha = 1 - swipeBackFraction1 }
         init(context, attrs)
     }
 
@@ -118,10 +105,9 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
         val measuredHeight: Int
         if (childCount > 0) {
             measureChildren(widthMeasureSpec, heightMeasureSpec)
-            mDragContentView = getChildAt(0)
-            if (mDragContentView!!.background == null) mDragContentView!!.setBackgroundColor(Color.WHITE)
-            defaultMeasuredWidth = mDragContentView!!.measuredWidth
-            defaultMeasuredHeight = mDragContentView!!.measuredHeight
+            if (mDragContentView.background == null) mDragContentView.setBackgroundColor(Color.WHITE)
+            defaultMeasuredWidth = mDragContentView.measuredWidth
+            defaultMeasuredHeight = mDragContentView.measuredHeight
         }
         measuredWidth = View.resolveSize(defaultMeasuredWidth, widthMeasureSpec) + paddingLeft + paddingRight
         measuredHeight = View.resolveSize(defaultMeasuredHeight, heightMeasureSpec) + paddingTop + paddingBottom
@@ -132,33 +118,26 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
         if (childCount == 0) return
         val left = paddingLeft + leftOffset
         val top = paddingTop + topOffset
-        val right = left + mDragContentView!!.measuredWidth
-        val bottom = top + mDragContentView!!.measuredHeight
-        mDragContentView!!.layout(left, top, right, bottom)
+        val right = left + mDragContentView.measuredWidth
+        val bottom = top + mDragContentView.measuredHeight
+        mDragContentView.layout(left, top, right, bottom)
         if (changed) {
             swipeWidth = width
             swipeHeight = height
         }
-        innerScrollView =
-            SwipeBackUtil.findAllScrollViews(this)
     }
 
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
 //        MotionEvent#getAction()
 //        when (MotionEventCompat.getActionMasked(ev)) {
-        when (ev.getAction()) {
+        when (ev.action) {
             MotionEvent.ACTION_DOWN -> {
                 downX = ev.rawX
                 downY = ev.rawY
             }
-            MotionEvent.ACTION_MOVE -> if (innerScrollView != null && SwipeBackUtil.contains(
-                    innerScrollView!!,
-                    downX,
-                    downY
-                )
-            ) {
-                val distanceX = Math.abs(ev.rawX - downX)
-                val distanceY = Math.abs(ev.rawY - downY)
+            MotionEvent.ACTION_MOVE -> if (innerScrollView != null && SwipeBackUtil.contains(innerScrollView!!, downX, downY)) {
+                val distanceX = abs(ev.rawX - downX)
+                val distanceY = abs(ev.rawY - downY)
                 if (directionMode == FROM_LEFT || directionMode == FROM_RIGHT) {
                     if (distanceY > mTouchSlop && distanceY > distanceX) {
                         return super.onInterceptTouchEvent(ev)
@@ -207,22 +186,10 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
         override fun clampViewPositionHorizontal(child: View, left: Int, dx: Int): Int {
             leftOffset = paddingLeft
             if (isSwipeEnabled) {
-                if (directionMode == FROM_LEFT && !SwipeBackUtil.canViewScrollRight(
-                        innerScrollView,
-                        downX,
-                        downY,
-                        false
-                    )
-                ) {
-                    leftOffset = Math.min(Math.max(left, paddingLeft), swipeWidth)
-                } else if (directionMode == FROM_RIGHT && !SwipeBackUtil.canViewScrollLeft(
-                        innerScrollView,
-                        downX,
-                        downY,
-                        false
-                    )
-                ) {
-                    leftOffset = Math.min(Math.max(left, -swipeWidth), paddingRight)
+                if (directionMode == FROM_LEFT && !SwipeBackUtil.canViewScrollRight(innerScrollView, downX, downY, false)) {
+                    leftOffset = left.coerceAtLeast(paddingLeft).coerceAtMost(swipeWidth)
+                } else if (directionMode == FROM_RIGHT && !SwipeBackUtil.canViewScrollLeft(innerScrollView, downX, downY, false)) {
+                    leftOffset = left.coerceAtLeast(-swipeWidth).coerceAtMost(paddingRight)
                 }
             }
             return leftOffset
@@ -231,22 +198,10 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
         override fun clampViewPositionVertical(child: View, top: Int, dy: Int): Int {
             topOffset = paddingTop
             if (isSwipeEnabled) {
-                if (directionMode == FROM_TOP && !SwipeBackUtil.canViewScrollUp(
-                        innerScrollView,
-                        downX,
-                        downY,
-                        false
-                    )
-                ) {
-                    topOffset = Math.min(Math.max(top, paddingTop), swipeHeight)
-                } else if (directionMode == FROM_BOTTOM && !SwipeBackUtil.canViewScrollDown(
-                        innerScrollView,
-                        downX,
-                        downY,
-                        false
-                    )
-                ) {
-                    topOffset = Math.min(Math.max(top, -swipeHeight), paddingBottom)
+                if (directionMode == FROM_TOP && !SwipeBackUtil.canViewScrollUp(innerScrollView, downX, downY, false)) {
+                    topOffset = top.coerceAtLeast(paddingTop).coerceAtMost(swipeHeight)
+                } else if (directionMode == FROM_BOTTOM && !SwipeBackUtil.canViewScrollDown(innerScrollView, downX, downY, false)) {
+                    topOffset = top.coerceAtLeast(-swipeHeight).coerceAtMost(paddingBottom)
                 }
             }
             return topOffset
@@ -262,7 +217,7 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
                 FROM_LEFT, FROM_RIGHT -> swipeBackFraction = 1.0f * left / swipeWidth
                 FROM_TOP, FROM_BOTTOM -> swipeBackFraction = 1.0f * top / swipeHeight
             }
-            onSwipeBackListener?.invoke(mDragContentView, swipeBackFraction)
+            onSwipeBackListener.invoke(mDragContentView, swipeBackFraction)
         }
 
         override fun onViewReleased(releasedChild: View, xvel: Float, yvel: Float) {
@@ -294,9 +249,9 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
             super.onViewDragStateChanged(state)
             if (state == ViewDragHelper.STATE_IDLE) {
                 if (swipeBackFraction == 0f) {
-                    onSwipeFinishedListener?.invoke(mDragContentView, false)
+                    onSwipeFinishedListener.invoke(mDragContentView, false)
                 } else if (swipeBackFraction == 1f) {
-                    onSwipeFinishedListener?.invoke(mDragContentView, true)
+                    onSwipeFinishedListener.invoke(mDragContentView, true)
                 }
             }
         }
@@ -315,9 +270,7 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
         }
     }
 
-    fun finish() {
-        (context as Activity).onBackPressed()
-    }
+    fun finish() { (context as Activity).onBackPressed() }
 
     private fun backJudgeBySpeed(xvel: Float, yvel: Float): Boolean {
         when (directionMode) {

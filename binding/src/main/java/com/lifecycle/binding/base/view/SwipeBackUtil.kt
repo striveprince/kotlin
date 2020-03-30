@@ -10,6 +10,7 @@ import android.widget.ScrollView
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
+import java.lang.RuntimeException
 
 /**
  * Created by GongWen on 17/8/25.
@@ -29,62 +30,25 @@ object SwipeBackUtil {
     }
 
     fun canViewScrollDown(mView: View?, x: Float, y: Float, defaultValueForNull: Boolean): Boolean {
-        return if (mView == null || !contains(
-                mView,
-                x,
-                y
-            )
-        ) {
-            defaultValueForNull
-        } else
-            mView.canScrollVertically(1)
+        return if (mView == null || !contains(mView, x, y))  defaultValueForNull  else mView.canScrollVertically(1)
     }
 
     fun canViewScrollRight(mView: View?, x: Float, y: Float, defaultValueForNull: Boolean): Boolean {
-        return if (mView == null || !contains(
-                mView,
-                x,
-                y
-            )
-        ) {
-            defaultValueForNull
-        } else
-            mView.canScrollHorizontally(-1)
+        return if (mView == null || !contains(mView, x, y)) defaultValueForNull  else mView.canScrollHorizontally(-1)
     }
 
-    fun canViewScrollLeft(mView: View?, x: Float, y: Float, defaultValueForNull: Boolean): Boolean {
-        return if (mView == null || !contains(
-                mView,
-                x,
-                y
-            )
-        ) {
-            defaultValueForNull
-        } else
-            mView.canScrollHorizontally(1)
-    }
+    fun canViewScrollLeft(mView: View?, x: Float, y: Float, defaultValueForNull: Boolean)=
+         if (mView == null || !contains(mView, x, y)) defaultValueForNull
+        else mView.canScrollHorizontally(1)
 
 
     fun findAllScrollViews(mViewGroup: ViewGroup): View? {
         for (i in 0 until mViewGroup.childCount) {
-            var mView: View? = mViewGroup.getChildAt(i)
-            if (mView!!.visibility != View.VISIBLE) {
-                continue
-            }
-            if (isScrollableView(
-                    mView
-                )
-            ) {
-                return mView
-            }
-            if (mView is ViewGroup) {
-                mView =
-                    findAllScrollViews(
-                        (mView as ViewGroup?)!!
-                    )
-                if (mView != null) {
-                    return mView
-                }
+            val view: View = mViewGroup.getChildAt(i)
+            if (view.visibility != View.VISIBLE) continue
+            if (isScrollableView(view)) return view
+            if (view is ViewGroup) {
+                return findAllScrollViews((view as ViewGroup?)!!)
             }
         }
         return null
