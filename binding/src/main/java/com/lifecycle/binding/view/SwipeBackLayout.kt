@@ -1,4 +1,4 @@
-package com.lifecycle.binding.base.view
+package com.lifecycle.binding.view
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -29,7 +29,13 @@ class SwipeBackLayout @JvmOverloads constructor(context: Context, attrs: Attribu
         const val FROM_BOTTOM = 1 shl 3
     }
 
-    @IntDef(FROM_NO, FROM_LEFT, FROM_TOP, FROM_RIGHT, FROM_BOTTOM)
+    @IntDef(
+        FROM_NO,
+        FROM_LEFT,
+        FROM_TOP,
+        FROM_RIGHT,
+        FROM_BOTTOM
+    )
     @Retention(AnnotationRetention.SOURCE)
     annotation class DirectionMode
 

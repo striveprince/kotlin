@@ -11,10 +11,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <com.lifecycle.binding.base.view.SwipeBackLayout
+        <com.lifecycle.binding.view.SwipeBackLayout
             android:id="@+id/swipe_back_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="24dp" >
-        </com.lifecycle.binding.base.view.SwipeBackLayout>
+        </com.lifecycle.binding.view.SwipeBackLayout>
 </FrameLayout>

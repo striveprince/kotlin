@@ -7,9 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.lifecycle.demo.R
 import com.lifecycle.demo.base.util.ARouterUtil
 import com.lifecycle.demo.inject.data.net.bean.InterrogationBean
-import com.lifecycle.binding.life.AppLifecycle
-import com.lifecycle.binding.base.rotate.TimeEntity
-import com.lifecycle.binding.base.rotate.TimeUtil
+import com.lifecycle.binding.rotate.TimeEntity
+import com.lifecycle.binding.rotate.TimeUtil
 import com.lifecycle.binding.inter.bind.data.DataBindRecycler
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
 import com.lifecycle.binding.inter.inflate.Diff

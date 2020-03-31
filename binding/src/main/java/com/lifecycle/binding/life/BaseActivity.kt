@@ -14,7 +14,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.lifecycle.binding.R
-import com.lifecycle.binding.base.view.SwipeBackLayout
+import com.lifecycle.binding.view.SwipeBackLayout
 import com.lifecycle.binding.inter.Init
 import com.lifecycle.binding.inter.Parse
 
@@ -54,7 +54,7 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
             val swipeBackLayout = findViewById<SwipeBackLayout>(R.id.swipe_back_layout)
             swipeBackLayout.directionMode = isSwipe()
             val imageView: View = findViewById(R.id.iv_shadow)
-            swipeBackLayout.setOnSwipeBackListener { _, f -> imageView.alpha = 1 - f }
+            swipeBackLayout.onSwipeBackListener =  { _, f -> imageView.alpha = 1 - f }
             swipeBackLayout.addView(injectView, ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT))
         } else setContentView(injectView)
     }
@@ -103,7 +103,7 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
             val swipeBackLayout = findViewById<SwipeBackLayout>(R.id.swipe_back_layout)
             swipeBackLayout.directionMode = isSwipe()
             val imageView: View = findViewById(R.id.iv_shadow)
-            swipeBackLayout.setOnSwipeBackListener { _, f -> imageView.alpha = 1 - f }
+            swipeBackLayout.onSwipeBackListener =  { _, f -> imageView.alpha = 1 - f }
             swipeBackLayout.addView(injectView, ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT))
         } else setContentView(injectView)
     }

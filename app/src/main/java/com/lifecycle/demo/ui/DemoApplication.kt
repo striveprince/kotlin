@@ -9,6 +9,8 @@ import com.lifecycle.demo.inject.component.DaggerAppComponent
 import com.lifecycle.demo.inject.data.Api
 import com.lifecycle.demo.inject.module.AppModule
 import com.lifecycle.binding.life.AppLifecycle
+import com.lifecycle.binding.server.LocalServer
+import com.lifecycle.demo.BuildConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,10 +43,16 @@ class DemoApplication : MultiDexApplication() {
             launch(Dispatchers.Main) {
                 DemoApplication.api = api
                 appLifecycle.apply {
-                    addCreateListener {
+                    createListener = {
                         ARouter.getInstance().inject(it)
                         if (it is AppCompatActivity)//this method is not run at start view
                             applyKitKatTranslucency(it, android.R.color.transparent)
+                    }
+                    if (BuildConfig.DEBUG) {
+                        LocalServer().run {
+                            onCreateListener = { start() }
+                            onExitListener = { stop() }
+                        }
                     }
                     postInitFinish()
                 }
@@ -52,4 +60,5 @@ class DemoApplication : MultiDexApplication() {
             }
         }
     }
+
 }

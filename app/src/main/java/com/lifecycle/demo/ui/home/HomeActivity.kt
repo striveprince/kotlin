@@ -2,10 +2,9 @@ package com.lifecycle.demo.ui.home
 
 import android.os.Bundle
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.lifecycle.binding.base.view.SwipeBackLayout
+import com.lifecycle.binding.view.SwipeBackLayout
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
 import com.lifecycle.binding.life.binding.data.DataBindingActivity
-import com.lifecycle.demo.BuildConfig
 import com.lifecycle.demo.R
 import com.lifecycle.demo.databinding.ActivityHomeBinding
 import com.lifecycle.demo.ui.DemoApplication

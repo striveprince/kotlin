@@ -6,17 +6,25 @@ import android.os.Bundle
 import com.lifecycle.binding.inter.inflate.Inflate
 import java.util.*
 
-@Suppress("UNCHECKED_CAST")
-open class AppLifecycle constructor(application: Application,
-                                       val parse: Int =1,
-                                       val vm: Int =2) : Application.ActivityLifecycleCallbacks, LifecycleListener {
+typealias LifeListener = ((LifecycleInit<*>) -> Unit)
 
-    private var createBlock: ((LifecycleInit<*>) -> Unit)? = null
-    private var startBlock: ((LifecycleInit<*>) -> Unit)? = null
-    private var resumeBlock: ((LifecycleInit<*>) -> Unit)? = null
-    private var pauseBlock: ((LifecycleInit<*>) -> Unit)? = null
-    private var stopBlock: ((LifecycleInit<*>) -> Unit)? = null
-    private var destroyBlock: ((LifecycleInit<*>) -> Unit)? = null
+@Suppress("UNCHECKED_CAST")
+open class AppLifecycle constructor(
+    application: Application,
+    val parse: Int = 1,
+    val vm: Int = 2
+) : Application.ActivityLifecycleCallbacks, LifecycleListener {
+
+
+    var createListener: LifeListener = {}
+    var startListener: LifeListener = {}
+    var resumeListener: LifeListener = {}
+    var pauseListener: LifeListener = {}
+    var stopListener: LifeListener = {}
+    var destroyListener: LifeListener = {}
+
+    var onExitListener: LifeListener = {}
+    var onCreateListener: ()->Unit = {}
 
     companion object {
         lateinit var appLifecycle: AppLifecycle
@@ -24,8 +32,11 @@ open class AppLifecycle constructor(application: Application,
         val toolbarList = arrayListOf<Inflate>()
         internal var initFinish = false
         lateinit var application: Application
-        fun activity(): Activity { return stack.lastElement() }
-        var appInit : ()->Unit = {}
+        fun activity(): Activity {
+            return stack.lastElement()
+        }
+
+        var appInit: () -> Unit = {}
     }
 
     init {
@@ -38,54 +49,31 @@ open class AppLifecycle constructor(application: Application,
     fun postInitFinish() {
         initFinish = true
         appInit()
-    }
-
-    fun addCreateListener(createBlock: (LifecycleInit<*>) -> Unit){
-        this.createBlock = createBlock
-    }
-
-    fun addResumeListener(createBlock: (LifecycleInit<*>) -> Unit){
-        this.resumeBlock = createBlock
-    }
-
-    fun addStartListener(createBlock: (LifecycleInit<*>) -> Unit){
-        this.startBlock = createBlock
-    }
-
-    fun addPauseListener(createBlock: (LifecycleInit<*>) -> Unit){
-        this.pauseBlock = createBlock
-    }
-
-    fun addStopListener(createBlock: (LifecycleInit<*>) -> Unit){
-        this.stopBlock = createBlock
-    }
-
-    fun addDestroyListener(createBlock: (LifecycleInit<*>) -> Unit){
-        this.destroyBlock = createBlock
+        onCreateListener()
     }
 
     override fun onCreate(lifecycle: LifecycleInit<*>, savedInstanceBundle: Bundle?) {
-        createBlock?.invoke(lifecycle)
+        createListener(lifecycle)
     }
 
     override fun onResume(lifecycle: LifecycleInit<*>) {
-        resumeBlock?.invoke(lifecycle)
+        resumeListener(lifecycle)
     }
 
     override fun onStart(lifecycle: LifecycleInit<*>) {
-        startBlock?.invoke(lifecycle)
+        startListener(lifecycle)
     }
 
     override fun onPause(lifecycle: LifecycleInit<*>) {
-        pauseBlock?.invoke(lifecycle)
+        pauseListener(lifecycle)
     }
 
     override fun onStop(lifecycle: LifecycleInit<*>) {
-        stopBlock?.invoke(lifecycle)
+        stopListener(lifecycle)
     }
 
     override fun onDestroy(lifecycle: LifecycleInit<*>) {
-        destroyBlock?.invoke(lifecycle)
+        destroyListener(lifecycle)
     }
 
     override fun onActivityPaused(activity: Activity?) {
@@ -107,12 +95,18 @@ open class AppLifecycle constructor(application: Application,
     }
 
     override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
+        if (activity is LifecycleInit<*>) {
+            if (stack.isEmpty()) onCreateListener()
+            onCreate(activity, savedInstanceState)
+        }
         stack.add(activity)
-        if (activity is LifecycleInit<*>) onCreate(activity, savedInstanceState)
     }
 
     override fun onActivityDestroyed(activity: Activity?) {
         stack.remove(activity)
-        if (activity is LifecycleInit<*>) onDestroy(activity)
+        if (activity is LifecycleInit<*>){
+            if (stack.isEmpty()) onExitListener(activity)
+            onDestroy(activity)
+        }
     }
 }

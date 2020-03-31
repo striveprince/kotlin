@@ -29,12 +29,11 @@ class UserApi private constructor(context: Context) {
         return sharedPreferences.get(tokenBean)
     }
 
-
     companion object {
         var token: String=""
         var token_type: String=""
         var isLogin = false
         private var userApi: UserApi? = null
-        fun getInstance(context: Context) = userApi ?: synchronized(UserApi::class.java) { userApi?: UserApi(context) }
+        fun getInstance(context: Context) = userApi ?: synchronized(UserApi::class.java) { userApi?: UserApi(context).also { userApi = it } }
     }
 }

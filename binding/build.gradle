@@ -63,7 +63,7 @@ dependencies {
     implementation 'com.scwang.smart:refresh-layout-kernel:2.0.0-alpha-1'
     implementation 'com.google.code.gson:gson:2.8.6'
     api 'com.jakewharton.timber:timber:4.7.1'
-
+    implementation 'com.koushikdutta.async:androidasync:2.2.1'
 }
 subprojects {
     tasks.withType(Javadoc).all { enabled = false }

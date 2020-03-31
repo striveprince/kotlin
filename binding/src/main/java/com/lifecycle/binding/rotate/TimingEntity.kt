@@ -1,9 +1,8 @@
-package com.lifecycle.binding.base.rotate
+package com.lifecycle.binding.rotate
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
-import com.lifecycle.binding.base.rotate.TimeUtil
 
 /**
  * Created by pc on 2017/8/29.

@@ -1,7 +1,6 @@
-package com.lifecycle.binding.base.rotate
+package com.lifecycle.binding.rotate
 
 import android.os.Handler
-import com.lifecycle.binding.base.rotate.TimeEntity
 
 import java.util.HashMap
 

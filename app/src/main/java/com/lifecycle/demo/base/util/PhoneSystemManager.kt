@@ -11,9 +11,9 @@ import android.provider.MediaStore
 import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import com.lifecycle.binding.util.filePathByUri
 import com.lifecycle.demo.BuildConfig
 import com.lifecycle.demo.R
-import com.lifecycle.demo.base.util.FileUtils.filePathByUri
 import com.lifecycle.demo.ui.DemoApplication.Companion.tomtaw
 import io.reactivex.Emitter
 import java.io.BufferedReader

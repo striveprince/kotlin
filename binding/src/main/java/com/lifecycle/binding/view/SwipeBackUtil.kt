@@ -1,4 +1,4 @@
-package com.lifecycle.binding.base.view
+package com.lifecycle.binding.view
 
 import android.graphics.Rect
 import android.view.View
@@ -10,7 +10,6 @@ import android.widget.ScrollView
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
-import java.lang.RuntimeException
 
 /**
  * Created by GongWen on 17/8/25.

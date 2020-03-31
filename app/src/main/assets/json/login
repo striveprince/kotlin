@@ -1,0 +1,11 @@
+{
+  "code": 0,
+  "msg": "登录成功",
+  "result": {
+      "token":"12345681",
+      "expires_in":100000,
+      "refresh_expires_in":100000,
+      "token_type":"Bearer",
+      "refresh_token":"12345681"
+  }
+}

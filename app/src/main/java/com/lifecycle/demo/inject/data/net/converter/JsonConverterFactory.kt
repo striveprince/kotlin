@@ -36,7 +36,7 @@ import java.nio.charset.Charset
 class JsonConverterFactory : Converter.Factory() {
     private val gson:Gson = Gson()
 //    private val json = Json(JsonConfiguration.Stable.copy(unquoted = true))
-    private val json = Json(JsonConfiguration.Stable.copy(strictMode = false))
+    private val json = Json(JsonConfiguration.Stable.copy())
 
     override fun responseBodyConverter(type: Type, annotations: Array<Annotation>?, retrofit: Retrofit?): Converter<ResponseBody, *> {
         return JsonResponseBodyConverter<Any>(serializerByTypeToken(type),json)

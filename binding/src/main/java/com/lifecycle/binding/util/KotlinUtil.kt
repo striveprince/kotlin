@@ -25,7 +25,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.lifecycle.binding.adapter.AdapterEvent
 import com.lifecycle.binding.life.AppLifecycle
-import com.lifecycle.binding.base.rotate.TimeUtil
+import com.lifecycle.binding.rotate.TimeUtil
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.json.Json
@@ -167,25 +167,6 @@ inline fun <T, R> T.transform(block: T.() -> R): R {
 
 
 //---- file -----
-val srcFileDir = Environment.getExternalStorageDirectory().toString() + "/111"
-
-fun createWholeDir(path: String): String {
-    var path1 = path
-    val builder = StringBuilder()
-    builder.append(srcFileDir)
-    if (path1.startsWith(srcFileDir)) {
-        path1 = path1.replace(srcFileDir + File.separatorChar, "")
-    }
-    val dirs = path1.split(File.separator.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-    for (dir in dirs) {
-        builder.append(File.separatorChar)
-        builder.append(dir)
-        if (createDir(File(builder.toString())) == FAILED) {
-            return ""
-        }
-    }
-    return builder.toString()
-}
 
 //fun <T> Observable<T>.subscribeNormal(
 //
@@ -283,26 +264,6 @@ fun installApkFile(
         intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive")
     }
     context.startActivity(intent)
-}
-
-const val SUCCESS = 1
-const val FAILED = 0
-fun createDir(path: String): Int {
-    var p = path
-    val l = p.length
-    if (p[l - 1] == File.separatorChar) { //如果末尾是 /
-        p = path.substring(0, l - 1)
-    }
-    return createDir(File(p))
-}
-
-fun createDir(file: File): Int {
-    if (file.exists()) {
-        if (file.isDirectory)
-            return SUCCESS
-        if (!file.delete()) return FAILED// 避免他是一个文件存在
-    }
-    return if (file.mkdirs()) SUCCESS else FAILED
 }
 
 

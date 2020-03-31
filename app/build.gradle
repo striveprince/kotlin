@@ -60,7 +60,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField "String", "host", "\"${host}\""
-            buildConfigField "String", "domainUrl", "\"${domain}\""
+            buildConfigField "String", "domainUrl", "\"http://localhost:8888\""
             buildConfigField "String", "endpoint", "\"http://oss-cn-hangzhou.aliyuncs.com\""
             manifestPlaceholders = [DOMAIN:"${domain}", HOST:"${host}"]
         }
@@ -112,7 +112,7 @@ dependencies {
     def navigation = '2.2.1'
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation"
     implementation "androidx.navigation:navigation-ui-ktx:$navigation"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$navigation"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
     def  room_version =  "2.2.5"
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
@@ -128,7 +128,7 @@ dependencies {
     def androidx_version = '1.1.0'
     implementation "androidx.appcompat:appcompat:$androidx_version"
     implementation "androidx.gridlayout:gridlayout:1.0.0"
-
+    implementation 'com.koushikdutta.async:androidasync:2.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     def fragment_version = "1.2.3"

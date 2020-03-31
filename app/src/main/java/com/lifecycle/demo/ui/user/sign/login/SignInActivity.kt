@@ -8,6 +8,7 @@ import com.lifecycle.binding.life.binding.data.DataBindingActivity
 import com.lifecycle.demo.databinding.ActivitySignInBinding
 import com.lifecycle.demo.ui.user.sign.login.SignInActivity.Companion.signIn
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
+import com.lifecycle.demo.BuildConfig
 import com.lifecycle.demo.ui.DemoApplication.Companion.tomtaw
 
 @Route(path = signIn)
@@ -18,5 +19,6 @@ class SignInActivity: DataBindingActivity<SignInModel, ActivitySignInBinding>() 
     override fun initData(owner: LifecycleOwner, bundle: Bundle?) {
         super.initData(owner, bundle)
         binding.params = model.sign
+        binding.webView.loadUrl("${BuildConfig.domainUrl}/login")
     }
 }

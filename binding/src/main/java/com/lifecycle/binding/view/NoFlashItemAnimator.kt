@@ -1,4 +1,4 @@
-package com.lifecycle.binding.base.view
+package com.lifecycle.binding.view
 
 
 import android.animation.Animator
