@@ -19,6 +19,5 @@ class SignInActivity: DataBindingActivity<SignInModel, ActivitySignInBinding>() 
     override fun initData(owner: LifecycleOwner, bundle: Bundle?) {
         super.initData(owner, bundle)
         binding.params = model.sign
-        binding.webView.loadUrl("${BuildConfig.domainUrl}/login")
     }
 }

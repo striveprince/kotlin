@@ -4,6 +4,7 @@ import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
 import androidx.databinding.adapters.ListenerUtil
+import com.lifecycle.binding.BuildConfig
 import com.lifecycle.binding.R
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.util.isStateRunning
@@ -27,7 +28,7 @@ object SmartRefreshLayoutBindingAdapter {
     @JvmStatic
     @BindingAdapter("state")
     fun setState(view: SmartRefreshLayout, state: Int) {
-        Timber.i("view.id = ${view.id} getRefreshing(view) = ${getState(view)} setRefreshing(view,refreshing=$state)")
+        if(BuildConfig.DEBUG)Timber.i("view.id = ${view.id} getRefreshing(view) = ${getState(view)} setRefreshing(view,refreshing=$state)")
         if (getState(view) != state) {
             view.setTag(R.id.smart_refresh_layout_state, state)
             if (isStateRunning(state)) {
@@ -46,14 +47,12 @@ object SmartRefreshLayoutBindingAdapter {
                 view.finishRefresh()
             }
         }
-
-
     }
 
     @JvmStatic
     @InverseBindingAdapter(attribute = "state", event = "android:stateAttrChanged")
     fun getState(view: SmartRefreshLayout): Int {
-        Timber.i("view.id = ${view.id}")
+        if(BuildConfig.DEBUG)Timber.i("view.id = ${view.id}")
         return when {
             view.isRefreshing -> stateStart(AdapterType.refresh)
             view.isLoading -> stateStart(AdapterType.load)
@@ -68,21 +67,21 @@ object SmartRefreshLayoutBindingAdapter {
         else {
             object : OnRefreshLoadMoreListener {
                 override fun onLoadMore(refreshLayout: RefreshLayout) {
-                    Timber.i("onLoadMore(view)")
+                    if(BuildConfig.DEBUG)Timber.i("onLoadMore(view)")
                     loadingMode?.onLoadMore(refreshLayout)
                     stateAttrChanged?.onChange()
                 }
 
                 override fun onRefresh(refreshLayout: RefreshLayout) {
-                    Timber.i("onRefresh(view)")
+                    if(BuildConfig.DEBUG)Timber.i("onRefresh(view)")
                     refreshListener?.onRefresh(refreshLayout)
                     stateAttrChanged?.onChange()
                 }
             }
         }
-        Timber.i("newValue = $newValue")
+        if(BuildConfig.DEBUG)Timber.i("newValue = $newValue")
         ListenerUtil.trackListener(view, newValue, R.id.smart_refresh_layout)?.let {
-            Timber.i("oldValue = $it")
+            if(BuildConfig.DEBUG) Timber.i("oldValue = $it")
             view.setOnRefreshLoadMoreListener(null)
         }
         newValue?.let { view.setOnRefreshLoadMoreListener(it) }

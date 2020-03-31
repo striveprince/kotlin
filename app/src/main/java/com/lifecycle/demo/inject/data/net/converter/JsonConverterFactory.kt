@@ -85,11 +85,10 @@ class JsonResponseBodyConverter<T> internal constructor(
     @Suppress("UNCHECKED_CAST")
     @Throws(IOException::class)
     override fun convert(value: ResponseBody): T = value.use {
-        val result = value.string()
 //        val jsonObject = JSONObject(result)
 //        val msg = jsonObject.optString("msg")
 //        val code = jsonObject.optInt("code")
 //        val infoJson = """{"msg":$msg,code:$code,"result":$result}"""
-        json.parse(kSerializer,result) as T
+        json.parse(kSerializer,value.string()) as T
     }
 }

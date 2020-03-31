@@ -7,9 +7,7 @@ data class InterrogationDataBean(
     val page_index: Int,
     val page_size: Int,
     val result: MutableList<InterrogationBean>,
-    val count: Int,
-    val msg: String,
-    val code: Int
+    val count: Int
 )
 
 @Serializable
