@@ -1,0 +1,16 @@
+{
+  "result": [
+    {
+      "name": "string",
+      "accession_number": "string",
+      "service_sect_id": "string",
+      "procedure_name": "string",
+      "observation_date": "2020-04-01T01:12:06.196Z"
+    }
+  ],
+  "page_index": 0,
+  "page_size": 0,
+  "count": 0,
+  "code": 0,
+  "msg": "string"
+}

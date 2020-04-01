@@ -39,30 +39,31 @@ fun createPathDir(srcDirPath: File, path: String): File {
 }
 
 fun assertToFile(context: Context, from: String, targetFile: File) :Boolean{
-    return createDirFile(targetFile, context.assets, from, from)
+    return createDirFile(targetFile, context.assets, from)
 }
 
-fun createDirFile(file: File, assets: AssetManager, from: String, path: String): Boolean {
+fun createDirFile(file: File, assets: AssetManager, from: String, path: String = from): Boolean {
     return runCatching {
-        assets.list(from)?.let {
+        assets.list(path)?.let {
             File(file, from).run {
                 if(it.isNotEmpty()){
                     var success = createDir()
-                    Timber.i("mkdir: absolutePath = $absolutePath;path = $path")
+                    Timber.i("mkdir:success = $success absolutePath = $absolutePath;path = $path")
                     for (s in it) success = createDirFile(File(file, from), assets, s, path + File.separatorChar + s)
                     success
                 }else {
-                    Timber.i("createFile: absolutePath = $absolutePath;path = $path")
                     createNewFile().apply {
+                        Timber.i("createFile: absolutePath = $absolutePath;path = $path,success = $this")
                         assets.open(path).runCatching {
                             val buffer = ByteArray(1024)
                             val outPutStream = outputStream()
                             var n = 0
                             while (-1 != (read(buffer).also { n = it })) outPutStream.write(buffer, 0, n)
-                            Timber.i("createFile: length = ${length()};path = $path")
                             close()
+                            Timber.i("createFile: length = ${length()};path = $path")
                         }
                     }
+
                 }
             }
         } ?: false

@@ -49,7 +49,7 @@ class DemoApplication : MultiDexApplication() {
                             applyKitKatTranslucency(it, android.R.color.transparent)
                     }
                     if (BuildConfig.DEBUG) {
-                        LocalServer().run {
+                        LocalServer("json").run {
                             onCreateListener = { start() }
                             onExitListener = { stop() }
                         }

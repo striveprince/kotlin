@@ -9,14 +9,10 @@ import com.lifecycle.binding.util.assertToFile
 import java.io.File
 
 
-class LocalServer : HttpServerRequestCallback {
-    companion object {
-        private const val json = "json"
-    }
+class LocalServer(private val json:String = "json",private val port:Int = 8888) : HttpServerRequestCallback {
 
     private val path by lazy { AppLifecycle.application.getExternalFilesDir(null)!!
             .also {
-//                if(!File(it, json).isDirectory)
                     it.deleteRecursively()
                     assertToFile(AppLifecycle.application, json, it)
             }
@@ -28,7 +24,7 @@ class LocalServer : HttpServerRequestCallback {
         server.addAction("OPTIONS", "[\\d\\D]*", this)
         server.get("[\\d\\D]*", this)
         server.post("[\\d\\D]*", this)
-        server.listen(8888)
+        server.listen(port)
     }
 
     override fun onRequest(request: AsyncHttpServerRequest, response: AsyncHttpServerResponse) {
