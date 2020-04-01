@@ -48,12 +48,12 @@ fun createDirFile(file: File, assets: AssetManager, from: String, path: String =
             File(file, from).run {
                 if(it.isNotEmpty()){
                     var success = createDir()
-                    Timber.i("mkdir:success = $success absolutePath = $absolutePath;path = $path")
+                    Timber.i("mkdir: $success absolutePath = $absolutePath;path = $path")
                     for (s in it) success = createDirFile(File(file, from), assets, s, path + File.separatorChar + s)
                     success
                 }else {
                     createNewFile().apply {
-                        Timber.i("createFile: absolutePath = $absolutePath;path = $path,success = $this")
+                        Timber.i("createFile: $this absolutePath = $absolutePath;path = $path")
                         assets.open(path).runCatching {
                             val buffer = ByteArray(1024)
                             val outPutStream = outputStream()
@@ -63,7 +63,6 @@ fun createDirFile(file: File, assets: AssetManager, from: String, path: String =
                             Timber.i("createFile: length = ${length()};path = $path")
                         }
                     }
-
                 }
             }
         } ?: false
