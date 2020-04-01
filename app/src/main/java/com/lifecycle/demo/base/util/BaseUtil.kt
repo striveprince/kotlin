@@ -28,7 +28,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
 import com.lifecycle.binding.inter.bind.data.DataBindRecycler
+import com.lifecycle.binding.life.AppLifecycle
 import com.lifecycle.demo.inject.data.ApiException
+import com.lifecycle.demo.ui.DemoApplication
 import java.security.MessageDigest
 import java.util.regex.Pattern
 
@@ -43,6 +45,7 @@ import java.util.regex.Pattern
 fun Context.string(@StringRes id: Int, vararg any: Any) =
     getString(id, *any)
 
+val api = (AppLifecycle.application as DemoApplication).api
 
 inline fun <reified T : ViewModel> LifecycleOwner.viewModel(): T {
     return if (this is Fragment) ViewModelProvider(this)[T::class.java]

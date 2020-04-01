@@ -12,11 +12,11 @@ import com.lifecycle.demo.ui.home.HomeModel
 import com.lifecycle.demo.ui.home.interrogation.list.InterrogationListFragment.Companion.interrogationList
 import com.lifecycle.binding.Constant
 import com.lifecycle.binding.inter.inflate.Diff
-import com.lifecycle.demo.ui.DemoApplication.Companion.api
 import com.lifecycle.demo.ui.home.interrogation.HomeInterrogationFragment.Companion.interrogation
 import com.lifecycle.rx.adapter.life.diff.RecyclerDiffFragment
 import io.reactivex.Single
 import com.lifecycle.coroutines.util.launchUI
+import com.lifecycle.demo.base.util.api
 
 @Route(path = interrogationList)
 class InterrogationListFragment : RecyclerDiffFragment<Diff>() {

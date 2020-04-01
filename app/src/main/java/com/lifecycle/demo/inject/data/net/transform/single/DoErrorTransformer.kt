@@ -1,9 +1,9 @@
 package com.lifecycle.demo.inject.data.net.transform.single
 
 import com.lifecycle.demo.base.util.ARouterUtil
+import com.lifecycle.demo.base.util.api
 import com.lifecycle.demo.inject.data.AuthenticationException
 import com.lifecycle.demo.inject.data.TokenExpireException
-import com.lifecycle.demo.ui.DemoApplication.Companion.api
 import com.lifecycle.rx.util.ioToMainThread
 import io.reactivex.Flowable
 import io.reactivex.Single

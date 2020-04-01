@@ -26,39 +26,30 @@ class DemoApplication : MultiDexApplication() {
     @Inject
     lateinit var api: Api
 
-    companion object {
-        const val tomtaw = "/tomtaw/"
-        lateinit var api: Api
-    }
+    companion object { const val tomtaw = "/tomtaw/" }
 
     override fun onCreate() {
         super.onCreate()
         val application = this
-        val appLifecycle = AppLifecycle(application, BR.parse, BR.vm)
-        CoroutineScope(Dispatchers.Default).launch {
-            DaggerAppComponent.builder()
-                .appModule(AppModule(application))
-                .build()
-                .inject(application)
-            launch(Dispatchers.Main) {
-                DemoApplication.api = api
-                appLifecycle.apply {
+        AppLifecycle(application, BR.parse, BR.vm).apply {
+            CoroutineScope(Dispatchers.Default).launch {
+                DaggerAppComponent.builder().appModule(AppModule(application)).build().inject(application)
+                if (BuildConfig.DEBUG) {
+                    LocalServer("json").run {
+                        onCreateListener = { start() }
+                        onExitListener = { stop() }
+                    }
+                }
+                launch(Dispatchers.Main) {
                     createListener = {
                         ARouter.getInstance().inject(it)
-                        if (it is AppCompatActivity)//this method is not run at start view
-                            applyKitKatTranslucency(it, android.R.color.transparent)
-                    }
-                    if (BuildConfig.DEBUG) {
-                        LocalServer("json").run {
-                            onCreateListener = { start() }
-                            onExitListener = { stop() }
-                        }
+                        if (it is AppCompatActivity) applyKitKatTranslucency(it, android.R.color.transparent)
                     }
                     postInitFinish()
                 }
-                //notify base activity application and resource init completed
             }
         }
+
     }
 
 }

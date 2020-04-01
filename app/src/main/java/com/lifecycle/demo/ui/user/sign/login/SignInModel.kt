@@ -4,9 +4,9 @@ import android.text.Editable
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import com.lifecycle.demo.base.util.ARouterUtil
+import com.lifecycle.demo.base.util.api
 import com.lifecycle.demo.base.util.getAccountError
 import com.lifecycle.demo.base.util.getPasswordError
-import com.lifecycle.demo.ui.DemoApplication.Companion.api
 import com.lifecycle.rx.util.subscribeObserver
 import com.lifecycle.rx.viewmodel.LifeViewModel
 

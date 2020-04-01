@@ -14,8 +14,6 @@ open class AppLifecycle constructor(
     val parse: Int = 1,
     val vm: Int = 2
 ) : Application.ActivityLifecycleCallbacks, LifecycleListener {
-
-
     var createListener: LifeListener = {}
     var startListener: LifeListener = {}
     var resumeListener: LifeListener = {}
