@@ -23,8 +23,7 @@ import javax.inject.Inject
  * Email: 1033144294@qq.com
  */
 class DemoApplication : MultiDexApplication() {
-    @Inject
-    lateinit var api: Api
+    @Inject lateinit var api: Api
 
     companion object { const val tomtaw = "/tomtaw/" }
 
