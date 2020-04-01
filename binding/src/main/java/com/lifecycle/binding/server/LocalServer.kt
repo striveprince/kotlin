@@ -12,7 +12,7 @@ import java.io.File
 class LocalServer(
     private val json: String = "json",
     private val port: Int = 8888,
-    private val update: Boolean
+    private val update: Boolean = true
 ) : HttpServerRequestCallback {
 
     private val server = AsyncHttpServer()
