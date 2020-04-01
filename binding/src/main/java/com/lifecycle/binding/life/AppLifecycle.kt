@@ -4,7 +4,9 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import com.lifecycle.binding.inter.inflate.Inflate
+import com.lifecycle.binding.server.LocalServer
 import java.util.*
+import kotlin.collections.ArrayList
 
 typealias LifeListener = ((LifecycleInit<*>) -> Unit)
 
@@ -23,6 +25,7 @@ open class AppLifecycle constructor(
 
     var onExitListener: LifeListener = {}
     var onCreateListener: ()->Unit = {}
+    private val localServers:ArrayList<LocalServer> = arrayListOf()
 
     companion object {
         lateinit var appLifecycle: AppLifecycle
@@ -48,6 +51,10 @@ open class AppLifecycle constructor(
         initFinish = true
         appInit()
         onCreateListener()
+    }
+
+    fun addLocalServer(localServer: LocalServer) {
+        localServers.add(localServer)
     }
 
     override fun onCreate(lifecycle: LifecycleInit<*>, savedInstanceBundle: Bundle?) {
@@ -94,7 +101,10 @@ open class AppLifecycle constructor(
 
     override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
         if (activity is LifecycleInit<*>) {
-            if (stack.isEmpty()) onCreateListener()
+            if (stack.isEmpty()){
+                localServers.forEach { it.start() }
+                onCreateListener()
+            }
             onCreate(activity, savedInstanceState)
         }
         stack.add(activity)
@@ -103,7 +113,10 @@ open class AppLifecycle constructor(
     override fun onActivityDestroyed(activity: Activity?) {
         stack.remove(activity)
         if (activity is LifecycleInit<*>){
-            if (stack.isEmpty()) onExitListener(activity)
+            if (stack.isEmpty()) {
+                localServers.forEach { it.stop() }
+                onExitListener(activity)
+            }
             onDestroy(activity)
         }
     }

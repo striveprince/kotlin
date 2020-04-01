@@ -33,12 +33,7 @@ class DemoApplication : MultiDexApplication() {
         AppLifecycle(application, BR.parse, BR.vm).apply {
             CoroutineScope(Dispatchers.Default).launch {
                 DaggerAppComponent.builder().appModule(AppModule(application)).build().inject(application)
-                if (BuildConfig.DEBUG) {
-                    LocalServer("json").run {
-                        onCreateListener = { start() }
-                        onExitListener = { stop() }
-                    }
-                }
+                if(BuildConfig.DEBUG)addLocalServer(LocalServer())
                 launch(Dispatchers.Main) {
                     createListener = {
                         ARouter.getInstance().inject(it)
@@ -50,5 +45,7 @@ class DemoApplication : MultiDexApplication() {
         }
 
     }
+
+
 
 }
