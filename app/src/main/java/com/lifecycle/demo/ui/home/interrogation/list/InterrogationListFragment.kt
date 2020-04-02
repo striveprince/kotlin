@@ -2,7 +2,6 @@ package com.lifecycle.demo.ui.home.interrogation.list
 
 import androidx.fragment.app.FragmentActivity
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.lifecycle.demo.base.util.viewModel
 import com.lifecycle.demo.inject.data.Api
 import com.lifecycle.demo.inject.data.net.InterrogationParams
 import com.lifecycle.demo.inject.data.net.bean.InterrogationDataBean
@@ -13,9 +12,8 @@ import com.lifecycle.binding.inter.inflate.Diff
 import com.lifecycle.coroutines.adapter.life.diff.RecyclerDiffFragment
 import com.lifecycle.demo.ui.home.interrogation.HomeInterrogationFragment.Companion.interrogation
 import com.lifecycle.coroutines.util.launchUI
-import com.lifecycle.demo.base.util.api
-import com.lifecycle.demo.base.util.toEntities
-import com.lifecycle.demo.base.util.toEntity
+import com.lifecycle.demo.base.util.*
+import com.lifecycle.demo.inject.ApiException
 import com.lifecycle.demo.inject.data.net.bean.InterrogationBean
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -38,12 +36,10 @@ class InterrogationListFragment : RecyclerDiffFragment<Diff>() {
 
     private fun Api.getInterrogationList(taskCategory: Int, position: Int, state: Int): Flow<List<InterrogationListEntity>> {
         val params = InterrogationParams(taskCategory, position)
-        return flow{
-            emit(netApi.httpApi.getInterrogationList(params).result?.run {
-                    notifyCount(taskCategory,this)
-                    result.toEntities<InterrogationListEntity>()
-                }?:ArrayList())
-        }
+        return netApi.httpApi.getInterrogationList(params)
+            .restful { it ->
+                it.result?.let { notifyCount(taskCategory,it) }
+                it.result?.result?.toEntities()?:throw ApiException(it.code,it.msg) }
     }
 
     private fun notifyCount(taskCategory: Int, it: InterrogationDataBean) {
