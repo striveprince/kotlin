@@ -25,7 +25,7 @@ open class AppLifecycle constructor(
 
     var onExitListener: LifeListener = {}
     var onCreateListener: ()->Unit = {}
-    private val localServers:ArrayList<LocalServer> = arrayListOf()
+    private val localServers:ArrayList<LocalServer> = ArrayList()
 
     companion object {
         lateinit var appLifecycle: AppLifecycle
