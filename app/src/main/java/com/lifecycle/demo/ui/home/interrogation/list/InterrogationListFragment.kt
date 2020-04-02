@@ -36,10 +36,11 @@ class InterrogationListFragment : RecyclerDiffFragment<Diff>() {
 
     private fun Api.getInterrogationList(taskCategory: Int, position: Int, state: Int): Flow<List<InterrogationListEntity>> {
         val params = InterrogationParams(taskCategory, position)
-        return netApi.httpApi.getInterrogationList(params)
-            .restful { it ->
-                it.result?.let { notifyCount(taskCategory,it) }
-                it.result?.result?.toEntities()?:throw ApiException(it.code,it.msg) }
+        return { netApi.httpApi.getInterrogationList(params) }
+            .restful {
+                notifyCount(taskCategory, it)
+                it.result.toEntities()
+            }
     }
 
     private fun notifyCount(taskCategory: Int, it: InterrogationDataBean) {
