@@ -18,7 +18,7 @@ import com.lifecycle.demo.inject.data.net.bean.InterrogationBean
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-@Route(path = interrogationList)
+//@Route(path = interrogationList)
 class InterrogationListFragment : RecyclerDiffFragment<Diff>() {
 
     companion object {
