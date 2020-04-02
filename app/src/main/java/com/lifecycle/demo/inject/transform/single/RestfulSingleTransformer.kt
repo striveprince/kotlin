@@ -1,7 +1,6 @@
 package com.lifecycle.demo.inject.transform.single
 
-import com.lifecycle.demo.inject.InfoEntity
-import com.lifecycle.demo.inject.ApiException
+import com.lifecycle.demo.inject.*
 import io.reactivex.*
 
 /**
@@ -13,10 +12,13 @@ import io.reactivex.*
 class RestfulSingleTransformer<T> : SingleTransformer<InfoEntity<T>, T> {
 
     override fun apply(upstream: Single<InfoEntity<T>>): SingleSource<T> {
-        return upstream.flatMap {entity->
-            Single.create<T> { e->
-                runCatching { entity.result?.let { e.onSuccess(it) } }
-                    .getOrElse { e.onError(ApiException(entity.code, entity.msg, entity)) }
+        return upstream.flatMap { entity ->
+            Single.create<T> { e ->
+                runCatching {
+                    if (entity.code == success) entity.result?.let { e.onSuccess(it) }
+                    else throw judgeApiThrowable(entity)
+                }
+                    .getOrElse { e.onError(judgeThrowable(it)) }
             }
         }
     }

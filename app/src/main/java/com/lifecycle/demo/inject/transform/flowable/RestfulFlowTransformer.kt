@@ -1,7 +1,6 @@
 package com.lifecycle.demo.inject.transform.flowable
 
-import com.lifecycle.demo.inject.InfoEntity
-import com.lifecycle.demo.inject.ApiException
+import com.lifecycle.demo.inject.*
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.FlowableTransformer
@@ -16,10 +15,13 @@ import org.reactivestreams.Publisher
 class RestfulFlowTransformer<T> : FlowableTransformer<InfoEntity<T>, T> {
     override fun apply(upstream: Flowable<InfoEntity<T>>): Publisher<T> {
         return upstream.flatMap {entity->
-            Flowable.create<T>({e->
-                runCatching { entity.result?.let { e.onNext(it) } }
-                    .getOrElse { e.onError(ApiException(entity.code, entity.msg, entity)) }
-            },BackpressureStrategy.BUFFER)
+            Flowable.create<T>({ e ->
+                runCatching {
+                    if (entity.code == success) entity.result?.let { e.onNext(it) }
+                    else  throw judgeApiThrowable(entity)
+                }
+                    .getOrElse { e.onError(judgeThrowable(it)) }
+            }, BackpressureStrategy.BUFFER)
         }
     }
 }
