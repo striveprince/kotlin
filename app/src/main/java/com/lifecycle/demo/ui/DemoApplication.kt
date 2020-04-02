@@ -31,9 +31,9 @@ class DemoApplication : MultiDexApplication() {
         super.onCreate()
         val application = this
         AppLifecycle(application, BR.parse, BR.vm).apply {
+            if(BuildConfig.DEBUG)addLocalServer(LocalServer())
             CoroutineScope(Dispatchers.Default).launch {
                 DaggerAppComponent.builder().appModule(AppModule(application)).build().inject(application)
-                if(BuildConfig.DEBUG)addLocalServer(LocalServer())
                 launch(Dispatchers.Main) {
                     createListener = {
                         ARouter.getInstance().inject(it)
