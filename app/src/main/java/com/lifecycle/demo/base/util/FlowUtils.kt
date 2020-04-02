@@ -21,14 +21,16 @@ import kotlinx.coroutines.flow.*
  * @UpdateRemark:
  * @Version:
  */
-typealias HttpBlock<T> = () -> InfoEntity<T>
 
-fun <T, R> HttpBlock<T>.restful( block: suspend FlowCollector<R>.(T) -> R): Flow<R> {
+
+typealias HttpBlock<T> = suspend () -> InfoEntity<T>
+
+fun <T, R> HttpBlock<T>.restful(function: suspend FlowCollector<R>.(T) -> R): Flow<R> {
     return flow {
         runCatching {
             invoke().run {
                 if (code != 0) throw judgeApiThrowable(this)
-                if (result != null)emit(block(result))
+                if (result != null)emit(function(result))
             }
         }.getOrElse { throw judgeThrowable(it) }
     }

@@ -24,5 +24,5 @@ interface HttpApi {
     fun getInterrogationRxList(@Body value: InterrogationParams): Single<InfoEntity<InterrogationDataBean>>
 
     @POST("/getList")
-    fun getInterrogationList(@Body value: InterrogationParams): InfoEntity<InterrogationDataBean>
+    suspend fun getInterrogationList(@Body value: InterrogationParams): InfoEntity<InterrogationDataBean>
 }

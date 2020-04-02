@@ -34,11 +34,11 @@ class InterrogationListFragment : RecyclerDiffFragment<Diff>() {
         return api.getInterrogationList(taskCategory, startOffset, state)
     }
 
-    private fun Api.getInterrogationList(taskCategory: Int, position: Int, state: Int): Flow<List<InterrogationListEntity>> {
+    private suspend fun Api.getInterrogationList(taskCategory: Int, position: Int, state: Int): Flow<List<InterrogationListEntity>> {
         val params = InterrogationParams(taskCategory, position)
-        return { netApi.httpApi.getInterrogationList(params) }
+        return suspend{ netApi.httpApi.getInterrogationList(params) }
             .restful {
-                notifyCount(taskCategory, it)
+                notifyCount(taskCategory,it)
                 it.result.toEntities()
             }
     }
@@ -57,3 +57,5 @@ class InterrogationListFragment : RecyclerDiffFragment<Diff>() {
 
 
 }
+
+
