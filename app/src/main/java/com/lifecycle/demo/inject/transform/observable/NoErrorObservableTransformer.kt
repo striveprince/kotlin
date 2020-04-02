@@ -1,6 +1,6 @@
-package com.lifecycle.demo.inject.data.net.transform.observable
+package com.lifecycle.demo.inject.transform.observable
 
-import com.lifecycle.demo.inject.data.ApiException
+import com.lifecycle.demo.inject.ApiException
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.functions.Function

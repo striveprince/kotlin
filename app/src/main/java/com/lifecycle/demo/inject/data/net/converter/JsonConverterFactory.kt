@@ -1,24 +1,20 @@
 package com.lifecycle.demo.inject.data.net.converter
 
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.lifecycle.binding.util.beanGet
+import com.lifecycle.binding.util.getAllFields
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
 import kotlinx.serialization.serializerByTypeToken
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import java.lang.reflect.Type
-
+import okhttp3.FormBody
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
-import okio.Buffer
+import org.json.JSONObject
 import retrofit2.Converter
 import retrofit2.Retrofit
 import java.io.IOException
-import java.io.OutputStreamWriter
-import java.nio.charset.Charset
+import java.lang.reflect.Type
 
 /**
  * project：cutv_ningbo
@@ -33,13 +29,12 @@ import java.nio.charset.Charset
  */
 
 
+
 class JsonConverterFactory : Converter.Factory() {
-    private val gson:Gson = Gson()
-//    private val json = Json(JsonConfiguration.Stable.copy(unquoted = true))
-    private val json = Json(JsonConfiguration.Stable.copy())
+    private val json = Json(JsonConfiguration.Stable.copy(isLenient = true,ignoreUnknownKeys = true))
 
     override fun responseBodyConverter(type: Type, annotations: Array<Annotation>?, retrofit: Retrofit?): Converter<ResponseBody, *> {
-        return JsonResponseBodyConverter<Any>(serializerByTypeToken(type),json)
+        return JsonResponseBodyConverter<Any>(serializerByTypeToken(type), json)
     }
 
     override fun requestBodyConverter(
@@ -48,30 +43,28 @@ class JsonConverterFactory : Converter.Factory() {
         methodAnnotations: Array<Annotation>?,
         retrofit: Retrofit?
     ): Converter<*, RequestBody> {
-        return JsonRequestBodyConverter<Any>(gson,type)
+        return JsonRequestBodyConverter<Any>(type)
     }
 
 }
-class JsonRequestBodyConverter<T> internal constructor(gson: Gson, type: Type) : Converter<T, RequestBody> {
-    @Suppress("UNCHECKED_CAST")
-    private val adapter = gson.getAdapter<T>(TypeToken.get(type) as TypeToken<T>)!!
-    companion object {
-        private val MEDIA_TYPE = "application/json; charset=UTF-8".toMediaTypeOrNull()
-        private val UTF_8 = Charset.forName("UTF-8")
-    }
+
+class JsonRequestBodyConverter<T> internal constructor(type: Type) : Converter<T, RequestBody> {
 
     @Throws(IOException::class)
     override fun convert(value: T): RequestBody {
-        return if(value is SingleConvert<*>) value.convert() else normalConvert(value)
+        return if (value is SingleConvert<*>) value.convert() else normalConvert(value)
     }
 
     private fun normalConvert(value: T): RequestBody {
-        val buffer = Buffer()
-        val writer = OutputStreamWriter(buffer.outputStream(), UTF_8)
-        writer.use {
-            adapter.toJson(writer, value)
-            return buffer.readByteString().toRequestBody(MEDIA_TYPE)
-        }
+        return FormBody.Builder()
+            .apply {
+                val bean = (value as Any)
+                val clazzFields = bean.javaClass.getAllFields()
+                for (declaredField in clazzFields) {
+                    declaredField.beanGet(bean)?.toString()?.let { addEncoded(declaredField.name, it) }
+                }
+            }
+            .build()
     }
 
 }
@@ -85,10 +78,10 @@ class JsonResponseBodyConverter<T> internal constructor(
     @Suppress("UNCHECKED_CAST")
     @Throws(IOException::class)
     override fun convert(value: ResponseBody): T = value.use {
-//        val jsonObject = JSONObject(result)
-//        val msg = jsonObject.optString("msg")
-//        val code = jsonObject.optInt("code")
-//        val infoJson = """{"msg":$msg,code:$code,"result":$result}"""
-        json.parse(kSerializer,value.string()) as T
+        val result = value.string()
+        JSONObject(result).let { message ->
+            runCatching { json.parse(kSerializer, """{"msg":${message.optString("msg")},code:${message.optInt("code")},"result":$result}""") as T }
+                .getOrElse { (json.parse(kSerializer, result) as T) }
+        }
     }
 }

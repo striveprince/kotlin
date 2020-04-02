@@ -1,7 +1,9 @@
-package com.lifecycle.demo.ui.home.interrogation.list
+package com.lifecycle.demo.ui.home.interrogation.rxlist
 
 import androidx.fragment.app.FragmentActivity
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.lifecycle.demo.base.util.restful
+import com.lifecycle.demo.base.util.toEntities
 import com.lifecycle.demo.base.util.viewModel
 import com.lifecycle.demo.inject.data.Api
 import com.lifecycle.demo.inject.data.net.InterrogationParams
@@ -10,15 +12,11 @@ import com.lifecycle.demo.ui.home.HomeModel
 import com.lifecycle.demo.ui.home.interrogation.rxlist.InterrogationListFragment.Companion.interrogationList
 import com.lifecycle.binding.Constant
 import com.lifecycle.binding.inter.inflate.Diff
-import com.lifecycle.coroutines.adapter.life.diff.RecyclerDiffFragment
 import com.lifecycle.demo.ui.home.interrogation.HomeInterrogationFragment.Companion.interrogation
+import com.lifecycle.rx.adapter.life.diff.RecyclerDiffFragment
+import io.reactivex.Single
 import com.lifecycle.coroutines.util.launchUI
 import com.lifecycle.demo.base.util.api
-import com.lifecycle.demo.base.util.toEntities
-import com.lifecycle.demo.base.util.toEntity
-import com.lifecycle.demo.inject.data.net.bean.InterrogationBean
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
 @Route(path = interrogationList)
 class InterrogationListFragment : RecyclerDiffFragment<Diff>() {
@@ -27,23 +25,21 @@ class InterrogationListFragment : RecyclerDiffFragment<Diff>() {
         const val interrogationList = "$interrogation/list"
     }
 
-    override suspend fun require(startOffset: Int, state: Int): Flow<List<InterrogationListEntity>> {
+    override fun apiData(offset: Int, state: Int): Single<List<Diff>> {
         val taskCategory = when (arguments?.getString(Constant.params)) {
             "new" -> 1
             "wait" -> 2
             else -> 0
         }
-        return api.getInterrogationList(taskCategory, startOffset, state)
+        return api.getInterrogationList(taskCategory, offset, state)
     }
 
-    private fun Api.getInterrogationList(taskCategory: Int, position: Int, state: Int): Flow<List<InterrogationListEntity>> {
+    private fun Api.getInterrogationList(taskCategory: Int, position: Int, state: Int): Single<List<Diff>> {
         val params = InterrogationParams(taskCategory, position)
-        return flow{
-            emit(netApi.httpApi.getInterrogationList(params).result?.run {
-                    notifyCount(taskCategory,this)
-                    result.toEntities<InterrogationListEntity>()
-                }?:ArrayList())
-        }
+        return if (taskCategory == 0) netApi.httpApi.getInterrogationRxList(params).restful()
+            .doOnSuccess { notifyCount(taskCategory, it) }
+            .map { it.result.toEntities<InterrogationListEntity>() }
+        else Single.just(ArrayList())
     }
 
     private fun notifyCount(taskCategory: Int, it: InterrogationDataBean) {

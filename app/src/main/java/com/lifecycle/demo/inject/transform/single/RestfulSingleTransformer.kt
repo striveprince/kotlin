@@ -1,7 +1,7 @@
-package com.lifecycle.demo.inject.data.net.transform.single
+package com.lifecycle.demo.inject.transform.single
 
-import com.lifecycle.demo.inject.data.net.InfoEntity
-import com.lifecycle.demo.inject.data.ApiException
+import com.lifecycle.demo.inject.InfoEntity
+import com.lifecycle.demo.inject.ApiException
 import io.reactivex.*
 
 /**

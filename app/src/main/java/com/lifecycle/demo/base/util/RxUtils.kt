@@ -2,18 +2,20 @@ package com.lifecycle.demo.base.util
 
 import android.app.Activity
 import android.view.View
+import androidx.fragment.app.FragmentActivity
 import com.afollestad.materialdialogs.MaterialDialog
+import com.lifecycle.binding.permission.PermissionsUtil
 import com.lifecycle.demo.R
-import com.lifecycle.demo.inject.data.net.InfoEntity
-import com.lifecycle.demo.inject.data.ApiException
-import com.lifecycle.demo.inject.data.NoPermissionException
-import com.lifecycle.demo.inject.data.net.transform.single.DoErrorTransformer
-import com.lifecycle.demo.inject.data.net.transform.single.ErrorSingleTransformer
-import com.lifecycle.demo.inject.data.net.transform.observable.NoErrorObservableTransformer
-import com.lifecycle.demo.inject.data.net.transform.single.RestfulSingleTransformer
-import com.lifecycle.demo.inject.data.net.transform.flowable.DoErrorFlowTransformer
-import com.lifecycle.demo.inject.data.net.transform.flowable.ErrorFlowTransformer
-import com.lifecycle.demo.inject.data.net.transform.flowable.RestfulFlowTransformer
+import com.lifecycle.demo.inject.InfoEntity
+import com.lifecycle.demo.inject.ApiException
+import com.lifecycle.demo.inject.NoPermissionException
+import com.lifecycle.demo.inject.transform.single.DoErrorTransformer
+import com.lifecycle.demo.inject.transform.single.ErrorSingleTransformer
+import com.lifecycle.demo.inject.transform.observable.NoErrorObservableTransformer
+import com.lifecycle.demo.inject.transform.single.RestfulSingleTransformer
+import com.lifecycle.demo.inject.transform.flowable.DoErrorFlowTransformer
+import com.lifecycle.demo.inject.transform.flowable.ErrorFlowTransformer
+import com.lifecycle.demo.inject.transform.flowable.RestfulFlowTransformer
 import com.lifecycle.rx.util.ioToMainThread
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Flowable
@@ -100,14 +102,12 @@ fun checkPermission(
 }
 
 fun Activity.rxPermissions(vararg permissions: String): Observable<Boolean> {
-    return RxPermissions(this)
-        .request(*permissions)
+    return Observable.create<Boolean> { emitter -> PermissionsUtil(this as FragmentActivity).request(*permissions) { emitter.onNext(it) } }
         .doOnNext { if (!it) throw NoPermissionException() }
 }
 
 fun Activity.rxPermissionsDialog(vararg permissions: String): Observable<Boolean> {
-    return RxPermissions(this)
-        .request(*permissions)
+    return rxPermissions(*permissions)
         .flatMap {
             if (it) Observable.just(it)
             else showPermissionDialog(*permissions)

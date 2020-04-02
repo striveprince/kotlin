@@ -152,6 +152,9 @@ fun Field.noDelegateName() = name.replace("\$delegate", "")
 //    return this
 //}
 
+fun Field.beanGet(bean:Any) =
+    runCatching { beanField { get(bean) } }.getOrNull()
+
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 inline fun <reified T, reified R> T.copy(r: R): T {
