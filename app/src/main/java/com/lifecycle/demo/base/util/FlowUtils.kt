@@ -30,7 +30,7 @@ fun <T, R> HttpBlock<T>.restful(function: suspend FlowCollector<R>.(T) -> R): Fl
         runCatching {
             invoke().run {
                 if (code != 0) throw judgeApiThrowable(this)
-                if (result != null)emit(function(result))
+                if (result != null) emit(function(result))
             }
         }.getOrElse { throw judgeThrowable(it) }
     }

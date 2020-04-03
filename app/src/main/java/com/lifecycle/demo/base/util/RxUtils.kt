@@ -5,6 +5,8 @@ import android.view.View
 import androidx.fragment.app.FragmentActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.lifecycle.binding.permission.PermissionsUtil
+import com.lifecycle.binding.permission.checkPermissions
+import com.lifecycle.binding.util.startActivity
 import com.lifecycle.demo.R
 import com.lifecycle.demo.inject.ApiException
 import com.lifecycle.demo.inject.InfoEntity

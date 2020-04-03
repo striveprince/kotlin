@@ -1,25 +1,22 @@
 package com.lifecycle.demo.ui.home.interrogation.list
 
 import androidx.fragment.app.FragmentActivity
-import com.alibaba.android.arouter.facade.annotation.Route
+import com.lifecycle.binding.Constant
+import com.lifecycle.binding.util.toEntities
+import com.lifecycle.binding.util.viewModel
+import com.lifecycle.coroutines.adapter.life.diff.RecyclerDiffFragment
+import com.lifecycle.coroutines.util.launchUI
+import com.lifecycle.demo.base.util.api
+import com.lifecycle.demo.base.util.restful
 import com.lifecycle.demo.inject.data.Api
 import com.lifecycle.demo.inject.data.net.InterrogationParams
 import com.lifecycle.demo.inject.data.net.bean.InterrogationDataBean
 import com.lifecycle.demo.ui.home.HomeModel
-import com.lifecycle.demo.ui.home.interrogation.rxlist.InterrogationListFragment.Companion.interrogationList
-import com.lifecycle.binding.Constant
-import com.lifecycle.binding.inter.inflate.Diff
-import com.lifecycle.coroutines.adapter.life.diff.RecyclerDiffFragment
 import com.lifecycle.demo.ui.home.interrogation.HomeInterrogationFragment.Companion.interrogation
-import com.lifecycle.coroutines.util.launchUI
-import com.lifecycle.demo.base.util.*
-import com.lifecycle.demo.inject.ApiException
-import com.lifecycle.demo.inject.data.net.bean.InterrogationBean
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
 //@Route(path = interrogationList)
-class InterrogationListFragment : RecyclerDiffFragment<Diff>() {
+class InterrogationListFragment : RecyclerDiffFragment<InterrogationListEntity>() {
 
     companion object {
         const val interrogationList = "$interrogation/list"

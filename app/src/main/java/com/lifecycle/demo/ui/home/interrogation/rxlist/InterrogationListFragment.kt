@@ -1,22 +1,21 @@
 package com.lifecycle.demo.ui.home.interrogation.rxlist
 
-import androidx.fragment.app.FragmentActivity
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.lifecycle.binding.Constant
+import com.lifecycle.binding.inter.inflate.Diff
+import com.lifecycle.binding.util.toEntities
+import com.lifecycle.binding.util.viewModel
+import com.lifecycle.coroutines.util.launchUI
+import com.lifecycle.demo.base.util.api
 import com.lifecycle.demo.base.util.restful
-import com.lifecycle.demo.base.util.toEntities
-import com.lifecycle.demo.base.util.viewModel
 import com.lifecycle.demo.inject.data.Api
 import com.lifecycle.demo.inject.data.net.InterrogationParams
 import com.lifecycle.demo.inject.data.net.bean.InterrogationDataBean
 import com.lifecycle.demo.ui.home.HomeModel
-import com.lifecycle.demo.ui.home.interrogation.rxlist.InterrogationListFragment.Companion.interrogationList
-import com.lifecycle.binding.Constant
-import com.lifecycle.binding.inter.inflate.Diff
 import com.lifecycle.demo.ui.home.interrogation.HomeInterrogationFragment.Companion.interrogation
+import com.lifecycle.demo.ui.home.interrogation.rxlist.InterrogationListFragment.Companion.interrogationList
 import com.lifecycle.rx.adapter.life.diff.RecyclerDiffFragment
 import io.reactivex.Single
-import com.lifecycle.coroutines.util.launchUI
-import com.lifecycle.demo.base.util.api
 
 @Route(path = interrogationList)
 class InterrogationListFragment : RecyclerDiffFragment<Diff>() {
@@ -44,7 +43,7 @@ class InterrogationListFragment : RecyclerDiffFragment<Diff>() {
 
     private fun notifyCount(taskCategory: Int, it: InterrogationDataBean) {
         launchUI {
-            (activity as FragmentActivity).viewModel<HomeModel>().apply {
+            requireActivity().viewModel<HomeModel>().apply {
                 when (taskCategory) {
                     0 -> allCount.value = it.count
                     1 -> newCount.value = it.count

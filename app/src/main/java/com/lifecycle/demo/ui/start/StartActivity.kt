@@ -5,9 +5,9 @@ import android.os.Bundle
 import androidx.lifecycle.LifecycleOwner
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.lifecycle.binding.life.binding.BindingActivity
+import com.lifecycle.binding.permission.checkPermissions
 import com.lifecycle.binding.rotate.TimeUtil
 import com.lifecycle.demo.base.util.ARouterUtil
-import com.lifecycle.demo.base.util.checkPermissions
 import com.lifecycle.demo.base.util.rxPermissions
 import com.lifecycle.demo.databinding.ActivityStartBinding
 import com.lifecycle.demo.ui.DemoApplication.Companion.tomtaw
