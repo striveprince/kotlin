@@ -21,8 +21,7 @@ interface IList<E,R> : IEvent<E, R>, ListUpdateCallback {
     fun size(): Int = adapterList.size
     fun setIEntity(e: E, position: Int, @AdapterEvent type: Int, view: View?): Boolean {
         return when (stateOriginal(type)) {
-            AdapterType.add -> add(e, position)
-            AdapterType.load -> add(e, position)
+            AdapterType.add,AdapterType.load -> add(e, position)
             AdapterType.set -> set(e, position)
             AdapterType.remove -> remove(e, position)
             AdapterType.move -> move(e, position)

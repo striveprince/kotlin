@@ -6,17 +6,19 @@ import com.lifecycle.binding.inter.inflate.Diff
 import com.lifecycle.demo.base.anko.AnkoActivity
 import com.lifecycle.demo.base.anko.recyclerAnko
 import com.lifecycle.rx.viewmodel.list.ListDiffViewModel
+import com.lifecycle.rx.viewmodel.list.ListViewModel
 import org.jetbrains.anko.AnkoContext
 
 
-abstract class RecyclerAnkoActivity<E: Diff>: AnkoActivity<ListDiffViewModel<E>>() {
+abstract class RecyclerAnkoActivity<E: Diff>: AnkoActivity<ListViewModel<E>>() {
 
-    override fun parse(t: ListDiffViewModel<E>, context: Context): AnkoContext<Context> {
+    override fun parse(t: ListViewModel<E>, context: Context): AnkoContext<Context> {
         return recyclerAnko(this, t)
     }
 
+
     @Suppress("UNCHECKED_CAST")
-    override fun initModel(): ListDiffViewModel<E> {
-        return ViewModelProvider(this)[ListDiffViewModel::class.java]  as ListDiffViewModel<E>
+    override fun initModel(): ListViewModel<E> {
+        return ViewModelProvider(this)[ListViewModel::class.java]  as ListViewModel<E>
     }
 }

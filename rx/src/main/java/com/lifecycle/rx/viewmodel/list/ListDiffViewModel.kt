@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.ListUpdateCallback
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.adapter.recycler.DiffUtilCallback
 import com.lifecycle.binding.inter.inflate.Diff
+import com.lifecycle.rx.inflate.list.ListViewInflate
 import com.lifecycle.rx.observer.NormalObserver
 import com.lifecycle.rx.util.ioToMainThread
 

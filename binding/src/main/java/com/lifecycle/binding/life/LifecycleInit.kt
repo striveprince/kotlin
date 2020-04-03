@@ -10,10 +10,10 @@ import com.lifecycle.binding.util.*
 interface LifecycleInit <Model>:Init,LifecycleOwner{
     fun initModel():Model
     fun owner():LifecycleOwner = this
-    fun getActivity(): FragmentActivity?
+    fun requireActivity(): FragmentActivity
     fun inject(savedInstanceState: Bundle?):View
 
-    fun Int.stringRes(vararg any: Any)= getActivity()!!.string(this,*any)
-    fun Int.drawable() = getActivity()!!.drawable(this)
-    fun Int.color() = getActivity()!!.color(this)
+    fun Int.stringRes(vararg any: Any)= requireActivity().string(this,*any)
+    fun Int.drawable() = requireActivity().drawable(this)
+    fun Int.color() = requireActivity().color(this)
 }

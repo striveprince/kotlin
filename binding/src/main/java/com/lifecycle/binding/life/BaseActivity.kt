@@ -29,7 +29,7 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
 
     open fun isSwipe(): Int = SwipeBackLayout.FROM_LEFT
     override fun owner() = this
-    override fun getActivity() = this
+    override fun requireActivity() = this
     private var usableHeightPrevious = 0
     fun rightText() = ""
     override fun t() = model

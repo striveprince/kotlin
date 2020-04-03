@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.demo.base.anko.AnkoFragment
 import com.lifecycle.demo.base.anko.recyclerAnko
+import com.lifecycle.rx.inflate.list.ListViewInflate
 import com.lifecycle.rx.viewmodel.list.ListViewModel
 import org.jetbrains.anko.AnkoContext
 
