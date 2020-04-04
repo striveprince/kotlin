@@ -36,7 +36,7 @@ fun <E : Inflate, Binding : ViewDataBinding> LifecycleInit<*>.popupRecycler(
             it.setBackgroundDrawable(ColorDrawable(Color.WHITE))
             it.isOutsideTouchable = true
             it.width = ViewGroup.LayoutParams.MATCH_PARENT
-            it.height = 1000
+            it.height = ViewGroup.LayoutParams.WRAP_CONTENT
         }
     }
 }

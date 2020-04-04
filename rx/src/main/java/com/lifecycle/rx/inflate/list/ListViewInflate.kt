@@ -24,7 +24,7 @@ import io.reactivex.disposables.Disposable
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
-open class ListViewInflate<E : Inflate, Binding : ViewDataBinding>(override val adapter: IList<E> = RecyclerAdapter()) :
+open class ListViewInflate<E : Inflate, Binding : ViewDataBinding>(final override val adapter: IList<E> = RecyclerAdapter()) :
     BindingInflate<Binding>, IList<E>, Observer<List<E>>, ListInflate<E, Disposable> {
     override var pageWay = true
     override var pageCount = 10
