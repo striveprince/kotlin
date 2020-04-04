@@ -8,13 +8,13 @@ import com.lifecycle.binding.IEvent
 import com.lifecycle.binding.IList
 import com.lifecycle.binding.inter.inflate.Inflate
 
-abstract class RecyclerOpenAdapter<E : Inflate,R> : RecyclerView.Adapter<RecyclerHolder<E,R>>(), IList<E, R> {
+abstract class RecyclerOpenAdapter<E : Inflate> : RecyclerView.Adapter<RecyclerHolder<E>>(), IList<E> {
     private val sparseArray = SparseArray<E>()
     override val adapterList: MutableList<E> = ArrayList()
-    private val event: IEvent<E, R> by lazy { this }
-    val events: ArrayList<IEvent<E, R>> = ArrayList()
+    private val event: IEvent<E> by lazy { this }
+    val events: ArrayList<IEvent<E>> = ArrayList()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerHolder<E,R> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerHolder<E> {
         return RecyclerHolder(parent, sparseArray.get(viewType))
     }
 
@@ -27,12 +27,12 @@ abstract class RecyclerOpenAdapter<E : Inflate,R> : RecyclerView.Adapter<Recycle
         return adapterList.size
     }
 
-    override fun onViewDetachedFromWindow(holder: RecyclerHolder<E,R>) {
+    override fun onViewDetachedFromWindow(holder: RecyclerHolder<E>) {
         super.onViewDetachedFromWindow(holder)
         holder.onViewDetachedFromWindow()
     }
 
-    override fun onViewAttachedToWindow(holder: RecyclerHolder<E,R>) {
+    override fun onViewAttachedToWindow(holder: RecyclerHolder<E>) {
         super.onViewAttachedToWindow(holder)
         holder.onViewAttachedToWindow()
     }
@@ -44,11 +44,11 @@ abstract class RecyclerOpenAdapter<E : Inflate,R> : RecyclerView.Adapter<Recycle
         return viewType
     }
 
-    override fun onBindViewHolder(holder: RecyclerHolder<E,R>, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerHolder<E>, position: Int) {
         holder.bindViewHolder(adapterList[position], event)
     }
 
-    override fun addEventAdapter(event: IEvent<E, R>) {
+    override fun addEventAdapter(event: IEvent<E>) {
         events.add(0,event)
     }
 

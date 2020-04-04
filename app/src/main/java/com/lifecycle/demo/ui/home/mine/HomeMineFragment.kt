@@ -9,7 +9,9 @@ import com.lifecycle.demo.base.util.popupRecycler
 import com.lifecycle.demo.databinding.FragmentHomeMineBinding
 import com.lifecycle.demo.ui.home.HomeActivity.Companion.home
 import com.lifecycle.demo.ui.home.mine.HomeMineFragment.Companion.mine
+import com.lifecycle.rx.adapter.RecyclerSelectAdapter
 import io.reactivex.Single
+import timber.log.Timber
 
 @Route(path = mine)
 @LayoutView(layout = [R.layout.fragment_home_mine])
@@ -19,7 +21,8 @@ class HomeMineFragment : DataBindingFragment<HomeMineModel, FragmentHomeMineBind
     }
 
     fun onButtonClick(view: View) {
-        val inflate = PopupRecyclerInflate<HomeMineEntity>(requireActivity()).apply {
+        val adapter = RecyclerSelectAdapter<HomeMineEntity>()
+        val inflate = PopupRecyclerInflate(requireActivity(),adapter).apply {
             httpData = {_,_-> Single.just(arrayListOf(
                 HomeMineEntity(),
                 HomeMineEntity(),
@@ -27,6 +30,10 @@ class HomeMineFragment : DataBindingFragment<HomeMineModel, FragmentHomeMineBind
                 HomeMineEntity()
             )) }
         }
-        popupRecycler(inflate).showAsDropDown(view)
+        popupRecycler(inflate)
+            .apply { setOnDismissListener {
+                Timber.i("size = ${adapter.selectList.size}")
+            } }
+            .showAsDropDown(view)
     }
 }

@@ -7,13 +7,13 @@ import androidx.databinding.Observable.OnPropertyChangedCallback
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import androidx.databinding.ViewDataBinding
+import com.lifecycle.binding.IList
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.inter.inflate.BindingInflate
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.inter.inflate.ListInflate
 import com.lifecycle.binding.util.canStateStart
 import com.lifecycle.binding.util.isStateRunning
-import com.lifecycle.rx.IListAdapter
 import com.lifecycle.rx.adapter.RecyclerAdapter
 import com.lifecycle.rx.observer.NormalObserver
 import com.lifecycle.rx.util.ioToMainThread
@@ -24,8 +24,8 @@ import io.reactivex.disposables.Disposable
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
-open class ListViewInflate<E : Inflate, Binding : ViewDataBinding>(final override val adapter: IListAdapter<E> = RecyclerAdapter()) :
-    BindingInflate<Binding>, IListAdapter<E>, Observer<List<E>>, ListInflate<E, Observable<Any>, Disposable> {
+open class ListViewInflate<E : Inflate, Binding : ViewDataBinding>(override val adapter: IList<E> = RecyclerAdapter()) :
+    BindingInflate<Binding>, IList<E>, Observer<List<E>>, ListInflate<E, Disposable> {
     override var pageWay = true
     override var pageCount = 10
     override var headIndex = 0

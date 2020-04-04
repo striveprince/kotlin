@@ -9,10 +9,10 @@ import com.lifecycle.binding.IList
 import com.lifecycle.binding.inter.inflate.Inflate
 import kotlin.collections.ArrayList
 
-abstract class WidgetOpenAdapter<E:Inflate,T> : BaseAdapter(), IList<E, T> {
+abstract class WidgetOpenAdapter<E:Inflate> : BaseAdapter(), IList<E> {
 
-    private val observableEvent: IEvent<E, T> by lazy { this }
-    val events: ArrayList<IEvent<E, T>> = ArrayList()
+    private val observableEvent: IEvent<E> by lazy { this }
+    val events: ArrayList<IEvent<E>> = ArrayList()
     override val adapterList: MutableList<E> = ArrayList()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {

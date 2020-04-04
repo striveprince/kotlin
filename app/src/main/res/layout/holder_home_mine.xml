@@ -7,6 +7,7 @@
     </data>
         <TextView
             android:text="@{vm.name}"
+            android:onClick="@{vm::onClick}"
             android:background="@color/colorAccent"
             android:layout_width="match_parent"
             android:layout_height="80dp"/>

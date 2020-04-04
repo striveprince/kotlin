@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import com.lifecycle.binding.IEvent
 import com.lifecycle.binding.R
 import com.lifecycle.binding.life.AppLifecycle.Companion.appLifecycle
 
@@ -43,4 +44,4 @@ interface BindingInflate<Binding : ViewDataBinding> : Inflate, Recycler {
         }
     }
 
-}
+ }

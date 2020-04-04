@@ -6,7 +6,7 @@ import com.lifecycle.binding.adapter.AdapterType
 import kotlin.math.min
 
 
-interface ISelectList<E : Select, R> : IList<E, R> {
+interface ISelectList<E : Select> : IList<E> {
     val selectList: MutableList<E>
     val max: Int
 

@@ -30,7 +30,7 @@ object ViewBindingAdapter {
 
     @JvmStatic
     @BindingAdapter("adapter")
-    fun setAdapter(view: View, adapter: IList<*, *>?) {
+    fun setAdapter(view: View, adapter: IList<*>?) {
         if (adapter == null) return
         if (view is RecyclerView && adapter is RecyclerView.Adapter<*>) {
             view.adapter = adapter
@@ -44,7 +44,7 @@ object ViewBindingAdapter {
             view.adapter = adapter
         } else if (view is AdapterView<*> && adapter is Adapter) {
             view.adapter = adapter
-        } else if(view is ViewPager2 &&adapter is RecyclerOpenAdapter<*,*>){
+        } else if(view is ViewPager2 &&adapter is RecyclerOpenAdapter<*>){
             view.adapter = adapter
         }
     }

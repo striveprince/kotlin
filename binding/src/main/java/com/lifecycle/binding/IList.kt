@@ -7,11 +7,11 @@ import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.util.stateOriginal
 
 
-interface IList<E,R> : IEvent<E, R>, ListUpdateCallback {
+interface IList<E> : IEvent<E>, ListUpdateCallback {
 
     val adapterList: MutableList<E>
 
-    fun addEventAdapter(event: IEvent<E, R>) {}
+    fun addEventAdapter(event: IEvent<E>) {}
 
     fun clearList() {
         adapterList.clear()

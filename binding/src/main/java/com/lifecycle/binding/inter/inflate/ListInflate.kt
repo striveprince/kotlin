@@ -10,7 +10,7 @@ import com.lifecycle.binding.util.*
 import com.lifecycle.binding.viewmodel.Obtain
 import java.util.concurrent.atomic.AtomicBoolean
 
-interface ListInflate<E, R, Job> : IList<E, R>, Obtain<List<E>, Job> {
+interface ListInflate<E,  Job> : IList<E>, Obtain<List<E>, Job> {
     var pageWay: Boolean
     var pageCount: Int
     var headIndex: Int
@@ -18,7 +18,7 @@ interface ListInflate<E, R, Job> : IList<E, R>, Obtain<List<E>, Job> {
     val loadingState: ObservableInt
     val error: ObservableField<Throwable>
     var job: Job?
-    val adapter: IList<E, R>
+    val adapter: IList<E>
     val canRun:AtomicBoolean
     override fun onNext(t: List<E>) {
         setList(getEndOffset(loadingState.get()), t, loadingState.get())
@@ -59,7 +59,7 @@ interface ListInflate<E, R, Job> : IList<E, R>, Obtain<List<E>, Job> {
         adapter.notifyDataSetChanged()
     }
 
-    override fun setEvent(position: Int, e: E, type: Int, view: View?): R {
+    override fun setEvent(position: Int, e: E, type: Int, view: View?): Any {
         return adapter.setEvent(position, e, type, view)
     }
 
@@ -125,7 +125,7 @@ interface ListInflate<E, R, Job> : IList<E, R>, Obtain<List<E>, Job> {
     }
 
 
-    override fun addEventAdapter(event: IEvent<E, R>) {
+    override fun addEventAdapter(event: IEvent<E>) {
         adapter.addEventAdapter(event)
     }
 

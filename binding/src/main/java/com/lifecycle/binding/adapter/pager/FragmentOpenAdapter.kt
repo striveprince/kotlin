@@ -6,9 +6,9 @@ import androidx.viewpager.widget.PagerAdapter
 import com.lifecycle.binding.IList
 import com.lifecycle.binding.inter.inflate.Item
 
-abstract class FragmentOpenAdapter<E: Item,R>(private val fm: FragmentManager,
+abstract class FragmentOpenAdapter<E: Item>(private val fm: FragmentManager,
                                               behavior:Int = BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT):
-    FragmentPagerAdapter(fm,behavior), IList<E, R> {
+    FragmentPagerAdapter(fm,behavior), IList<E> {
     override val adapterList: MutableList<E> = ArrayList()
     override fun getItem(position: Int) = adapterList[position].fragment(fm)
 

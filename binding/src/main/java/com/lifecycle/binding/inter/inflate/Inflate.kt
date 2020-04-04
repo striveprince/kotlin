@@ -12,5 +12,5 @@ interface Inflate{
     fun createView(context: Context, parent: ViewGroup?=null,convertView:View?=null): View{
         return LayoutInflater.from(context).inflate(layoutId(),parent)
     }
-    fun <E> event(event: IEvent<E, *>){}
+    fun  event(event: IEvent<*>){}
 }

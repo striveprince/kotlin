@@ -7,9 +7,9 @@ import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.inter.inflate.Recycler
 import java.util.concurrent.atomic.AtomicReference
 
-class RecyclerHolder<E : Inflate,R>(private val v: ViewGroup, inflate: E) : RecyclerView.ViewHolder(inflate.createView(v.context, v)) {
+class RecyclerHolder<E : Inflate>(private val v: ViewGroup, inflate: E) : RecyclerView.ViewHolder(inflate.createView(v.context, v)) {
     private val eReference = AtomicReference<E>(inflate)
-    fun bindViewHolder(e: E, event: IEvent<E, R>) {
+    fun bindViewHolder(e: E, event: IEvent<E>) {
         eReference.set(e)
         eReference.get().let {
             it.event(event)

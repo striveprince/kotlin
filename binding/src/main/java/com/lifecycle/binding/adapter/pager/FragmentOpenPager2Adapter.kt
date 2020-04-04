@@ -6,8 +6,8 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.lifecycle.binding.IList
 import com.lifecycle.binding.inter.inflate.Item
 
-abstract class FragmentOpenPager2Adapter<E: Item,R>(private val fm: FragmentManager, lifecycle:Lifecycle):
-    FragmentStateAdapter(fm,lifecycle), IList<E, R> {
+abstract class FragmentOpenPager2Adapter<E: Item>(private val fm: FragmentManager, lifecycle:Lifecycle):
+    FragmentStateAdapter(fm,lifecycle), IList<E> {
     override val adapterList: MutableList<E> = ArrayList()
     override fun notify(p: Int, type: Int, from: Int): Boolean {
         notifyDataSetChanged()

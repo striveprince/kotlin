@@ -3,11 +3,11 @@ package com.lifecycle.coroutines.viewmodel.list
 import android.os.Bundle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
+import com.lifecycle.binding.IList
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.util.*
 import com.lifecycle.binding.viewmodel.ListModel
-import com.lifecycle.coroutines.IListAdapter
 import com.lifecycle.coroutines.adapter.RecyclerAdapter
 import com.lifecycle.coroutines.util.launchUI
 import com.lifecycle.coroutines.viewmodel.LifeViewModel
@@ -17,8 +17,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import java.util.concurrent.atomic.AtomicBoolean
 
-open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E> = RecyclerAdapter()) :
-    LifeViewModel(), IListAdapter<E>, ListModel<E, Any, Job> ,HttpData<List<E>>{
+open class ListViewModel<E : Inflate>(final override val adapter: IList<E> = RecyclerAdapter()) :
+    LifeViewModel(), IList<E>, ListModel<E, Job> ,HttpData<List<E>>{
     override var pageWay = true
     override var pageCount = 10
     override var headIndex = 0
