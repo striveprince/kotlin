@@ -15,6 +15,10 @@ data class HomeMineEntity (val name:String="arvin"):Select, RecyclerBindInflate 
     override var isChecked: Boolean = false
     lateinit var event:IEvent<Any>
 
+    override fun event(event: IEvent<Any>) {
+        this.event = event
+    }
+
     fun onClick(view:View){
         event.setEvent(-1,this,AdapterType.select,view)
     }

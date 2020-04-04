@@ -18,7 +18,7 @@ abstract class WidgetOpenAdapter<E:Inflate> : BaseAdapter(), IList<E> {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val e = adapterList[position]
         val view = e.createView(parent.context,parent,convertView)
-        e.event(observableEvent)
+        e.event(observableEvent as IEvent<Any>)
         view.setTag(R.id.inflate,e)
         return view
     }
