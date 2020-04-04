@@ -13,7 +13,7 @@ abstract class WidgetOpenAdapter<E:Inflate> : BaseAdapter(), IList<E> {
 
     private val observableEvent: IEvent<E> by lazy { this }
     val events: ArrayList<IEvent<E>> = ArrayList()
-    override val adapterList: MutableList<E> = ArrayList()
+    override val adapterList: MutableList<E> = ArrayList<E>()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val e = adapterList[position]
