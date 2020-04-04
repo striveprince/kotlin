@@ -29,7 +29,7 @@ interface ISelectList<E : Select> : IList<E> {
     fun select(e: E, position: Int = -1): Boolean {
         val p = if (position < 0) adapterList.indexOf(e) else position
         if (adapterList[p] != e) throw RuntimeException("this e is not the same with index of adapterList")
-        return selectStatus(e, !(selectList.contains(e).let { e.check(it) }))
+        return selectStatus(e, !(selectList.contains(e).also { e.isChecked = it }))
     }
 
     fun selectStatus(e: E, check: Boolean): Boolean {
@@ -40,8 +40,11 @@ interface ISelectList<E : Select> : IList<E> {
             else selectList.remove(e).let { e.check(false) }
         } else {
             if (e.isPush()) selectList.add(e)
-                .apply { while (selectList.size > max) selectList.removeAt(0).check(false) }
-                .let { e.check(it) }
+                .also { e.check(it) }
+                .apply {
+                    while (selectList.size > max)
+                        selectList.removeAt(0).check(false)
+                }
             else add(e)
         }
     }
