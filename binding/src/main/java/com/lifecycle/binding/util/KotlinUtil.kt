@@ -6,6 +6,7 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -16,21 +17,26 @@ import android.widget.Toast
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
+import androidx.core.os.bundleOf
+import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.lifecycle.binding.adapter.AdapterEvent
 import com.lifecycle.binding.life.AppLifecycle
 import com.lifecycle.binding.rotate.TimeUtil
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
+import com.lifecycle.binding.inter.bind.data.DataBindRecycler
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.parse
 import java.io.File
+import java.lang.RuntimeException
 
 /**
  * Company:
@@ -99,6 +105,35 @@ fun Context.sharedPreferences(name:String):SharedPreferences{
     return application().getSharedPreferences(name,Activity.MODE_PRIVATE)
 }
 
+
+inline fun <reified T : ViewModel> LifecycleOwner.viewModel(): T {
+    return if (this is Fragment) ViewModelProvider(this)[T::class.java]
+    else ViewModelProvider(this as FragmentActivity)[T::class.java]
+}
+
+
+inline fun <reified E : DataBindRecycler<*, out ViewDataBinding>> Any.toEntity(vararg arrayOfAny: Any?): E {
+    val clazz = E::class
+    val list: ArrayList<Any?> = arrayListOf(this)
+    list.addAll(arrayOfAny)
+    for (it in clazz.constructors) {
+        if (it.parameters.size == list.size) {
+            val parameters = list.toArray()
+            return it.call(*parameters)
+        }
+    }
+    throw RuntimeException( "check ${E::class.simpleName} class's constructor")
+}
+
+inline fun <reified E : DataBindRecycler<*, out ViewDataBinding>> List<Any>.toEntities(vararg arrayOfAny: Any?): List<E> {
+    val list = ArrayList<E>()
+    for (any in this) {
+        list.add(any.toEntity(*arrayOfAny))
+    }
+    return list
+}
+
+
 //inline fun <reified E> rxBus(): Observable<E> {
 //    return RxBus.getInstance()
 //        .toObservable(E::class.java)
@@ -141,6 +176,13 @@ fun <T,R> List<T>.converter(block: T.() -> R):List<R>{
 }
 
 
+
+
+inline fun <reified T : Activity> Activity.startActivity(vararg pairs: Pair<String, Any>) {
+    val intent = Intent(this, T::class.java)
+    intent.putExtras(bundleOf(*pairs))
+    startActivity(intent)
+}
 
 
 inline fun <reified T> toArray(list: List<T>): Array<T> {

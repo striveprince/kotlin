@@ -8,7 +8,7 @@ import com.lifecycle.binding.inter.bind.annotation.LayoutView
 import com.lifecycle.binding.life.binding.data.DataBindingFragment
 import com.lifecycle.binding.util.observer
 import com.lifecycle.demo.R
-import com.lifecycle.demo.base.util.viewModel
+import com.lifecycle.binding.util.viewModel
 import com.lifecycle.demo.databinding.FragmentHomeIntrrogationBinding
 import com.lifecycle.demo.ui.home.HomeActivity.Companion.home
 import com.lifecycle.demo.ui.home.HomeModel

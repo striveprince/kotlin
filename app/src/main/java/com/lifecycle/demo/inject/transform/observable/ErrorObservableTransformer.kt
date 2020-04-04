@@ -1,9 +1,9 @@
-package com.lifecycle.demo.inject.data.net.transform.observable
+package com.lifecycle.demo.inject.transform.observable
 
-import com.lifecycle.demo.inject.data.net.InfoEntity
-import com.lifecycle.demo.inject.data.judgeApiThrowable
-import com.lifecycle.demo.inject.data.judgeThrowable
-import com.lifecycle.demo.inject.data.success
+import com.lifecycle.demo.inject.InfoEntity
+import com.lifecycle.demo.inject.judgeApiThrowable
+import com.lifecycle.demo.inject.judgeThrowable
+import com.lifecycle.demo.inject.success
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import io.reactivex.ObservableTransformer

@@ -4,6 +4,7 @@ import com.lifecycle.binding.inter.bind.data.DataBinding
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.rx.R
 import com.lifecycle.binding.databinding.LayoutSwipeRecyclerViewBinding
+import com.lifecycle.rx.inflate.list.ListViewInflate
 import com.lifecycle.rx.viewmodel.list.ListViewModel
 
 class RecyclerParse<E : Inflate>(

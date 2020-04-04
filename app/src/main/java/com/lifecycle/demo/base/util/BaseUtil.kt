@@ -29,7 +29,7 @@ import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
 import com.lifecycle.binding.inter.bind.data.DataBindRecycler
 import com.lifecycle.binding.life.AppLifecycle
-import com.lifecycle.demo.inject.data.ApiException
+import com.lifecycle.demo.inject.ApiException
 import com.lifecycle.demo.ui.DemoApplication
 import java.security.MessageDigest
 import java.util.regex.Pattern
@@ -42,46 +42,11 @@ import java.util.regex.Pattern
  * Email: 1033144294@qq.com
  */
 
-fun Context.string(@StringRes id: Int, vararg any: Any) =
-    getString(id, *any)
 
 val api = (AppLifecycle.application as DemoApplication).api
 
-inline fun <reified T : ViewModel> LifecycleOwner.viewModel(): T {
-    return if (this is Fragment) ViewModelProvider(this)[T::class.java]
-    else ViewModelProvider(this as FragmentActivity)[T::class.java]
-}
-
-inline fun <reified E : DataBindRecycler<*, out ViewDataBinding>> Any.toEntity(vararg arrayOfAny: Any?): E {
-    val clazz = E::class
-    val list: ArrayList<Any?> = arrayListOf(this)
-    list.addAll(arrayOfAny)
-    for (it in clazz.constructors) {
-        if (it.parameters.size == list.size) {
-            val parameters = list.toArray()
-            return it.call(*parameters)
-        }
-    }
-    throw ApiException(0, "check ${E::class.simpleName} class's constructor")
-}
-
-inline fun <reified E : DataBindRecycler<*, out ViewDataBinding>> List<Any>.toEntities(vararg arrayOfAny: Any?): List<E> {
-    val list = ArrayList<E>()
-    for (any in this) {
-        list.add(any.toEntity(*arrayOfAny))
-    }
-    return list
-}
 
 
-@Suppress("DEPRECATED_IDENTITY_EQUALS")
-fun Context.checkPermissions(vararg permissions: String): Boolean {
-    for (permission in permissions) {
-        if (ActivityCompat.checkSelfPermission(this, permission) !== PackageManager.PERMISSION_GRANTED)
-            return false
-    }
-    return true
-}
 
 
 fun headUrl(urlString: String): GlideUrl {
@@ -110,13 +75,6 @@ fun md5(paramString: String): String {
         ""
     }
 
-}
-
-
-inline fun <reified T : Activity> Activity.startActivity(vararg pairs: Pair<String, Any>) {
-    val intent = Intent(this, T::class.java)
-    intent.putExtras(bundleOf(*pairs))
-    startActivity(intent)
 }
 
 

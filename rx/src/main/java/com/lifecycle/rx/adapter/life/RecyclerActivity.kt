@@ -12,6 +12,7 @@ import com.lifecycle.binding.inter.inflate.Diff
 import com.lifecycle.binding.life.BaseActivity
 import com.lifecycle.binding.databinding.LayoutSwipeRecyclerViewBinding
 import com.lifecycle.rx.util.recyclerBinding
+import com.lifecycle.rx.inflate.list.ListViewInflate
 import com.lifecycle.rx.viewmodel.list.ListViewModel
 import io.reactivex.Single
 

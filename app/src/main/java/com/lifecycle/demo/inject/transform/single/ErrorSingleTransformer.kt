@@ -1,10 +1,10 @@
-package com.lifecycle.demo.inject.data.net.transform.single
+package com.lifecycle.demo.inject.transform.single
 
 import com.lifecycle.demo.BuildConfig
-import com.lifecycle.demo.inject.data.net.InfoEntity
-import com.lifecycle.demo.inject.data.judgeApiThrowable
-import com.lifecycle.demo.inject.data.judgeThrowable
-import com.lifecycle.demo.inject.data.success
+import com.lifecycle.demo.inject.InfoEntity
+import com.lifecycle.demo.inject.judgeApiThrowable
+import com.lifecycle.demo.inject.judgeThrowable
+import com.lifecycle.demo.inject.success
 import io.reactivex.Single
 import io.reactivex.SingleSource
 import io.reactivex.SingleTransformer

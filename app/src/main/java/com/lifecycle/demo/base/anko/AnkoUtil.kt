@@ -18,8 +18,9 @@ import com.lifecycle.binding.inter.inflate.ErrorInflate
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.life.LifecycleInit
 import com.lifecycle.binding.util.observer
-import com.lifecycle.rx.viewmodel.list.ListViewModel
+import com.lifecycle.rx.inflate.list.ListViewInflate
 import com.lifecycle.binding.util.toast
+import com.lifecycle.rx.viewmodel.list.ListViewModel
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.simple.SimpleMultiListener
@@ -51,12 +52,12 @@ inline fun ViewManager.smartRefreshLayout(init: SmartRefreshLayout.() -> Unit): 
 fun <E : Inflate> recyclerAnko(
     lifecycleInit: LifecycleInit<*>,
     t: ListViewModel<E>,
-    recyclerManager: RecyclerView.LayoutManager = LinearLayoutManager(lifecycleInit.getActivity()),
+    recyclerManager: RecyclerView.LayoutManager = LinearLayoutManager(lifecycleInit.requireActivity()),
     animator: ItemAnimator? = null,
     errorInflate: ErrorInflate = errorInflate(),
     emptyString: String = "没有相关数据,点击重试"
 ) =
-    AnkoContext.create(lifecycleInit.getActivity()!!).apply {
+    AnkoContext.create(lifecycleInit.requireActivity()).apply {
         frameLayout {
             lparams(matchParent, matchParent)
             val errorView = errorInflate.createView(context, this)

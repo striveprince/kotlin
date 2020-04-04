@@ -1,4 +1,4 @@
-package com.lifecycle.demo.inject.data.net
+package com.lifecycle.demo.inject
 
 import kotlinx.serialization.Serializable
 

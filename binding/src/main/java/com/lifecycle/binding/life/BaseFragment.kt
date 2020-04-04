@@ -26,6 +26,7 @@ abstract class BaseFragment<Model:ViewModel,B>:Fragment(),Parse<Model,B>, Lifecy
         model.let { if(it is Init)it.initData(this,bundle) }
     }
 
+
     override fun inject(savedInstanceState: Bundle?)= createView(model, activity!!)
 
     override fun initModel():Model {
