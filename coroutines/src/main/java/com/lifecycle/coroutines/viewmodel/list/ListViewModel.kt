@@ -5,10 +5,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.inter.inflate.Inflate
-import com.lifecycle.binding.util.observer
-import com.lifecycle.binding.util.stateError
-import com.lifecycle.binding.util.stateStart
-import com.lifecycle.binding.util.stateSuccess
+import com.lifecycle.binding.util.*
 import com.lifecycle.binding.viewmodel.ListModel
 import com.lifecycle.coroutines.IListAdapter
 import com.lifecycle.coroutines.adapter.RecyclerAdapter
@@ -30,9 +27,8 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
     override val error = MutableLiveData<Throwable>()
     override var job: Job? = null
     override val adapterList: MutableList<E> = adapter.adapterList
-    override var canRun: AtomicBoolean = AtomicBoolean(true)
     var http: HttpData<List<E>> = this
-
+    override val canRun: AtomicBoolean = AtomicBoolean(true)
     override suspend fun require(startOffset: Int, it: Int) = flow { emit(ArrayList<E>()) }
 
     @ExperimentalCoroutinesApi
@@ -43,7 +39,14 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
 
     @ExperimentalCoroutinesApi
     open fun doGetData(it: Int) {
-        if (it != 0 && canRun.getAndSet(false)) {
+        if (canStateStart(it)) {
+            getData(it)
+        }
+    }
+
+    @ExperimentalCoroutinesApi
+    open fun getData(it: Int){
+        if(canRun.getAndSet(false)){
             onSubscribe(launchUI {
                 http.require(getStartOffset(it), it)
                     .flowOn(Dispatchers.IO)
@@ -71,5 +74,9 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
         loadingState.value = stateError(loadingState.value!!)
     }
 
+    override fun onComplete() {
+        super.onComplete()
+        canRun.compareAndSet(false,true)
+    }
 
 }

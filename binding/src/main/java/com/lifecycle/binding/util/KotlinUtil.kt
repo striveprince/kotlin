@@ -35,6 +35,7 @@ import com.lifecycle.binding.inter.bind.data.DataBindRecycler
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.parse
+import timber.log.Timber
 import java.io.File
 import java.lang.RuntimeException
 
@@ -51,9 +52,6 @@ import java.lang.RuntimeException
  *  FF FF   FF      FF
  */
 
-fun isStateRunning(@AdapterEvent state :Int):Boolean{
-    return state.shr(8) and 1 == 1 && state .shr(9) and 1 == 0
-}
 
 fun stateStart(@AdapterEvent state :Int):Int{
     return state or 0x300
@@ -62,7 +60,6 @@ fun stateStart(@AdapterEvent state :Int):Int{
 fun stateEnd(@AdapterEvent state :Int):Int{
     return state and 0x100FF
 }
-
 
 fun stateError(state :Int):Int{
     return state or 0x10000
@@ -76,9 +73,26 @@ fun stateOriginal(state: Int):Int{
     return state and 0xff
 }
 
+
+fun isStateRunning(@AdapterEvent state :Int):Boolean{
+    return state shr(8) and 1 == 1 && state shr(9) and 1 == 1
+}
+
 fun Int.stateEqual(@AdapterEvent state: Int):Boolean{
     return (this and 0xff) == state
 }
+
+fun canStateStart(@AdapterEvent state: Int):Boolean{
+    Timber.i("can start state=$state")
+    return isStateEnd(state)&&state!=0
+}
+
+fun isStateEnd(state: Int):Boolean{
+    return state shr 8 and 1 == 0 && state shr 9 and 1 == 0
+}
+
+
+
 
 val gson = Gson()
 

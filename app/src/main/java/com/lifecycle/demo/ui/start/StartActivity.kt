@@ -22,7 +22,7 @@ class StartActivity : BindingActivity<LifeViewModel,ActivityStartBinding>() {
     }
 
     private fun start(){
-        ARouterUtil.start()
+        ARouterUtil.home()
         TimeUtil.handler.postDelayed({ finish() }, 500)
     }
     override fun initData(owner: LifecycleOwner, bundle: Bundle?) {

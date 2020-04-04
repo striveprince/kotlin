@@ -19,7 +19,7 @@ interface ListInflate<E, R, Job> : IList<E, R>, Obtain<List<E>, Job> {
     val error: ObservableField<Throwable>
     var job: Job?
     val adapter: IList<E, R>
-    var canRun: AtomicBoolean
+    val canRun:AtomicBoolean
     override fun onNext(t: List<E>) {
         setList(getEndOffset(loadingState.get()), t, loadingState.get())
         loadingState.set(stateSuccess(loadingState.get()))
@@ -32,8 +32,8 @@ interface ListInflate<E, R, Job> : IList<E, R>, Obtain<List<E>, Job> {
 
     override fun onComplete() {
         loadingState.set(stateEnd(loadingState.get()))
-        canRun.compareAndSet(false, true)
     }
+
 
     fun getStartOffset(state: Int): Int {
         offset = if (state.stateEqual(AdapterType.refresh)) 0 else size()

@@ -25,5 +25,6 @@
     <color name="inquiryGreen2">#1BC5AE</color>
     <color name="inquiryRed2">#D0021B</color>
     <color name="tabTextColorNormal">#595A5A</color>
+    <color name="black_background">#333333</color>
 
 </resources>

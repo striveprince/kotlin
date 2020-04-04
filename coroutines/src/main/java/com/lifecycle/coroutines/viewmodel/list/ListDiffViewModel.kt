@@ -6,12 +6,14 @@ import com.lifecycle.binding.adapter.recycler.DiffUtilCallback
 import com.lifecycle.binding.inter.inflate.Diff
 import com.lifecycle.coroutines.util.launchUI
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 
 open class ListDiffViewModel<E : Diff> : ListViewModel<E>() {
 
-    override fun doGetData(it: Int) {
-        if (it != 0 && canRun.getAndSet(false)) {
+    @ExperimentalCoroutinesApi
+    override fun getData(it: Int) {
+        if (canRun.getAndSet(false)) {
             onSubscribe(launchUI {
                 http.require(getStartOffset(it), it)
                     .map {
