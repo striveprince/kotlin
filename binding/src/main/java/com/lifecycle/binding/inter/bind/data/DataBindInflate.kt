@@ -16,7 +16,7 @@ import com.lifecycle.binding.util.findLayoutView
  * Author: created by ArvinWang on 2019/11/15 10:28
  * Email: 1033144294@qq.com
  */
-interface DataBindRecycler<T, Binding : ViewDataBinding> : DataBinding<T, Binding>, Inflate, Recycler {
+interface DataBindInflate<T, Binding : ViewDataBinding> : DataBinding<T, Binding>, Inflate, Recycler {
 
     override fun createView(context: Context, parent: ViewGroup?, convertView: View?): View {
         val layoutId = convertView?.getTag(R.id.inflate)?.let { (it as Inflate).layoutId() }

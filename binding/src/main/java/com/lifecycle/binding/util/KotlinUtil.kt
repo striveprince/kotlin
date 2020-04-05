@@ -6,10 +6,8 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.text.TextUtils
 import android.view.View
 import android.view.WindowManager
@@ -17,7 +15,6 @@ import android.widget.Toast
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
@@ -31,7 +28,7 @@ import com.lifecycle.binding.adapter.AdapterEvent
 import com.lifecycle.binding.life.AppLifecycle
 import com.lifecycle.binding.rotate.TimeUtil
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
-import com.lifecycle.binding.inter.bind.data.DataBindRecycler
+import com.lifecycle.binding.inter.bind.data.DataBindInflate
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.parse
@@ -126,7 +123,7 @@ inline fun <reified T : ViewModel> LifecycleOwner.viewModel(): T {
 }
 
 
-inline fun <reified E : DataBindRecycler<*, out ViewDataBinding>> Any.toEntity(vararg arrayOfAny: Any?): E {
+inline fun <reified E : DataBindInflate<*, out ViewDataBinding>> Any.toEntity(vararg arrayOfAny: Any?): E {
     val clazz = E::class
     val list: ArrayList<Any?> = arrayListOf(this)
     list.addAll(arrayOfAny)
@@ -139,7 +136,7 @@ inline fun <reified E : DataBindRecycler<*, out ViewDataBinding>> Any.toEntity(v
     throw RuntimeException( "check ${E::class.simpleName} class's constructor")
 }
 
-inline fun <reified E : DataBindRecycler<*, out ViewDataBinding>> List<Any>.toEntities(vararg arrayOfAny: Any?): List<E> {
+inline fun <reified E : DataBindInflate<*, out ViewDataBinding>> List<Any>.toEntities(vararg arrayOfAny: Any?): List<E> {
     val list = ArrayList<E>()
     for (any in this) {
         list.add(any.toEntity(*arrayOfAny))

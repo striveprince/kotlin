@@ -2,9 +2,9 @@ package com.lifecycle.binding.inter.bind
 
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import com.lifecycle.binding.inter.bind.data.DataBindRecycler
+import com.lifecycle.binding.inter.bind.data.DataBindInflate
 
-class ViewInflateRecycler<Bean,Binding:ViewDataBinding>(private val bean:Bean) : DataBindRecycler<Bean, Binding> {
+class DataBeanInflate<Bean,Binding:ViewDataBinding>(private val bean:Bean) : DataBindInflate<Bean, Binding> {
     override fun t(): Bean = bean
     lateinit var holder: RecyclerView.ViewHolder
     override fun attach(t: RecyclerView.ViewHolder) {
