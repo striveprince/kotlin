@@ -15,10 +15,13 @@ import com.lifecycle.binding.util.findLayoutView
 interface DataBinding<T, B : ViewDataBinding> : Binding<T, B> {
 
     override fun parse(t: T, context: Context, parent: ViewGroup?, attachToParent: Boolean): B {
-        return (DataBindingUtil.inflate(LayoutInflater.from(context), layoutId(), parent, attachToParent) as B).apply {
-            setVariable(appLifecycle.vm, t)
-            setVariable(appLifecycle.parse, this@DataBinding)
-        }
+        return runCatching {
+            (DataBindingUtil.inflate(LayoutInflater.from(context), layoutId(), parent, attachToParent) as B)
+                .apply {
+                    setVariable(appLifecycle.vm, t)
+                    setVariable(appLifecycle.parse, this@DataBinding)
+                } }
+            .getOrElse { super.parse(t, context, parent, attachToParent) }
     }
 
     fun layoutId(): Int = findLayoutView(javaClass).layout[layoutIndex()]
