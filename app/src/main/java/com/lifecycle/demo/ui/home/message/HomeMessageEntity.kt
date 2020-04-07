@@ -7,6 +7,6 @@ import com.lifecycle.binding.inter.inflate.Recycler
 import com.lifecycle.binding.inter.inflate.ViewBindInflate
 
 @LayoutView(layout = [R.layout.holder_home_message])
-class HomeMessageEntity:Diff,ViewBindInflate,Recycler{
+class HomeMessageEntity:Diff,ViewBindInflate(),Recycler{
 
 }

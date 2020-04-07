@@ -6,6 +6,7 @@ import com.lifecycle.binding.inter.bind.annotation.LayoutView
 import com.lifecycle.binding.life.binding.data.DataBindingFragment
 import com.lifecycle.coroutines.adapter.RecyclerSelectAdapter
 import com.lifecycle.demo.R
+import com.lifecycle.demo.base.util.popup
 import com.lifecycle.demo.base.util.popupRecycler
 import com.lifecycle.demo.databinding.FragmentHomeMineBinding
 import com.lifecycle.demo.ui.home.HomeActivity.Companion.home
@@ -37,10 +38,9 @@ class HomeMineFragment : DataBindingFragment<HomeMineModel, FragmentHomeMineBind
                 } else {
                     Single.just(list)
                 }
-
             }
         }
-        popupRecycler(inflate)
+        popup(inflate)
             .apply {
                 setOnDismissListener {
                     Timber.i("size = ${adapter.selectList.size}")

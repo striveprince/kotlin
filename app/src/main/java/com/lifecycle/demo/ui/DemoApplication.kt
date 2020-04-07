@@ -45,9 +45,5 @@ class DemoApplication : MultiDexApplication() {
                 }
             }
         }
-
     }
-
-
-
 }

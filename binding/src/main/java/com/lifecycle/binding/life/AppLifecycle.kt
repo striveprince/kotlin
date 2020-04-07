@@ -116,6 +116,7 @@ open class AppLifecycle constructor(
             if (stack.isEmpty()) {
                 localServers.forEach { it.stop() }
                 onExitListener(activity)
+                localServers.clear()
             }
             onDestroy(activity)
         }

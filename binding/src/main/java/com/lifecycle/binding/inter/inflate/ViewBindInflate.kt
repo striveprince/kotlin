@@ -1,8 +1,11 @@
 package com.lifecycle.binding.inter.inflate
 
 import androidx.databinding.ViewDataBinding
+import com.lifecycle.binding.util.findLayoutView
 
-interface ViewBindInflate : BindingInflate<ViewDataBinding> {
+open class ViewBindInflate : BindingInflate<ViewDataBinding> {
+    var layoutIndex:Int = 0
 
+    override fun layoutId() = findLayoutView(javaClass).layout[layoutIndex]
 
 }

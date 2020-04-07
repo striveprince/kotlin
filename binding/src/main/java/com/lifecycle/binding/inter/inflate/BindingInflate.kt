@@ -11,6 +11,7 @@ import androidx.databinding.ViewDataBinding
 import com.lifecycle.binding.IEvent
 import com.lifecycle.binding.R
 import com.lifecycle.binding.life.AppLifecycle.Companion.appLifecycle
+import com.lifecycle.binding.util.findLayoutView
 
 interface BindingInflate<Binding : ViewDataBinding> : Inflate, Recycler {
     override fun createView(context: Context, parent: ViewGroup?, convertView: View?): View {
@@ -23,6 +24,8 @@ interface BindingInflate<Binding : ViewDataBinding> : Inflate, Recycler {
     }
 
     fun initBinding(t: Binding) {}
+
+
 
 
     fun inflate(convertView: View?, context: Context, parent: ViewGroup?): Binding {

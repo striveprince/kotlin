@@ -10,7 +10,7 @@ import com.lifecycle.demo.R
 
 
 @LayoutView(R.layout.holder_home_mine)
-data class HomeMineEntity (val name:String="arvin"):Select, ViewBindInflate {
+data class HomeMineEntity (val name:String="arvin"):Select, ViewBindInflate() {
     override var checkWay: Int = 3
     override var isChecked: Boolean = false
     lateinit var event:IEvent<Any>
