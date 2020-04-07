@@ -3,10 +3,11 @@ parse interface use create view could create view
 it support databinding,anko and normal way to create view
 you could read the demo and build project what you want 
 
+```
 implementation 'com.lifecycle:binding:2.1.0'
 implementation 'com.lifecycle:rx:2.1.0'
 implementation 'com.lifecycle:coroutines:2.1.0'
-
+```
 
 从两三年前，就一直想介绍一下自己在实战的项目结构
 地址：[https://github.com/striveprince/kotlin](https://github.com/striveprince/kotlin)
