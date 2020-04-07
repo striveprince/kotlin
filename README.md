@@ -20,12 +20,12 @@ A-->B这个符号表示B是A的子类
 ```
 Parse-->Normal
          -->AnkoParse 
-         -->Binding-->DataBinding-->DataBindInflate-->DataBeanInflate
-                                                                            -->BindingActivity-->DatabindingActivity
+         -->Binding-->DataBinding            -->DataBindInflate         -->DataBeanInflate
+                   -->BindingActivity        -->DatabindingActivity
          -->BaseActivity-->NormalActivity
-                                 -->RecyclerActivity
-                                 -->AnkoActivity
-                                 -->BindingActivity-->DatabindingActivity
+                        -->RecyclerActivity
+                        -->AnkoActivity
+                        -->BindingActivity-->DatabindingActivity
         -->BaseFragment(同上)
 ```
 Parse是用于什么场景，可以看到这里有BaseActivity和BaseFragment,这里其实就是将解析视图和数据同时引入，就是有数据和界面两个类同时进行绑定<br>
@@ -52,16 +52,15 @@ DataBindInflate：用于解析和界面分开，可以用于复用界面<br>
 Select:将用于选择，配合RecyclerSelectAdapter<br>
 DataBeanInflate:加入Attach和Detach，就是实现了attach和detach方法，另外还有Attach,Detach用于界面移入和移出时被调用（目前支持recyclerView）<br>
 ```
-IEvent-->IList-->IListAdapter
-                      -->ListModel
-                      -->ListAdapter
-                      -->ListViewInflate
-                      -->ISelect
-                      -->FragmentOpenAdapter
-                      -->WidgetOpenAdapter
-                      -->FragmentOpenPager2Adapter
-                      -->WidgetOpenAdapter
-                      -->RecyclerOpenAdapter
+IEvent-->IList-->-->ListModel
+                 -->ListAdapter
+                 -->ListViewInflate
+                 -->ISelect
+                 -->FragmentOpenAdapter
+                 -->WidgetOpenAdapter
+                 -->FragmentOpenPager2Adapter
+                 -->WidgetOpenAdapter
+                 -->RecyclerOpenAdapter
 ```
 IEvent：事件类，可以使用这个传入事件进行监听<br>
 IList：复用界面事件类，是各种adapter的基类，可以实现列表的加载，刷新，删除，更新等操作<br>
