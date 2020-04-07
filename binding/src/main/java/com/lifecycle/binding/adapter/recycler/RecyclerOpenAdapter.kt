@@ -1,6 +1,7 @@
 package com.lifecycle.binding.adapter.recycler
 
 import android.util.SparseArray
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.lifecycle.binding.adapter.AdapterType
@@ -48,8 +49,14 @@ abstract class RecyclerOpenAdapter<E : Inflate> : RecyclerView.Adapter<RecyclerH
         holder.bindViewHolder(adapterList[position], event)
     }
 
+    fun addEventAdapter(event: (Int, E, Int, View?) -> Any) {
+        addEventAdapter(object : IEvent<E> {
+            override fun setEvent(position: Int, e: E, type: Int, view: View?) = event(position, e, type, view)
+        })
+    }
+
     override fun addEventAdapter(event: IEvent<E>) {
-        events.add(0,event)
+        events.add(0, event)
     }
 
     override fun notify(p: Int, type: Int, from: Int): Boolean {
