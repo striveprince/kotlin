@@ -10,6 +10,8 @@ import com.lifecycle.demo.inject.data.Api
 import com.lifecycle.demo.inject.module.AppModule
 import com.lifecycle.binding.life.AppLifecycle
 import com.lifecycle.binding.server.LocalServer
+import com.lifecycle.coroutines.util.launchDefault
+import com.lifecycle.coroutines.util.launchUI
 import com.lifecycle.demo.BuildConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,9 +34,9 @@ class DemoApplication : MultiDexApplication() {
         val application = this
         AppLifecycle(application, BR.parse, BR.vm).apply {
             if(BuildConfig.DEBUG)addLocalServer(LocalServer())
-            CoroutineScope(Dispatchers.Default).launch {
+            launchDefault {
                 DaggerAppComponent.builder().appModule(AppModule(application)).build().inject(application)
-                launch(Dispatchers.Main) {
+                launchUI {
                     createListener = {
                         ARouter.getInstance().inject(it)
                         if (it is AppCompatActivity) applyKitKatTranslucency(it, android.R.color.transparent)
