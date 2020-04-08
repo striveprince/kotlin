@@ -4,9 +4,10 @@ it support databinding,anko and normal way to create view
 you could read the demo and build project what you want 
 
 ```
-implementation 'com.lifecycle:binding:2.1.0'
-implementation 'com.lifecycle:rx:2.1.0'
-implementation 'com.lifecycle:coroutines:2.1.0'
+def binding_version='2.1.2'
+implementation "com.lifecycle:binding:$binding_version"
+implementation "com.lifecycle:rx:$binding_version"
+implementation "com.lifecycle:coroutines:$binding_version"
 ```
 
 从两三年前，就一直想介绍一下自己在实战的项目结构<br>
