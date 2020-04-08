@@ -8,7 +8,7 @@ import io.reactivex.Observable
 
 open class RecyclerAdapter<E:Inflate> : RecyclerOpenAdapter<E>(), IList<E> {
     override fun setEvent(position: Int, e: E, type: Int, view: View?): Any {
-        for (event in events) return event.setEvent(position, e, type, view)
+        for (event in events) event.setEvent(position, e, type, view).let { if(it != false)return it }
         return Observable.just(setIEntity(e,position, type, view))
     }
 }
