@@ -73,42 +73,148 @@ ListViewInflate：ListInflate的一个实现类<br>
 
  实现
  是Application中onCreate的中先注册AppLifecycle.这里实现了异步注册，在注册完成的时候，postInitFinish方法会发送注册完成通知其他界面，BaseActivity中的initData方法会等待注册postIntiFinish方法调用，具体逻辑可以看代码。<br>
+先看相应的parse中的createview方法
 ```
-Application中的
-  @Inject lateinit var api: Api
+interface Parse<T,B>{
+    fun t():T
+    /**
+     * 解析layout创建View，这里是用的最简单的解析方式
+     * */
+    fun createView(t:T,context: Context, parent: ViewGroup?=null, attachToParent: Boolean=false): View {
+        return LayoutInflater.from(context).inflate(findLayoutView(this.javaClass).layout[0],parent,attachToParent)
+    }
+    /**
+     * 这里是解析出view的持有类型，如ViewDataBinding
+     * */
+    fun parse(t: T, context: Context, parent: ViewGroup?, attachToParent: Boolean): B
+}
+ 
+再看子类Binding
+interface Binding<T,B:ViewBinding>:Parse<T, B> {
+    /**
+     * 覆盖了Parse中parse的方法，以反射的方式解析出ViewBinding
+     * */
+    @Suppress("UNCHECKED_CAST")
+    override fun parse(t: T, context: Context, parent: ViewGroup?, attachToParent: Boolean): B {
+        val clazz = javaClass.kotlin.supertypes[0].arguments[1].type!!.javaType as Class<B>
+        val method = clazz.getMethod("inflate",LayoutInflater::class.java,ViewGroup::class.java,Boolean::class.java)
+        return method.invoke(null,LayoutInflater.from(context),parent,attachToParent) as B
+    }
+
+    /**
+     * 覆盖了Parse中createView的方法，调用了parse方法来获取root
+     * */
+    override fun createView(t: T, context: Context, parent: ViewGroup?, attachToParent: Boolean): View {
+        return parse(t,context,parent, attachToParent).root
+    }
+}
+再看子类Binding
+interface DataBinding<T, B : ViewDataBinding> : Binding<T, B> {
+    /**
+     * 这里又覆盖了Binding的parse方法，以DataBindingUtil.inflate的方式加载
+     * */
+    override fun parse(t: T, context: Context, parent: ViewGroup?, attachToParent: Boolean): B {
+        return runCatching {
+            (DataBindingUtil.inflate(LayoutInflater.from(context), layoutId(), parent, attachToParent) as B)
+                .apply {
+                    setVariable(appLifecycle.vm, t)
+                    setVariable(appLifecycle.parse, this@DataBinding)
+                } }
+            .getOrElse { super.parse(t, context, parent, attachToParent) }
+    }
+
+    fun layoutId(): Int = findLayoutView(javaClass).layout[layoutIndex()]
+    fun layoutIndex() = 0
+}
+
+```
+ 
+```
+DemoApplication需要在AndroidManifest中注册
+class DemoApplication : MultiDexApplication() {
+    @Inject lateinit var api: Api//dagger2的方式用注解注入
+
+    companion object { const val tomtaw = "/tomtaw/" }
+
     override fun onCreate() {
         super.onCreate()
         val application = this
         AppLifecycle(application, BR.parse, BR.vm).apply {
             if(BuildConfig.DEBUG)addLocalServer(LocalServer())
-            launchDefault {
+            launchDefault {//协程，运行在新线程
                 DaggerAppComponent.builder().appModule(AppModule(application)).build().inject(application)
-                launchUI {
+                launchUI {//代码运行在主线程
                     createListener = {
-                        ARouter.getInstance().inject(it)
+                        ARouter.getInstance().inject(it)//阿里的arouter路由跳转模块，数据注入
                         if (it is AppCompatActivity) applyKitKatTranslucency(it, android.R.color.transparent)
                     }
-                    postInitFinish()
+                    postInitFinish()//子主线程的切换，是异步加载的，这里是传递信号，数据已经加载完成，就会调用BaseActivity中的initData方法
                 }
             }
         }
     }
+}
 
 //StartActivity中的方法
+   
+@Route(path = start)
+class StartActivity : BindingActivity<LifeViewModel,ActivityStartBinding>() {
+    companion object {
+        const val start = tomtaw + "start"
+    }
+
+    private fun start(){
+        ARouterUtil.home()
+        TimeUtil.handler.postDelayed({ finish() }, 500)
+    }
     override fun initData(owner: LifecycleOwner, bundle: Bundle?) {
         super.initData(owner, bundle)
-        ARouterUtil.start()
+        if (!checkPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO)) {
+            rxPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO)
+                .subscribeObserver(onError = { finish() }) {
+                    start()
+                }
+        }else start()
     }
-//BaseActivity中这段就是判断是否已经加载完了，否则继续等待
-      val injectView = if (!AppLifecycle.initFinish) {
-      startView().apply { waitFinish(savedInstanceState) }
 
- open fun ViewGroup.waitFinish(savedInstanceState: Bundle?){
+
+}
+//BaseActivity中这段就是判断是否已经加载完了，否则继续等待
+
+abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<Model, B>,LifecycleInit<Model> {
+     open fun ViewGroup.waitFinish(savedInstanceState: Bundle?){
         AppLifecycle.appInit =  {
             removeAllViews()
             addView(inject(savedInstanceState))
         }
     }
+
+    private fun initView(savedInstanceState: Bundle?) {
+        val injectView = if (!AppLifecycle.initFinish) {
+            startView().apply { waitFinish(savedInstanceState) }
+        } else inject(savedInstanceState)
+        if (isSwipe() != SwipeBackLayout.FROM_NO) {
+            //这里是加载滑动关闭手势，暂时可以忽略
+            setContentView(R.layout.activity_base)
+            val swipeBackLayout = findViewById<SwipeBackLayout>(R.id.swipe_back_layout)
+            swipeBackLayout.directionMode = isSwipe()
+            val imageView: View = findViewById(R.id.iv_shadow)
+            swipeBackLayout.onSwipeBackListener =  { _, f -> imageView.alpha = 1 - f }
+            swipeBackLayout.addView(injectView, ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT))
+        } else setContentView(injectView)
+    }
+    
+    
+    override fun inject(savedInstanceState: Bundle?): View {
+        val view = createView(model, this)
+        initData(this,savedInstanceState)
+        return initToolbar(toolbarView(), view)
+    }
+
+    override fun initData(owner: LifecycleOwner, bundle: Bundle?) {
+        model.let { if(it is Init)it.initData(this,bundle) }
+    }
+}
 等待完成会在调用inject方法加载view界面
 
 ```
