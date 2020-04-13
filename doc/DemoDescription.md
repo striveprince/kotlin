@@ -61,6 +61,7 @@ start/StartActivity:启动的Activity
         }    
     }
 ```
+recycler列表界面
 协程的方式：继承RecyclerDiffFragment后启动是会调用require方法，这个时候可以直接使用flow的<br>
 rxjava的方式：继承RecyclerDiffFragment后启动是会调用apiData方法，这个时候可以直接使用rxjava的Single方式来获取数据<br>
 他们都会解析InterrogationListEntity上的注解@LayoutView，获取对应的id和binding，然后将数据自动绑定进去
@@ -120,4 +121,4 @@ holder_interrogation.xml
         android:paddingBottom="18dp">
     </androidx.constraintlayout.widget.ConstraintLayout>
 ```
-后面再细讲preference的代理绑定及databinding的双向绑定，rxjava的错误等，<br>待续
+后面再细讲preference的代理绑定及databinding的双向绑定，rxjava的错误等；<br>待续
