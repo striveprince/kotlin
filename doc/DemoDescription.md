@@ -91,6 +91,7 @@ class InterrogationListFragment : RecyclerDiffFragment<InterrogationListEntity>(
     
 }
 
+这个InterrogationListEntity和InterrogationBean两个对象会分别自动绑定在holder_interrogation.xml的parse和vm属性上
 
 @LayoutView(layout = [R.layout.holder_interrogation])
 class InterrogationListEntity(private val bean: InterrogationBean) : DataBindInflate<InterrogationBean, ViewDataBinding>, Diff,Recycler,TimeEntity {
