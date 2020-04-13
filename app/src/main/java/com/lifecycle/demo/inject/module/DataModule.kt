@@ -40,18 +40,11 @@ class DataModule {
     }
 
     @Provides
-    internal fun provideOkHttpClient(): OkHttpClient {
-        return if (BuildConfig.DEBUG) {
-            val loggingInterceptor = HttpLoggingInterceptor()
-            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-            OkHttpClient.Builder()
-                .readTimeout(30, TimeUnit.SECONDS)
-                .addInterceptor(NetInterceptor())
-                .addInterceptor(loggingInterceptor)
-                .build()
-        } else OkHttpClient.Builder()
+    internal fun provideOkHttpClient(preferenceApi: PreferenceApi): OkHttpClient {
+        return OkHttpClient.Builder()
             .readTimeout(30, TimeUnit.SECONDS)
-            .addInterceptor(NetInterceptor())
+            .addInterceptor(NetInterceptor(preferenceApi.userApi))
+            .apply { if (BuildConfig.DEBUG) addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }) }
             .build()
     }
 

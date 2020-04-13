@@ -26,9 +26,9 @@ open class LifeViewModel : ViewModel(), Init {
             .doFinally {
                 v?.isEnabled = true
                 value?.let {
-                    it.end()
                     it.removeAllListeners()
                     it.removeAllUpdateListeners()
+                    it.cancel()
                 }
             }
     }

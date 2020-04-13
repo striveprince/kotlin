@@ -6,15 +6,12 @@ import okhttp3.Response
 import javax.inject.Inject
 
 
-class NetInterceptor @Inject constructor() : Interceptor {
+class NetInterceptor @Inject constructor(private val userApi: UserApi) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
-        val r = if (UserApi.isLogin) request.newBuilder()
-                .addHeader("Authorization", " ${UserApi.token_type} ${UserApi.token}")
-                .addHeader("user-agent", "user-agent")
-                .build()
-         else request.newBuilder()
+        val r = request.newBuilder()
+                .apply { if (userApi.login.value == true)userApi.userEntity.run { addHeader("Authorization", " $token_type $token") }  }
                 .addHeader("user-agent", "user-agent")
                 .build()
         return chain.proceed(r)

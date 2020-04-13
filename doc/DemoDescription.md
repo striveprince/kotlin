@@ -121,4 +121,7 @@ holder_interrogation.xml
         android:paddingBottom="18dp">
     </androidx.constraintlayout.widget.ConstraintLayout>
 ```
-后面再细讲preference的代理绑定及databinding的双向绑定，rxjava的错误等；<br>待续
+
+后面再细讲preference的代理绑定及databinding的双向绑定，rxjava的错误处理等；
+<br>
+待续
