@@ -13,7 +13,9 @@ import com.lifecycle.binding.life.AppLifecycle.Companion.appLifecycle
 import com.lifecycle.binding.util.findLayoutView
 
 interface DataBinding<T, B : ViewDataBinding> : Binding<T, B> {
-
+    /**
+     * 这里又覆盖了Binding的parse方法，以DataBindingUtil.inflate的方式加载
+     * */
     override fun parse(t: T, context: Context, parent: ViewGroup?, attachToParent: Boolean): B {
         return runCatching {
             (DataBindingUtil.inflate(LayoutInflater.from(context), layoutId(), parent, attachToParent) as B)

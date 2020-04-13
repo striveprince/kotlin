@@ -8,7 +8,7 @@ import com.lifecycle.coroutines.adapter.life.diff.RecyclerDiffFragment
 import com.lifecycle.coroutines.util.launchUI
 import com.lifecycle.demo.base.util.api
 import com.lifecycle.demo.base.util.restful
-import com.lifecycle.demo.inject.data.Api
+import com.lifecycle.demo.inject.Api
 import com.lifecycle.demo.inject.data.net.InterrogationParams
 import com.lifecycle.demo.inject.data.net.bean.InterrogationDataBean
 import com.lifecycle.demo.ui.home.HomeModel

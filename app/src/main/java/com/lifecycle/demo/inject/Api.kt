@@ -1,4 +1,4 @@
-package com.lifecycle.demo.inject.data
+package com.lifecycle.demo.inject
 
 import android.content.Context
 import com.lifecycle.demo.base.util.restful

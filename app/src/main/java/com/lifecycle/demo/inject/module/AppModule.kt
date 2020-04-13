@@ -4,8 +4,6 @@ import android.content.Context
 import android.content.res.Resources
 import com.alibaba.android.arouter.launcher.ARouter
 import com.lifecycle.demo.BuildConfig
-import com.lifecycle.demo.inject.qualifier.AppContext
-import com.lifecycle.demo.inject.scope.ApplicationScope
 import com.lifecycle.demo.ui.DemoApplication
 import com.scwang.smart.refresh.footer.ClassicsFooter
 import com.scwang.smart.refresh.header.ClassicsHeader
@@ -29,28 +27,23 @@ class AppModule(val app: DemoApplication) {
         }
     }
 
-    @AppContext
     @Provides
-    @ApplicationScope
     internal fun getContext(): Context {
         return app
     }
 
     @Provides
-    @ApplicationScope
     internal fun getApplication(): DemoApplication {
         return app
     }
 
     @Provides
-    @ApplicationScope
     internal fun provideResources(): Resources {
         return app.resources
     }
 
 
     @Provides
-    @ApplicationScope
     internal fun provideFileDirs(): File {
         return app.filesDir.absoluteFile
     }
