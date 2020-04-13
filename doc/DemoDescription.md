@@ -1,7 +1,7 @@
 首先来看下demo项目的目录结构<br>
 主模块分为3个目录<br>
 &ensp;&ensp;1.base:主要用于通用的全局工具支持，如arouter、util和datbinding目录等 anko目录暂时可以忽略<br>
-&ensp;&ensp;2.inject:主要用于数据事件的目录，这里使用的是dagger2的注解注入的方式再application启动的时候就加载，具体的dagger2的加载可以查看这个链接[https://blog.csdn.net/shusheng0007/article/details/80950117]，这里用的是最简单的方式<br>
+&ensp;&ensp;2.inject:主要用于数据事件的目录，这里使用的是dagger2的注解注入的方式再application启动的时候就加载，具体的dagger2的加载可以查看这个[链接](https://blog.csdn.net/shusheng0007/article/details/80950117)，这里用的是最简单的方式<br>
 &ensp;&ensp; &ensp;&ensp;interceptor:过滤器，主要用于okhttp的过滤器<br>
 &ensp;&ensp; &ensp;&ensp;module:dagger的module，提供数据<br>
 &ensp;&ensp; &ensp;&ensp;ApiException:所有异常及异常处理<br>
@@ -71,8 +71,7 @@ class InterrogationListFragment : RecyclerDiffFragment<InterrogationListEntity>(
     companion object {
         const val interrogationList = "$interrogation/list"
     }
-    
-
+   
     override suspend fun require(startOffset: Int, state: Int): Flow<List<InterrogationListEntity>> {
         val taskCategory = when (arguments?.getString(Constant.params)) {
             "new" -> 1
@@ -86,9 +85,7 @@ class InterrogationListFragment : RecyclerDiffFragment<InterrogationListEntity>(
         val params = InterrogationParams(taskCategory, position)
         return suspend{ netApi.httpApi.getInterrogationList(params) }
             .restful {   it.result.toEntities() }
-    }
-
-    
+    }    
 }
 
 这个InterrogationListEntity和InterrogationBean两个对象会分别自动绑定在holder_interrogation.xml的parse和vm属性上

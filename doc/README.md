@@ -225,6 +225,7 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
 @LayoutView(layout = [R.layout.fragment_home_intrrogation])
 class HomeInterrogationFragment : DataBindingFragment<HomeInterrogationModel, FragmentHomeIntrrogationBinding>() {}
 ```
+也可以查看Demo项目的介绍[DemoDescription.md](https://github.com/striveprince/kotlin/blob/master/doc/DemoDescription.md)
 后待更新
 
 
