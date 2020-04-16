@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,9 +18,9 @@ import com.lifecycle.coroutines.viewmodel.list.ListViewModel
 
 abstract class RecyclerFragment<E : Diff> : BaseFragment<ListViewModel<E>, LayoutSwipeRecyclerViewBinding>(),
     HttpData<List<E>> {
-
+    lateinit var binding: LayoutSwipeRecyclerViewBinding
     override fun createView(t: ListViewModel<E>, context: Context, parent: ViewGroup?, attachToParent: Boolean): View {
-        val binding = parse(t, context, parent, attachToParent)
+        binding = parse(t, context, parent, attachToParent)
         binding.lifecycleOwner = this
         return binding.root
     }
@@ -38,14 +37,14 @@ abstract class RecyclerFragment<E : Diff> : BaseFragment<ListViewModel<E>, Layou
                 layoutManager = LinearLayoutManager(context)
                 itemAnimator = null
             }
-            tipView(t.error)?.let {
+            tipView(t)?.let {
                 frameLayout.removeAllViews()
                 frameLayout.addView(it)
             }
         }
     }
 
-    open fun tipView(s: MutableLiveData<Throwable>): View? = null
+    open fun tipView(s: ListViewModel<E>): View? = null
 
     @Suppress("UNCHECKED_CAST")
     override fun initModel(): ListViewModel<E> {
