@@ -48,7 +48,7 @@ open class ListViewInflate<E : Inflate, Binding : ViewDataBinding>(final overrid
             doGetData(AdapterType.refresh)
             loadingState.addOnPropertyChangedCallback(object : OnPropertyChangedCallback() {
                 override fun onPropertyChanged(sender: androidx.databinding.Observable, propertyId: Int) {
-                    if(sender is ObservableInt&&isStateRunning(sender.get()))getData(sender.get())
+                    if(sender is ObservableInt)getData(sender.get())
                 }
             })
         }

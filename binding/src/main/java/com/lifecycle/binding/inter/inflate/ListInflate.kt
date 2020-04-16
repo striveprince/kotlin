@@ -140,4 +140,12 @@ interface ListInflate<E,  Job> : IList<E>, Obtain<List<E>, Job> {
     fun running(state: Int): Boolean {
         return isStateRunning(state)
     }
+
+    fun onCancelClick(v:View){
+        onComplete()
+    }
+
+    fun isSuccess(state :Int):Boolean{
+        return state shr 8 == 1
+    }
 }
