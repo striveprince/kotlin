@@ -10,10 +10,10 @@ interface Select:Inflate {
      * takeBack false   false  true     true
      * */
     var checkWay: Int
-    var isChecked: Boolean
-    fun check(b: Boolean): Boolean {
-        isChecked = b
-        return isChecked
+    fun select(b: Boolean): Boolean {
+        return b
     }
+
+    fun isSelected():Boolean = false
 
 }

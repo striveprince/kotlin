@@ -29,35 +29,35 @@ interface ISelectList<E : Select> : IList<E> {
     fun select(e: E, position: Int = -1): Boolean {
         val p = if (position < 0) adapterList.indexOf(e) else position
         if (adapterList[p] != e) throw RuntimeException("this e is not the same with index of adapterList")
-        return selectStatus(e, !(selectList.contains(e).also { e.isChecked = it }))
+        return selectStatus(e, !(selectList.contains(e).also { e.select(it) }))
     }
 
     fun selectStatus(e: E, check: Boolean): Boolean {
         asyncList()
-        if (e.isChecked == check) return check
+        if (e.isSelected() == check) return check
         return if (!check) {
-            if (!e.couldTakeBack()) e.check(true)
-            else selectList.remove(e).let { e.check(false) }
+            if (!e.couldTakeBack()) e.select(true)
+            else selectList.remove(e).let { e.select(false) }
         } else {
             if (e.isPush()) selectList.add(e)
-                .also { e.check(it) }
+                .also { e.select(it) }
                 .apply {
                     while (selectList.size > max)
-                        selectList.removeAt(0).check(false)
+                        selectList.removeAt(0).select(false)
                 }
             else add(e)
         }
     }
 
     private fun add(inE: E): Boolean {
-        return selectList.size < max && selectList.add(inE).let { inE.check(it) }
+        return selectList.size < max && selectList.add(inE).let { inE.select(it) }
     }
 
     fun firstAsync(type: Int) {
         when (type) {
             AdapterType.refresh, AdapterType.remove -> {
                 selectList.clear()
-                adapterList.forEach { e -> e.check(e.isChecked).also { if (it&&selectList.size<max) selectList.add(e) } }
+                adapterList.forEach { e -> e.select(e.isSelected()).also { if (it&&selectList.size<max) selectList.add(e) } }
             }
         }
         asyncList()
@@ -65,8 +65,8 @@ interface ISelectList<E : Select> : IList<E> {
 
     fun asyncEntity(e: E, type: Int) {
         when (type) {
-            AdapterType.remove -> selectList.remove(e).also { if(it)e.check(false) }
-            AdapterType.add -> selectStatus(e,e.isChecked)
+            AdapterType.remove -> selectList.remove(e).also { if(it)e.select(false) }
+            AdapterType.add -> selectStatus(e,e.isSelected())
         }
     }
 
@@ -77,18 +77,18 @@ interface ISelectList<E : Select> : IList<E> {
             val l = selectList.size - max
             for (index in 0..min(l, arrayList.size)) {
                 selectList.remove(arrayList[index])
-                arrayList[index].check(false)
+                arrayList[index].select(false)
             }
             if (l > arrayList.size)
                 for (index in 0..l - arrayList.size)
-                    selectList.removeAt(selectList.lastIndex).check(false)
+                    selectList.removeAt(selectList.lastIndex).select(false)
         }
     }
 
     fun selectList(list:List<E> = adapterList,boolean: Boolean = false){
         if(adapterList == list&&!boolean){
             selectList.clear()
-            for (e in adapterList) e.check(false)
+            for (e in adapterList) e.select(false)
         }else
             for (e in list) selectStatus(e,boolean)
     }
