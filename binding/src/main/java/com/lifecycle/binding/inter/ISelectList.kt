@@ -57,7 +57,7 @@ interface ISelectList<E : Select> : IList<E> {
         when (type) {
             AdapterType.refresh, AdapterType.remove -> {
                 selectList.clear()
-                adapterList.forEach { e -> e.check(e.isChecked).also { if (it) selectList.add(e) } }
+                adapterList.forEach { e -> e.check(e.isChecked).also { if (it&&selectList.size<max) selectList.add(e) } }
             }
         }
         asyncList()
@@ -65,7 +65,7 @@ interface ISelectList<E : Select> : IList<E> {
 
     fun asyncEntity(e: E, type: Int) {
         when (type) {
-            AdapterType.remove -> selectList.remove(e).run { e.check(false) }
+            AdapterType.remove -> selectList.remove(e).also { if(it)e.check(false) }
             AdapterType.add -> selectStatus(e,e.isChecked)
         }
     }
@@ -83,6 +83,14 @@ interface ISelectList<E : Select> : IList<E> {
                 for (index in 0..l - arrayList.size)
                     selectList.removeAt(selectList.lastIndex).check(false)
         }
+    }
+
+    fun selectList(list:List<E> = adapterList,boolean: Boolean = false){
+        if(adapterList == list&&!boolean){
+            selectList.clear()
+            for (e in adapterList) e.check(false)
+        }else
+            for (e in list) selectStatus(e,boolean)
     }
 
     private fun E.isPush() = checkWay and 1 == 1
