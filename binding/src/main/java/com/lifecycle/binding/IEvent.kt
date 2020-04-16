@@ -4,5 +4,5 @@ import android.view.View
 
 
 interface IEvent<E> {
-    fun setEvent(position: Int, e: E, type: Int, view: View?):Any
+    fun setEvent( type: Int, e: E,position: Int=-1, view: View?=null):Any
 }

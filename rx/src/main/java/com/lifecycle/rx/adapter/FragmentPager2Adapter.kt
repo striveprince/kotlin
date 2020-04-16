@@ -10,7 +10,7 @@ import io.reactivex.Observable
 
 open class FragmentPager2Adapter<E : Item>(fm: FragmentManager, lifecycle: Lifecycle)
     : FragmentOpenPager2Adapter<E>(fm, lifecycle), IList<E> {
-    override fun setEvent(position: Int, e: E, type: Int, view: View?): Any {
+    override fun setEvent(type: Int, e: E, position: Int, view: View?): Any {
         return Observable.just(false as Any)
     }
 }

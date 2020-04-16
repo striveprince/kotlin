@@ -54,4 +54,5 @@ class InterrogationListFragment : RecyclerDiffFragment<Diff>() {
     }
 
 
+
 }

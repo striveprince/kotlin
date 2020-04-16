@@ -12,7 +12,7 @@ abstract class FragmentAdapter<E: Item>(fm: FragmentManager,
                                         behavior:Int = BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT):
     FragmentOpenAdapter<E>(fm,behavior), IList<E> {
 
-    override fun setEvent(position: Int, e: E, type: Int, view: View?): Observable<Any> {
+    override fun setEvent(type: Int, e: E, position: Int, view: View?): Observable<Any> {
         return Observable.just(false as Any)
     }
 

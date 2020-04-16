@@ -45,6 +45,9 @@ import java.lang.RuntimeException
 
 
 /**
+ * FF FF: error
+ * FF   : run
+ * FF   : state
  *  error   run     state
  *  FF FF   FF      FF
  */
@@ -64,6 +67,10 @@ fun stateError(state :Int):Int{
 
 fun stateSuccess(state :Int):Int{
     return state and 0x1ff
+}
+
+fun isSuccess(state :Int):Boolean{
+    return state shr 8 == 1
 }
 
 fun stateOriginal(state: Int):Int{

@@ -2,6 +2,7 @@ package com.lifecycle.demo.inject.data.preference.user
 
 import android.content.Context
 import com.lifecycle.binding.util.*
+import com.lifecycle.coroutines.util.launchUI
 import com.lifecycle.demo.inject.data.net.bean.TokenBean
 
 /**
@@ -21,7 +22,7 @@ class UserApi(context: Context) {
 
     fun logout() = sharedPreferences.clear()
         .apply { userEntity.copy(TokenBean()) }
-        .apply { login.value = userEntity.isLogin() }
+        .apply { launchUI { login.value = userEntity.isLogin() } }
 
     fun UserEntity.isLogin() = token.isNotEmpty() && token_type.isNotEmpty() && expires_in > System.currentTimeMillis() / 1000L
 

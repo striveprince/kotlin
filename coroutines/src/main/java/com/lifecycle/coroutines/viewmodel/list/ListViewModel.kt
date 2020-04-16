@@ -69,10 +69,6 @@ open class ListViewModel<E : Inflate>(final override val adapter: IList<E> = Rec
         }
     }
 
-    override fun onError(e: Throwable) {
-        error.value = e
-        loadingState.value = stateError(loadingState.value!!)
-    }
 
     override fun onComplete() {
         super.onComplete()

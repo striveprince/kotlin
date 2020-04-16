@@ -8,8 +8,8 @@ import io.reactivex.Observable
 
 open class WidgetAdapter<E : Inflate> : WidgetOpenAdapter<E>(), IList<E> {
 
-    override fun setEvent(position: Int, e: E, type: Int, view: View?):Any {
-        for (event in events) return event.setEvent(position, e, type, view)
+    override fun setEvent(type: Int, e: E, position: Int, view: View?):Any {
+        for (event in events) return event.setEvent(type, e, position, view)
         return Observable.just(setIEntity(e, position, type, view))
     }
 }

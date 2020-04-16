@@ -43,8 +43,7 @@ object SmartRefreshLayoutBindingAdapter {
                     }
                 }
             }else{
-                view.finishLoadMore()
-                view.finishRefresh()
+                view.closeHeaderOrFooter()
             }
         }
     }

@@ -27,11 +27,14 @@
                     android:layout_height="match_parent" />
 
                 <FrameLayout
-                    android:visibility="@{vm.error==null?View.GONE:View.VISIBLE,default=gone}"
+                    android:background="@color/colorAccent"
+                    android:onClick="@{vm::onCancelClick}"
+                    android:visibility="@{vm.isSuccess(vm.loadingState)?View.GONE:View.VISIBLE,default=gone}"
                     android:id="@+id/frame_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <TextView
+                        android:visibility="@{vm.error==null?View.GONE:View.VISIBLE,default=gone}"
                         android:layout_width="match_parent"
                         android:gravity="center"
                         android:text="@{vm.error.message}"

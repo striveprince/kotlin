@@ -19,8 +19,8 @@ abstract class RecyclerOpenAdapter<E : Inflate> : RecyclerView.Adapter<RecyclerH
         return RecyclerHolder(parent, sparseArray.get(viewType))
     }
 
-//    override fun setEvent(position: Int, e: E, type: Int, view: View?): R {
-//        for (event in eventObservableEvents) return event.setEvent(position, e, type, view)
+//    override fun setEvent(type: Int, e: E, position: Int, view: View?): R {
+//        for (event in eventObservableEvents) return event.setEvent(type, e, position, view)
 //        return Observable.just(setIEntity(e,position, type, view))
 //    }
 
@@ -51,7 +51,7 @@ abstract class RecyclerOpenAdapter<E : Inflate> : RecyclerView.Adapter<RecyclerH
 
     fun addEventAdapter(event: (Int, E, Int, View?) -> Any) {
         addEventAdapter(object : IEvent<E> {
-            override fun setEvent(position: Int, e: E, type: Int, view: View?) = event(position, e, type, view)
+            override fun setEvent(type: Int, e: E, position: Int, view: View?) = event(position, e, type, view)
         })
     }
 

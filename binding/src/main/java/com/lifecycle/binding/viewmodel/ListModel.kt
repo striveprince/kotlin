@@ -26,6 +26,8 @@ interface ListModel<E,Job>: IList<E>,Obtain<List<E>,Job> {
         }
     }
 
+
+
     override fun onError(e: Throwable) {
         error.value = e
         loadingState.value = stateError(loadingState.value!!)
@@ -60,8 +62,8 @@ interface ListModel<E,Job>: IList<E>,Obtain<List<E>,Job> {
         adapter.notifyDataSetChanged()
     }
 
-    override fun setEvent(position: Int, e: E, type: Int, view: View?): Any {
-        return adapter.setEvent(position, e, type, view)
+    override fun setEvent(type: Int, e: E, position: Int, view: View?): Any {
+        return adapter.setEvent(type, e, position, view)
     }
 
 
@@ -140,5 +142,13 @@ interface ListModel<E,Job>: IList<E>,Obtain<List<E>,Job> {
 
     fun running(state:Int):Boolean{
         return isStateRunning(state)
+    }
+
+    fun onCancelClick(v:View){
+        onComplete()
+    }
+
+    fun isSuccess(state :Int):Boolean{
+        return state shr 8 == 1
     }
 }

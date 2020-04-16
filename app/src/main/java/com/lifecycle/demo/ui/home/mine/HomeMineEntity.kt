@@ -20,6 +20,6 @@ data class HomeMineEntity (val name:String="arvin"):Select, ViewSelectInflate() 
     }
 
     fun onClick(view:View){
-        event.setEvent(-1,this,AdapterType.select,view)
+        event.setEvent(AdapterType.select,this)
     }
 }

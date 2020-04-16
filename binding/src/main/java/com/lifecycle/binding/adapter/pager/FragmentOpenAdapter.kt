@@ -24,7 +24,7 @@ abstract class FragmentOpenAdapter<E: Item>(private val fm: FragmentManager,
         return true
     }
 
-//    override fun setEvent(position: Int, e: E, type: Int, view: View?): R {
+//    override fun setEvent(type: Int, e: E, position: Int, view: View?): R {
 //        return Observable.just(false as Any)
 //    }
 

@@ -56,7 +56,9 @@ object ARouterUtil {
     }
 
     fun start() {
-        val path = if (api.preferenceApi.isLogin()) HomeActivity.home else SignInActivity.signIn
+        val path = if (api.preferenceApi.isLogin()) HomeActivity.home else
+            HomeActivity.home
+//        SignInActivity.signIn
         build(path).navigation()
     }
 
