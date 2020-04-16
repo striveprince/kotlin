@@ -46,5 +46,27 @@
         <item name="errorTextAppearance">@style/TextInputAppTheme</item>
     </style>
 
+    <style name="text">
+        <item name="android:text">@string/text</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:gravity">center</item>
+    </style>
 
+    <style name="style_select">
+        <item name="android:textColor">@color/select_color</item>
+        <item name="android:button">@null</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="text.Title">
+        <item name="android:textSize">@dimen/text_title</item>
+    </style>
+
+    <style name="text.Action">
+        <item name="android:textSize">@dimen/text_action</item>
+    </style>
+
+
+    <string name="text">text</string>
+    <dimen name="text_action">16sp</dimen>
 </resources>

@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
+import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
 open class ListViewModel<E : Inflate>(final override val adapter: IList<E> = RecyclerAdapter()) :
@@ -23,7 +24,7 @@ open class ListViewModel<E : Inflate>(final override val adapter: IList<E> = Rec
     override var pageCount = 10
     override var headIndex = 0
     override var offset = 0
-    override val loadingState = MutableLiveData(AdapterType.no)
+    override val loadingState = MutableLiveData(stateStart(AdapterType.refresh))
     override val error = MutableLiveData<Throwable>()
     override var job: Job? = null
     override val adapterList: MutableList<E> = adapter.adapterList
@@ -34,12 +35,12 @@ open class ListViewModel<E : Inflate>(final override val adapter: IList<E> = Rec
     @ExperimentalCoroutinesApi
     override fun attachData(owner: LifecycleOwner, bundle: Bundle?) {
         loadingState.observer(owner) { doGetData(it) }
-        loadingState.value = stateStart(AdapterType.refresh)
     }
 
     @ExperimentalCoroutinesApi
     open fun doGetData(it: Int) {
-        if (canStateStart(it) && canRun.getAndSet(false))
+        if (isStateStart(it) && canRun.getAndSet(false)) {
+            Timber.i("SmartRefreshState=${isStateStart(it)} ,result=$it  start http doGetData")
             onSubscribe(launchUI {
                 http.require(getStartOffset(it), it)
                     .flowOn(Dispatchers.IO)
@@ -47,8 +48,7 @@ open class ListViewModel<E : Inflate>(final override val adapter: IList<E> = Rec
                     .onCompletion { onComplete() }
                     .collect { onNext(it) }
             })
-
-
+        }
     }
 
     override fun onSubscribe(job: Job) {
@@ -56,17 +56,9 @@ open class ListViewModel<E : Inflate>(final override val adapter: IList<E> = Rec
         addJob(job)
     }
 
-    override fun onNext(t: List<E>) {
-        loadingState.value?.let {
-            setList(getEndOffset(it), t, it)
-            loadingState.value = stateSuccess(it)
-        }
-    }
-
 
     override fun onComplete() {
         super.onComplete()
         canRun.compareAndSet(false, true)
     }
-
 }

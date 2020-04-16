@@ -26,16 +26,18 @@ import kotlinx.coroutines.runBlocking
 
 
 
-typealias HttpBlock<T> =suspend () -> InfoEntity<T>
+
+typealias HttpBlock<T> = suspend () -> InfoEntity<T>
 typealias ConvertFlow<T, R> = suspend FlowCollector<R>.(T) -> R
 
 fun <T, R> HttpBlock<T>.restful(function: ConvertFlow<T, R>): Flow<R> {
-    return runBlocking(Dispatchers.IO) { invoke() }.run {
-        flow<R> {
-            if (code != success) throw judgeApiThrowable(this@run)
-            if (result != null) emit(function(result))
+    return runBlocking(Dispatchers.IO) { runCatching { invoke() }.getOrElse { InfoEntity(1, it.message ?: "", null).apply { it.printStackTrace() } } }
+        .run {
+            flow<R> {
+                if (code != success) throw judgeApiThrowable(this@run)
+                if (result != null) emit(function(result))
+            }
         }
-    }
 }
 
 fun <T, R> HttpBlock<T>.restfulUI(block: suspend FlowCollector<R>.(T) -> R): Flow<R> {
@@ -43,21 +45,3 @@ fun <T, R> HttpBlock<T>.restfulUI(block: suspend FlowCollector<R>.(T) -> R): Flo
         .flowOn(Dispatchers.IO)
         .catch { toast(it) }
 }
-
-//
-//fun <T, R> HttpBlock<T>.restful(function: suspend FlowCollector<R>.(T) -> R): Flow<R> {
-//    return flow {
-//        runCatching {
-//            invoke().run {
-//                if (code != 0) throw judgeApiThrowable(this)
-//                if (result != null) emit(function(result))
-//            }
-//        }.getOrElse { throw judgeThrowable(it) }
-//    }
-//}
-//
-//fun <T, R> HttpBlock<T>.restfulUI(block: suspend FlowCollector<R>.(T) -> R): Flow<R> {
-//    return restful(block)
-//        .flowOn(Dispatchers.IO)
-//        .catch { toast(it) }
-//}

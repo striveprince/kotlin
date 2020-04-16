@@ -10,8 +10,8 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class InfoEntity<T>(
-    val result: T?,
+    val code: Int = 0,
     val msg: String = "",
-    val code: Int = 0
+    val result: T?
 
 )

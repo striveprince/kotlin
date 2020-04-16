@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable name="vm" type="com.lifecycle.demo.ui.select.popup.SelectOption" />
+    </data>
+
+    <CheckBox
+        android:text="@{vm.option}"
+        tools:text="标题"
+        android:checked="@={vm.checked}"
+        android:onClick="@{vm::onSelectClick}"
+        android:padding="10dp"
+        android:textSize="@dimen/text_title"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</layout>

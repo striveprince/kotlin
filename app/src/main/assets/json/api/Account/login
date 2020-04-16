@@ -1,5 +1,5 @@
 {
   "token": "string",
   "code": 0,
-  "msg": "string"
+  "msg": "登录成功"
 }

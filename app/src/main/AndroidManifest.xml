@@ -29,7 +29,7 @@
         tools:targetApi="m">
 
         <activity android:name="com.lifecycle.demo.ui.debug.BlackActivity" />
-        <activity android:name=".ui.home.HomeActivity"/>
+<!--        <activity android:name=".ui.home.HomeActivity"/>-->
         <activity android:name=".ui.start.StartActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -53,5 +53,6 @@
 <!--            android:windowSoftInputMode="stateVisible|adjustResize"/>-->
         <activity android:name=".ui.video.VideoActivity" android:label="@string/video"/>
         <activity android:name=".ui.interrogation.detail.InterrogationDetailActivity" />
+        <activity android:name=".ui.select.SelectActivity"/>
     </application>
 </manifest>

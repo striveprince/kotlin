@@ -12,12 +12,11 @@ import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.inter.inflate.BindingInflate
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.inter.inflate.ListInflate
-import com.lifecycle.binding.util.canStateStart
-import com.lifecycle.binding.util.isStateRunning
+import com.lifecycle.binding.util.isStateStart
+import com.lifecycle.binding.util.stateStart
 import com.lifecycle.rx.adapter.RecyclerAdapter
 import com.lifecycle.rx.observer.NormalObserver
 import com.lifecycle.rx.util.ioToMainThread
-import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
@@ -44,27 +43,26 @@ open class ListViewInflate<E : Inflate, Binding : ViewDataBinding>(final overrid
 
     override fun createView(context: Context, parent: ViewGroup?, convertView: View?): View {
         return super.createView(context, parent, convertView).apply {
-            loadingState.set(AdapterType.refresh)
-            doGetData(AdapterType.refresh)
             loadingState.addOnPropertyChangedCallback(object : OnPropertyChangedCallback() {
                 override fun onPropertyChanged(sender: androidx.databinding.Observable, propertyId: Int) {
-                    if(sender is ObservableInt)getData(sender.get())
+                    if (sender is ObservableInt) doGetData(sender.get())
                 }
             })
+            loadingState.set(stateStart(AdapterType.refresh))
         }
     }
 
     open fun doGetData(it: Int) {
-        if (canStateStart(it)) getData(it)
+        if (isStateStart(it)) getData(it)
     }
 
-    private fun getData(it: Int){
-        Timber.i("do get data state = $it")
-        if(canRun.getAndSet(false))
-        httpData(getStartOffset(it), it)
-            .ioToMainThread()
-            .map { if (it is ArrayList) it else ArrayList(it) }
-            .subscribe(NormalObserver(this))
+    private fun getData(state: Int) {
+        if (canRun.getAndSet(false))
+            httpData(getStartOffset(state), state)
+                .ioToMainThread()
+                .map { if (it is ArrayList) it else ArrayList(it) }
+                .subscribe(NormalObserver(this))
+                .also { Timber.i("SmartRefreshState = $it  setState = ${isStateStart(state)} start http") }
     }
 
     override fun onNext(t: List<E>) {
@@ -74,7 +72,7 @@ open class ListViewInflate<E : Inflate, Binding : ViewDataBinding>(final overrid
     override fun onComplete() {
         super.onComplete()
         job?.dispose()
-        canRun.compareAndSet(false,true)
+        canRun.compareAndSet(false, true)
     }
 
     override fun onSubscribe(job: Disposable) {

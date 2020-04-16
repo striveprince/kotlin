@@ -26,8 +26,6 @@ interface ListModel<E,Job>: IList<E>,Obtain<List<E>,Job> {
         }
     }
 
-
-
     override fun onError(e: Throwable) {
         error.value = e
         loadingState.value = stateError(loadingState.value!!)

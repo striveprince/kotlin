@@ -1,0 +1,49 @@
+{
+  "patient_class": {
+    "门诊": "门诊",
+    "住院": "住院",
+    "急诊": "急诊",
+    "体检": "体检",
+    "VIP": "VIP"
+  },
+  "service_sect": {
+    "CR": "CR",
+    "DX": "DX",
+    "DR": "DR",
+    "XA": "XA",
+    "RF": "RF",
+    "CT": "CT",
+    "MR": "MR",
+    "MG": "MG",
+    "NM": "NM",
+    "US": "US",
+    "ES": "ES",
+    "ECG": "ECG",
+    "PS": "PS",
+    "OT": "OT"
+  },
+  "request_dept": {},
+  "data_source": {
+    "放射": "RIS",
+    "超声": "UIS",
+    "内镜": "EIS",
+    "特检": "XIS",
+    "病理": "PIS",
+    "心电": "ECG",
+    "肺功能": "FGN",
+    "骨髓": "GMD",
+    "肌电": "JD",
+    "脑电": "ND",
+    "多普勒": "TCD",
+    "检验": "LIS"
+  },
+  "sreach_keys": {
+    "Name": "患者姓名",
+    "PatientID": "患者编号",
+    "AccessionNumber": "流水号",
+    "MedRecNO": "就诊卡号",
+    "HealthCardNO": "健康卡号"
+  },
+  "code": 0,
+  "msg": "Ok"
+}

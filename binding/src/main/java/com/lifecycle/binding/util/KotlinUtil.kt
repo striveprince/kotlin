@@ -46,53 +46,43 @@ import java.lang.RuntimeException
 
 /**
  * FF FF: error
+ *      0x0001 error
+ *      0x0000 success
  * FF   : run
+ *      0x00 end
+ *      0x01 start
+ *      0x02 running
  * FF   : state
- *  error   run     state
- *  FF FF   FF      FF
+ *      @see AdapterType
  */
 
-
-fun stateStart(@AdapterEvent state :Int):Int{
-    return state or 0x300
-}
-
-fun stateEnd(@AdapterEvent state :Int):Int{
-    return state and 0x100FF
-}
-
-fun stateError(state :Int):Int{
-    return state or 0x10000
-}
-
-fun stateSuccess(state :Int):Int{
-    return state and 0x1ff
-}
-
-fun isSuccess(state :Int):Boolean{
-    return state shr 8 == 1
-}
-
-fun stateOriginal(state: Int):Int{
-    return state and 0xff
-}
+//end
+fun stateEnd(@AdapterEvent state :Int)= state and 0x100FF
+fun isStateEnd(@AdapterEvent state: Int)=state shr 8 and 1 == 0 &&state shr 9 == 0
 
 
-fun isStateRunning(@AdapterEvent state :Int):Boolean{
-    return state shr(8) and 1 == 1 && state shr(9) and 1 == 1
-}
+//start
+fun stateStart(@AdapterEvent state :Int)=state or 0x00100
+fun isStateStart(@AdapterEvent state: Int)= state shr 8 and 1 == 1
 
-fun Int.stateEqual(@AdapterEvent state: Int):Boolean{
-    return (this and 0xff) == state
-}
 
-fun canStateStart(@AdapterEvent state: Int):Boolean{
-    return (isStateStart(state)&&state!=0).also { Timber.i("can start state=$state ,result=$it") }
-}
+//running
+fun stateRunning(state: Int)=state or 0x0200
+fun isStateRunning(@AdapterEvent state :Int)=state shr(9) and 1 == 1
 
-fun isStateStart(state: Int):Boolean{
-    return state shr 8 and 1 == 1 && state shr 9 and 1 == 1
-}
+
+//error
+fun stateError(state :Int)= state or 0x010000
+
+//success
+fun stateSuccess(state :Int)=state and 0xff
+
+fun isSuccess(state :Int)=state shr 16 == 0
+
+fun stateOriginal(state: Int)= state and 0xff
+
+fun Int.stateEqual(@AdapterEvent state: Int)=(this and 0xff) == (state and 0xff)
+
 
 val gson = Gson()
 

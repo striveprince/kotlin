@@ -22,9 +22,10 @@ class StartActivity : BindingActivity<LifeViewModel,ActivityStartBinding>() {
     }
 
     private fun start(){
-        ARouterUtil.start()
+        ARouterUtil.select()
         TimeUtil.handler.postDelayed({ finish() }, 500)
     }
+
     override fun initData(owner: LifecycleOwner, bundle: Bundle?) {
         super.initData(owner, bundle)
         if (!checkPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO)) {

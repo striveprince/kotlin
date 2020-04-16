@@ -11,9 +11,9 @@ import com.lifecycle.binding.Constant
 import com.lifecycle.binding.life.AppLifecycle
 import com.lifecycle.binding.life.LifecycleInit
 import com.lifecycle.demo.R
-import com.lifecycle.demo.inject.data.preference.user.UserApi
-import com.lifecycle.demo.ui.home.HomeActivity
 import com.lifecycle.demo.ui.interrogation.detail.InterrogationDetailActivity
+import com.lifecycle.demo.ui.home.HomeActivity
+import com.lifecycle.demo.ui.select.SelectActivity
 import com.lifecycle.demo.ui.user.sign.login.SignInActivity
 import java.lang.StringBuilder
 import kotlin.math.min
@@ -62,23 +62,40 @@ object ARouterUtil {
         build(path).navigation()
     }
 
+    fun select(){
+        if(api.preferenceApi.isLogin()){
+
+        }
+        build(SelectActivity.select).navigation()
+    }
     fun finish() {
         AppLifecycle.activity().finish()
     }
 
     fun home() {
-        build(HomeActivity.home)
+        build(SelectActivity.select)
             .navigation()
+    }
+
+
+    fun findFragmentByTag(fm: FragmentManager?, route: String): Fragment {
+        return fm?.findFragmentByTag(route) ?: buildFragment(Uri.parse(route))
     }
 
     private fun buildFragment(route: Uri): Fragment {
         return ARouter.getInstance().build(route).navigation() as Fragment
     }
 
-    fun findFragmentByTag(fragmentManager: FragmentManager? = null, route: String): Fragment {
-        return fragmentManager?.findFragmentByTag(route) ?: buildFragment(Uri.parse(route))
-//        return fragmentManager?.findFragmentByTag(route) ?: buildFragment(Uri.parse("${domainUrl}$route"))
-    }
+//    private fun buildFragment(route: Uri): Fragment {
+//        return ARouter.getInstance().build(route).navigation() as Fragment
+//    }
+//
+//
+//
+//    fun findFragmentByTag(fragmentManager: FragmentManager? = null, route: String): Fragment {
+//        return fragmentManager?.findFragmentByTag(route) ?: buildFragment(Uri.parse(route))
+////        return fragmentManager?.findFragmentByTag(route) ?: buildFragment(Uri.parse("${domainUrl}$route"))
+//    }
 
     fun interrogationDetail(id: String) {
         build(InterrogationDetailActivity.interrogationDetail)

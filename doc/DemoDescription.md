@@ -106,7 +106,7 @@ holder_interrogation.xml
             type="com.lifecycle.demo.inject.data.net.bean.InterrogationBean" />
         <variable
             name="parse"
-            type="com.lifecycle.demo.ui.home.interrogation.rxlist.InterrogationListEntity" />
+            type="com.lifecycle.demo.ui.select.interrogation.rxlist.InterrogationListEntity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
