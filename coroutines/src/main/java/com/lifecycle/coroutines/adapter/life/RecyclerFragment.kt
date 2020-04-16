@@ -5,14 +5,15 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.lifecycle.binding.inter.inflate.Diff
 import com.lifecycle.binding.life.BaseFragment
 import com.lifecycle.binding.databinding.LayoutSwipeRecyclerViewBinding
+import com.lifecycle.coroutines.inflate.RecyclerParse
 import com.lifecycle.coroutines.viewmodel.list.HttpData
-import com.lifecycle.coroutines.util.recyclerBinding
 import com.lifecycle.coroutines.viewmodel.list.ListViewModel
 
 
@@ -31,21 +32,20 @@ abstract class RecyclerFragment<E : Diff> : BaseFragment<ListViewModel<E>, Layou
     }
 
     override fun parse(t: ListViewModel<E>, context: Context, parent: ViewGroup?, attachToParent: Boolean): LayoutSwipeRecyclerViewBinding {
-        return recyclerBinding(this, t)
-            .apply {
-                recyclerView.apply {
-                    adapter = t.adapter as RecyclerView.Adapter<*>
-                    layoutManager = LinearLayoutManager(context)
-                    itemAnimator = null
-                }
-                errorView()?.let{
-                    frameLayout.removeAllViews()
-                    frameLayout.addView(it)
-                }
+        return RecyclerParse(t).parse(t, requireActivity(), parent, false).apply {
+            recyclerView.apply {
+                adapter = t.adapter as RecyclerView.Adapter<*>
+                layoutManager = LinearLayoutManager(context)
+                itemAnimator = null
             }
+            tipView(t.error)?.let {
+                frameLayout.removeAllViews()
+                frameLayout.addView(it)
+            }
+        }
     }
 
-    open fun errorView():View? = null
+    open fun tipView(s: MutableLiveData<Throwable>): View? = null
 
     @Suppress("UNCHECKED_CAST")
     override fun initModel(): ListViewModel<E> {
