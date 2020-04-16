@@ -33,16 +33,10 @@ open class ListViewModel<E : Inflate>(final override val adapter: IList<E> = Rec
 
     @ExperimentalCoroutinesApi
     override fun attachData(owner: LifecycleOwner, bundle: Bundle?) {
-        loadingState.observer(owner) { doGetData(it) }
+        loadingState.observer(owner) { getData(it) }
         loadingState.value = stateStart(AdapterType.refresh)
     }
 
-    @ExperimentalCoroutinesApi
-    open fun doGetData(it: Int) {
-        if (canStateStart(it)) {
-            getData(it)
-        }
-    }
 
     @ExperimentalCoroutinesApi
     open fun getData(it: Int){
