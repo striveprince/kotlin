@@ -11,7 +11,7 @@
             type="com.lifecycle.demo.inject.data.net.bean.InterrogationBean" />
         <variable
             name="parse"
-            type="com.lifecycle.demo.ui.home.interrogation.rxlist.InterrogationListEntity" />
+            type="com.lifecycle.demo.ui.home.interrogation.InterrogationListEntity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

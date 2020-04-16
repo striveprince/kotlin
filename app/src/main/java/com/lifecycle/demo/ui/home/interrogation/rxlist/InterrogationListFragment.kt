@@ -13,11 +13,12 @@ import com.lifecycle.demo.inject.data.net.InterrogationParams
 import com.lifecycle.demo.inject.data.net.bean.InterrogationDataBean
 import com.lifecycle.demo.ui.home.HomeModel
 import com.lifecycle.demo.ui.home.interrogation.HomeInterrogationFragment.Companion.interrogation
+import com.lifecycle.demo.ui.home.interrogation.InterrogationListEntity
 import com.lifecycle.demo.ui.home.interrogation.rxlist.InterrogationListFragment.Companion.interrogationList
 import com.lifecycle.rx.adapter.life.diff.RecyclerDiffFragment
 import io.reactivex.Single
 
-@Route(path = interrogationList)
+//@Route(path = interrogationList)
 class InterrogationListFragment : RecyclerDiffFragment<Diff>() {
 
     companion object {

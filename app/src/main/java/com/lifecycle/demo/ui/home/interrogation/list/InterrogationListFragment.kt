@@ -1,6 +1,7 @@
 package com.lifecycle.demo.ui.home.interrogation.list
 
 import androidx.fragment.app.FragmentActivity
+import com.alibaba.android.arouter.facade.annotation.Route
 import com.lifecycle.binding.Constant
 import com.lifecycle.binding.util.toEntities
 import com.lifecycle.binding.util.viewModel
@@ -13,9 +14,11 @@ import com.lifecycle.demo.inject.data.net.InterrogationParams
 import com.lifecycle.demo.inject.data.net.bean.InterrogationDataBean
 import com.lifecycle.demo.ui.home.HomeModel
 import com.lifecycle.demo.ui.home.interrogation.HomeInterrogationFragment.Companion.interrogation
+import com.lifecycle.demo.ui.home.interrogation.InterrogationListEntity
+import com.lifecycle.demo.ui.home.interrogation.list.InterrogationListFragment.Companion.interrogationList
 import kotlinx.coroutines.flow.Flow
 
-//@Route(path = interrogationList)
+@Route(path = interrogationList)
 class InterrogationListFragment : RecyclerDiffFragment<InterrogationListEntity>() {
 
     companion object {

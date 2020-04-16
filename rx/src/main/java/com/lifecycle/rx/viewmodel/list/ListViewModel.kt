@@ -33,12 +33,8 @@ open class ListViewModel<E : Inflate>(final override val adapter: IList<E> = Rec
     override val canRun: AtomicBoolean = AtomicBoolean(true)
     override fun attachData(owner: LifecycleOwner, bundle: Bundle?) {
         super.attachData(owner, bundle)
-        loadingState.observer(owner) { doGetData(it) }
+        loadingState.observer(owner) { getData(it) }
         loadingState.value = AdapterType.refresh
-    }
-
-    open fun doGetData(it:Int){
-        if (canStateStart(it)) getData(it)
     }
 
     open fun getData(it: Int){

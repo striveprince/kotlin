@@ -1,4 +1,4 @@
-package com.lifecycle.demo.ui.home.interrogation.list
+package com.lifecycle.demo.ui.home.interrogation
 
 import android.view.View
 import androidx.databinding.ViewDataBinding

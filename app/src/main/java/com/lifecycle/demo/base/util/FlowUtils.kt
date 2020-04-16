@@ -4,8 +4,10 @@ import com.lifecycle.binding.util.toast
 import com.lifecycle.demo.inject.InfoEntity
 import com.lifecycle.demo.inject.judgeApiThrowable
 import com.lifecycle.demo.inject.judgeThrowable
+import com.lifecycle.demo.inject.success
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.runBlocking
 
 
 /**
@@ -23,16 +25,16 @@ import kotlinx.coroutines.flow.*
  */
 
 
-typealias HttpBlock<T> = suspend () -> InfoEntity<T>
 
-fun <T, R> HttpBlock<T>.restful(function: suspend FlowCollector<R>.(T) -> R): Flow<R> {
-    return flow {
-        runCatching {
-            invoke().run {
-                if (code != 0) throw judgeApiThrowable(this)
-                if (result != null) emit(function(result))
-            }
-        }.getOrElse { throw judgeThrowable(it) }
+typealias HttpBlock<T> =suspend () -> InfoEntity<T>
+typealias ConvertFlow<T, R> = suspend FlowCollector<R>.(T) -> R
+
+fun <T, R> HttpBlock<T>.restful(function: ConvertFlow<T, R>): Flow<R> {
+    return runBlocking(Dispatchers.IO) { invoke() }.run {
+        flow<R> {
+            if (code != success) throw judgeApiThrowable(this@run)
+            if (result != null) emit(function(result))
+        }
     }
 }
 
@@ -41,3 +43,21 @@ fun <T, R> HttpBlock<T>.restfulUI(block: suspend FlowCollector<R>.(T) -> R): Flo
         .flowOn(Dispatchers.IO)
         .catch { toast(it) }
 }
+
+//
+//fun <T, R> HttpBlock<T>.restful(function: suspend FlowCollector<R>.(T) -> R): Flow<R> {
+//    return flow {
+//        runCatching {
+//            invoke().run {
+//                if (code != 0) throw judgeApiThrowable(this)
+//                if (result != null) emit(function(result))
+//            }
+//        }.getOrElse { throw judgeThrowable(it) }
+//    }
+//}
+//
+//fun <T, R> HttpBlock<T>.restfulUI(block: suspend FlowCollector<R>.(T) -> R): Flow<R> {
+//    return restful(block)
+//        .flowOn(Dispatchers.IO)
+//        .catch { toast(it) }
+//}
