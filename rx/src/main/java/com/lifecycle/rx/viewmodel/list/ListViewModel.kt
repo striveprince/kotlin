@@ -37,8 +37,9 @@ open class ListViewModel<E : Inflate>(final override val adapter: IList<E> = Rec
         loadingState.value = AdapterType.refresh
     }
 
+
     open fun getData(it: Int){
-        if(canRun.getAndSet(false))
+        if(canStateStart(it)&&canRun.getAndSet(false))
         httpData(getStartOffset(it), it)
             .ioToMainThread()
             .map { if(it is ArrayList)it else ArrayList(it) }

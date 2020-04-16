@@ -87,16 +87,12 @@ fun Int.stateEqual(@AdapterEvent state: Int):Boolean{
 }
 
 fun canStateStart(@AdapterEvent state: Int):Boolean{
-    Timber.i("can start state=$state")
-    return isStateEnd(state)&&state!=0
+    return (isStateStart(state)&&state!=0).also { Timber.i("can start state=$state ,result=$it") }
 }
 
-fun isStateEnd(state: Int):Boolean{
-    return state shr 8 and 1 == 0 && state shr 9 and 1 == 0
+fun isStateStart(state: Int):Boolean{
+    return state shr 8 and 1 == 1 && state shr 9 and 1 == 1
 }
-
-
-
 
 val gson = Gson()
 

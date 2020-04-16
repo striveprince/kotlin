@@ -12,16 +12,16 @@ data class InterrogationDataBean(
 
 @Serializable
 class InterrogationBean(
-    val images: List<AdditionalImages>,
-    val dialogues: List<Dialogue>,
-    val evaluate: Evaluate?,
-    val description: String,
-    val end_time: String,
-    val id: String,
-    val state: Int,
-    val patient_name: String,
-    val purpose: String,
-    val exam: Exam
+//    val images: List<AdditionalImages>,
+//    val dialogues: List<Dialogue>,
+//    val evaluate: Evaluate?,
+//    val description: String,
+//    val end_time: String,
+//    val id: String,
+//    val state: Int,
+//    val patient_name: String,
+//    val purpose: String,
+//    val exam: Exam
 ) {
 }
 

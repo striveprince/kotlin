@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 open class ListViewModel<E : Inflate>(final override val adapter: IList<E> = RecyclerAdapter()) :
-    LifeViewModel(), IList<E>, ListModel<E, Job> ,HttpData<List<E>>{
+    LifeViewModel(), IList<E>, ListModel<E, Job>, HttpData<List<E>> {
     override var pageWay = true
     override var pageCount = 10
     override var headIndex = 0
@@ -33,22 +33,22 @@ open class ListViewModel<E : Inflate>(final override val adapter: IList<E> = Rec
 
     @ExperimentalCoroutinesApi
     override fun attachData(owner: LifecycleOwner, bundle: Bundle?) {
-        loadingState.observer(owner) { getData(it) }
+        loadingState.observer(owner) { doGetData(it) }
         loadingState.value = stateStart(AdapterType.refresh)
     }
 
-
     @ExperimentalCoroutinesApi
-    open fun getData(it: Int){
-        if(canRun.getAndSet(false)){
+    open fun doGetData(it: Int) {
+        if (canStateStart(it) && canRun.getAndSet(false))
             onSubscribe(launchUI {
                 http.require(getStartOffset(it), it)
                     .flowOn(Dispatchers.IO)
-                    .catch{ onError(it) }
+                    .catch { onError(it) }
                     .onCompletion { onComplete() }
-                    .collect{ onNext(it) }
+                    .collect { onNext(it) }
             })
-        }
+
+
     }
 
     override fun onSubscribe(job: Job) {
@@ -66,7 +66,7 @@ open class ListViewModel<E : Inflate>(final override val adapter: IList<E> = Rec
 
     override fun onComplete() {
         super.onComplete()
-        canRun.compareAndSet(false,true)
+        canRun.compareAndSet(false, true)
     }
 
 }
