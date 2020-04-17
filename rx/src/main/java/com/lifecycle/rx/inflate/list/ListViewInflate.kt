@@ -13,6 +13,8 @@ import com.lifecycle.binding.inter.inflate.BindingInflate
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.inter.inflate.ListInflate
 import com.lifecycle.binding.util.isStateStart
+import com.lifecycle.binding.util.observe
+import com.lifecycle.binding.util.observer
 import com.lifecycle.binding.util.stateStart
 import com.lifecycle.rx.adapter.RecyclerAdapter
 import com.lifecycle.rx.observer.NormalObserver
@@ -37,32 +39,21 @@ open class ListViewInflate<E : Inflate, Binding : ViewDataBinding>(final overrid
     lateinit var binding: Binding
     override val canRun: AtomicBoolean = AtomicBoolean(true)
 
-    override fun initBinding(t: Binding) {
-        binding = t
-    }
+    override fun initBinding(t: Binding) { binding = t }
 
     override fun createView(context: Context, parent: ViewGroup?, convertView: View?): View {
         return super.createView(context, parent, convertView).apply {
-            loadingState.addOnPropertyChangedCallback(object : OnPropertyChangedCallback() {
-                override fun onPropertyChanged(sender: androidx.databinding.Observable, propertyId: Int) {
-                    if (sender is ObservableInt) doGetData(sender.get())
-                }
-            })
+            loadingState.observe { getData(it) }
             loadingState.set(stateStart(AdapterType.refresh))
         }
     }
 
-    open fun doGetData(it: Int) {
-        if (isStateStart(it)) getData(it)
-    }
-
     private fun getData(state: Int) {
-        if (canRun.getAndSet(false))
+        if (canRun.getAndSet(false)&&isStateStart(state))
             httpData(getStartOffset(state), state)
                 .ioToMainThread()
                 .map { if (it is ArrayList) it else ArrayList(it) }
                 .subscribe(NormalObserver(this))
-                .also { Timber.i("SmartRefreshState = $it  setState = ${isStateStart(state)} start http") }
     }
 
     override fun onNext(t: List<E>) {

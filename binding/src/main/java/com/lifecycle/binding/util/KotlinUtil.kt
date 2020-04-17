@@ -18,7 +18,7 @@ import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
-import androidx.databinding.ViewDataBinding
+import androidx.databinding.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
@@ -32,7 +32,6 @@ import com.lifecycle.binding.inter.bind.data.DataBindInflate
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.parse
-import timber.log.Timber
 import java.io.File
 import java.lang.RuntimeException
 
@@ -77,7 +76,7 @@ fun stateError(state :Int)= state or 0x010000
 //success
 fun stateSuccess(state :Int)=state and 0xff
 
-fun isSuccess(state :Int)=state shr 16 == 0
+fun isStateSuccess(state :Int)=state shr 16 == 0
 
 fun stateOriginal(state: Int)= state and 0xff
 
@@ -137,18 +136,60 @@ inline fun <reified E : DataBindInflate<*, out ViewDataBinding>> List<Any>.toEnt
     return list
 }
 
+private fun<T> observableCallback(block: (T) -> Unit) = object : Observable.OnPropertyChangedCallback(){
+    override fun onPropertyChanged(sender: Observable, propertyId: Int) {
+        val t = when(sender){
+            is ObservableInt -> sender.get()
+            is ObservableBoolean -> sender.get()
+            is ObservableFloat -> sender.get()
+            is ObservableByte -> sender.get()
+            is ObservableChar -> sender.get()
+            is ObservableDouble -> sender.get()
+            is ObservableLong -> sender.get()
+            is ObservableShort -> sender.get()
+            is ObservableField<*> -> sender.get()
+            else -> throw RuntimeException("cannot get the value type:${sender.javaClass.simpleName}")
+        }
+        block(t as T)
+    }
+}
 
-//inline fun <reified E> rxBus(): Observable<E> {
-//    return RxBus.getInstance()
-//        .toObservable(E::class.java)
-//}
-//inline fun<reified E> rxBusMain():Observable<E>{
-//    return rxBus<E>().observeOn(AndroidSchedulers.mainThread())
-//}
+fun ObservableInt.observe(block: (Int) -> Unit){
+    addOnPropertyChangedCallback(observableCallback(block))
+}
 
-//fun busPost(any: Any) {
-//    RxBus.getInstance().send(any)
-//}
+fun ObservableBoolean.observe(block: (Boolean) -> Unit){
+    addOnPropertyChangedCallback(observableCallback(block))
+}
+
+fun ObservableChar.observe(block: (Char) -> Unit){
+    addOnPropertyChangedCallback(observableCallback(block))
+}
+
+fun ObservableShort.observe(block: (Short) -> Unit){
+    addOnPropertyChangedCallback(observableCallback(block))
+}
+
+fun ObservableLong.observe(block: (Long) -> Unit){
+    addOnPropertyChangedCallback(observableCallback(block))
+}
+
+fun ObservableByte.observe(block: (Byte) -> Unit){
+    addOnPropertyChangedCallback(observableCallback(block))
+}
+
+fun ObservableDouble.observe(block: (Double) -> Unit){
+    addOnPropertyChangedCallback(observableCallback(block))
+}
+
+fun ObservableFloat.observe(block: (Float) -> Unit){
+    addOnPropertyChangedCallback(observableCallback(block))
+}
+
+fun<T> ObservableField<T>.observe(block: (T) -> Unit){
+    addOnPropertyChangedCallback(observableCallback(block))
+}
+
 fun Context.string(@StringRes id: Int, vararg any: Any) =
     getString(id, *any)
 

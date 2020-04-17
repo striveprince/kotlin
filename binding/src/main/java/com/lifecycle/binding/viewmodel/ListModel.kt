@@ -147,6 +147,6 @@ interface ListModel<E,Job>: IList<E>,Obtain<List<E>,Job> {
     }
 
     fun isSuccess(state :Int):Boolean{
-        return state shr 8 == 1
+        return isStateSuccess(state)
     }
 }
