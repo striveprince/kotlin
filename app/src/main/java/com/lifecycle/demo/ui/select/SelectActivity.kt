@@ -8,8 +8,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.GridLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.lifecycle.demo.R
-import com.lifecycle.demo.base.util.api
-import com.lifecycle.demo.base.util.popup
 import com.lifecycle.demo.databinding.ActivityHomeBinding
 import com.lifecycle.demo.inject.bean.CommonDataBean
 import com.lifecycle.demo.ui.select.SelectActivity.Companion.select
@@ -19,8 +17,7 @@ import com.lifecycle.demo.ui.select.popup.SelectOption
 import com.lifecycle.binding.adapter.recycler.OrderSpanSizeLookup
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
 import com.lifecycle.binding.life.binding.data.DataBindingActivity
-import com.lifecycle.demo.base.util.ARouterUtil
-import com.lifecycle.demo.base.util.restful
+import com.lifecycle.demo.base.util.*
 import com.lifecycle.demo.ui.DemoApplication.Companion.tomtaw
 import com.lifecycle.rx.adapter.RecyclerSelectAdapter
 import io.reactivex.Single
@@ -29,7 +26,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 @Route(path = select)
 @LayoutView(layout = [R.layout.activity_select])
 class SelectActivity : DataBindingActivity<SelectModel, ActivityHomeBinding>() {
-    companion object { const val select = tomtaw + "select" }
+    companion object {
+        const val select = tomtaw + "select"
+    }
 
     private val list = ArrayList<SelectOption>()
     private val dataList = ArrayList<SelectOption>()
@@ -92,21 +91,24 @@ class SelectActivity : DataBindingActivity<SelectModel, ActivityHomeBinding>() {
     fun onSelectClick(v: View) {
         model.position.value?.let {
             window?.dismiss()
-            window = showPopup(it).apply {
-                setOnDismissListener { model.position.value = -1 }
-                showAsDropDown(v)
-            }
+            window = showPopup(it) { model.position.value = -1 }
+                .apply { showAsDropDown(v) }
         }
     }
 
-    private fun showPopup(it: Int): PopupWindow {
+    private fun showPopup(it: Int, dismiss: () -> Unit = {}): PopupWindow {
         val adapter = RecyclerSelectAdapter<SelectOption>()
         val manager = GridLayoutManager(requireActivity(), 4)
         manager.spanSizeLookup = OrderSpanSizeLookup(adapter, 4)
         val inflate = PopupRecyclerInflate(manager, adapter) {
             selectList(ExamParam(it))
         }.apply { httpData = { offset, state -> requireData(it, offset, state) } }
-        return popup(inflate)
+        return popup(inflate).apply {
+            setOnDismissListener {
+                dismiss()
+                inflate.destroy()
+            }
+        }
     }
 
     private fun selectList(examParam: ExamParam) {

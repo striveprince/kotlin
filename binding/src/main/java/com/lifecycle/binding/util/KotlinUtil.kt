@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST", "unused")
+
 package com.lifecycle.binding.util
 
 import android.annotation.SuppressLint
@@ -30,6 +32,7 @@ import com.lifecycle.binding.rotate.TimeUtil
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
 import com.lifecycle.binding.inter.bind.data.DataBindInflate
 import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.parse
 import java.io.File
@@ -154,40 +157,40 @@ private fun<T> observableCallback(block: (T) -> Unit) = object : Observable.OnPr
     }
 }
 
-fun ObservableInt.observe(block: (Int) -> Unit){
-    addOnPropertyChangedCallback(observableCallback(block))
+fun ObservableInt.observe(block: (Int) -> Unit): Observable.OnPropertyChangedCallback {
+    return observableCallback(block).also { addOnPropertyChangedCallback(it) }
 }
 
-fun ObservableBoolean.observe(block: (Boolean) -> Unit){
-    addOnPropertyChangedCallback(observableCallback(block))
+fun ObservableBoolean.observe(block: (Boolean) -> Unit): Observable.OnPropertyChangedCallback {
+    return observableCallback(block).also { addOnPropertyChangedCallback(it) }
 }
 
-fun ObservableChar.observe(block: (Char) -> Unit){
-    addOnPropertyChangedCallback(observableCallback(block))
+fun ObservableChar.observe(block: (Char) -> Unit): Observable.OnPropertyChangedCallback {
+    return observableCallback(block).also { addOnPropertyChangedCallback(it) }
 }
 
-fun ObservableShort.observe(block: (Short) -> Unit){
-    addOnPropertyChangedCallback(observableCallback(block))
+fun ObservableShort.observe(block: (Short) -> Unit): Observable.OnPropertyChangedCallback {
+    return observableCallback(block).also { addOnPropertyChangedCallback(it) }
 }
 
-fun ObservableLong.observe(block: (Long) -> Unit){
-    addOnPropertyChangedCallback(observableCallback(block))
+fun ObservableLong.observe(block: (Long) -> Unit): Observable.OnPropertyChangedCallback {
+    return observableCallback(block).also { addOnPropertyChangedCallback(it) }
 }
 
-fun ObservableByte.observe(block: (Byte) -> Unit){
-    addOnPropertyChangedCallback(observableCallback(block))
+fun ObservableByte.observe(block: (Byte) -> Unit): Observable.OnPropertyChangedCallback {
+    return observableCallback(block).also { addOnPropertyChangedCallback(it) }
 }
 
-fun ObservableDouble.observe(block: (Double) -> Unit){
-    addOnPropertyChangedCallback(observableCallback(block))
+fun ObservableDouble.observe(block: (Double) -> Unit): Observable.OnPropertyChangedCallback {
+    return observableCallback(block).also { addOnPropertyChangedCallback(it) }
 }
 
-fun ObservableFloat.observe(block: (Float) -> Unit){
-    addOnPropertyChangedCallback(observableCallback(block))
+fun ObservableFloat.observe(block: (Float) -> Unit): Observable.OnPropertyChangedCallback {
+    return observableCallback(block).also { addOnPropertyChangedCallback(it) }
 }
 
-fun<T> ObservableField<T>.observe(block: (T) -> Unit){
-    addOnPropertyChangedCallback(observableCallback(block))
+fun<T> ObservableField<T>.observe(block: (T) -> Unit): Observable.OnPropertyChangedCallback {
+    return observableCallback(block).also { addOnPropertyChangedCallback(it) }
 }
 
 fun Context.string(@StringRes id: Int, vararg any: Any) =
@@ -208,20 +211,14 @@ fun<T> LiveData<T>.observer(owner: LifecycleOwner,block:(T)->Unit){
 
 fun findLayoutView(thisCls: Class<*>): LayoutView {
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-    return thisCls.getAnnotation(LayoutView::class.java)
-        ?: findLayoutView(thisCls = thisCls.superclass!!)
+    return thisCls.getAnnotation(LayoutView::class.java) ?: findLayoutView(thisCls = thisCls.superclass!!)
 }
-
-
 
 fun <T,R> List<T>.converter(block: T.() -> R):List<R>{
     val list = ArrayList<R>()
     for (t in this) list.add( t.block())
     return list
 }
-
-
-
 
 inline fun <reified T : Activity> Activity.startActivity(vararg pairs: Pair<String, Any>) {
     val intent = Intent(this, T::class.java)
@@ -234,6 +231,7 @@ inline fun <reified T> toArray(list: List<T>): Array<T> {
     return ArrayList<T>(list).toArray(arrayOf())
 }
 
+@UnstableDefault
 @ImplicitReflectionSerializer
 inline fun <reified T : Any> parse(string: String): T {
     return Json.parse(string)
@@ -252,78 +250,6 @@ inline fun <T, R> T.transform(block: T.() -> R): R {
     return block()
 }
 
-
-//---- file -----
-
-//fun <T> Observable<T>.subscribeNormal(
-//
-//    onError: (Throwable) -> Unit = { toast(it) },
-//    onComplete: () -> Unit = {},
-//    onSubscribe: (Disposable) -> Unit = {},
-//    onNext: (T) -> Unit = {}
-//):Disposable{
-//    val observer = NormalObserver(onNext, onError, onComplete, onSubscribe)
-//    this.subscribe(observer)
-//    return observer.disposable.get()
-//}
-
-//fun <T> Observable<T>.subscribeObserver(
-//    onError: (Throwable) -> Unit = { toast(it) },
-//    onComplete: () -> Unit = {},
-//    onSubscribe: (Disposable) -> Unit = {},
-//    onNext: (T) -> Unit = {}
-//){
-//    val observer = NormalObserver(onNext, onError, onComplete, onSubscribe)
-//    this.subscribe(observer)
-//}
-
-
-//-------------Single---------------
-//
-//fun <T> Single<T>.subscribeNormal(
-//    onSubscribe: (Disposable) -> Unit = {},
-//    onError: (Throwable) -> Unit = { toast(it) },
-//    onComplete: () -> Unit = {},
-//    onNext: (T) -> Unit = {}
-//) :Disposable{
-//    val observer = NormalObserver(onNext, onError, onComplete, onSubscribe)
-//    this.subscribe(observer)
-//    return observer.disposable.get()
-//}
-
-//
-//fun <T> Single<T>.subscribeObserver(
-//    onSubscribe: (Disposable) -> Unit = {},
-//    onError: (Throwable) -> Unit = { toast(it) },
-//    onComplete: () -> Unit = {},
-//    onNext: (T) -> Unit = {}
-//) {
-//    subscribe(NormalObserver(onNext, onError, onComplete, onSubscribe))
-//}
-//
-//
-//fun <T> Flowable<T>.subscribeObserver(
-//    onSubscribe: (Disposable) -> Unit = {},
-//    onError: (Throwable) -> Unit = { toast(it) },
-//    onComplete: () -> Unit = {},
-//    onNext: (T) -> Unit = {}
-//) {
-//
-//    val disposable = subscribe(Consumer(onNext), Consumer(onError), Action(onComplete))
-//    onSubscribe.invoke(disposable)
-//}
-//
-//
-//fun <T> Flowable<T>.subscribeNormal(
-//    onNext: (T) -> Unit = {},
-//    onError: (Throwable) -> Unit = { toast(it) },
-//    onComplete: () -> Unit = {},
-//    onSubscribe: (Disposable) -> Unit = {}
-//):Disposable {
-//    val disposable = subscribe(Consumer(onNext), Consumer(onError), Action(onComplete))
-//    onSubscribe.invoke(disposable)
-//    return disposable
-//}
 
 fun toast(e: Throwable) {
     if(!TextUtils.isEmpty(e.message))
@@ -368,7 +294,7 @@ fun setMiuiStatusBarDarkMode(activity: Activity, darkmode: Boolean): Boolean {
 
         val layoutParams = Class.forName("android.view.MiuiWindowManager\$LayoutParams")
         val field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE")
-        var darkModeFlag = field.getInt(layoutParams)
+        val darkModeFlag = field.getInt(layoutParams)
         val extraFlagField = clazz.getMethod(
             "setExtraFlags",
             Int::class.javaPrimitiveType,

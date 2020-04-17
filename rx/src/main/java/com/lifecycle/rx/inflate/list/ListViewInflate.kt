@@ -3,7 +3,7 @@ package com.lifecycle.rx.inflate.list
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.Observable.OnPropertyChangedCallback
+import androidx.databinding.Observable
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import androidx.databinding.ViewDataBinding
@@ -14,7 +14,6 @@ import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.inter.inflate.ListInflate
 import com.lifecycle.binding.util.isStateStart
 import com.lifecycle.binding.util.observe
-import com.lifecycle.binding.util.observer
 import com.lifecycle.binding.util.stateStart
 import com.lifecycle.rx.adapter.RecyclerAdapter
 import com.lifecycle.rx.observer.NormalObserver
@@ -22,7 +21,6 @@ import com.lifecycle.rx.util.ioToMainThread
 import io.reactivex.Observer
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
-import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
 open class ListViewInflate<E : Inflate, Binding : ViewDataBinding>(final override val adapter: IList<E> = RecyclerAdapter()) :
@@ -38,12 +36,12 @@ open class ListViewInflate<E : Inflate, Binding : ViewDataBinding>(final overrid
     override val error: ObservableField<Throwable> = ObservableField()
     lateinit var binding: Binding
     override val canRun: AtomicBoolean = AtomicBoolean(true)
-
+    lateinit var propertyChangedCallback :Observable.OnPropertyChangedCallback
     override fun initBinding(t: Binding) { binding = t }
 
     override fun createView(context: Context, parent: ViewGroup?, convertView: View?): View {
         return super.createView(context, parent, convertView).apply {
-            loadingState.observe { getData(it) }
+            propertyChangedCallback = loadingState.observe { getData(it) }
             loadingState.set(stateStart(AdapterType.refresh))
         }
     }
@@ -74,4 +72,7 @@ open class ListViewInflate<E : Inflate, Binding : ViewDataBinding>(final overrid
         super.onError(e)
     }
 
+    fun destroy(){
+        loadingState.removeOnPropertyChangedCallback(propertyChangedCallback)
+    }
 }

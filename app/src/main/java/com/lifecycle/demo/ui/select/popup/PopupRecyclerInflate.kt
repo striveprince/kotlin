@@ -8,6 +8,7 @@ import com.lifecycle.binding.IList
 import com.lifecycle.binding.inter.ISelectList
 import com.lifecycle.binding.inter.Select
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
+import com.lifecycle.binding.life.LifecycleInit
 import com.lifecycle.coroutines.adapter.RecyclerSelectAdapter
 import com.lifecycle.rx.inflate.list.ListViewInflate
 
@@ -31,5 +32,4 @@ class PopupRecyclerInflate<E : Select>(
     fun onConfirmClick(v: View) {
         block(selectAdapter.selectList)
     }
-
 }

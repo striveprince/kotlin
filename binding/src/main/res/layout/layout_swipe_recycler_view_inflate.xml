@@ -16,8 +16,6 @@
             android:enabled="@{!vm.running(vm.loadingState)}"
             app:state="@={vm.loadingState}"
             android:layout_height="match_parent">
-<!--            app:loadMoreListener="@{vm::onLoadMode}"-->
-<!--            app:refreshListener="@{vm::onRefresh}"-->
             <FrameLayout
                 android:onClick="@{vm::onCancelClick}"
                 android:layout_width="match_parent"
