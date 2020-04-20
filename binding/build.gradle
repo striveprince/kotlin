@@ -40,7 +40,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    kapt "com.android.databinding:compiler:3.6.0-rc03"
+    kapt "com.android.databinding:compiler:$gradle_version"
 
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
     def androidx_version = '1.1.0'
