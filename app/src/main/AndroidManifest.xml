@@ -54,5 +54,6 @@
         <activity android:name=".ui.video.VideoActivity" android:label="@string/video"/>
         <activity android:name=".ui.interrogation.detail.InterrogationDetailActivity" />
         <activity android:name=".ui.select.SelectActivity"/>
+        <activity android:name=".ui.home.HomeActivity" />
     </application>
 </manifest>
