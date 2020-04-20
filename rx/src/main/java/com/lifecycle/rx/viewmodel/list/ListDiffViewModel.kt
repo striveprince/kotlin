@@ -27,5 +27,4 @@ open class ListDiffViewModel<E : Diff> : ListViewModel<E>() {
                 }, { onError(it) }, { onComplete() }, { onSubscribe(it) }))
         }
     }
-
 }

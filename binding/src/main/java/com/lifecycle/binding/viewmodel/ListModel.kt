@@ -3,12 +3,12 @@ package com.lifecycle.binding.viewmodel
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import com.lifecycle.binding.IEvent
-import com.lifecycle.binding.IList
+import com.lifecycle.binding.IListAdapter
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
-interface ListModel<E,Job>: IList<E>,Obtain<List<E>,Job> {
+interface ListModel<E,Job>: IListAdapter<E>,Obtain<List<E>,Job> {
     var pageWay:Boolean
     var pageCount :Int
     var headIndex :Int
@@ -16,7 +16,7 @@ interface ListModel<E,Job>: IList<E>,Obtain<List<E>,Job> {
     val loadingState : MutableLiveData<Int>
     val error : MutableLiveData<Throwable>
     var job: Job?
-    val adapter:IList<E>
+    val adapter:IListAdapter<E>
     val canRun:AtomicBoolean
 
     override fun onNext(t: List<E>) {

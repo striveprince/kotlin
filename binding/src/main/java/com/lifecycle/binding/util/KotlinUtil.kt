@@ -60,7 +60,7 @@ import java.lang.RuntimeException
 
 //end
 fun stateEnd(@AdapterEvent state :Int)= state and 0x100FF
-fun isStateEnd(@AdapterEvent state: Int)=state shr 8 and 1 == 0 &&state shr 9 == 0
+fun isStateEnd(@AdapterEvent state: Int)=state shr 8 and 1 == 0 &&state shr 9 and 1 == 0
 
 
 //start

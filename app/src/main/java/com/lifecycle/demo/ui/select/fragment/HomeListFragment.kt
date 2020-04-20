@@ -5,7 +5,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.util.*
-import com.lifecycle.coroutines.adapter.life.RecyclerFragment
+import com.lifecycle.demo.base.recycler.RecyclerFragment
 import com.lifecycle.demo.base.util.api
 import com.lifecycle.demo.base.util.restful
 import com.lifecycle.demo.ui.select.ExamParam
@@ -27,9 +27,10 @@ class HomeListFragment: RecyclerFragment<ExamResultEntity>(){
                 examParam = it
             }
         }
+        model.httpData = {offset,state->require(offset,state)}
     }
 
-    override suspend fun require(startOffset: Int, state: Int): Flow<List<ExamResultEntity>> {
+    suspend fun require(offset: Int, state: Int): Flow<List<ExamResultEntity>> {
         return suspend { api.netApi.httpApi.examList(examParam) }.restful{ it.result.toEntities() }
     }
 

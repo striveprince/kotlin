@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentManager
 import com.lifecycle.binding.inter.inflate.Item
 import com.lifecycle.demo.R
 import com.lifecycle.demo.base.util.ARouterUtil
-import com.lifecycle.demo.ui.home.interrogation.rxlist.InterrogationListFragment.Companion.interrogationList
+import com.lifecycle.demo.ui.home.interrogation.list.InterrogationListFragment.Companion.interrogationList
 
 class HomeInterrogationEntity(strRes: Int) : Item {
     private val params = when (strRes) {

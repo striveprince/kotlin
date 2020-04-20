@@ -3,12 +3,14 @@ package com.lifecycle.coroutines.viewmodel.list
 import android.os.Bundle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
-import com.lifecycle.binding.IList
+import com.lifecycle.binding.IEvent
+import com.lifecycle.binding.IListAdapter
 import com.lifecycle.binding.adapter.AdapterType
+import com.lifecycle.binding.adapter.recycler.RecyclerAdapter
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.util.*
 import com.lifecycle.binding.viewmodel.ListModel
-import com.lifecycle.coroutines.adapter.RecyclerAdapter
+import com.lifecycle.coroutines.util.HttpData
 import com.lifecycle.coroutines.util.launchUI
 import com.lifecycle.coroutines.viewmodel.LifeViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,8 +20,8 @@ import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
-open class ListViewModel<E : Inflate>(final override val adapter: IList<E> = RecyclerAdapter()) :
-    LifeViewModel(), IList<E>, ListModel<E, Job>, HttpData<List<E>> {
+open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E> = RecyclerAdapter()) :
+    LifeViewModel(), IListAdapter<E>, ListModel<E, Job> {
     override var pageWay = true
     override var pageCount = 10
     override var headIndex = 0
@@ -28,9 +30,10 @@ open class ListViewModel<E : Inflate>(final override val adapter: IList<E> = Rec
     override val error = MutableLiveData<Throwable>()
     override var job: Job? = null
     override val adapterList: MutableList<E> = adapter.adapterList
-    var http: HttpData<List<E>> = this
+    var httpData: HttpData<E> = { _,_: Int -> flow {  emit(ArrayList<E>()) }}
     override val canRun: AtomicBoolean = AtomicBoolean(true)
-    override suspend fun require(startOffset: Int, it: Int) = flow { emit(ArrayList<E>()) }
+    override val events: ArrayList<IEvent<E>> = adapter.events
+
 
     @ExperimentalCoroutinesApi
     override fun attachData(owner: LifecycleOwner, bundle: Bundle?) {
@@ -42,7 +45,7 @@ open class ListViewModel<E : Inflate>(final override val adapter: IList<E> = Rec
         if (isStateStart(it) && canRun.getAndSet(false)) {
             Timber.i("SmartRefreshState=${isStateStart(it)} ,result=$it  start http doGetData")
             onSubscribe(launchUI {
-                http.require(getStartOffset(it), it)
+                httpData(getStartOffset(it), it)
                     .flowOn(Dispatchers.IO)
                     .catch { onError(it) }
                     .onCompletion { onComplete() }
@@ -56,9 +59,4 @@ open class ListViewModel<E : Inflate>(final override val adapter: IList<E> = Rec
         addJob(job)
     }
 
-
-    override fun onComplete() {
-        super.onComplete()
-        canRun.compareAndSet(false, true)
-    }
 }

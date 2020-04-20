@@ -3,13 +3,14 @@ package com.lifecycle.rx.viewmodel.list
 import android.os.Bundle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
-import com.lifecycle.binding.IList
+import com.lifecycle.binding.IEvent
+import com.lifecycle.binding.IListAdapter
 import com.lifecycle.binding.adapter.AdapterType
+import com.lifecycle.binding.adapter.recycler.RecyclerAdapter
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.util.isStateStart
 import com.lifecycle.binding.util.observer
 import com.lifecycle.binding.viewmodel.ListModel
-import com.lifecycle.rx.adapter.RecyclerAdapter
 import com.lifecycle.rx.observer.NormalObserver
 import com.lifecycle.rx.util.ioToMainThread
 import com.lifecycle.rx.viewmodel.LifeViewModel
@@ -19,8 +20,9 @@ import io.reactivex.disposables.Disposable
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
-open class ListViewModel<E : Inflate>(final override val adapter: IList<E> = RecyclerAdapter()) :
-    LifeViewModel(), IList<E>, Observer<List<E>>, ListModel<E, Disposable> {
+open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E> = RecyclerAdapter()) :
+    LifeViewModel(), IListAdapter<E>, Observer<List<E>>, ListModel<E, Disposable> {
+    override val events: ArrayList<IEvent<E>> = adapter.events
     override var pageWay = true
     override var pageCount = 10
     override var headIndex = 0
@@ -30,6 +32,7 @@ open class ListViewModel<E : Inflate>(final override val adapter: IList<E> = Rec
     override val adapterList: MutableList<E> = adapter.adapterList
     override var job: Disposable? = null
     var httpData: (Int, Int) -> Single<List<E>> = { _, _ -> Single.just(ArrayList()) }
+
     override val canRun: AtomicBoolean = AtomicBoolean(true)
     override fun attachData(owner: LifecycleOwner, bundle: Bundle?) {
         super.attachData(owner, bundle)

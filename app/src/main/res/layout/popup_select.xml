@@ -14,39 +14,9 @@
         android:padding="10dp"
         android:layout_height="match_parent">
 
-        <com.scwang.smart.refresh.layout.SmartRefreshLayout
-            android:id="@+id/smart_refresh_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="@{!vm.running(vm.loadingState)}"
-            app:layout_constraintTop_toTopOf="parent"
-            app:state="@={vm.loadingState}">
-            <!--            app:loadMoreListener="@{vm::onLoadMode}"-->
-            <!--            app:refreshListener="@{vm::onRefresh}"-->
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:adapter="@{vm.adapter}" />
-
-                <FrameLayout
-                    android:id="@+id/frame_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="@{vm.error==null?View.GONE:View.VISIBLE,default=gone}">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="@{vm.error.message}" />
-                </FrameLayout>
-            </FrameLayout>
-        </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+     <!--   <include app:vm="@{vm}"
+            android:id="@+id/swipe_back_layout"
+            layout="@layout/layout_swipe_recycler_view_inflate"/>-->
 
         <TextView
             android:id="@+id/textView1"
@@ -75,3 +45,39 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
+
+<!--
+
+<com.scwang.smart.refresh.layout.SmartRefreshLayout
+android:id="@+id/smart_refresh_layout"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:enabled="@{!vm.running(vm.loadingState)}"
+app:layout_constraintTop_toTopOf="parent"
+app:state="@={vm.loadingState}">
+<FrameLayout
+android:layout_width="match_parent"
+android:layout_height="match_parent">
+
+<androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/recycler_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:adapter="@{vm.adapter}" />
+
+<FrameLayout
+    android:id="@+id/frame_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="@{vm.error==null?View.GONE:View.VISIBLE,default=gone}">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@{vm.error.message}" />
+</FrameLayout>
+</FrameLayout>
+    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
+-->

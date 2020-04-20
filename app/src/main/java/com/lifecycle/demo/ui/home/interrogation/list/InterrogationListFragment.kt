@@ -1,12 +1,14 @@
 package com.lifecycle.demo.ui.home.interrogation.list
 
+import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LifecycleOwner
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.lifecycle.binding.Constant
 import com.lifecycle.binding.util.toEntities
 import com.lifecycle.binding.util.viewModel
-import com.lifecycle.coroutines.adapter.life.diff.RecyclerDiffFragment
 import com.lifecycle.coroutines.util.launchUI
+import com.lifecycle.demo.base.recycler.diff.RecyclerDiffFragment
 import com.lifecycle.demo.base.util.api
 import com.lifecycle.demo.base.util.restful
 import com.lifecycle.demo.inject.Api
@@ -25,7 +27,12 @@ class InterrogationListFragment : RecyclerDiffFragment<InterrogationListEntity>(
         const val interrogationList = "$interrogation/list"
     }
 
-    override suspend fun require(startOffset: Int, state: Int): Flow<List<InterrogationListEntity>> {
+    override fun initData(owner: LifecycleOwner, bundle: Bundle?) {
+        super.initData(owner, bundle)
+        model.httpData= {start, state -> require(start,state) }
+    }
+
+    private suspend fun require(startOffset: Int, state: Int): Flow<List<InterrogationListEntity>> {
         val taskCategory = when (arguments?.getString(Constant.params)) {
             "new" -> 1
             "wait" -> 2

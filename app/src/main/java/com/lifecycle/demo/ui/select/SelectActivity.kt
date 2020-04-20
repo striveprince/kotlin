@@ -15,11 +15,11 @@ import com.lifecycle.demo.ui.select.fragment.HomeListFragment.Companion.homeList
 import com.lifecycle.demo.ui.select.popup.PopupRecyclerInflate
 import com.lifecycle.demo.ui.select.popup.SelectOption
 import com.lifecycle.binding.adapter.recycler.OrderSpanSizeLookup
+import com.lifecycle.binding.adapter.recycler.RecyclerSelectAdapter
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
 import com.lifecycle.binding.life.binding.data.DataBindingActivity
 import com.lifecycle.demo.base.util.*
 import com.lifecycle.demo.ui.DemoApplication.Companion.tomtaw
-import com.lifecycle.rx.adapter.RecyclerSelectAdapter
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 
@@ -43,7 +43,6 @@ class SelectActivity : DataBindingActivity<SelectModel, ActivityHomeBinding>() {
         super.initData(owner, bundle)
         showFragment(supportFragmentManager, homeList)
     }
-
 
     private fun requireData(position: Int, offset: Int, state: Int): Single<List<SelectOption>> {
         return if (list.isEmpty()) api.netApi.httpApi.commonData().restful()
@@ -102,7 +101,8 @@ class SelectActivity : DataBindingActivity<SelectModel, ActivityHomeBinding>() {
         manager.spanSizeLookup = OrderSpanSizeLookup(adapter, 4)
         val inflate = PopupRecyclerInflate(manager, adapter) {
             selectList(ExamParam(it))
-        }.apply { httpData = { offset, state -> requireData(it, offset, state) } }
+        }
+//            .apply { httpData = { offset, state -> requireData(it, offset, state) } }
         return popup(inflate).apply {
             setOnDismissListener {
                 dismiss()

@@ -1,12 +1,12 @@
 package com.lifecycle.binding.inter
 
 import android.view.View
-import com.lifecycle.binding.IList
+import com.lifecycle.binding.IListAdapter
 import com.lifecycle.binding.adapter.AdapterType
 import kotlin.math.min
 
 
-interface ISelectList<E : Select> : IList<E> {
+interface ISelectList<E : Select> : IListAdapter<E> {
     val selectList: MutableList<E>
     val max: Int
 

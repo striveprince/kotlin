@@ -13,12 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemAnimator
 import androidx.viewpager2.widget.ViewPager2
 import com.lifecycle.binding.adapter.AdapterType
-import com.lifecycle.rx.adapter.RecyclerAdapter
+import com.lifecycle.binding.adapter.recycler.RecyclerAdapter
 import com.lifecycle.binding.inter.inflate.ErrorInflate
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.life.LifecycleInit
 import com.lifecycle.binding.util.observer
-import com.lifecycle.rx.inflate.list.ListViewInflate
 import com.lifecycle.binding.util.toast
 import com.lifecycle.rx.viewmodel.list.ListViewModel
 import com.scwang.smart.refresh.layout.SmartRefreshLayout

@@ -4,13 +4,8 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.ViewGroup
 import android.widget.PopupWindow
-import androidx.databinding.ViewDataBinding
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.lifecycle.binding.databinding.LayoutSwipeRecyclerViewInflateBinding
 import com.lifecycle.binding.inter.inflate.Inflate
-import com.lifecycle.binding.inter.inflate.ListInflate
 import com.lifecycle.binding.life.LifecycleInit
-import com.lifecycle.rx.inflate.list.ListViewInflate
 
 
 /**

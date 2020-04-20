@@ -4,13 +4,10 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.lifecycle.demo.R
 import com.lifecycle.demo.databinding.PopupSelectBinding
-import com.lifecycle.binding.IList
 import com.lifecycle.binding.inter.ISelectList
 import com.lifecycle.binding.inter.Select
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
-import com.lifecycle.binding.life.LifecycleInit
-import com.lifecycle.coroutines.adapter.RecyclerSelectAdapter
-import com.lifecycle.rx.inflate.list.ListViewInflate
+import com.lifecycle.coroutines.inflate.ListViewInflate
 
 
 @LayoutView(layout = [R.layout.popup_select])
@@ -22,7 +19,7 @@ class PopupRecyclerInflate<E : Select>(
 
     override fun initBinding(t: PopupSelectBinding) {
         super.initBinding(t)
-        t.recyclerView.layoutManager = layoutManager
+//        t.swipeBackLayout.recyclerView.layoutManager = layoutManager
     }
 
     fun onResetClick(v: View) {

@@ -20,6 +20,7 @@ interface BindingInflate<Binding : ViewDataBinding> : Inflate, Recycler {
         val view = binding.root
         view.setTag(R.id.dataBinding, binding)
         view.setTag(R.id.inflate, this)
+
         return view
     }
 

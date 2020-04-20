@@ -1,10 +1,10 @@
 package com.lifecycle.binding.adapter.recycler
 
-import com.lifecycle.binding.IList
+import com.lifecycle.binding.IListAdapter
 import com.lifecycle.binding.inter.SpanLookup
 import timber.log.Timber
 
-class OrderSpanSizeLookup<E : SpanLookup>(adapter: IList<E>, count: Int): ReverseSpanSizeLookup<E>(adapter, count) {
+class OrderSpanSizeLookup<E : SpanLookup>(adapter: IListAdapter<E>, count: Int): ReverseSpanSizeLookup<E>(adapter, count) {
 
     override fun getSpanSize(position: Int): Int {
         val span = super.getSpanSize(position)

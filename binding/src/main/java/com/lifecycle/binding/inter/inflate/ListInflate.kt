@@ -1,16 +1,20 @@
 package com.lifecycle.binding.inter.inflate
 
+import android.content.Context
 import android.view.View
+import android.view.ViewGroup
+import androidx.databinding.Observable
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
+import androidx.databinding.ViewDataBinding
 import com.lifecycle.binding.IEvent
-import com.lifecycle.binding.IList
+import com.lifecycle.binding.IListAdapter
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.util.*
 import com.lifecycle.binding.viewmodel.Obtain
 import java.util.concurrent.atomic.AtomicBoolean
 
-interface ListInflate<E,  Job> : IList<E>, Obtain<List<E>, Job> {
+interface ListInflate<E, Binding:ViewDataBinding, Job> : IListAdapter<E>, Obtain<List<E>, Job>,BindingInflate<Binding> {
     var pageWay: Boolean
     var pageCount: Int
     var headIndex: Int
@@ -18,11 +22,27 @@ interface ListInflate<E,  Job> : IList<E>, Obtain<List<E>, Job> {
     val loadingState: ObservableInt
     val error: ObservableField<Throwable>
     var job: Job?
-    val adapter: IList<E>
+    val adapter: IListAdapter<E>
     val canRun:AtomicBoolean
+    var callback : Observable.OnPropertyChangedCallback?
+
+    override fun createView(context: Context, parent: ViewGroup?, convertView: View?): View {
+        return super.createView(context, parent, convertView)
+            .apply {
+                callback = loadingState.observe { getData(it) }
+                loadingState.set(stateStart(AdapterType.refresh))
+            }
+    }
+
+    fun getData(state:Int)
+
     override fun onNext(t: List<E>) {
         setList(getEndOffset(loadingState.get()), t, loadingState.get())
         loadingState.set(stateSuccess(loadingState.get()))
+    }
+
+    override fun onSubscribe(job: Job) {
+        this.job = job
     }
 
     override fun onError(e: Throwable) {
@@ -45,6 +65,10 @@ interface ListInflate<E,  Job> : IList<E>, Obtain<List<E>, Job> {
         val position = if (pageWay) (offset - headIndex) / pageCount * pageCount else offset
         val headIndex = if (state.stateEqual(AdapterType.refresh)) 0 else this.headIndex
         return position + headIndex
+    }
+
+    fun destroy(){
+        callback?.let { loadingState.removeOnPropertyChangedCallback(it) }
     }
 
     override fun notify(p: Int, type: Int, from: Int): Boolean {

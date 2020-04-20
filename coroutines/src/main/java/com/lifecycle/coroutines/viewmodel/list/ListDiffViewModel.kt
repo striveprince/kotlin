@@ -9,7 +9,6 @@ import com.lifecycle.coroutines.util.launchUI
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
-
 open class ListDiffViewModel<E : Diff> : ListViewModel<E>() {
 
 
@@ -18,7 +17,7 @@ open class ListDiffViewModel<E : Diff> : ListViewModel<E>() {
     override fun doGetData(it: Int) {
         if (isStateStart(it) && canRun.getAndSet(false))
             onSubscribe(launchUI {
-                http.require(getStartOffset(it), it)
+                httpData(getStartOffset(it), it)
                     .map {
                         DiffUtil.calculateDiff(DiffUtilCallback(adapterList, it)).apply {
                             adapterList.clear()

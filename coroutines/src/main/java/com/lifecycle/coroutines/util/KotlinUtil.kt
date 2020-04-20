@@ -1,9 +1,14 @@
 package com.lifecycle.coroutines.util
 
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
+
+//typealias HttpData<T> = suspend (Int,Int)->Flow<T>
+
+typealias HttpData<E> = suspend (Int,Int)->Flow<List<E>>
 
 fun launchUI(context: CoroutineContext = EmptyCoroutineContext,
              start: CoroutineStart = CoroutineStart.DEFAULT,
