@@ -9,20 +9,12 @@ buildscript {
         google()
         jcenter()
     }
-//    ext.navigation = '2.2.0-rc04'
     dependencies {
-//        classpath gradle_path
-//        classpath deps.kotlin.plugin
-//        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
         classpath "com.android.tools.build:gradle:$gradle_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
 
         classpath 'com.novoda:bintray-release:0.9.2'
-//        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigation"
-//        classpath 'com.huawei.agconnect:agcp:1.0.0.300'
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
     }
 }
 
