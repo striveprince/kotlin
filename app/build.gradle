@@ -3,8 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlinx-serialization'
-//apply plugin: "androidx.navigation.safeargs.kotlin"
-//apply plugin: 'com.huawei.agconnect'
 kapt {
     arguments {
         arg("moduleName", project.getName())
@@ -131,7 +129,7 @@ dependencies {
     implementation 'com.koushikdutta.async:androidasync:2.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
-    def fragment_version = "1.2.3"
+    def fragment_version = "1.2.4"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
 //    debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
     implementation "androidx.vectordrawable:vectordrawable:$androidx_version"
@@ -171,7 +169,6 @@ dependencies {
     implementation "com.github.bumptech.glide:okhttp3-integration:$glide_version"
     implementation "com.github.bumptech.glide:glide:$glide_version"
     kapt "com.github.bumptech.glide:compiler:$glide_version"
-//    implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
     implementation 'com.aliyun.dpa:oss-android-sdk:2.9.2'
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.amap.api:location:4.7.2'

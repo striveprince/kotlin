@@ -3,7 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlinx-serialization'
-//apply plugin: 'com.novoda.bintray-release'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -68,42 +67,3 @@ dependencies {
 subprojects {
     tasks.withType(Javadoc).all { enabled = false }
 }
-
-
-//    def navigation = '2.3.0-alpha02'
-//    def navigation = '2.2.1'
-//    implementation "androidx.navigation:navigation-runtime:$navigation"
-//    implementation "androidx.navigation:navigation-runtime-ktx:$navigation"
-//    implementation "androidx.navigation:navigation-fragment:$navigation"
-//    implementation "androidx.navigation:navigation-fragment-ktx:$navigation"
-//    implementation "androidx.navigation:navigation-ui:$navigation"
-//    implementation "androidx.navigation:navigation-ui-ktx:$navigation"
-
-//    implementation "androidx.constraintlayout:constraintlayout:$androidx_version"
-//    implementation "androidx.constraintlayout:constraintlayout:2.0.0-beta3"
-//    def compose_version = '0.1.0-dev03'
-//    implementation "androidx.compose:compose-runtime:$compose_version"
-//    implementation "androidx.ui:ui-framework:$compose_version"
-//    implementation "androidx.ui:ui-layout:$compose_version"
-//    implementation "androidx.ui:ui-material:$compose_version"
-//    implementation "androidx.ui:ui-foundation:$compose_version"
-//    implementation "androidx.ui:ui-animation:$compose_version"
-//    implementation "androidx.ui:ui-tooling:$compose_version"
-//    androidTestImplementation "androidx.ui:ui-platform:$compose_version"
-//    androidTestImplementation "androidx.ui:ui-test:$compose_version"
-//
-//Properties properties = new Properties()
-//properties.load( project.rootProject.file('local.properties').newDataInputStream() )
-//publish {
-//    userOrg = 'arvinwant'
-//    groupId = 'com.lifecycle'
-//    artifactId = 'binding'
-//    publishVersion = properties.getProperty('version')
-//    repoName = 'wmt'
-//    desc = 'you could use it create view, databinding or anko or the normal way'
-//    website = 'https://github.com/striveprince/kotlin'
-//    bintrayUser = properties.getProperty('user')
-//    bintrayKey = properties.getProperty('key')
-////    gradlew clean build generatePomFileForReleasePublication bintrayUpload -PdryRun=false
-////    gradlew clean build bintrayUpload -PdryRun=false
-//}
