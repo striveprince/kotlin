@@ -98,12 +98,28 @@ android {
     }
 }
 
+/*
+
+def data_version = "4.7.1"
+configurations.all() {
+    resolutionStrategy.force "org.antlr:antlr4-runtime:${data_version}"
+    resolutionStrategy.force "org.antlr:antlr4-tool:${data_version}"
+}
+configurations.all {
+    resolutionStrategy {
+        force("org.antlr:antlr4-runtime:${data_version}")
+        force("org.antlr:antlr4-tool:${data_version}")
+    }
+}*/
 
 dependencies {
 //    implementation fileTree(dir: 'libs', include: ['*.jar','*.aar'])
-//    implementation 'com.lifecycle:binding:1.1.0-RC2'
-//    implementation project(path: ':binding')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+//    def binding_version = "2.2.0-beta02"
+//    implementation "com.lifecycle:binding:$binding_version"
+//    implementation "com.lifecycle:rx:$binding_version"
+//    implementation "com.lifecycle:coroutines:$binding_version"
     implementation project(path: ':binding')
     implementation project(path: ':rx')
     implementation project(path: ':coroutines')

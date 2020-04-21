@@ -14,7 +14,7 @@
         android:padding="10dp"
         android:layout_height="match_parent">
 
-     <!--   <include app:vm="@{vm}"
+      <!--  <include app:vm="@{vm}"
             android:id="@+id/swipe_back_layout"
             layout="@layout/layout_swipe_recycler_view_inflate"/>-->
 
