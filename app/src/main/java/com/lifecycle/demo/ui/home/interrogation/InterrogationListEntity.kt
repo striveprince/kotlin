@@ -27,9 +27,9 @@ class InterrogationListEntity(bean: InterrogationBean) : DataBeanInflate<Interro
     val content = MutableLiveData(getContent(bean))
     val notifyRed = MutableLiveData<Int>(R.drawable.shape_circle8)
 //    val age = MutableLiveData<String>(bean.exam.age.toString())
-    val age = MutableLiveData<String>("12")
+    val age = MutableLiveData("12")
 //    val sex = MutableLiveData<String>(bean.exam.sex)
-    val sex = MutableLiveData<String>("bean.exam.sex")
+    val sex = MutableLiveData("bean.exam.sex")
 
     override fun attach(t: RecyclerView.ViewHolder) {
         TimeUtil.add(this)
