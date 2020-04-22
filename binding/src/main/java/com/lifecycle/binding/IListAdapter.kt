@@ -32,10 +32,10 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
     fun setList(position: Int, es: List<E>, type: Int): Boolean {
         if (es.isEmpty()) return false
         return when (stateOriginal(type)) {
-            AdapterType.add,AdapterType.load -> addList(es,position)
+            AdapterType.add-> addList(es,position)
             AdapterType.move -> moveList(position, adapterList.indexOf(es.first()), es.size)
             AdapterType.remove -> removeList(position, adapterList.indexOf(es.first()), es.size)
-            AdapterType.refresh -> refreshList(es,position)
+            AdapterType.refresh,AdapterType.load  -> refreshList(es,position)
             AdapterType.set -> set(es,position)
             else -> false
         }
@@ -98,13 +98,15 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
         return notifyList(p, AdapterType.remove, list)
     }
 
+
     fun refreshList(es: List<E>,position: Int): Boolean {
         return if (position in adapterList.indices) {
-            val list = ArrayList(adapterList.subList(0, position))
-            list.addAll(position, es)
+            if(position == 0)adapterList.clear()
+            else adapterList.removeAll(adapterList.subList(position, size()))
+            adapterList.addAll(position, es)
             notifyList(position, AdapterType.refresh, es)
         } else {
-            addList( es,position)
+            addList(es,position)
         }
     }
 
