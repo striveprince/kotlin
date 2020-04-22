@@ -86,6 +86,7 @@ fun stateOriginal(state: Int)= state and 0xff
 fun Int.stateEqual(@AdapterEvent state: Int)=(this and 0xff) == (state and 0xff)
 
 
+
 val gson = Gson()
 
 inline fun <reified T> Gson.fromJson(json: String) =

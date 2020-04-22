@@ -7,6 +7,5 @@ import com.lifecycle.demo.R
 import com.lifecycle.demo.databinding.LayoutSwipeRecyclerViewBinding
 
 open class RecyclerParse<E : Inflate>(private val t: ListViewModel<E>) : DataBinding<ListViewModel<E>, LayoutSwipeRecyclerViewBinding> {
-    override fun t()=t
     override fun layoutId() = R.layout.layout_swipe_recycler_view
 }
