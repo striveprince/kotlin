@@ -45,12 +45,6 @@ open class RecyclerAdapter<E : Inflate> : RecyclerView.Adapter<RecyclerHolder<E>
         holder.bindViewHolder(adapterList[position], event)
     }
 
-    fun addEventAdapter(event: (Int, E, Int, View?) -> Any) {
-        addEventAdapter(object : IEvent<E> {
-            override fun setEvent(type: Int, e: E, position: Int, view: View?) = event(position, e, type, view)
-        })
-    }
-
     override fun addEventAdapter(event: IEvent<E>) {
         events.add(0, event)
     }
