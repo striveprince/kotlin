@@ -22,7 +22,6 @@ interface BindingInflate<Binding : ViewDataBinding> : Inflate, Recycler {
 
     fun initBinding(t: Binding) {}
 
-
     fun parse(convertView: View?, context: Context, parent: ViewGroup?): Binding {
         return convertView?.convertBinding() ?: binding(context, parent)
             .also { initBinding(it) }
@@ -30,10 +29,10 @@ interface BindingInflate<Binding : ViewDataBinding> : Inflate, Recycler {
 
 
     fun View.convertBinding(): Binding? {
-        return getTag(R.id.dataBinding)?.let {
+        return getTag(R.id.dataBinding)?.let { it ->
             if (it is ViewDataBinding && layoutIdFromTag() == layoutId()) {
                 (it as Binding)
-                    .apply { setProperties() }
+                    .also { setProperties(it) }
                     .apply { executePendingBindings() }
             } else null
         }
@@ -44,11 +43,11 @@ interface BindingInflate<Binding : ViewDataBinding> : Inflate, Recycler {
 
     fun binding(context: Context, parent: ViewGroup?): Binding {
         return (DataBindingUtil.inflate(LayoutInflater.from(context), layoutId(), parent, false) as Binding)
-            .apply { setProperties() }
+            .also { setProperties(it) }
     }
 
-    fun Binding.setProperties() {
-        setVariable(appLifecycle.parse, this)
-        setVariable(appLifecycle.vm, this)
+    fun setProperties(binding:Binding) {
+        binding.setVariable(appLifecycle.parse, this)
+        binding.setVariable(appLifecycle.vm, this)
     }
 }
