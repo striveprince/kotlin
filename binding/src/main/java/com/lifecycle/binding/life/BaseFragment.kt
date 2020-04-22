@@ -34,7 +34,6 @@ abstract class BaseFragment<Model:ViewModel,B>:Fragment(),Parse<Model,B>, Lifecy
         return ViewModelProvider(this)[clazz]
     }
 
-    override fun t() = model
     override fun owner()=this
 //    override fun fragmentManager()=childFragmentManager
     override fun onCreate(savedInstanceState: Bundle?) {

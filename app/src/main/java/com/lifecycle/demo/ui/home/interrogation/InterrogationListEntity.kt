@@ -5,6 +5,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.alibaba.android.arouter.utils.MapUtils.isNotEmpty
+import com.lifecycle.binding.inter.bind.DataBeanInflate
 import com.lifecycle.demo.R
 import com.lifecycle.demo.base.util.ARouterUtil
 import com.lifecycle.demo.inject.data.net.bean.InterrogationBean
@@ -16,8 +17,7 @@ import com.lifecycle.binding.inter.inflate.Diff
 import com.lifecycle.binding.inter.inflate.Recycler
 
 @LayoutView(layout = [R.layout.holder_interrogation])
-class InterrogationListEntity(private val bean: InterrogationBean) : DataBindInflate<InterrogationBean, ViewDataBinding>, Diff,Recycler,TimeEntity {
-    override fun t() = bean
+class InterrogationListEntity(bean: InterrogationBean) : DataBeanInflate<InterrogationBean, ViewDataBinding>(bean), Diff,Recycler,TimeEntity {
     var t:RecyclerView.ViewHolder? = null
     val state = MutableLiveData(interrogationState())
 //    val timeRemaining = MutableLiveData(calculationTime(bean.end_time))

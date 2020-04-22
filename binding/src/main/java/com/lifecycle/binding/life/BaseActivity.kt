@@ -32,7 +32,6 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
     override fun requireActivity() = this
     private var usableHeightPrevious = 0
     fun rightText() = ""
-    override fun t() = model
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView(savedInstanceState)
