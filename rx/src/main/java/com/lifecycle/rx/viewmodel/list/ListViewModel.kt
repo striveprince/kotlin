@@ -36,19 +36,17 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
     override val canRun: AtomicBoolean = AtomicBoolean(true)
     override fun attachData(owner: LifecycleOwner, bundle: Bundle?) {
         super.attachData(owner, bundle)
-        loadingState.observer(owner) { getData(it) }
+        loadingState.observer(owner) { if (isStateStart(it) && canRun.getAndSet(false)) getData(it) }
         loadingState.value = AdapterType.refresh
     }
 
 
-    open fun getData(it: Int) {
-        if (isStateStart(it) && canRun.getAndSet(false)) {
-            Timber.i("SmartRefreshState=${isStateStart(it)} ,result=$it")
-            httpData(getStartOffset(it), it)
-                .ioToMainThread()
-                .map { if (it is ArrayList) it else ArrayList(it) }
-                .subscribe(NormalObserver(this))
-        }
+    open fun getData(state: Int) {
+//        Timber.i("SmartRefreshState=${isStateStart(state)} ,result=$state")
+        httpData(getStartOffset(state), state)
+            .ioToMainThread()
+            .map { if (it is ArrayList) it else ArrayList(it) }
+            .subscribe(NormalObserver(this))
     }
 
     override fun onNext(t: List<E>) {
