@@ -98,7 +98,7 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
     }
 
     fun removeList(from: Int,size: Int):Boolean{
-        val list = ArrayList(adapterList.subList(from, size))
+        val list = ArrayList(adapterList.subList(from,from+size))
         adapterList.removeAll(list)
         return notifyList(from, AdapterType.remove, list)
     }
@@ -107,7 +107,7 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
         if (es.isEmpty()) return false
         val position = adapterList.indexOf(es.first())
         if (position < 0) return false
-        val list = ArrayList(adapterList.subList(position, es.size))
+        val list = ArrayList(adapterList.subList(position, position+es.size))
         if (checkEqualList(list, es)) {
             return removeList(position,es.size)
         } else es.forEach { remove(it) }
