@@ -121,10 +121,13 @@ interface ListModel<E,Job>: IListAdapter<E>,Obtain<List<E>,Job> {
         return adapter.moveList(position, from, size)
     }
 
-    override fun removeList(position: Int, from: Int, size: Int): Boolean {
-        return adapter.removeList(position, from, size)
+    override fun removeList(es: List<E>): Boolean {
+        return adapter.removeList(es)
     }
 
+    override fun removeList(from: Int, size: Int): Boolean {
+        return adapter.removeList(from,size)
+    }
 
     override fun addEventAdapter(event: IEvent<E>) {
         adapter.addEventAdapter(event)
