@@ -17,9 +17,9 @@ interface NormalInflate : Inflate {
         val layoutId = convertView?.getTag(R.id.inflate)?.let { (it as Inflate).layoutId() }
         val view = if (layoutId == layoutId()) convertView
         else LayoutInflater.from(context).inflate(layoutId(), parent, false)
-        return view.apply {
+        return view.also {
             view.setTag(R.id.inflate, this)
-            binding(this)
+            binding(it)
         }
     }
 
