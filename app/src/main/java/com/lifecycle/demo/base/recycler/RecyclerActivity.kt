@@ -8,11 +8,9 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.lifecycle.binding.inter.bind.data.DataBinding
 import com.lifecycle.binding.inter.inflate.Diff
 import com.lifecycle.binding.life.BaseActivity
 import com.lifecycle.coroutines.viewmodel.list.ListViewModel
-import com.lifecycle.demo.R
 import com.lifecycle.demo.databinding.LayoutSwipeRecyclerViewBinding
 import kotlinx.coroutines.flow.flow
 
@@ -32,7 +30,7 @@ abstract class RecyclerActivity<E : Diff> : BaseActivity<ListViewModel<E>, Layou
     }
 
     override fun parse(t: ListViewModel<E>, context: Context, parent: ViewGroup?, attachToParent: Boolean): LayoutSwipeRecyclerViewBinding {
-        return RecyclerParse(t).parse(t, requireActivity(), parent, false).apply {
+        return RecyclerParse<E>().parse(t, requireActivity(), parent, false).apply {
             recyclerView.apply {
                 adapter = t.adapter as RecyclerView.Adapter<*>
                 layoutManager = LinearLayoutManager(context)

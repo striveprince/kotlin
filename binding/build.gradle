@@ -104,6 +104,6 @@ publish {
     website = 'https://github.com/striveprince/kotlin'
     bintrayUser = properties.getProperty('user')
     bintrayKey = properties.getProperty('key')
-//    gradlew clean build generatePomFileForReleasePublication bintrayUpload -PdryRun=false
-//    gradlew clean build bintrayUpload -PdryRun=false
+//    gradle clean build generatePomFileForReleasePublication bintrayUpload -PdryRun=false
+//    gradle clean build bintrayUpload -PdryRun=false
 }

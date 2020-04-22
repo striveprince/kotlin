@@ -21,7 +21,7 @@ abstract class RecyclerFragment<E : Diff> : BaseFragment<ListViewModel<E>, Layou
     }
 
     override fun parse(t: ListViewModel<E>, context: Context, parent: ViewGroup?, attachToParent: Boolean): LayoutSwipeRecyclerViewBinding {
-        return RecyclerParse(t).parse(t, requireActivity(), parent, false).apply {
+        return RecyclerParse<E>().parse(t, requireActivity(), parent, false).apply {
             recyclerView.apply {
                 adapter = t.adapter as RecyclerView.Adapter<*>
                 layoutManager = LinearLayoutManager(context)
