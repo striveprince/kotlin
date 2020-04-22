@@ -30,28 +30,25 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
     override val error = MutableLiveData<Throwable>()
     override var job: Job? = null
     override val adapterList: MutableList<E> = adapter.adapterList
-    var httpData: HttpData<E> = { _,_: Int -> flow {  emit(ArrayList<E>()) }}
+    var httpData: HttpData<E> = { _, _: Int -> flow { emit(ArrayList<E>()) } }
     override val canRun: AtomicBoolean = AtomicBoolean(true)
     override val events: ArrayList<IEvent<E>> = adapter.events
 
 
     @ExperimentalCoroutinesApi
     override fun attachData(owner: LifecycleOwner, bundle: Bundle?) {
-        loadingState.observer(owner) { doGetData(it) }
+        loadingState.observer(owner) { if (isStateStart(it) && canRun.getAndSet(false)) doGetData(it) }
     }
 
     @ExperimentalCoroutinesApi
-    open fun doGetData(it: Int) {
-        if (isStateStart(it) && canRun.getAndSet(false)) {
-            Timber.i("SmartRefreshState=${isStateStart(it)} ,result=$it  start http doGetData")
-            onSubscribe(launchUI {
-                httpData(getStartOffset(it), it)
-                    .flowOn(Dispatchers.IO)
-                    .catch { onError(it) }
-                    .onCompletion { onComplete() }
-                    .collect { onNext(it) }
-            })
-        }
+    open fun doGetData(state: Int) {
+        onSubscribe(launchUI {
+            httpData(getStartOffset(state), state)
+                .flowOn(Dispatchers.IO)
+                .catch { onError(it) }
+                .onCompletion { onComplete() }
+                .collect { onNext(it) }
+        })
     }
 
     override fun onSubscribe(job: Job) {

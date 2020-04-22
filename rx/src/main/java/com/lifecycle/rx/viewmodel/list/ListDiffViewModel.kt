@@ -5,15 +5,15 @@ import androidx.recyclerview.widget.ListUpdateCallback
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.adapter.recycler.DiffUtilCallback
 import com.lifecycle.binding.inter.inflate.Diff
+import com.lifecycle.binding.util.stateOriginal
 import com.lifecycle.rx.observer.NormalObserver
 import com.lifecycle.rx.util.ioToMainThread
 
 open class ListDiffViewModel<E : Diff> : ListViewModel<E>() {
 
-    override fun getData(it: Int) {
-        val es = ArrayList<E>()
-        val state:Int = loadingState.value!!
-        if (canRun.getAndSet(false)) {
+    override fun getData(state: Int) {
+        if (AdapterType.refresh == stateOriginal(state)) {
+            val es = ArrayList<E>()
             httpData(getStartOffset(state), state)
                 .map { if (it is ArrayList) it else ArrayList(it) }
                 .doOnSuccess { es.addAll(it) }
@@ -25,6 +25,8 @@ open class ListDiffViewModel<E : Diff> : ListViewModel<E>() {
                     adapterList.addAll(es)
                     it.dispatchUpdatesTo(adapter as ListUpdateCallback)
                 }, { onError(it) }, { onComplete() }, { onSubscribe(it) }))
-        }
+        } else super.getData(state)
     }
+
+
 }

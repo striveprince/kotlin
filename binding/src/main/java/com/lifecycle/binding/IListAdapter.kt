@@ -32,7 +32,7 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
     fun setList(position: Int, es: List<E>, type: Int): Boolean {
         if (es.isEmpty()) return false
         return when (stateOriginal(type)) {
-            AdapterType.add -> addList(es,position)
+            AdapterType.add,AdapterType.load -> addList(es,position)
             AdapterType.move -> moveList(position, adapterList.indexOf(es.first()), es.size)
             AdapterType.remove -> removeList(position, adapterList.indexOf(es.first()), es.size)
             AdapterType.refresh -> refreshList(es,position)
