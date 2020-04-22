@@ -29,7 +29,7 @@ interface BindingInflate<Binding : ViewDataBinding> : Inflate, Recycler {
 
 
     fun View.convertBinding(): Binding? {
-        return getTag(R.id.dataBinding)?.let {
+        return getTag(R.id.dataBinding)?.let { it ->
             if (it is ViewDataBinding && layoutIdFromTag() == layoutId()) {
                 (it as Binding)
                     .also { setProperties(it) }
