@@ -42,7 +42,6 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
 
 
     open fun getData(state: Int) {
-//        Timber.i("SmartRefreshState=${isStateStart(state)} ,result=$state")
         httpData(getStartOffset(state), state)
             .ioToMainThread()
             .map { if (it is ArrayList) it else ArrayList(it) }
