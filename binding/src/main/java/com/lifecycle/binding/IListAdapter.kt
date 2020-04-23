@@ -67,19 +67,18 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
     }
 
     fun move(e: E, position: Int): Boolean {
-        val p = if (position in adapterList.indices) position else adapterList.lastIndex
+        if(position !in  adapterList.indices)return false
         val from = adapterList.indexOf(e)
-        return if (from >= 0 && from != p && adapterList.remove(e)) {
-            adapterList.add(p, e)
-            notify(p, AdapterType.move, from)
+        return if (from >= 0 && from != position && adapterList.remove(e)) {
+            adapterList.add(position, e)
+            notify(position, AdapterType.move, from)
         } else false
     }
 
     fun remove(e: E, position: Int = -1): Boolean {
-        return if (position in adapterList.indices) {
-            adapterList.remove(e)
-            notify(position, AdapterType.remove)
-        } else false
+         if (position in adapterList.indices) adapterList.removeAt(position)
+        else adapterList.remove(e)
+        return notify(position, AdapterType.remove)
     }
 
     fun addList(es: List<E>, position: Int = Int.MAX_VALUE): Boolean {
