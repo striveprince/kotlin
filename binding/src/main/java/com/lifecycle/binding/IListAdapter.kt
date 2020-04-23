@@ -30,7 +30,7 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
         return when (stateOriginal(type)) {
             AdapterType.add, AdapterType.load -> add(e, position)
             AdapterType.set -> set(e, position)
-            AdapterType.remove -> remove(e, position)
+            AdapterType.remove -> remove(e)
             AdapterType.move -> move(e, position)
             else -> false
         }
@@ -67,7 +67,7 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
     }
 
     fun move(e: E, position: Int): Boolean {
-        if(position !in  adapterList.indices)return false
+        if (position !in adapterList.indices) return false
         val from = adapterList.indexOf(e)
         return if (from >= 0 && from != position && adapterList.remove(e)) {
             adapterList.add(position, e)
@@ -75,9 +75,14 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
         } else false
     }
 
-    fun remove(e: E, position: Int = -1): Boolean {
-         if (position in adapterList.indices) adapterList.removeAt(position)
-        else adapterList.remove(e)
+    fun remove(e: E): Boolean {
+        val position = adapterList.indexOf(e)
+        return if (position in adapterList.indices) removeAt(position)
+        else false
+    }
+
+    fun removeAt(position: Int): Boolean {
+        if (position in adapterList.indices) adapterList.removeAt(position)
         return notify(position, AdapterType.remove)
     }
 
@@ -96,8 +101,8 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
         return notifyList(p, AdapterType.move, list)
     }
 
-    fun removeList(from: Int,size: Int):Boolean{
-        val list = ArrayList(adapterList.subList(from,from+size))
+    fun removeList(from: Int, size: Int): Boolean {
+        val list = ArrayList(adapterList.subList(from, from + size))
         adapterList.removeAll(list)
         return notifyList(from, AdapterType.remove, list)
     }
@@ -106,9 +111,9 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
         if (es.isEmpty()) return false
         val position = adapterList.indexOf(es.first())
         if (position < 0) return false
-        val list = ArrayList(adapterList.subList(position, position+es.size))
+        val list = ArrayList(adapterList.subList(position, position + es.size))
         if (checkEqualList(list, es)) {
-            return removeList(position,es.size)
+            return removeList(position, es.size)
         } else es.forEach { remove(it) }
         return false
     }
@@ -116,9 +121,9 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
     fun checkEqualList(list: List<E>, es: List<E>): Boolean {
         es.forEachIndexed { index, e ->
             val ie = list[index]
-             if(e is Diff && ie is Diff){
-                if(e.key() != ie.key())return false
-            }else if (ie != e) return false
+            if (e is Diff && ie is Diff) {
+                if (e.key() != ie.key()) return false
+            } else if (ie != e) return false
         }
         return true
     }
