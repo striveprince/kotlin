@@ -4,6 +4,7 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import com.lifecycle.binding.IEvent
 import com.lifecycle.binding.IListAdapter
+import com.lifecycle.binding.adapter.AdapterEvent
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.util.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -24,6 +25,10 @@ interface ListModel<E,Job>: IListAdapter<E>,Obtain<List<E>,Job> {
             setList(getEndOffset(it), t, it)
             loadingState.value = stateSuccess(it)
         }
+    }
+
+    fun start(@AdapterEvent state:Int){
+        loadingState.value = stateStart(state)
     }
 
     override fun onError(e: Throwable) {

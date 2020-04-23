@@ -9,12 +9,13 @@ import androidx.databinding.ObservableInt
 import androidx.databinding.ViewDataBinding
 import com.lifecycle.binding.IEvent
 import com.lifecycle.binding.IListAdapter
+import com.lifecycle.binding.adapter.AdapterEvent
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.util.*
 import com.lifecycle.binding.viewmodel.Obtain
 import java.util.concurrent.atomic.AtomicBoolean
 
-interface ListInflate<E, Binding:ViewDataBinding, Job> : IListAdapter<E>, Obtain<List<E>, Job>,BindingInflate<Binding> {
+interface ListInflate<E, Binding : ViewDataBinding, Job> : IListAdapter<E>, Obtain<List<E>, Job>, BindingInflate<Binding> {
     var pageWay: Boolean
     var pageCount: Int
     var headIndex: Int
@@ -23,18 +24,23 @@ interface ListInflate<E, Binding:ViewDataBinding, Job> : IListAdapter<E>, Obtain
     val error: ObservableField<Throwable>
     var job: Job?
     val adapter: IListAdapter<E>
-    val canRun:AtomicBoolean
-    var callback : Observable.OnPropertyChangedCallback?
+    val canRun: AtomicBoolean
+    var callback: Observable.OnPropertyChangedCallback?
 
     override fun createView(context: Context, parent: ViewGroup?, convertView: View?): View {
-        return super.createView(context, parent, convertView)
-            .apply {
-                callback = loadingState.observe { getData(it) }
-                loadingState.set(stateStart(AdapterType.refresh))
-            }
+        return super.createView(context, parent, convertView).apply { init() }
     }
 
-    fun getData(state:Int)
+    fun init(){
+        callback = loadingState.observe { getData(it) }
+        start(AdapterType.refresh)
+    }
+
+    fun start(@AdapterEvent state: Int) {
+        loadingState.set(stateStart(state))
+    }
+
+    fun getData(state: Int)
 
     override fun onNext(t: List<E>) {
         setList(getEndOffset(loadingState.get()), t, loadingState.get())
@@ -67,7 +73,7 @@ interface ListInflate<E, Binding:ViewDataBinding, Job> : IListAdapter<E>, Obtain
         return position + headIndex
     }
 
-    fun destroy(){
+    fun destroy() {
         callback?.let { loadingState.removeOnPropertyChangedCallback(it) }
     }
 
@@ -149,7 +155,7 @@ interface ListInflate<E, Binding:ViewDataBinding, Job> : IListAdapter<E>, Obtain
     }
 
     override fun removeList(from: Int, size: Int): Boolean {
-        return adapter.removeList(from,size)
+        return adapter.removeList(from, size)
     }
 
     override fun addEventAdapter(event: IEvent<E>) {
@@ -168,11 +174,11 @@ interface ListInflate<E, Binding:ViewDataBinding, Job> : IListAdapter<E>, Obtain
         return isStateRunning(state)
     }
 
-    fun onCancelClick(v:View){
+    fun onCancelClick(v: View) {
         onComplete()
     }
 
-    fun isSuccess(state :Int):Boolean{
+    fun isSuccess(state: Int): Boolean {
         return state shr 8 == 1
     }
 }
