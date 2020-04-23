@@ -113,7 +113,7 @@ configurations.all {
 
 dependencies {
 //    implementation fileTree(dir: 'libs', include: ['*.jar','*.aar'])
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar','*.aar'])
 
 //    def binding_version = "2.2.0-beta02"
 //    implementation "com.lifecycle:binding:$binding_version"
