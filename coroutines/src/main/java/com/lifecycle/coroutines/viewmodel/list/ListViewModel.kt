@@ -10,6 +10,7 @@ import com.lifecycle.binding.adapter.recycler.RecyclerAdapter
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.util.*
 import com.lifecycle.binding.inter.list.ListModel
+import com.lifecycle.binding.life.AppLifecycle
 import com.lifecycle.coroutines.util.HttpData
 import com.lifecycle.coroutines.util.launchUI
 import com.lifecycle.coroutines.viewmodel.LifeViewModel
@@ -22,7 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E> = RecyclerAdapter()) :
     LifeViewModel(), IListAdapter<E>, ListModel<E, Job> {
     override var pageWay = true
-    override var pageCount = 10
+    override var pageCount = AppLifecycle.pageCount
     override var headIndex = 0
     override var offset = 0
     override val loadingState = MutableLiveData(stateStart(AdapterType.refresh))

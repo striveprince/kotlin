@@ -16,46 +16,9 @@ import com.lifecycle.binding.util.*
 import com.lifecycle.binding.viewmodel.Obtain
 import java.util.concurrent.atomic.AtomicBoolean
 
-interface ListInflate<E, Binding : ViewDataBinding, Job> : IListAdapter<E>, ListObtain<E, Job> , BindingInflate<Binding> {
-    val loadingState: ObservableInt
-    val error: ObservableField<Throwable>
-    var callback: Observable.OnPropertyChangedCallback?
-
+interface ListInflate<E, Binding : ViewDataBinding, Job> : ListObserve<E,Binding, Job> , BindingInflate<Binding> {
     override fun createView(context: Context, parent: ViewGroup?, convertView: View?): View {
         return super.createView(context, parent, convertView).apply { init() }
     }
 
-    fun init(){
-        callback = loadingState.observe {  if (canRun.getAndSet(false) && isStateStart(it))getData(it) }
-        start(AdapterType.refresh)
-    }
-
-    override fun start(@AdapterEvent state: Int) {
-        loadingState.set(stateStart(state))
-    }
-
-
-    override fun onNext(t: List<E>) {
-        setList(getEndOffset(loadingState.get()), t, loadingState.get())
-        loadingState.set(stateSuccess(loadingState.get()))
-    }
-
-    override fun onSubscribe(job: Job) {
-        this.job = job
-    }
-
-    override fun onError(e: Throwable) {
-        error.set(e)
-        loadingState.set(stateError(loadingState.get()))
-    }
-
-    override fun onComplete() {
-        super.onComplete()
-        loadingState.set(stateEnd(loadingState.get()))
-    }
-
-
-    fun destroy() {
-        callback?.let { loadingState.removeOnPropertyChangedCallback(it) }
-    }
 }

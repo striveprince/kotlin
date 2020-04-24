@@ -10,6 +10,7 @@ import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.adapter.recycler.RecyclerAdapter
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.inter.list.ListInflate
+import com.lifecycle.binding.life.AppLifecycle
 import com.lifecycle.binding.util.isStateStart
 import com.lifecycle.rx.observer.NormalObserver
 import com.lifecycle.rx.util.ioToMainThread
@@ -21,7 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 open class ListViewInflate<E : Inflate, Binding : ViewDataBinding>(final override val adapter: IListAdapter<E> = RecyclerAdapter()) :
      IListAdapter<E>, ListInflate<E, Binding, Disposable>,Observer<List<E>> {
     override var pageWay = true
-    override var pageCount = 10
+    override var pageCount = AppLifecycle.pageCount
     override var headIndex = 0
     override var offset = 0
     override val adapterList: MutableList<E> = adapter.adapterList

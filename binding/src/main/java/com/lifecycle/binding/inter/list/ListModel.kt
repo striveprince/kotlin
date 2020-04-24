@@ -8,7 +8,7 @@ import com.lifecycle.binding.util.stateError
 import com.lifecycle.binding.util.stateStart
 import com.lifecycle.binding.util.stateSuccess
 
-interface ListModel<E,Job>: IListAdapter<E>, ListObtain<E, Job> {
+interface ListModel<E,Job>:  ListObtain<E, Job> {
     val loadingState : MutableLiveData<Int>
     val error : MutableLiveData<Throwable>
 

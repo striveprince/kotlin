@@ -19,7 +19,10 @@ interface ListObtain<E,Job> :IListAdapter<E>, Obtain<List<E>, Job> {
     var job: Job?
     val adapter: IListAdapter<E>
     val canRun: AtomicBoolean
+
     fun start(@AdapterEvent state: Int)
+
+    fun getData(state: Int)
 
     fun getStartOffset(state: Int): Int {
         offset = if (state.stateEqual(AdapterType.refresh)) 0 else size()
@@ -37,7 +40,7 @@ interface ListObtain<E,Job> :IListAdapter<E>, Obtain<List<E>, Job> {
         canRun.compareAndSet(false,true)
     }
 
-    fun getData(state: Int)
+
 
     override fun notify(p: Int, type: Int, from: Int): Boolean {
         return adapter.notify(p, type, from)

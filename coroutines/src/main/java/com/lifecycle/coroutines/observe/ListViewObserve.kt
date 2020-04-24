@@ -1,4 +1,4 @@
-package com.lifecycle.coroutines.inflate
+package com.lifecycle.coroutines.observe
 
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
@@ -9,17 +9,17 @@ import com.lifecycle.binding.IListAdapter
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.adapter.recycler.RecyclerAdapter
 import com.lifecycle.binding.inter.inflate.Inflate
-import com.lifecycle.binding.inter.list.ListInflate
+import com.lifecycle.binding.inter.list.ListObserve
 import com.lifecycle.binding.life.AppLifecycle
-import com.lifecycle.binding.util.isStateStart
 import com.lifecycle.coroutines.util.launchUI
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import java.util.concurrent.atomic.AtomicBoolean
 
-open class ListViewInflate<E : Inflate, Binding : ViewDataBinding>(final override val adapter: IListAdapter<E> = RecyclerAdapter()) :
-  ListInflate<E, Binding, Job> {
+class ListViewObserve<E : Inflate, Binding : ViewDataBinding>(override val adapter: IListAdapter<E> = RecyclerAdapter()) :
+    ListObserve<E, Binding, Job> {
     override var pageWay = true
     override var pageCount = AppLifecycle.pageCount
     override var headIndex = 0
@@ -34,18 +34,16 @@ open class ListViewInflate<E : Inflate, Binding : ViewDataBinding>(final overrid
     override var callback: Observable.OnPropertyChangedCallback? = null
     override var job: Job? = null
 
-    override fun initBinding(t: Binding) {
-        binding = t
-    }
 
+    @ExperimentalCoroutinesApi
     override fun getData(state: Int) {
-            onSubscribe(launchUI {
-                httpData(getStartOffset(state), state)
-                    .flowOn(Dispatchers.IO)
-                    .catch { onError(it) }
-                    .onCompletion { onComplete() }
-                    .collect { onNext(it) }
-            })
+        onSubscribe(launchUI {
+            httpData(getStartOffset(state), state)
+                .flowOn(Dispatchers.IO)
+                .catch { onError(it) }
+                .onCompletion { onComplete() }
+                .collect { onNext(it) }
+        })
     }
 
 

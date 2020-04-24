@@ -11,6 +11,7 @@ import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.util.isStateStart
 import com.lifecycle.binding.util.observer
 import com.lifecycle.binding.inter.list.ListModel
+import com.lifecycle.binding.life.AppLifecycle
 import com.lifecycle.rx.observer.NormalObserver
 import com.lifecycle.rx.util.ioToMainThread
 import com.lifecycle.rx.viewmodel.LifeViewModel
@@ -23,7 +24,7 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
     LifeViewModel(), IListAdapter<E>, Observer<List<E>>, ListModel<E, Disposable> {
     override val events: ArrayList<IEvent<E>> = adapter.events
     override var pageWay = true
-    override var pageCount = 10
+    override var pageCount = AppLifecycle.pageCount
     override var headIndex = 0
     override var offset = 0
     override val loadingState = MutableLiveData(AdapterType.no)
