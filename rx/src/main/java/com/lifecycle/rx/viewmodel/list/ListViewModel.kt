@@ -10,14 +10,13 @@ import com.lifecycle.binding.adapter.recycler.RecyclerAdapter
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.util.isStateStart
 import com.lifecycle.binding.util.observer
-import com.lifecycle.binding.viewmodel.ListModel
+import com.lifecycle.binding.inter.list.ListModel
 import com.lifecycle.rx.observer.NormalObserver
 import com.lifecycle.rx.util.ioToMainThread
 import com.lifecycle.rx.viewmodel.LifeViewModel
 import io.reactivex.Observer
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
-import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
 open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E> = RecyclerAdapter()) :
@@ -41,11 +40,12 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
     }
 
 
-    open fun getData(state: Int) {
-        httpData(getStartOffset(state), state)
-            .ioToMainThread()
-            .map { if (it is ArrayList) it else ArrayList(it) }
-            .subscribe(NormalObserver(this))
+    override fun getData(state: Int) {
+        if (canRun.getAndSet(false) && isStateStart(state))
+            httpData(getStartOffset(state), state)
+                .ioToMainThread()
+                .map { if (it is ArrayList) it else ArrayList(it) }
+                .subscribe(NormalObserver(this))
     }
 
     override fun onNext(t: List<E>) {

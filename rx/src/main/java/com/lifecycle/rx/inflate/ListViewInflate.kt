@@ -9,7 +9,7 @@ import com.lifecycle.binding.IListAdapter
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.adapter.recycler.RecyclerAdapter
 import com.lifecycle.binding.inter.inflate.Inflate
-import com.lifecycle.binding.inter.inflate.ListInflate
+import com.lifecycle.binding.inter.list.ListInflate
 import com.lifecycle.binding.util.isStateStart
 import com.lifecycle.rx.observer.NormalObserver
 import com.lifecycle.rx.util.ioToMainThread
@@ -19,7 +19,7 @@ import io.reactivex.disposables.Disposable
 import java.util.concurrent.atomic.AtomicBoolean
 
 open class ListViewInflate<E : Inflate, Binding : ViewDataBinding>(final override val adapter: IListAdapter<E> = RecyclerAdapter()) :
-     IListAdapter<E>, ListInflate<E,Binding, Disposable>,Observer<List<E>> {
+     IListAdapter<E>, ListInflate<E, Binding, Disposable>,Observer<List<E>> {
     override var pageWay = true
     override var pageCount = 10
     override var headIndex = 0
@@ -39,7 +39,6 @@ open class ListViewInflate<E : Inflate, Binding : ViewDataBinding>(final overrid
     }
 
      override fun getData(state: Int) {
-        if (canRun.getAndSet(false) && isStateStart(state))
             httpData(getStartOffset(state), state)
                 .ioToMainThread()
                 .map { if (it is ArrayList) it else ArrayList(it) }
