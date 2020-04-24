@@ -34,6 +34,7 @@ class ListViewObserve<E : Inflate, Binding : ViewDataBinding>(override val adapt
     override var callback: Observable.OnPropertyChangedCallback? = null
     override var job: Job? = null
 
+    init { init() }
 
     @ExperimentalCoroutinesApi
     override fun getData(state: Int) {
