@@ -18,6 +18,38 @@
             android:id="@+id/swipe_back_layout"
             layout="@layout/layout_swipe_recycler_view_inflate"/>-->
 
+        <com.scwang.smart.refresh.layout.SmartRefreshLayout
+            android:id="@+id/smart_refresh_layout"
+            android:layout_width="match_parent"
+            android:enabled="@{!vm.running(vm.loadingState)}"
+            app:state="@={vm.loadingState}"
+            android:layout_height="match_parent">
+            <FrameLayout
+                android:onClick="@{vm::onCancelClick}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    app:adapter="@{vm.adapter}"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <FrameLayout
+                    android:visibility="@{vm.isSuccess(vm.loadingState)?View.GONE:View.VISIBLE,default=gone}"
+                    android:id="@+id/frame_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:gravity="center"
+                        android:visibility="@{vm.error==null?View.GONE:View.VISIBLE,default=gone}"
+                        android:text="@{vm.error.message}"
+                        android:layout_height="match_parent"/>
+                </FrameLayout>
+            </FrameLayout>
+        </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
         <TextView
             android:id="@+id/textView1"
             android:layout_width="0dp"

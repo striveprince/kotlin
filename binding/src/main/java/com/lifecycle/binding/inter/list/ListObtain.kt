@@ -1,45 +1,28 @@
-package com.lifecycle.binding.viewmodel
+package com.lifecycle.binding.inter.list
 
 import android.view.View
-import androidx.lifecycle.MutableLiveData
 import com.lifecycle.binding.IEvent
 import com.lifecycle.binding.IListAdapter
 import com.lifecycle.binding.adapter.AdapterEvent
 import com.lifecycle.binding.adapter.AdapterType
-import com.lifecycle.binding.util.*
+import com.lifecycle.binding.util.isStateRunning
+import com.lifecycle.binding.util.isStateSuccess
+import com.lifecycle.binding.util.stateEqual
+import com.lifecycle.binding.viewmodel.Obtain
 import java.util.concurrent.atomic.AtomicBoolean
 
-interface ListModel<E,Job>: IListAdapter<E>,Obtain<List<E>,Job> {
+interface ListObtain<E,Job> :IListAdapter<E>, Obtain<List<E>, Job> {
     var pageWay:Boolean
     var pageCount :Int
     var headIndex :Int
     var offset:Int
-    val loadingState : MutableLiveData<Int>
-    val error : MutableLiveData<Throwable>
     var job: Job?
-    val adapter:IListAdapter<E>
-    val canRun:AtomicBoolean
+    val adapter: IListAdapter<E>
+    val canRun: AtomicBoolean
 
-    override fun onNext(t: List<E>) {
-        loadingState.value?.let {
-            setList(getEndOffset(it), t, it)
-            loadingState.value = stateSuccess(it)
-        }
-    }
+    fun start(@AdapterEvent state: Int)
 
-    fun start(@AdapterEvent state:Int){
-        loadingState.value = stateStart(state)
-    }
-
-    override fun onError(e: Throwable) {
-        error.value = e
-        loadingState.value = stateError(loadingState.value!!)
-    }
-
-    override fun onComplete() {
-        loadingState.value = stateEnd(loadingState.value!!)
-        canRun.compareAndSet(false,true)
-    }
+    fun getData(state: Int)
 
     fun getStartOffset(state: Int): Int {
         offset = if (state.stateEqual(AdapterType.refresh)) 0 else size()
@@ -52,6 +35,12 @@ interface ListModel<E,Job>: IListAdapter<E>,Obtain<List<E>,Job> {
         val headIndex = if(state.stateEqual(AdapterType.refresh)) 0 else this.headIndex
         return position+headIndex
     }
+
+    override fun onComplete() {
+        canRun.compareAndSet(false,true)
+    }
+
+
 
     override fun notify(p: Int, type: Int, from: Int): Boolean {
         return adapter.notify(p, type, from)
@@ -69,6 +58,9 @@ interface ListModel<E,Job>: IListAdapter<E>,Obtain<List<E>,Job> {
         return adapter.setEvent(type, e, position, view)
     }
 
+    override fun addEventAdapter(event: (Int, E, Int, View?) -> Any) {
+        adapter.addEventAdapter(event)
+    }
 
     override fun onInserted(position: Int, count: Int) {
         adapter.onInserted(position, count)
@@ -106,8 +98,12 @@ interface ListModel<E,Job>: IListAdapter<E>,Obtain<List<E>,Job> {
         return adapter.move(e, position)
     }
 
-    override fun remove(e: E, position: Int): Boolean {
-        return adapter.remove(e, position)
+    override fun remove(e: E): Boolean {
+        return adapter.remove(e)
+    }
+
+    override fun removeAt(position: Int): Boolean {
+        return adapter.removeAt(position)
     }
 
     override fun addList(es: List<E>, position: Int): Boolean {

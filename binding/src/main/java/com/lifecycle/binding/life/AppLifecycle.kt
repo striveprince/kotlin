@@ -22,7 +22,6 @@ open class AppLifecycle constructor(
     var pauseListener: LifeListener = {}
     var stopListener: LifeListener = {}
     var destroyListener: LifeListener = {}
-
     var onExitListener: LifeListener = {}
     var onCreateListener: ()->Unit = {}
     private val localServers:ArrayList<LocalServer> = ArrayList()
@@ -36,7 +35,7 @@ open class AppLifecycle constructor(
         fun activity(): Activity {
             return stack.lastElement()
         }
-
+        var pageCount = 10
         var appInit: () -> Unit = {}
     }
 

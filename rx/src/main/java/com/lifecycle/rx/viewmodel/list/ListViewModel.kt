@@ -10,21 +10,21 @@ import com.lifecycle.binding.adapter.recycler.RecyclerAdapter
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.util.isStateStart
 import com.lifecycle.binding.util.observer
-import com.lifecycle.binding.viewmodel.ListModel
+import com.lifecycle.binding.inter.list.ListModel
+import com.lifecycle.binding.life.AppLifecycle
 import com.lifecycle.rx.observer.NormalObserver
 import com.lifecycle.rx.util.ioToMainThread
 import com.lifecycle.rx.viewmodel.LifeViewModel
 import io.reactivex.Observer
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
-import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
 open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E> = RecyclerAdapter()) :
     LifeViewModel(), IListAdapter<E>, Observer<List<E>>, ListModel<E, Disposable> {
     override val events: ArrayList<IEvent<E>> = adapter.events
     override var pageWay = true
-    override var pageCount = 10
+    override var pageCount = AppLifecycle.pageCount
     override var headIndex = 0
     override var offset = 0
     override val loadingState = MutableLiveData(AdapterType.no)
@@ -41,11 +41,12 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
     }
 
 
-    open fun getData(state: Int) {
-        httpData(getStartOffset(state), state)
-            .ioToMainThread()
-            .map { if (it is ArrayList) it else ArrayList(it) }
-            .subscribe(NormalObserver(this))
+    override fun getData(state: Int) {
+        if (canRun.getAndSet(false) && isStateStart(state))
+            httpData(getStartOffset(state), state)
+                .ioToMainThread()
+                .map { if (it is ArrayList) it else ArrayList(it) }
+                .subscribe(NormalObserver(this))
     }
 
     override fun onNext(t: List<E>) {

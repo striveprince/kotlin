@@ -16,7 +16,7 @@ open class ListDiffViewModel<E : Diff> : ListViewModel<E>() {
 
 
     @ExperimentalCoroutinesApi
-    override fun doGetData(state: Int) {
+    override fun getData(state: Int) {
         if (AdapterType.refresh == stateOriginal(state)) {
             onSubscribe(launchUI {
                 httpData(getStartOffset(state), state)

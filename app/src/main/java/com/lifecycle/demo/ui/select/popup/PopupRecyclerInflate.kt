@@ -19,7 +19,7 @@ class PopupRecyclerInflate<E : Select>(
 
     override fun initBinding(t: PopupSelectBinding) {
         super.initBinding(t)
-//        t.swipeBackLayout.recyclerView.layoutManager = layoutManager
+        t.recyclerView.layoutManager = layoutManager
     }
 
     fun onResetClick(v: View) {
