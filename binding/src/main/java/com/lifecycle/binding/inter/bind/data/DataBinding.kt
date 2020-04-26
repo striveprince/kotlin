@@ -26,6 +26,5 @@ interface DataBinding<T, B : ViewDataBinding> : Binding<T, B> {
         }.getOrElse { super.parse(t, context, parent, attachToParent) }
     }
 
-    fun layoutId(): Int = findLayoutView(javaClass).layout[layoutIndex()]
-    fun layoutIndex() = 0
+
 }

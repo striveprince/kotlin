@@ -12,11 +12,4 @@ interface Normal<T> :Parse<T,Any>{
         return ""
     }
 
-    override fun createView(t: T, context: Context, parent: ViewGroup?, attachToParent: Boolean): View {
-        return LayoutInflater.from(context).inflate(layoutId(),parent,attachToParent)
-    }
-
-    fun layoutId(): Int = findLayoutView(this.javaClass).layout[layoutIndex()]
-
-    fun layoutIndex(): Int = 0
 }

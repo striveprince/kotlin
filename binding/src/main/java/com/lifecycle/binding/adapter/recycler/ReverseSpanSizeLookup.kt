@@ -15,5 +15,4 @@ open class ReverseSpanSizeLookup<E : SpanLookup>(val adapter: IListAdapter<E>, v
                 else -> it
             }
         }
-
 }

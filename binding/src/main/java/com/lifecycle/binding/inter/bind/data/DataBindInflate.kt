@@ -15,10 +15,13 @@ import com.lifecycle.binding.util.findLayoutView
 interface DataBindInflate<T, Binding : ViewDataBinding> : DataBinding<T, Binding>, BindingInflate<Binding>, Recycler {
     val bean:T
 
+
     override fun setProperties(binding: Binding) {
         binding.setVariable(AppLifecycle.appLifecycle.parse, this)
         binding.setVariable(AppLifecycle.appLifecycle.vm, bean)
     }
 
     override fun layoutId() = super<DataBinding>.layoutId()
+
+    override fun layoutIndex()= super<DataBinding>.layoutIndex()
 }

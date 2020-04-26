@@ -11,11 +11,16 @@ interface Parse<T,B>{
      * 解析layout创建View，这里是用的最简单的解析方式
      * */
     fun createView(t:T,context: Context, parent: ViewGroup?=null, attachToParent: Boolean=false): View {
-        return LayoutInflater.from(context).inflate(findLayoutView(this.javaClass).layout[0],parent,attachToParent)
+        return LayoutInflater.from(context).inflate(layoutId(),parent,attachToParent)
     }
+
+    fun layoutIndex() = 0
+
+    fun layoutId(): Int = findLayoutView(javaClass).layout[layoutIndex()]
 
     /**
      * 这里是解析出view的持有类型，如ViewDataBinding
      * */
     fun parse(t: T, context: Context, parent: ViewGroup?, attachToParent: Boolean): B
+
 }
