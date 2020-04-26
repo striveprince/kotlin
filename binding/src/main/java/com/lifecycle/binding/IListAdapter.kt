@@ -1,7 +1,6 @@
 package com.lifecycle.binding
 
 import android.util.SparseArray
-import android.util.SparseIntArray
 import android.view.View
 import androidx.recyclerview.widget.ListUpdateCallback
 import com.lifecycle.binding.adapter.AdapterEvent
