@@ -1,5 +1,6 @@
 package com.lifecycle.rx.inflate
 
+import android.util.SparseIntArray
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
@@ -21,6 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 open class ListViewInflate<E : Inflate, Binding : ViewDataBinding>(final override val adapter: IListAdapter<E> = RecyclerAdapter()) :
      IListAdapter<E>, ListInflate<E, Binding, Disposable>,Observer<List<E>> {
+    override val tag: SparseIntArray = SparseIntArray()
     override var pageWay = true
     override var pageCount = AppLifecycle.pageCount
     override var headIndex = 0

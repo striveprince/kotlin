@@ -1,6 +1,7 @@
 package com.lifecycle.binding.adapter.recycler
 
 import android.util.SparseArray
+import android.util.SparseIntArray
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +15,7 @@ open class RecyclerAdapter<E : Inflate> : RecyclerView.Adapter<RecyclerHolder<E>
     override val events: ArrayList<IEvent<E>> = ArrayList()
     override val adapterList: MutableList<E> = ArrayList()
     private val event: IEvent<E> by lazy { this }
+    override val tag: SparseIntArray = SparseIntArray()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerHolder<E> {
         return RecyclerHolder(parent, sparseArray.get(viewType))
@@ -43,10 +45,6 @@ open class RecyclerAdapter<E : Inflate> : RecyclerView.Adapter<RecyclerHolder<E>
 
     override fun onBindViewHolder(holder: RecyclerHolder<E>, position: Int) {
         holder.bindViewHolder(adapterList[position], event)
-    }
-
-    override fun addEventAdapter(event: IEvent<E>) {
-        events.add(0, event)
     }
 
     override fun notify(p: Int, type: Int, from: Int): Boolean {

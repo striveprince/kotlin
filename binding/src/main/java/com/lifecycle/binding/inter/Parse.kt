@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import com.lifecycle.binding.util.findLayoutView
 
 interface Parse<T,B>{
+
     /**
      * 解析layout创建View，这里是用的最简单的解析方式
      * */
-    fun createView(t:T,context: Context, parent: ViewGroup?=null, attachToParent: Boolean=false): View {
-        return LayoutInflater.from(context).inflate(layoutId(),parent,attachToParent)
-    }
+    fun createView(t:T,context: Context, parent: ViewGroup?=null, attachToParent: Boolean=false) =
+        LayoutInflater.from(context).inflate(layoutId(),parent,attachToParent)
 
     fun layoutIndex() = 0
 
