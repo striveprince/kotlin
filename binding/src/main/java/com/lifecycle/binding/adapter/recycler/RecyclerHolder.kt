@@ -7,6 +7,7 @@ import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.inter.inflate.Recycler
 import java.util.concurrent.atomic.AtomicReference
 
+@Suppress("UNCHECKED_CAST")
 class RecyclerHolder<E : Inflate>(private val v: ViewGroup, inflate: E) : RecyclerView.ViewHolder(inflate.createView(v.context, v)) {
     private val eReference = AtomicReference<E>(inflate)
     fun bindViewHolder(e: E, event: IEvent<*>) {

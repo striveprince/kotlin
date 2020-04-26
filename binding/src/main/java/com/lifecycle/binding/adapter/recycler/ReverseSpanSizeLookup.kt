@@ -8,6 +8,11 @@ open class ReverseSpanSizeLookup<E : SpanLookup>(val adapter: IListAdapter<E>, v
 
     override fun getSpanSize(position: Int) = adapter.adapterList[position]
         .getSpanSize()
-        .let { if (it <= 0 || it > count) 1 else it }
-
+        .let {
+            when {
+                it < 1 -> 1
+                it > count -> count
+                else -> it
+            }
+        }
 }

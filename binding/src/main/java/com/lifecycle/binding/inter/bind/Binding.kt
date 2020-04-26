@@ -19,11 +19,11 @@ import kotlin.reflect.jvm.javaType
 //    }
 
 
+@Suppress("UNCHECKED_CAST")
 interface Binding<T,B:ViewBinding>:Parse<T, B> {
     /**
      * 覆盖了Parse中parse的方法，以反射的方式解析出ViewBinding
      * */
-    @Suppress("UNCHECKED_CAST")
     override fun parse(t: T, context: Context, parent: ViewGroup?, attachToParent: Boolean): B {
         val clazz = javaClass.kotlin.supertypes[0].arguments[1].type!!.javaType as Class<B>
         val method = clazz.getMethod("inflate",LayoutInflater::class.java,ViewGroup::class.java,Boolean::class.java)

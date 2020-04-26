@@ -1,6 +1,7 @@
 package com.lifecycle.rx.viewmodel.list
 
 import android.os.Bundle
+import android.util.SparseIntArray
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import com.lifecycle.binding.IEvent
@@ -22,6 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E> = RecyclerAdapter()) :
     LifeViewModel(), IListAdapter<E>, Observer<List<E>>, ListModel<E, Disposable> {
+    override val tag: SparseIntArray = SparseIntArray()
     override val events: ArrayList<IEvent<E>> = adapter.events
     override var pageWay = true
     override var pageCount = AppLifecycle.pageCount
