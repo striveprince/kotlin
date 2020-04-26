@@ -15,7 +15,7 @@ open class RecyclerAdapter<E : Inflate> : RecyclerView.Adapter<RecyclerHolder<E>
     override val events: ArrayList<IEvent<E>> = ArrayList()
     override val adapterList: MutableList<E> = ArrayList()
     private val event: IEvent<E> by lazy { this }
-    override val tag: SparseIntArray = SparseIntArray()
+    override val tag:SparseArray<Any> = SparseArray()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerHolder<E> {
         return RecyclerHolder(parent, sparseArray.get(viewType))

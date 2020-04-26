@@ -1,5 +1,6 @@
 package com.lifecycle.binding
 
+import android.util.SparseArray
 import android.util.SparseIntArray
 import android.view.View
 import androidx.recyclerview.widget.ListUpdateCallback
@@ -13,7 +14,7 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
 
     val adapterList: MutableList<E>
     val events: ArrayList<IEvent<E>>
-    val tag:SparseIntArray
+    val tag:SparseArray<Any>
     fun addEventAdapter(event: IEvent<E>) {
         events.add(0,event)
     }

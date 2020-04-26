@@ -1,6 +1,6 @@
 package com.lifecycle.coroutines.observe
 
-import android.util.SparseIntArray
+import android.util.SparseArray
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class ListViewObserve<E : Inflate, Binding : ViewDataBinding>(override val adapter: IListAdapter<E> = RecyclerAdapter()) :
     ListObserve<E, Binding, Job> {
-    override val tag: SparseIntArray = SparseIntArray()
+    override val tag:SparseArray<Any> = SparseArray()
     override var pageWay = true
     override var pageCount = AppLifecycle.pageCount
     override var headIndex = 0
