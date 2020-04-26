@@ -1,5 +1,6 @@
 package com.lifecycle.binding.adapter.widget
 
+import android.util.SparseArray
 import android.util.SparseIntArray
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,7 @@ import kotlin.collections.ArrayList
 
 @Suppress("UNCHECKED_CAST")
 open class WidgetAdapter<E:Inflate> : BaseAdapter(), IListAdapter<E> {
-    override val tag: SparseIntArray = SparseIntArray()
+    override val tag: SparseArray<Any> = SparseArray()
     private val observableEvent: IEvent<E> by lazy { this }
     override val events: ArrayList<IEvent<E>> = ArrayList()
     override val adapterList: MutableList<E> = ArrayList<E>()
