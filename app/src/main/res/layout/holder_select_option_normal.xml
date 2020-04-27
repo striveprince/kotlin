@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="vm"
+            type="com.lifecycle.demo.ui.select.popup.SelectOption" />
+    </data>
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:text="@{vm.option}"
+        android:checked="@={vm.checked}"
+        android:layout_height="wrap_content"/>
+</layout>

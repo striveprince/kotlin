@@ -31,18 +31,22 @@ interface ISelectMultiplexList<E : MultiplexSelect> : IListAdapter<E> {
     }
 
     fun selectStatus(e: E, check: Boolean): Boolean {
-        if (e.isSelected() == check && selectMap.contain(e,selectList)==check) return check
+        if (e.isSelected() == check && selectMap.contain(e, selectList) == check) return check
         return if (!check) {
-            if (!e.couldTakeBack()) e.select(true)
-            else selectMap.remove(e, selectList).let { e.select(false) }
+            if (!e.couldTakeBack()) {
+                asyncSelectMap(e, true)
+            } else selectMap.remove(e, selectList).let { e.select(false) }
         } else {
             if (e.isPush()) selectMap.add(e, selectList)
-                .also { e.select(it) }
-                .apply {
-                    while (selectMap.size(e) > e.max())
-                        selectMap.removeAt(0, selectList).select(false)
-                }
+                .apply { asyncSelectMap(e, this) }
             else selectMap.size(e) < e.max() && selectMap.add(e, selectList).let { e.select(it) }
+        }
+    }
+
+    fun asyncSelectMap(e: E, b: Boolean): Boolean {
+        return e.select(b).apply {
+            while (selectMap.size(e) > e.max())
+                selectMap.removeAt(0, selectList, e.selectType()).select(false)
         }
     }
 
@@ -50,10 +54,13 @@ interface ISelectMultiplexList<E : MultiplexSelect> : IListAdapter<E> {
         when (type) {
             AdapterType.refresh, AdapterType.remove -> {
                 selectMap.clear(selectList)
-                adapterList.forEach { e -> e.select(e.isSelected()).also { if (it && selectMap.size(e) < e.max()) selectMap.add(e, selectList) } }
+                adapterList.reversed().forEach {
+                    val s = it.isSelected() && selectMap.size(it) < it.selectMax()
+                    if (s) selectMap.add(it, selectList)
+                    it.select(s)
+                }
             }
         }
-        selectMap.asyncList(selectList)
     }
 
     fun asyncEntity(e: E, type: Int) {
@@ -82,7 +89,7 @@ interface ISelectMultiplexList<E : MultiplexSelect> : IListAdapter<E> {
     }
 
     fun Map<String, SelectType<E>>.size(e: E): Int {
-        return get(e.selectType())?.selects?.size?:0
+        return get(e.selectType())?.selects?.size ?: 0
     }
 
     fun Map<String, SelectType<E>>.remove(e: E, list: MutableList<E>): Boolean {
@@ -90,8 +97,8 @@ interface ISelectMultiplexList<E : MultiplexSelect> : IListAdapter<E> {
             .also { get(e.selectType())?.selects?.remove(e) }
     }
 
-    fun Map<String, SelectType<E>>.removeAt(index: Int, list: MutableList<E>): E {
-        return list.removeAt(index).also { get(it.selectType())?.selects?.remove(it) }
+    fun Map<String, SelectType<E>>.removeAt(index: Int, list: MutableList<E>, selectType: String): E {
+        return get(selectType)?.selects?.removeAt(index)?.also { list.remove(it) } ?: list.removeAt(index)
     }
 
     fun Map<String, SelectType<E>>.lastIndex(e: E): Int {
@@ -105,11 +112,14 @@ interface ISelectMultiplexList<E : MultiplexSelect> : IListAdapter<E> {
 
     fun MutableMap<String, SelectType<E>>.asyncList(list: MutableList<E>) {
         clear()
-        for (e in list) selectStatus(e,e.isSelected())
+        for (e in list) selectStatus(e, e.isSelected())
     }
 
     fun MutableMap<String, SelectType<E>>.add(inE: E, list: MutableList<E>): Boolean {
-        return get(inE.selectType())?.selects?.add(inE)?:put(inE.selectType(),SelectType(inE.selectMax())).let { list.add(inE) }
+        return list.add(inE).apply {
+            if (get(inE.selectType())?.selects?.add(inE) == null)
+                put(inE.selectType(), SelectType<E>(inE.selectMax()).apply { selects.add(inE) })
+        }
     }
 }
 

@@ -31,4 +31,11 @@
     <string name="confirm">确定</string>
     <string name="type_seek">就诊类型</string>
     <string name="type_inspect">检查类型</string>
+
+    <string name="day_one">一天内</string>
+    <string name="date_not_limit">日期不限</string>
+    <string name="week_one">一周内</string>
+    <string name="month_one">一月内</string>
+    <string name="year_one">一年内</string>
+    <string name="date">日期</string>
 </resources>
