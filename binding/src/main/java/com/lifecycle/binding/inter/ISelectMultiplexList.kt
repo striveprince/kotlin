@@ -110,10 +110,10 @@ interface ISelectMultiplexList<E : MultiplexSelect> : IListAdapter<E> {
         list.clear()
     }
 
-    fun MutableMap<String, SelectType<E>>.asyncList(list: MutableList<E>) {
-        clear()
-        for (e in list) selectStatus(e, e.isSelected())
-    }
+//    fun MutableMap<String, SelectType<E>>.asyncList(list: MutableList<E>) {
+//        clear()
+//        for (e in list) selectStatus(e, e.isSelected())
+//    }
 
     fun MutableMap<String, SelectType<E>>.add(inE: E, list: MutableList<E>): Boolean {
         return list.add(inE).apply {
