@@ -25,7 +25,7 @@ interface ListObserve<E, Binding : ViewDataBinding, Job>: ListObtain<E, Job>  {
 
 
     override fun onNext(t: List<E>) {
-        setList(getEndOffset(loadingState.get()), t, loadingState.get())
+        setList(getEndOffset(loadingState.get()), t, stateOriginal(loadingState.get()))
         loadingState.set(stateSuccess(loadingState.get()))
     }
 
