@@ -14,14 +14,11 @@ import com.lifecycle.demo.databinding.LayoutSwipeRecyclerViewBinding
 
 abstract class RecyclerFragment<E : Diff> : BaseFragment<ListViewModel<E>, LayoutSwipeRecyclerViewBinding>(){
     lateinit var binding: LayoutSwipeRecyclerViewBinding
-    override fun createView(t: ListViewModel<E>, context: Context, parent: ViewGroup?, attachToParent: Boolean): View {
-        binding = parse(t, context, parent, attachToParent)
-        binding.lifecycleOwner = this
-        return binding.root
-    }
 
     override fun parse(t: ListViewModel<E>, context: Context, parent: ViewGroup?, attachToParent: Boolean): LayoutSwipeRecyclerViewBinding {
-        return RecyclerParse<E>().parse(t, requireActivity(), parent, false).apply {
+        return RecyclerParse(t).parse(t, requireActivity(), parent, false).apply {
+            binding = this
+            binding.lifecycleOwner = this@RecyclerFragment
             recyclerView.apply {
                 adapter = t.adapter as RecyclerView.Adapter<*>
                 layoutManager = LinearLayoutManager(context)
