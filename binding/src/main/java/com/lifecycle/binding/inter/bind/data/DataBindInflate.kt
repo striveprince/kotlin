@@ -21,7 +21,8 @@ interface DataBindInflate<T, Binding : ViewDataBinding> : DataBinding<T, Binding
         binding.setVariable(AppLifecycle.appLifecycle.vm, bean)
     }
 
-    override fun layoutId() = super<DataBinding>.layoutId()
+    override fun layoutId() = super<BindingInflate>.layoutId()
 
-    override fun layoutIndex()= super<DataBinding>.layoutIndex()
+    override fun layoutIndex()= super<BindingInflate>.layoutIndex()
+    override fun viewId(): Int = super<BindingInflate>.viewId()
 }

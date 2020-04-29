@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import com.lifecycle.binding.util.layoutParam
 
 interface LayoutMeasure {
-    fun layoutMeasure(viewGroup1: View, viewGroup: ViewGroup): ViewGroup.LayoutParams {
+    fun layoutMeasure(root: View, viewGroup: ViewGroup): ViewGroup.LayoutParams {
         return viewGroup.layoutParam()
     }
 }

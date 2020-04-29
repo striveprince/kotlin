@@ -8,6 +8,8 @@ import com.lifecycle.binding.IEvent
 import com.lifecycle.binding.R
 import com.lifecycle.binding.inter.LayoutMeasure
 import com.lifecycle.binding.inter.inflate.Inflate
+import com.lifecycle.binding.util.layoutParam
+import com.lifecycle.binding.inter.Parse as Parse
 
 
 /**
@@ -66,6 +68,47 @@ object ViewGroupBindingAdapter {
     fun <E : Inflate> addInflates(viewGroup: ViewGroup,es :List<E>){
         viewGroup.removeAllViews()
         for (e in es) viewGroup.inflate(e)
+    }
+
+
+
+
+    fun<T,B, E: Parse<T,B>> ViewGroup.parse(e :E,t:T):B{
+        val b = e.parse(t,context,this@parse,false)
+        val view =  e.run { b.root(context) }
+        view.id = e.viewId()
+        view.setTag(R.id.parse,e)
+        addView(view,if (e is LayoutMeasure)e.layoutMeasure(view,this)else layoutParam())
+        return b
+    }
+
+
+    @JvmStatic
+    @BindingAdapter("remove")
+    fun <E: Parse<*,*>> removeParse(viewGroup: ViewGroup, e:E){
+        val count = viewGroup.childCount
+        for (i in 0 until count){
+            val view = viewGroup.getChildAt(i)
+            val obj = view.getTag(R.id.parse)
+            if(obj == e){
+                viewGroup.removeView(view)
+                break
+            }
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter(value = ["parse","vm"])
+    fun <T,B,E : Parse<T,B>> addParse(viewGroup: ViewGroup,e :E,vm:T) {
+        viewGroup.parse(e,vm)
+    }
+
+
+    @JvmStatic
+    @BindingAdapter(value = ["parses","vm"])
+    fun <T,B,E: Parse<T,B>> addParses(viewGroup: ViewGroup, es :List<E>, vm:T){
+        viewGroup.removeAllViews()
+        for (e in es) viewGroup.parse(e,vm)
     }
 
 }
