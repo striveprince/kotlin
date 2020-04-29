@@ -21,6 +21,8 @@ interface Inflate {
         }
     }
 
+    fun viewId() = 0
+
     fun layoutIndex() = 0
 
     fun event(event: IEvent<Any>) {}

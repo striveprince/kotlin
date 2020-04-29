@@ -3,6 +3,7 @@
 package com.lifecycle.binding.util
 
 import android.annotation.SuppressLint
+import android.app.ActionBar
 import android.app.Activity
 import android.app.Application
 import android.content.Context
@@ -12,18 +13,27 @@ import android.net.Uri
 import android.os.Build
 import android.text.TextUtils
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.appcompat.widget.ActionMenuView
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
 import androidx.databinding.*
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.lifecycle.binding.adapter.AdapterEvent
@@ -361,3 +371,21 @@ fun post(delayMillis:Long=0, block: () -> Unit){
     else TimeUtil.handler.postDelayed(Runnable(block),delayMillis)
 }
 
+fun ViewGroup.layoutParam(width:Int = ViewGroup.LayoutParams.MATCH_PARENT,height:Int = ViewGroup.LayoutParams.WRAP_CONTENT):ViewGroup.LayoutParams{
+    return when(this){
+        is FrameLayout->FrameLayout.LayoutParams(width, height)
+        is LinearLayout->LinearLayout.LayoutParams(width, height)
+        is RadioGroup->RadioGroup.LayoutParams(width, height)
+        is RelativeLayout->RelativeLayout.LayoutParams(width, height)
+        is DrawerLayout-> DrawerLayout.LayoutParams(width, height)
+        is androidx.appcompat.widget.Toolbar->androidx.appcompat.widget.Toolbar.LayoutParams(width, height)
+        is RecyclerView-> RecyclerView.LayoutParams(width, height)
+        is AbsListView->AbsListView.LayoutParams(width, height)
+        is TableRow->TableRow.LayoutParams(width, height)
+        is ActionBar->ActionBar.LayoutParams(width, height)
+        is ActionMenuView->ActionMenuView.LayoutParams(width, height)
+        is CoordinatorLayout->CoordinatorLayout.LayoutParams(width, height)
+        is CollapsingToolbarLayout->CollapsingToolbarLayout.LayoutParams(width, height)
+        else->ViewGroup.LayoutParams(width, height)
+    }
+}

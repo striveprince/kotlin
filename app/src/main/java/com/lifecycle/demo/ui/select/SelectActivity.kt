@@ -9,6 +9,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.GridLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.lifecycle.binding.IEvent
+import com.lifecycle.binding.adapter.databinding.ViewGroupBindingAdapter.inflate
 import com.lifecycle.demo.R
 import com.lifecycle.demo.databinding.ActivityHomeBinding
 import com.lifecycle.demo.inject.bean.CommonDataBean
@@ -21,6 +22,7 @@ import com.lifecycle.binding.adapter.recycler.ReverseSpanSizeLookup
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
 import com.lifecycle.binding.life.binding.data.DataBindingActivity
 import com.lifecycle.demo.base.util.*
+import com.lifecycle.demo.databinding.ActivitySelectBinding
 import com.lifecycle.demo.ui.DemoApplication.Companion.tomtaw
 import com.lifecycle.demo.ui.select.popup.SelectOption
 import com.lifecycle.demo.ui.select.popup.SelectTitle
@@ -29,7 +31,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 
 @Route(path = select)
 @LayoutView(layout = [R.layout.activity_select])
-class SelectActivity : DataBindingActivity<SelectModel, ActivityHomeBinding>() , IEvent<PopupSelect> {
+class SelectActivity : DataBindingActivity<SelectModel, ActivitySelectBinding>() , IEvent<PopupSelect> {
     companion object {
         const val select = tomtaw + "select"
     }
@@ -46,7 +48,13 @@ class SelectActivity : DataBindingActivity<SelectModel, ActivityHomeBinding>() ,
 
     override fun initData(owner: LifecycleOwner, bundle: Bundle?) {
         super.initData(owner, bundle)
-        showFragment(supportFragmentManager, homeList)
+        adapter = RecyclerMultiplexSelectAdapter()
+        val manager = GridLayoutManager(requireActivity(), 4)
+        manager.spanSizeLookup = ReverseSpanSizeLookup(adapter, 4)
+        val inflate = PopupRecyclerInflate(manager,adapter).apply { httpData = { _, _ -> requireData(3) } }
+        binding.inflate = inflate
+//        binding.homeFrameLayout.inflate(inflate)
+//        showFragment(supportFragmentManager, homeList)
     }
 
     private fun requireData(position: Int): Single<List<PopupSelect>> {
