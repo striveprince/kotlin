@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="parse"
+            type="com.lifecycle.demo.ui.select.consult.HomeConsultFragment" />
+
+        <variable
+            name="vm"
+            type="com.lifecycle.demo.ui.select.consult.HomeConsultModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_44">
+
+            <TextView
+                android:id="@+id/textView"
+                style="@style/Text.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/app_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/toolbar_search"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/search"
+                android:padding="6dp"
+                android:src="@drawable/ic_icon_search"
+                app:layout_constraintEnd_toStartOf="@+id/toolbar_grid" />
+
+            <CheckBox
+                android:id="@+id/toolbar_grid"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:button="@drawable/ic_icon_grid"
+                android:checked="@={vm.grid}"
+                android:padding="6dp"
+                app:layout_constraintEnd_toStartOf="@+id/toolbar_sort" />
+
+            <CheckBox
+                android:id="@+id/toolbar_sort"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:button="@drawable/ic_icon_sort"
+                android:checked="@={vm.sort}"
+                android:padding="6dp"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_1"
+            android:background="@color/view_line" />
+
+        <RadioGroup
+            android:id="@+id/radio_group_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/dp_12"
+            android:paddingBottom="@dimen/dp_12"
+            app:position="@={vm.position}">
+
+            <RadioButton
+                style="@style/Text.Select"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:onClick="@{parse::onSelectClick}"
+                android:text="@string/type_seek" />
+
+            <RadioButton
+                android:id="@+id/radio_type_inspect"
+                style="@style/Text.Select"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:onClick="@{parse::onSelectClick}"
+                android:text="@string/type_inspect" />
+
+            <RadioButton
+                style="@style/Text.Select"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:onClick="@{parse::onSelectClick}"
+                android:text="@={vm.date}"
+                tools:text="@string/day_one" />
+
+            <RadioButton
+                style="@style/Text.Select"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/rectangle_line"
+                android:drawableEnd="@drawable/ic_icon_selection"
+                android:onClick="@{parse::onSelectClick}"
+                android:text="@string/selection" />
+        </RadioGroup>
+
+        <FrameLayout
+            android:id="@+id/frame_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+
+
+    </LinearLayout>
+</layout>
+<!--
+  <com.scwang.smart.refresh.layout.SmartRefreshLayout
+            android:id="@+id/smart_refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/gray"
+            android:enabled="@{!vm.running(vm.loadingState)}"
+            app:state="@={vm.loadingState}">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/color_f2">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/dp_8"
+                    app:adapter="@{vm.adapter}" />
+
+                <FrameLayout
+                    android:id="@+id/frame_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:onClick="@{vm::onCancelClick}"
+                    android:visibility="@{vm.isSuccess(vm.loadingState)?View.GONE:View.VISIBLE,default=gone}">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@{vm.error.message}"
+                        android:visibility="@{vm.error==null?View.GONE:View.VISIBLE,default=gone}" />
+                </FrameLayout>
+            </FrameLayout>
+        </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+-->

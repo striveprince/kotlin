@@ -9,7 +9,6 @@ import com.lifecycle.demo.R
 import com.lifecycle.demo.databinding.PopupSelectBinding
 import com.lifecycle.rx.inflate.ListViewInflate
 
-
 @LayoutView(layout = [R.layout.popup_select])
 class PopupRecyclerInflate<E : MultiplexSelect>(
     private val layoutManager: RecyclerView.LayoutManager,
@@ -24,7 +23,6 @@ class PopupRecyclerInflate<E : MultiplexSelect>(
         t.recyclerView.animation = null
         t.smartRefreshLayout.setEnableLoadMore(false)
     }
-
 
     fun onResetClick(v: View) {
         selectAdapter.selectList()

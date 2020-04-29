@@ -38,4 +38,8 @@
     <string name="month_one">一月内</string>
     <string name="year_one">一年内</string>
     <string name="date">日期</string>
+    <string name="text">text</string>
+    <string name="selection">筛选</string>
+    <string name="search">搜索</string>
+
 </resources>

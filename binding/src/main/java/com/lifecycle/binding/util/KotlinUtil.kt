@@ -75,7 +75,7 @@ fun isStateEnd(@AdapterEvent state: Int)=state shr 8 and 1 == 0 &&state shr 9 an
 
 //start
 fun stateStart(@AdapterEvent state :Int)=state or 0x00100
-fun isStateStart(@AdapterEvent state: Int)= state shr 8 and 1 == 1
+fun isStateStart(@AdapterEvent state: Int)= state shr 8 and 1 == 1 && !isStateRunning(state)
 
 
 //running

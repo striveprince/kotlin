@@ -58,7 +58,6 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
     override fun onComplete() {
         super.onComplete()
         job?.dispose()
-        canRun.compareAndSet(false, true)
     }
 
     override fun onSubscribe(job: Disposable) {

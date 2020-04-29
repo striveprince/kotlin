@@ -156,10 +156,9 @@ fun Field.beanGet(bean:Any) =
     runCatching { beanField { get(bean) } }.getOrNull()
 
 
-@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 inline fun <reified T, reified R> T.copy(r: R): T {
     val map = HashMap<String, Any>()
-    R::class.java.declaredFields.forEach { it.beanSetField { map[name] = get(r) } }
+    R::class.java.declaredFields.forEach { it -> it.beanSetField { get(r)?.let { map[name] = it } } }
     T::class.java.declaredFields.forEach { it -> it.beanField { map[name]?.let { set(this@copy, it) } } }
     return this
 }
