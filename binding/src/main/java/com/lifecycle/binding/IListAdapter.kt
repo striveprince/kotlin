@@ -13,7 +13,7 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
 
     val adapterList: MutableList<E>
     val events: ArrayList<IEvent<E>>
-    val tag:SparseArray<Any>
+    val array:SparseArray<Any>
     fun addEventAdapter(event: IEvent<E>) {
         events.add(0,event)
     }

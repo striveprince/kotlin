@@ -24,7 +24,7 @@ abstract class RecyclerActivity<E : Diff> : BaseActivity<ListViewModel<E>, Layou
     }
 
     override fun parse(t: ListViewModel<E>, context: Context, parent: ViewGroup?, attachToParent: Boolean): LayoutSwipeRecyclerViewBinding {
-        return RecyclerParse(t).parse(t, requireActivity(), parent, false).apply {
+        return RecyclerParse<E>().parse(t, requireActivity(), parent, false).apply {
             binding = this
             binding.lifecycleOwner = this@RecyclerActivity
             recyclerView.apply {

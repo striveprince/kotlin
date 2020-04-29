@@ -2,7 +2,6 @@ package com.lifecycle.rx.viewmodel.list
 
 import android.os.Bundle
 import android.util.SparseArray
-import android.util.SparseIntArray
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import com.lifecycle.binding.IEvent
@@ -10,10 +9,10 @@ import com.lifecycle.binding.IListAdapter
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.adapter.recycler.RecyclerAdapter
 import com.lifecycle.binding.inter.inflate.Inflate
-import com.lifecycle.binding.util.isStateStart
-import com.lifecycle.binding.util.observer
 import com.lifecycle.binding.inter.list.ListModel
 import com.lifecycle.binding.life.AppLifecycle
+import com.lifecycle.binding.util.isStateStart
+import com.lifecycle.binding.util.observer
 import com.lifecycle.rx.observer.NormalObserver
 import com.lifecycle.rx.util.ioToMainThread
 import com.lifecycle.rx.viewmodel.LifeViewModel
@@ -24,7 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E> = RecyclerAdapter()) :
     LifeViewModel(), IListAdapter<E>, Observer<List<E>>, ListModel<E, Disposable> {
-    override val tag: SparseArray<Any> = SparseArray()
+    override val array: SparseArray<Any> = SparseArray()
     override val events: ArrayList<IEvent<E>> = adapter.events
     override var pageWay = true
     override var pageCount = AppLifecycle.pageCount

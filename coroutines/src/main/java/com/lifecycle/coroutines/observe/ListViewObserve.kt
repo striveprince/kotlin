@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class ListViewObserve<E : Inflate, Binding : ViewDataBinding>(override val adapter: IListAdapter<E> = RecyclerAdapter()) :
     ListObserve<E, Binding, Job> {
-    override val tag:SparseArray<Any> = SparseArray()
+    override val array:SparseArray<Any> = SparseArray()
     override var pageWay = true
     override var pageCount = AppLifecycle.pageCount
     override var headIndex = 0
