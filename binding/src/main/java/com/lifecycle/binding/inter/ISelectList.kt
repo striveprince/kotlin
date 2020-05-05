@@ -70,12 +70,15 @@ interface ISelectList<E : Select> : IListAdapter<E> {
         }
     }
 
+
+
     fun asyncList() {
         if (selectList.size > max) {
             val arrayList = ArrayList<E>()
             for (it in selectList) if (it.isPush()) arrayList.add(it)
             val l = selectList.size - max
-            for (index in 0..min(l, arrayList.size)) {
+            val min = min(l, arrayList.size)-1
+            for (index in 0..min) {
                 selectList.remove(arrayList[index])
                 arrayList[index].select(false)
             }

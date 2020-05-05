@@ -3,6 +3,7 @@ package com.lifecycle.demo.base.anko.recycler.diff
 import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import com.lifecycle.binding.inter.inflate.Diff
+import com.lifecycle.binding.util.lifeModel
 import com.lifecycle.demo.base.anko.AnkoActivity
 import com.lifecycle.demo.base.anko.recyclerAnko
 import com.lifecycle.rx.viewmodel.list.ListDiffViewModel
@@ -18,7 +19,7 @@ abstract class RecyclerAnkoActivity<E: Diff>: AnkoActivity<ListViewModel<E>>() {
 
 
     @Suppress("UNCHECKED_CAST")
-    override fun initModel(): ListViewModel<E> {
-        return ViewModelProvider(this)[ListViewModel::class.java]  as ListViewModel<E>
+    override fun initModel(clazz: Class<ListViewModel<E>>): ListViewModel<E> {
+        return lifeModel(ListViewModel::class.java) as ListViewModel<E>
     }
 }

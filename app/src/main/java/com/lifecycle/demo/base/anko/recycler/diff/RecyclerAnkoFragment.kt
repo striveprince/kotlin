@@ -14,8 +14,8 @@ abstract class RecyclerAnkoFragment<E: Diff>: AnkoFragment<ListDiffViewModel<E>>
         return recyclerAnko(this, t)
     }
 
-    @Suppress("UNCHECKED_CAST")
-    override fun initModel(): ListDiffViewModel<E> {
+
+    override fun initModel(clazz: Class<ListDiffViewModel<E>>): ListDiffViewModel<E> {
         return ViewModelProvider(this)[ListDiffViewModel::class.java]  as ListDiffViewModel<E>
     }
 }

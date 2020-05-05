@@ -30,9 +30,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.viewpager.widget.ViewPager
-import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -208,11 +205,14 @@ fun Context.string(@StringRes id: Int, vararg any: Any) =
     getString(id, *any)
 
 fun Context.drawable(@DrawableRes id:Int) = ContextCompat.getDrawable(this,id)
+
 fun Context.color(@ColorRes id:Int) = ContextCompat.getColor(this,id)
 
-val density by lazy { AppLifecycle.application.resources.displayMetrics.density }
-val screenWidth by lazy { AppLifecycle.application.resources.displayMetrics.widthPixels }
-val screenHeight by lazy { AppLifecycle.application.resources.displayMetrics.heightPixels }
+val displayMetrics by lazy { AppLifecycle.application.resources.displayMetrics }
+val density by lazy { displayMetrics.density }
+val screenWidth by lazy { displayMetrics.widthPixels }
+val screenHeight by lazy { displayMetrics.heightPixels }
+
 fun dip(int: Int) = (density*int).toInt()
 fun pxToDip(int: Int) = (int/density+0.5).toInt()
 
@@ -387,5 +387,33 @@ fun ViewGroup.layoutParam(width:Int = ViewGroup.LayoutParams.MATCH_PARENT,height
         is CoordinatorLayout->CoordinatorLayout.LayoutParams(width, height)
         is CollapsingToolbarLayout->CollapsingToolbarLayout.LayoutParams(width, height)
         else->ViewGroup.LayoutParams(width, height)
+    }
+}
+
+
+inline fun <reified T : ViewModel> LifecycleOwner.viewModel(factory: ViewModelProvider.Factory? = null): T {
+    return lifeModel(T::class.java,factory)
+}
+
+fun <T : ViewModel> LifecycleOwner.lifeModel(clazz: Class<T>, factory: ViewModelProvider.Factory? = null): T {
+    return if (factory == null)
+        if (this is Fragment) ViewModelProvider(this)[clazz]
+        else ViewModelProvider(this as FragmentActivity)[clazz]
+    else
+        if (this is Fragment) ViewModelProvider(this, factory)[clazz]
+        else ViewModelProvider(this as FragmentActivity, factory)[clazz]
+}
+
+@Suppress("UNREACHABLE_CODE")
+fun <T : ViewModel> LifecycleOwner.lifeViewModel(clazz: Class<T>, vararg argument:Any): T {
+    return if(argument.isEmpty())return lifeModel(clazz,null)
+    else {
+        val factory = object :ViewModelProvider.Factory{
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                val a = Array<Class<*>>(argument.size) { argument[it].javaClass }
+                return modelClass.getConstructor(*a).newInstance()
+            }
+        }
+        return lifeModel(clazz,factory)
     }
 }

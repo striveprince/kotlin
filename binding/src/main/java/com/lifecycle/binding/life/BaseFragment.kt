@@ -29,8 +29,8 @@ abstract class BaseFragment<Model:ViewModel,B>:Fragment(),Parse<Model,B>, Lifecy
 
     override fun inject(savedInstanceState: Bundle?)= createView(model, activity!!)
 
-    override fun initModel():Model {
-        val clazz = javaClass.kotlin.supertypes[0].arguments[0].type!!.javaType as Class<Model>
+
+    override fun initModel(clazz: Class<Model>): Model {
         return ViewModelProvider(this)[clazz]
     }
 

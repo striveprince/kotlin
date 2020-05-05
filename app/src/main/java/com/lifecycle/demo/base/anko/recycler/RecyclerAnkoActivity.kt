@@ -16,7 +16,7 @@ abstract class RecyclerAnkoActivity<E: Inflate>: AnkoActivity<ListViewModel<E>>(
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun initModel(): ListViewModel<E> {
+    override fun initModel(clazz: Class<ListViewModel<E>>): ListViewModel<E> {
         return ViewModelProvider(this)[ListViewModel::class.java]  as ListViewModel<E>
     }
 }

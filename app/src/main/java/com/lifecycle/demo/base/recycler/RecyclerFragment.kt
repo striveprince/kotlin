@@ -34,7 +34,7 @@ abstract class RecyclerFragment<E : Diff> : BaseFragment<ListViewModel<E>, Layou
     open fun tipView(s: ListViewModel<E>): View? = null
 
     @Suppress("UNCHECKED_CAST")
-    override fun initModel(): ListViewModel<E> {
+    override fun initModel(clazz: Class<ListViewModel<E>>): ListViewModel<E> {
         return ViewModelProvider(this)[ListViewModel::class.java] as ListViewModel<E>
     }
 }
