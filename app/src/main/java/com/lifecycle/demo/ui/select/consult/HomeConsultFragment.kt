@@ -15,6 +15,7 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.lifecycle.demo.ui.select.consult.HomeConsultFragment.Companion.homeConsult
 import com.lifecycle.binding.IEvent
 import com.lifecycle.binding.adapter.databinding.ViewGroupBindingAdapter
+import com.lifecycle.binding.adapter.databinding.parse
 import com.lifecycle.binding.adapter.recycler.RecyclerAdapter
 import com.lifecycle.binding.adapter.recycler.RecyclerMultiplexSelectAdapter
 import com.lifecycle.binding.adapter.recycler.ReverseSpanSizeLookup
@@ -58,11 +59,9 @@ class HomeConsultFragment : DataBindingFragment<HomeConsultModel, FragmentHomeCo
     }
 
     private fun initRecyclerBinding(it: FragmentHomeConsultBinding, t: HomeConsultModel) {
-        ViewGroupBindingAdapter.apply {
             recyclerBinding = it.frameLayout.parse(RecyclerParse<ExamResultEntity>(), t)
                 .apply { recyclerView.apply { layoutManager = LinearLayoutManager(context) }
                     lifecycleOwner = this@HomeConsultFragment }
-        }
     }
 
     private var popupWindow: PopupWindow? = null

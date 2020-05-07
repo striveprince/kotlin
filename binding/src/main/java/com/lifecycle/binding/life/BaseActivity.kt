@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ScrollView
@@ -36,8 +37,8 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
         initView(savedInstanceState)
     }
 
-    open fun ViewGroup.waitFinish(savedInstanceState: Bundle?){
-        AppLifecycle.appInit =  {
+    open fun ViewGroup.waitFinish(savedInstanceState: Bundle?) {
+        AppLifecycle.appInit = {
             removeAllViews()
             addView(inject(savedInstanceState))
         }
@@ -52,27 +53,83 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
             val swipeBackLayout = findViewById<SwipeBackLayout>(R.id.swipe_back_layout)
             swipeBackLayout.directionMode = isSwipe()
             val imageView: View = findViewById(R.id.iv_shadow)
-            swipeBackLayout.onSwipeBackListener =  { _, f -> imageView.alpha = 1 - f }
+            swipeBackLayout.onSwipeBackListener = { _, f -> imageView.alpha = 1 - f }
             swipeBackLayout.addView(injectView, ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT))
         } else setContentView(injectView)
     }
 
     override fun inject(savedInstanceState: Bundle?): View {
-        val view = createView(model, this)
-        initData(this,savedInstanceState)
-        return initToolbar(toolbarView(), view)
+        val injectView = createView(model, this)
+        initData(this, savedInstanceState)
+        if(injectView.searchToolbar()==null){
+            if (AppLifecycle.toolbarList.isNotEmpty()){
+                val toolbar = AppLifecycle.toolbarList[toolbarIndex].createView(this) as Toolbar
+                setSupportActionBar(toolbar).also { initToolbar(toolbar) }
+                return LinearLayout(this).apply {
+                    layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+                    orientation = LinearLayout.VERTICAL
+                    addView(toolbar,MATCH_PARENT, WRAP_CONTENT)
+                    addView(injectView, MATCH_PARENT, MATCH_PARENT)
+                }
+            }
+        }
+        return injectView
+    }
+
+    open fun initToolbar(it: Toolbar) {
+
     }
 
     override fun initData(owner: LifecycleOwner, bundle: Bundle?) {
-        model.let { if(it is Init)it.initData(this,bundle) }
+        model.let { if (it is Init) it.initData(this, bundle) }
     }
 
+    private fun View.searchToolbar(): Toolbar? {
+        if (this is Toolbar) {
+            setSupportActionBar(this).also { initToolbar(this) }
+            return this
+        } else if (this is ViewGroup) {
+            for (index in 0 until childCount)
+                return getChildAt(index).searchToolbar()
+        }
+        return null
+    }
+
+    private fun addToSwipeLayout(injectView: View) {
+        return if (isSwipe() != SwipeBackLayout.FROM_NO) {
+            setContentView(R.layout.activity_base)
+            val swipeBackLayout = findViewById<SwipeBackLayout>(R.id.swipe_back_layout)
+            swipeBackLayout.directionMode = isSwipe()
+            val imageView: View = findViewById(R.id.iv_shadow)
+            swipeBackLayout.onSwipeBackListener = { _, f -> imageView.alpha = 1 - f }
+            swipeBackLayout.addView(injectView, ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT))
+        } else setContentView(injectView)
+    }
+
+    open fun startView(): FrameLayout {
+        return FrameLayout(this)
+    }
+
+    //    override fun fragmentManager()=supportFragmentManager
+    override fun initModel(clazz: Class<Model>): Model {
+        return lifeModel(clazz)
+    }
+
+    fun onBackClick(view: View) {
+        onBackPressed()
+    }
+
+    fun onRightClick(view: View) {
+    }
+
+}
+
+
+/*
     open fun toolbarView(): ViewGroup {
         return if (AppLifecycle.toolbarList.isEmpty()) FrameLayout(this).apply { layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT) }
         else AppLifecycle.toolbarList[toolbarIndex].createView(this) as ViewGroup
     }
-
-    private fun initToolbar(viewGroup: ViewGroup, injectView: View): View {
         return if (viewGroup is Toolbar) {
             setSupportActionBar(viewGroup)
             LinearLayout(viewGroup.context).apply {
@@ -93,29 +150,12 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
                 addView(injectView, ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT))
             }
         }
+    private fun initToolbar(injectView: View): View {
+        injectView.searchToolbar()?.let { setSupportActionBar(it) }
+        return injectView
     }
 
-    private fun addToSwipeLayout(injectView: View) {
-        return if (isSwipe() != SwipeBackLayout.FROM_NO) {
-            setContentView(R.layout.activity_base)
-            val swipeBackLayout = findViewById<SwipeBackLayout>(R.id.swipe_back_layout)
-            swipeBackLayout.directionMode = isSwipe()
-            val imageView: View = findViewById(R.id.iv_shadow)
-            swipeBackLayout.onSwipeBackListener =  { _, f -> imageView.alpha = 1 - f }
-            swipeBackLayout.addView(injectView, ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT))
-        } else setContentView(injectView)
-    }
-
-    open fun startView(): FrameLayout {
-        return FrameLayout(this)
-    }
-
-//    override fun fragmentManager()=supportFragmentManager
-    override fun initModel(clazz:Class<Model>): Model {
-        return lifeModel(clazz)
-    }
-
-    open fun possiblyResizeChildOfContent(injectView: View) {
+     open fun possiblyResizeChildOfContent(injectView: View) {
         val usableHeightNow = computeUsableHeight(injectView)
         if (usableHeightNow != usableHeightPrevious) {
             val usableHeightSansKeyboard = injectView.parentHeight()
@@ -157,13 +197,4 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
         injectView.getWindowVisibleDisplayFrame(r)
         return r.bottom - r.top
     }
-
-    fun onBackClick(view: View) {
-        onBackPressed()
-    }
-
-    fun onRightClick(view: View) {
-    }
-
-}
-
+*/
