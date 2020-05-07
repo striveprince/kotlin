@@ -372,7 +372,7 @@ fun post(delayMillis: Long = 0, block: () -> Unit) {
     else TimeUtil.handler.postDelayed(Runnable(block), delayMillis)
 }
 
-fun ViewGroup.layoutParam(width: Int = ViewGroup.LayoutParams.MATCH_PARENT, height: Int = ViewGroup.LayoutParams.WRAP_CONTENT): ViewGroup.LayoutParams {
+fun ViewGroup.layoutParam(width: Int = ViewGroup.LayoutParams.MATCH_PARENT, height: Int = ViewGroup.LayoutParams.MATCH_PARENT): ViewGroup.LayoutParams {
     return when (this) {
         is FrameLayout -> FrameLayout.LayoutParams(width, height)
         is LinearLayout -> LinearLayout.LayoutParams(width, height)
@@ -441,4 +441,18 @@ class OnGlobalLayout(val activity: Activity, val block: (Boolean, Int) -> Unit) 
         }
         height = visibleHeight
     }
+}
+
+
+fun <T, B> List<T>.contain(b: B, block: T.(B) -> Boolean): Boolean {
+    for (it in this)
+        if (it.block(b)) return true
+    return false
+}
+
+fun <T, B> List<T>.indexOfList(b: B, block: T.(B) -> Boolean): Int {
+    for ((index, it) in this.withIndex()) {
+        if (it.block(b)) return index
+    }
+    return -1
 }
