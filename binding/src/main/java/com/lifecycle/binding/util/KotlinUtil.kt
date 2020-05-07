@@ -9,11 +9,13 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Rect
 import android.net.Uri
 import android.os.Build
 import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.view.WindowManager
 import android.widget.*
 import androidx.annotation.ColorRes
@@ -416,4 +418,23 @@ fun <T : ViewModel> LifecycleOwner.lifeViewModel(clazz: Class<T>, vararg argumen
         }
         return lifeModel(clazz,factory)
     }
+}
+
+fun Activity.softKeyBoardListener(block:(Boolean,Int)->Unit){
+    val rootView = window.decorView
+    var height = 0
+    val listener = ViewTreeObserver.OnGlobalLayoutListener {
+        val r = Rect()
+        rootView.getWindowVisibleDisplayFrame(r)
+        val visibleHeight = r.height()
+        if (height == 0) height = visibleHeight
+        val h =  height - visibleHeight
+        when{
+            h>200->block(true,h)
+            h<-200->block(false,h)
+        }
+        height = visibleHeight
+    }
+    rootView.viewTreeObserver.removeOnGlobalLayoutListener(listener)
+    rootView.viewTreeObserver.addOnGlobalLayoutListener (listener)
 }

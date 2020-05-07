@@ -46,16 +46,6 @@ object ViewGroupBindingAdapter {
         viewGroup.inflate(e)
     }
 
-    fun<E:Inflate> ViewGroup.inflate(e :E,iEvent: IEvent<*>?=null){
-        iEvent?.let { e.event(it as IEvent<Any>) }
-        val view = e.createView(context, this, null)
-        view.id = e.viewId()
-        view.setTag(R.id.inflate,e)
-        if (e is LayoutMeasure) addView(view,e.layoutMeasure(view,this))
-        else addView(view)
-    }
-
-
     @JvmStatic
     @BindingAdapter(value = ["inflates","event"])
     fun <E : Inflate> addInflates(viewGroup: ViewGroup, es :List<E>, iEvent: IEvent<*>){
@@ -69,19 +59,6 @@ object ViewGroupBindingAdapter {
         viewGroup.removeAllViews()
         for (e in es) viewGroup.inflate(e)
     }
-
-
-
-
-    fun<T,B, E: Parse<T,B>> ViewGroup.parse(e :E,t:T):B{
-        val b = e.parse(t,context,this@parse,false)
-        val view =  e.run { b.root(context) }
-        view.id = e.viewId()
-        view.setTag(R.id.parse,e)
-        addView(view,if (e is LayoutMeasure)e.layoutMeasure(view,this)else layoutParam())
-        return b
-    }
-
 
     @JvmStatic
     @BindingAdapter("remove")
@@ -110,5 +87,27 @@ object ViewGroupBindingAdapter {
         viewGroup.removeAllViews()
         for (e in es) viewGroup.parse(e,vm)
     }
+}
 
+
+
+
+fun <E : Inflate> ViewGroup.inflate(e: E, iEvent: IEvent<*>? = null): E {
+    iEvent?.let { e.event(it as IEvent<Any>) }
+    val view = e.createView(context, this, null)
+    view.id = e.viewId()
+    view.setTag(R.id.inflate, e)
+    if (e is LayoutMeasure) addView(view, e.layoutMeasure(view, this))
+    else addView(view)
+    return e
+}
+
+
+fun<T,B, E: Parse<T,B>> ViewGroup.parse(e :E,t:T):B{
+    val b = e.parse(t,context,this@parse,false)
+    val view =  e.run { b.root(context) }
+    view.id = e.viewId()
+    view.setTag(R.id.parse,e)
+    addView(view,if (e is LayoutMeasure)e.layoutMeasure(view,this)else layoutParam())
+    return b
 }

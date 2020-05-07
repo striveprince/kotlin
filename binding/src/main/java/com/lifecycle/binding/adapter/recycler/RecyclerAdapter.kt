@@ -22,7 +22,6 @@ open class RecyclerAdapter<E : Inflate> : RecyclerView.Adapter<RecyclerHolder<E>
         return RecyclerHolder(parent, sparseArray.get(viewType).apply { event(event as IEvent<Any>) })
     }
 
-
     override fun getItemCount(): Int {
         return adapterList.size
     }

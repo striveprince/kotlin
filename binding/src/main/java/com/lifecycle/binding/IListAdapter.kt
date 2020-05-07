@@ -26,7 +26,7 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
 
     fun clearList() {
         adapterList.clear()
-        notifyList(0, AdapterType.remove, adapterList)
+        notifyList(0, AdapterType.no, adapterList)
     }
 
     fun size(): Int = adapterList.size
