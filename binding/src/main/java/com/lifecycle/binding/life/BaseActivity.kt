@@ -1,6 +1,5 @@
 package com.lifecycle.binding.life
 
-import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +7,6 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.LifecycleOwner
@@ -17,7 +15,6 @@ import com.lifecycle.binding.R
 import com.lifecycle.binding.inter.Init
 import com.lifecycle.binding.inter.Parse
 import com.lifecycle.binding.util.lifeModel
-import com.lifecycle.binding.util.viewModel
 import com.lifecycle.binding.view.SwipeBackLayout
 
 @Suppress("UNCHECKED_CAST")
@@ -25,7 +22,7 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
 
     LifecycleInit<Model> {
     val model: Model by lazy { initModel() }
-    var toolbarIndex = 0
+    var toolbarIndex = Int.MAX_VALUE
 
     open fun isSwipe(): Int = SwipeBackLayout.FROM_LEFT
     override fun owner() = this
@@ -35,13 +32,6 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView(savedInstanceState)
-    }
-
-    open fun ViewGroup.waitFinish(savedInstanceState: Bundle?) {
-        AppLifecycle.appInit = {
-            removeAllViews()
-            addView(inject(savedInstanceState))
-        }
     }
 
     private fun initView(savedInstanceState: Bundle?) {
@@ -58,40 +48,52 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
         } else setContentView(injectView)
     }
 
+
     override fun inject(savedInstanceState: Bundle?): View {
         val injectView = createView(model, this)
         initData(this, savedInstanceState)
         if(injectView.searchToolbar()==null){
-            if (AppLifecycle.toolbarList.isNotEmpty()){
-                val toolbar = AppLifecycle.toolbarList[toolbarIndex].createView(this) as Toolbar
-                setSupportActionBar(toolbar).also { initToolbar(toolbar) }
+            if (AppLifecycle.toolbarList.run { isNotEmpty()&& toolbarIndex<size }){
+                val toolbar = AppLifecycle.toolbarList[toolbarIndex].createView(this) as ViewGroup
                 return LinearLayout(this).apply {
                     layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
                     orientation = LinearLayout.VERTICAL
                     addView(toolbar,MATCH_PARENT, WRAP_CONTENT)
                     addView(injectView, MATCH_PARENT, MATCH_PARENT)
+                    toolbar.searchToolbar()
                 }
             }
         }
         return injectView
     }
 
-    open fun initToolbar(it: Toolbar) {
-
+    open fun ViewGroup.waitFinish(savedInstanceState: Bundle?) {
+        AppLifecycle.appInit = {
+            removeAllViews()
+            addView(inject(savedInstanceState))
+        }
     }
 
     override fun initData(owner: LifecycleOwner, bundle: Bundle?) {
         model.let { if (it is Init) it.initData(this, bundle) }
     }
 
+
+    open fun initToolbar(it: Toolbar) {
+
+    }
+
     private fun View.searchToolbar(): Toolbar? {
-        if (this is Toolbar) {
-            setSupportActionBar(this).also { initToolbar(this) }
-            return this
-        } else if (this is ViewGroup) {
-            for (index in 0 until childCount)
-                return getChildAt(index).searchToolbar()
+        return when(this){
+            is Toolbar-> this.also { setSupportActionBar(it) }.also { initToolbar(it) }
+            is ViewGroup-> loopToolbar()
+            else-> null
         }
+    }
+
+    private fun ViewGroup.loopToolbar(): Toolbar?{
+        for (index in 0 until childCount)
+            return getChildAt(index).searchToolbar()
         return null
     }
 
@@ -106,11 +108,8 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
         } else setContentView(injectView)
     }
 
-    open fun startView(): FrameLayout {
-        return FrameLayout(this)
-    }
+    open fun startView(): ViewGroup = FrameLayout(this)
 
-    //    override fun fragmentManager()=supportFragmentManager
     override fun initModel(clazz: Class<Model>): Model {
         return lifeModel(clazz)
     }

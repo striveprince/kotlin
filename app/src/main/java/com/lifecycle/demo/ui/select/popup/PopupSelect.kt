@@ -46,7 +46,7 @@ class SelectTitle(type: String) : PopupSelect(type), Inflate {
 
     override fun View.binding() {
         findViewById<CheckBox>(R.id.select_title).setOnClickListener { onSelectClick(it) }
-        findViewById<TextView>(R.id.title).text = type
+//        findViewById<TextView>(R.id.title).text = type
     }
 }
 
