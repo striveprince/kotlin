@@ -46,6 +46,8 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.parse
 import java.io.File
 import java.lang.RuntimeException
+import java.lang.reflect.Constructor
+import java.lang.reflect.Parameter
 
 /**
  * Company:
@@ -118,12 +120,6 @@ fun Context.application(): Context {
 
 fun Context.sharedPreferences(name: String): SharedPreferences {
     return application().getSharedPreferences(name, Activity.MODE_PRIVATE)
-}
-
-
-inline fun <reified T : ViewModel> LifecycleOwner.viewModel(): T {
-    return if (this is Fragment) ViewModelProvider(this)[T::class.java]
-    else ViewModelProvider(this as FragmentActivity)[T::class.java]
 }
 
 
@@ -405,23 +401,41 @@ fun <T : ViewModel> LifecycleOwner.lifeModel(clazz: Class<T>, factory: ViewModel
         else ViewModelProvider(this as FragmentActivity, factory)[clazz]
 }
 
-@Suppress("UNREACHABLE_CODE")
 fun <T : ViewModel> LifecycleOwner.lifeViewModel(clazz: Class<T>, vararg argument: Any): T {
     return if (argument.isEmpty()) return lifeModel(clazz, null)
     else {
         val factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 val a = Array<Class<*>>(argument.size) { argument[it].javaClass }
-                return modelClass.getConstructor(*a).newInstance()
+                return modelClass.getMatchConstructor(*a)?.newInstance()?:throw RuntimeException("can't find the matched class ")
             }
         }
-        return lifeModel(clazz, factory)
+        lifeModel(clazz, factory)
     }
+}
+
+fun <T> Class<T>.getMatchConstructor(vararg clazz: Class<*>): Constructor<T>? {
+    return runCatching { getConstructor(*clazz) }.getOrElse {
+        constructors.forEach {
+            if(it.parameters.isMatched(*clazz))
+                return it as Constructor<T>
+        }
+        null
+    }
+}
+
+private fun Array<out Parameter>.isMatched(vararg clazzs: Class<*>): Boolean {
+
+    for ((index,parameter) in withIndex()) {
+//        if(parameter.cl)
+        return false
+    }
+    return true
 }
 
 fun Activity.softKeyBoardListener(block: (Boolean, Int) -> Unit) {
     val rootView = window.decorView
-    val listener = OnGlobalLayout(this,block)
+    val listener = OnGlobalLayout(this, block)
     rootView.viewTreeObserver.removeOnGlobalLayoutListener(listener)
     rootView.viewTreeObserver.addOnGlobalLayoutListener(listener)
 }

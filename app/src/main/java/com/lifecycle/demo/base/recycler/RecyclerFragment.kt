@@ -8,11 +8,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.lifecycle.binding.inter.inflate.Diff
 import com.lifecycle.binding.life.BaseFragment
+import com.lifecycle.binding.util.lifeModel
 import com.lifecycle.coroutines.viewmodel.list.ListViewModel
 import com.lifecycle.demo.databinding.LayoutSwipeRecyclerViewBinding
 
 
-abstract class RecyclerFragment<E : Diff> : BaseFragment<ListViewModel<E>, LayoutSwipeRecyclerViewBinding>(){
+abstract class RecyclerFragment<E : Diff> : BaseFragment<ListViewModel<E>, LayoutSwipeRecyclerViewBinding>() {
     lateinit var binding: LayoutSwipeRecyclerViewBinding
 
     override fun parse(t: ListViewModel<E>, context: Context, parent: ViewGroup?, attachToParent: Boolean): LayoutSwipeRecyclerViewBinding {
@@ -33,8 +34,11 @@ abstract class RecyclerFragment<E : Diff> : BaseFragment<ListViewModel<E>, Layou
 
     open fun tipView(s: ListViewModel<E>): View? = null
 
-    @Suppress("UNCHECKED_CAST")
-    override fun initModel(clazz: Class<ListViewModel<E>>): ListViewModel<E> {
-        return ViewModelProvider(this)[ListViewModel::class.java] as ListViewModel<E>
+    //    @Suppress("UNCHECKED_CAST")
+//    override fun initModel(clazz: Class<*>): ListViewModel<E> {
+//        return ViewModelProvider(this)[ListViewModel::class.java] as ListViewModel<E>
+//    }
+    override fun initModel(clazz: Class<*>): ListViewModel<E> {
+        return lifeModel(ListViewModel::class.java) as ListViewModel<E>
     }
 }

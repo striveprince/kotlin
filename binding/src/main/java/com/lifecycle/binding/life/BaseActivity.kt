@@ -15,9 +15,10 @@ import com.lifecycle.binding.R
 import com.lifecycle.binding.inter.Init
 import com.lifecycle.binding.inter.Parse
 import com.lifecycle.binding.util.lifeModel
+import com.lifecycle.binding.util.viewModel
 import com.lifecycle.binding.view.SwipeBackLayout
 
-@Suppress("UNCHECKED_CAST")
+
 abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<Model, B>,
 
     LifecycleInit<Model> {
@@ -109,10 +110,6 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
     }
 
     open fun startView(): ViewGroup = FrameLayout(this)
-
-    override fun initModel(clazz: Class<Model>): Model {
-        return lifeModel(clazz)
-    }
 
     fun onBackClick(view: View) {
         onBackPressed()
