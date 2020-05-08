@@ -83,7 +83,7 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
 
     }
 
-    private fun View.searchToolbar(): Toolbar? {
+    fun View.searchToolbar(): Toolbar? {
         return when(this){
             is Toolbar-> this.also { setSupportActionBar(it) }.also { initToolbar(it) }
             is ViewGroup-> loopToolbar()
