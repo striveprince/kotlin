@@ -87,8 +87,8 @@ object ViewGroupBindingAdapter {
         viewGroup.removeAllViews()
         for (e in es) viewGroup.parse(e,vm)
     }
-}
 
+}
 
 
 
