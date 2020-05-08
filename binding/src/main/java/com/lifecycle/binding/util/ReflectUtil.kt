@@ -190,20 +190,20 @@ fun beanFieldSet(field: Field, bean: Any, value: Any?) {
     field.beanField { value?.let { set(bean, it) } }
 }
 
-
 fun <T> Class<T>.getMatchConstructor(vararg clazz: Class<*>): Constructor<T>? {
     return runCatching { getConstructor(*clazz) }.getOrElse {
         constructors.forEach {
-            if(it.typeParameters.isMatched(*clazz))
+            if(it.parameterTypes.isMatched(*clazz))
                 return it as Constructor<T>
         }
         null
     }
 }
 
-fun Array<out Type>.isMatched(vararg cls: Class<*>): Boolean {
+fun Array<out Class<*>>.isMatched(vararg cls: Class<*>): Boolean {
+    if(size != cls.size)return false
     for ((index,parameter) in withIndex()) {
-        if(parameter is Class<*> && parameter.isAssignableFrom(cls[index]))continue
+        if( parameter.isAssignableFrom(cls[index]))continue
         else return false
     }
     return true

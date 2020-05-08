@@ -409,13 +409,12 @@ fun <T : ViewModel> LifecycleOwner.lifeViewModel(clazz: Class<T>, vararg argumen
         val factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 val a = Array<Class<*>>(argument.size) { argument[it].javaClass }
-                return modelClass.getMatchConstructor(*a)?.newInstance(argument)?:throw RuntimeException("can't find the matched class ")
+                return modelClass.getMatchConstructor(*a)?.newInstance(*argument)?:throw RuntimeException("can't find the matched class ")
             }
         }
         lifeModel(clazz, factory)
     }
 }
-
 
 fun Activity.softKeyBoardListener(block: (Boolean, Int) -> Unit) {
     val rootView = window.decorView
