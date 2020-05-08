@@ -1,10 +1,13 @@
+@file:Suppress("UNCHECKED_CAST", "unused")
 package com.lifecycle.binding.util
 
 import android.text.TextUtils
 import com.lifecycle.binding.BuildConfig
 import timber.log.Timber
+import java.lang.reflect.Constructor
 import java.lang.reflect.Field
 import java.lang.reflect.Method
+import java.lang.reflect.Type
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -185,4 +188,23 @@ fun beanFieldSet(fieldName: String, bean: Any, value: Any?) {
 
 fun beanFieldSet(field: Field, bean: Any, value: Any?) {
     field.beanField { value?.let { set(bean, it) } }
+}
+
+
+fun <T> Class<T>.getMatchConstructor(vararg clazz: Class<*>): Constructor<T>? {
+    return runCatching { getConstructor(*clazz) }.getOrElse {
+        constructors.forEach {
+            if(it.typeParameters.isMatched(*clazz))
+                return it as Constructor<T>
+        }
+        null
+    }
+}
+
+fun Array<out Type>.isMatched(vararg cls: Class<*>): Boolean {
+    for ((index,parameter) in withIndex()) {
+        if(parameter is Class<*> && parameter.isAssignableFrom(cls[index]))continue
+        else return false
+    }
+    return true
 }

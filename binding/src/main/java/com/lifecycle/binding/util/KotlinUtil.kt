@@ -17,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
@@ -25,6 +26,7 @@ import androidx.appcompat.widget.ActionMenuView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import androidx.databinding.*
 import androidx.drawerlayout.widget.DrawerLayout
@@ -47,7 +49,7 @@ import kotlinx.serialization.parse
 import java.io.File
 import java.lang.RuntimeException
 import java.lang.reflect.Constructor
-import java.lang.reflect.Parameter
+import java.lang.reflect.Type
 
 /**
  * Company:
@@ -414,24 +416,6 @@ fun <T : ViewModel> LifecycleOwner.lifeViewModel(clazz: Class<T>, vararg argumen
     }
 }
 
-fun <T> Class<T>.getMatchConstructor(vararg clazz: Class<*>): Constructor<T>? {
-    return runCatching { getConstructor(*clazz) }.getOrElse {
-        constructors.forEach {
-            if(it.parameters.isMatched(*clazz))
-                return it as Constructor<T>
-        }
-        null
-    }
-}
-
-private fun Array<out Parameter>.isMatched(vararg clazzs: Class<*>): Boolean {
-
-    for ((index,parameter) in withIndex()) {
-//        if(parameter.cl)
-        return false
-    }
-    return true
-}
 
 fun Activity.softKeyBoardListener(block: (Boolean, Int) -> Unit) {
     val rootView = window.decorView
@@ -469,4 +453,16 @@ fun <T, B> List<T>.indexOfList(b: B, block: T.(B) -> Boolean): Int {
         if (it.block(b)) return index
     }
     return -1
+}
+
+
+
+fun Context.showInput(searchView: TextView, show: Boolean) {
+    searchView.requestFocus()
+    searchView.requestFocusFromTouch()
+    getSystemService<InputMethodManager>()?.run {
+        if (show) {
+            if (!showSoftInput(searchView, InputMethodManager.SHOW_FORCED)) searchView.postDelayed({ showInput(searchView, show) }, 500)
+        } else if (!hideSoftInputFromWindow(searchView.windowToken, 0)) searchView.postDelayed({ showInput(searchView, show) }, 500)
+    }
 }
