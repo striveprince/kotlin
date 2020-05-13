@@ -16,7 +16,6 @@ import kotlin.collections.HashMap
  * Company:
  * Description:
  */
-
 fun invoke(methodName: String, bean: Any, vararg args: Any) {
     val cl = ArrayList<Class<*>>()
     for (arg in args) cl.add(arg.javaClass)
@@ -49,7 +48,7 @@ fun Class<*>.getAllFields(): List<Field> {
     for (declaredField in declaredFields) {
         list.add(declaredField)
     }
-    if (this != Any::class.java) list.addAll(superclass!!.getAllFields())
+    if (this != Any::class.java && superclass!=null) list.addAll(superclass!!.getAllFields())
     return list
 }
 
@@ -138,7 +137,6 @@ fun CharArray.toUpperChar(): CharArray {
         it
     }
 }
-
 
 fun Field.noDelegateName() = name.replace("\$delegate", "")
 

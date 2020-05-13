@@ -1,12 +1,15 @@
 package com.lifecycle.binding.adapter.databinding.smartrefresh
 
-import androidx.databinding.BindingAdapter
-import androidx.databinding.InverseBindingAdapter
-import androidx.databinding.InverseBindingListener
+import androidx.databinding.*
 import androidx.databinding.adapters.ListenerUtil
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
+import androidx.viewpager.widget.ViewPager
 import com.lifecycle.binding.BuildConfig
 import com.lifecycle.binding.R
 import com.lifecycle.binding.adapter.AdapterType
+import com.lifecycle.binding.adapter.databinding.ViewPagerBindingAdapter
+import com.lifecycle.binding.adapter.databinding.inter.Observer
 import com.lifecycle.binding.util.*
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.scwang.smart.refresh.layout.api.RefreshLayout
@@ -74,4 +77,31 @@ object SmartRefreshLayoutBindingAdapter {
         newValue?.let { view.setOnRefreshLoadMoreListener(it) }
     }
 
+}
+
+fun SmartRefreshLayout.stateChange(function: (Int) -> Unit){
+    setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
+        override fun onLoadMore(refreshLayout: RefreshLayout) {
+            function(stateStart(AdapterType.load))
+        }
+
+        override fun onRefresh(refreshLayout: RefreshLayout) {
+            function(stateStart(AdapterType.refresh))
+        }
+    })
+}
+
+fun SmartRefreshLayout.bindState(owner: LifecycleOwner, s: MutableLiveData<Int>){
+    s.observer(owner) { SmartRefreshLayoutBindingAdapter.setState(this,it) }
+    stateChange{ s.value = it }
+}
+
+fun SmartRefreshLayout.bindState(s: ObservableInt): Observable.OnPropertyChangedCallback {
+    stateChange{ s.set(it) }
+    return s.observe { SmartRefreshLayoutBindingAdapter.setState(this,it) }
+}
+
+fun SmartRefreshLayout.bindState(s: Observer<Int>){
+    s.observer { SmartRefreshLayoutBindingAdapter.setState(this,it) }
+    stateChange { s.set(it) }
 }

@@ -18,7 +18,8 @@ import com.lifecycle.binding.R
  * @version 2.0
  */
 
-object SwipeRefreshBindingAdapter {
+object  SwipeRefreshBindingAdapter {
+
     @JvmStatic
     @BindingAdapter("refreshing")
     fun setRefreshing(view: SwipeRefreshLayout, refreshing: Boolean) {
@@ -40,11 +41,8 @@ object SwipeRefreshBindingAdapter {
             refreshingAttrChanged?.onChange()
             listener?.onRefresh()
         }
-        ListenerUtil.trackListener<SwipeRefreshLayout.OnRefreshListener>(view, newValue, R.id.swipe_refresh_layout)?.let {
-            view.setOnRefreshListener(null)
-        }
+        ListenerUtil.trackListener<SwipeRefreshLayout.OnRefreshListener>(view, newValue, R.id.swipe_refresh_layout)
+            ?.let { view.setOnRefreshListener(null) }
         view.setOnRefreshListener(newValue)
     }
-
-
 }
