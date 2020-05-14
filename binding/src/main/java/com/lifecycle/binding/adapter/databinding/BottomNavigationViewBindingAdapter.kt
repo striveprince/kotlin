@@ -78,12 +78,12 @@ fun BottomNavigationView.bindPosition(owner: LifecycleOwner, s: MutableLiveData<
 
 
 fun BottomNavigationView.bindPosition(s: ObservableInt): Observable.OnPropertyChangedCallback {
-    positionChange{ s.set(it) }
+    positionChange{ if (it !=s.get())s.set(it) }
     return s.observe { BottomNavigationViewBindingAdapter.setPosition(this,it) }
 }
 
 
 fun BottomNavigationView.bindPosition(s: Observer<Int>) {
     s.observer { BottomNavigationViewBindingAdapter.setPosition(this,it) }
-    return positionChange { s.set(it) }
+    return positionChange { if (it !=s.get())s.set(it) }
 }

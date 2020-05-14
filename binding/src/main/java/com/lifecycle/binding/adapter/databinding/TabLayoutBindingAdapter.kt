@@ -84,11 +84,11 @@ fun TabLayout.bindPosition(owner: LifecycleOwner, s: MutableLiveData<Int>){
 
 
 fun TabLayout.bindPosition(s: ObservableInt): Observable.OnPropertyChangedCallback {
-    positionChange{ s.set(it) }
+    positionChange{ if (it !=s.get())s.set(it) }
     return s.observe { TabLayoutBindingAdapter.setPosition(this,it) }
 }
 
 fun TabLayout.bindChange(s: Observer<Int>): TabLayout.OnTabSelectedListener  {
     s.observer { TabLayoutBindingAdapter.setPosition(this,it) }
-    return positionChange { s.set(it) }
+    return positionChange { if (it !=s.get())s.set(it) }
 }

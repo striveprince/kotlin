@@ -81,12 +81,12 @@ fun ViewPager2.bindPosition(owner: LifecycleOwner, s: MutableLiveData<Int>){
 
 
 fun ViewPager2.bindPosition(s: ObservableInt): Observable.OnPropertyChangedCallback {
-    positionChange{ s.set(it) }
+    positionChange{ if (it !=s.get())s.set(it) }
     return s.observe { ViewPager2BindingAdapter.setCurrentItem(this,it) }
 }
 
 
 fun ViewPager2.bindPosition(s: Observer<Int>): ViewPager2.OnPageChangeCallback {
     s.observer { ViewPager2BindingAdapter.setCurrentItem(this,it) }
-    return positionChange { s.set(it) }
+    return positionChange { if (it !=s.get())s.set(it) }
 }

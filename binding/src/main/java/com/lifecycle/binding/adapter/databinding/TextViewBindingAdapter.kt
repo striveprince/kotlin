@@ -125,12 +125,12 @@ fun TextView.textChange(function: (String) -> Unit): TextWatcher {
 
 fun TextView.bindChange(s: Observer<String>):TextWatcher{
     s.observer { text = it }
-    return textChange { s.set(it) }
+    return textChange { if (it !=s.get())s.set(it) }
 }
 
 fun TextView.bindChange(s: ObservableField<String>):TextWatcher{
     s.observe { text =  it }
-    return textChange { s.set(it) }
+    return textChange { if (it !=s.get())s.set(it) }
 }
 
 fun TextView.bindChange(owner: LifecycleOwner, s: MutableLiveData<String>):TextWatcher{

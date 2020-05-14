@@ -97,11 +97,11 @@ fun SmartRefreshLayout.bindState(owner: LifecycleOwner, s: MutableLiveData<Int>)
 }
 
 fun SmartRefreshLayout.bindState(s: ObservableInt): Observable.OnPropertyChangedCallback {
-    stateChange{ s.set(it) }
+    stateChange{ if (it !=s.get())s.set(it) }
     return s.observe { SmartRefreshLayoutBindingAdapter.setState(this,it) }
 }
 
 fun SmartRefreshLayout.bindState(s: Observer<Int>){
     s.observer { SmartRefreshLayoutBindingAdapter.setState(this,it) }
-    stateChange { s.set(it) }
+    stateChange { if (it !=s.get())s.set(it) }
 }
