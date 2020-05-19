@@ -32,7 +32,17 @@ object SmartRefreshLayoutBindingAdapter {
         if (getState(view) != state) {
             val s = when {
                 isStateStart(state) -> startHttp(state, view)
-                isStateEnd(state) -> view.finishRefresh().apply { finishLoadMore() }.run { stateEnd(state) }
+                isStateEnd(state) -> {
+                    when (stateOriginal(state)) {
+                        AdapterType.refresh -> view.finishRefresh(1000)
+                        AdapterType.load -> view.finishLoadMore(1000)
+                        else -> {
+                            view.finishLoadMore()
+                            view.finishRefresh()
+                        }
+                    }
+                    stateEnd(state)
+                }
                 else -> state
             }
             view.setTag(R.id.smart_refresh_layout_state, s)
@@ -79,7 +89,7 @@ object SmartRefreshLayoutBindingAdapter {
 
 }
 
-fun SmartRefreshLayout.stateChange(function: (Int) -> Unit){
+fun SmartRefreshLayout.stateChange(function: (Int) -> Unit) {
     setOnRefreshLoadMoreListener(object : OnRefreshLoadMoreListener {
         override fun onLoadMore(refreshLayout: RefreshLayout) {
             function(stateStart(AdapterType.load))
@@ -91,17 +101,17 @@ fun SmartRefreshLayout.stateChange(function: (Int) -> Unit){
     })
 }
 
-fun SmartRefreshLayout.bindState(owner: LifecycleOwner, s: MutableLiveData<Int>){
-    s.observer(owner) { SmartRefreshLayoutBindingAdapter.setState(this,it) }
-    stateChange{ s.value = it }
+fun SmartRefreshLayout.bindState(owner: LifecycleOwner, s: MutableLiveData<Int>) {
+    s.observer(owner) { SmartRefreshLayoutBindingAdapter.setState(this, it) }
+    stateChange { if (it !=s.value)s.value = it }
 }
 
 fun SmartRefreshLayout.bindState(s: ObservableInt): Observable.OnPropertyChangedCallback {
-    stateChange{ if (it !=s.get())s.set(it) }
-    return s.observe { SmartRefreshLayoutBindingAdapter.setState(this,it) }
+    stateChange { if (it != s.get()) s.set(it) }
+    return s.observe { SmartRefreshLayoutBindingAdapter.setState(this, it) }
 }
 
-fun SmartRefreshLayout.bindState(s: Observer<Int>){
-    s.observer { SmartRefreshLayoutBindingAdapter.setState(this,it) }
-    stateChange { if (it !=s.get())s.set(it) }
+fun SmartRefreshLayout.bindState(s: Observer<Int>) {
+    s.observer { SmartRefreshLayoutBindingAdapter.setState(this, it) }
+    stateChange { if (it != s.get()) s.set(it) }
 }

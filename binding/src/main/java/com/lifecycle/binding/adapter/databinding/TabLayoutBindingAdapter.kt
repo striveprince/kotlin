@@ -79,7 +79,7 @@ fun TabLayout.positionChange(function: (Int) -> Unit): TabLayout.OnTabSelectedLi
 
 fun TabLayout.bindPosition(owner: LifecycleOwner, s: MutableLiveData<Int>){
     s.observer(owner) { TabLayoutBindingAdapter.setPosition(this,it) }
-    positionChange{ s.value = it }
+    positionChange{ if (it !=s.value)s.value = it }
 }
 
 

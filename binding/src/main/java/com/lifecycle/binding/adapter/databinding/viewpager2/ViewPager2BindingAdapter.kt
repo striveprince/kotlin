@@ -76,7 +76,7 @@ fun ViewPager2.positionChange(function: (Int) -> Unit): ViewPager2.OnPageChangeC
 
 fun ViewPager2.bindPosition(owner: LifecycleOwner, s: MutableLiveData<Int>){
     s.observer(owner) { ViewPager2BindingAdapter.setCurrentItem(this,it) }
-    positionChange{ s.value = it }
+    positionChange{ if (it !=s.value)s.value = it }
 }
 
 

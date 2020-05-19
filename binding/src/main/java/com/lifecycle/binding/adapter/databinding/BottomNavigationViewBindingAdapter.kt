@@ -73,7 +73,7 @@ fun BottomNavigationView.positionChange(function:(Int)->Unit) {
 
 fun BottomNavigationView.bindPosition(owner: LifecycleOwner, s: MutableLiveData<Int>){
     s.observer(owner) { BottomNavigationViewBindingAdapter.setPosition(this,it) }
-    positionChange{ s.value = it }
+    positionChange{ if (it !=s.value)s.value = it }
 }
 
 

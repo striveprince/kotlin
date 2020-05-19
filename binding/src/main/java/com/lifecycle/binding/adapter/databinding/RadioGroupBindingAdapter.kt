@@ -80,5 +80,5 @@ fun RadioGroup.bindPosition(s: ObservableInt){
 
 fun RadioGroup.bindPosition(owner: LifecycleOwner, s: MutableLiveData<Int>){
     s.observer(owner) { check(getChildAt(it).id) }
-    positionChange{ s.value = it }
+    positionChange{ if (it !=s.value)s.value = it }
 }

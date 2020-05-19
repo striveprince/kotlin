@@ -78,7 +78,7 @@ fun ViewPager.positionChange(function: (Int) -> Unit): ViewPager.OnPageChangeLis
 
 fun ViewPager.bindPosition(owner: LifecycleOwner, s: MutableLiveData<Int>): ViewPager.OnPageChangeListener {
     s.observer(owner) { ViewPagerBindingAdapter.setCurrentItem(this,it) }
-    return positionChange{ s.value = it }
+    return positionChange{ if (it !=s.value)s.value = it }
 }
 
 fun ViewPager.bindPosition(s:ObservableInt): Observable.OnPropertyChangedCallback {

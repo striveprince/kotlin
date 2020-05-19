@@ -135,5 +135,5 @@ fun TextView.bindChange(s: ObservableField<String>):TextWatcher{
 
 fun TextView.bindChange(owner: LifecycleOwner, s: MutableLiveData<String>):TextWatcher{
     s.observer(owner) { text =  it }
-    return textChange { s.value = it }
+    return textChange { if (it !=s.value)s.value = it }
 }
