@@ -34,6 +34,7 @@ object SmartRefreshLayoutBindingAdapter {
                 isStateStart(state) -> startHttp(state, view)
                 isStateEnd(state) -> {
                     when (stateOriginal(state)) {
+                        AdapterType.start->{}
                         AdapterType.refresh -> view.finishRefresh(1000)
                         AdapterType.load -> view.finishLoadMore(1000)
                         else -> {
