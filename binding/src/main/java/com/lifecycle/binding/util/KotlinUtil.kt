@@ -42,6 +42,7 @@ import com.lifecycle.binding.life.AppLifecycle
 import com.lifecycle.binding.rotate.TimeUtil
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
 import com.lifecycle.binding.inter.bind.data.DataBindInflate
+import com.lifecycle.binding.inter.inflate.Inflate
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
@@ -125,7 +126,7 @@ fun Context.sharedPreferences(name: String): SharedPreferences {
 }
 
 
-inline fun <reified E : DataBindInflate<*, out ViewDataBinding>> Any.toEntity(vararg arrayOfAny: Any?): E {
+inline fun <reified E : Inflate> Any.toEntity(vararg arrayOfAny: Any?): E {
     val clazz = E::class
     val list: ArrayList<Any?> = arrayListOf(this)
     list.addAll(arrayOfAny)
@@ -138,7 +139,7 @@ inline fun <reified E : DataBindInflate<*, out ViewDataBinding>> Any.toEntity(va
     throw RuntimeException("check ${E::class.simpleName} class's constructor")
 }
 
-inline fun <reified E : DataBindInflate<*, out ViewDataBinding>> List<Any>.toEntities(vararg arrayOfAny: Any?): List<E> {
+inline fun <reified E : Inflate> List<Any>.toEntities(vararg arrayOfAny: Any?): List<E> {
     val list = ArrayList<E>()
     for (any in this) {
         list.add(any.toEntity(*arrayOfAny))
