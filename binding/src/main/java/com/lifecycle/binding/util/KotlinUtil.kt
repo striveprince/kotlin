@@ -117,6 +117,12 @@ fun <T, R> Collection<T>.converter(block: (T) -> R): Set<R> {
     return set
 }
 
+fun <T, R> List<T>.converter(block: T.() -> R): List<R> {
+    val list = ArrayList<R>()
+    for (t in this) list.add(t.block())
+    return list
+}
+
 fun Context.application(): Context {
     return if (this is Application) this else applicationContext
 }
@@ -126,7 +132,7 @@ fun Context.sharedPreferences(name: String): SharedPreferences {
 }
 
 
-inline fun <reified E : Inflate> Any.toEntity(vararg arrayOfAny: Any?): E {
+inline fun <reified E> Any.toEntity(vararg arrayOfAny: Any?): E {
     val clazz = E::class
     val list: ArrayList<Any?> = arrayListOf(this)
     list.addAll(arrayOfAny)
@@ -139,7 +145,9 @@ inline fun <reified E : Inflate> Any.toEntity(vararg arrayOfAny: Any?): E {
     throw RuntimeException("check ${E::class.simpleName} class's constructor")
 }
 
-inline fun <reified E : Inflate> List<Any>.toEntities(vararg arrayOfAny: Any?): List<E> {
+
+
+inline fun <reified E> List<Any>.toEntities(vararg arrayOfAny: Any?): List<E> {
     val list = ArrayList<E>()
     for (any in this) {
         list.add(any.toEntity(*arrayOfAny))
@@ -225,11 +233,6 @@ fun findLayoutView(thisCls: Class<*>): LayoutView {
     return thisCls.getAnnotation(LayoutView::class.java) ?: findLayoutView(thisCls = thisCls.superclass!!)
 }
 
-fun <T, R> List<T>.converter(block: T.() -> R): List<R> {
-    val list = ArrayList<R>()
-    for (t in this) list.add(t.block())
-    return list
-}
 
 inline fun <reified T : Activity> Activity.startActivity(vararg pairs: Pair<String, Any>) {
     val intent = Intent(this, T::class.java)
