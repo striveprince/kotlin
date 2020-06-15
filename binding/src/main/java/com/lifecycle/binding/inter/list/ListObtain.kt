@@ -115,9 +115,13 @@ interface ListObtain<E,Job> :IListAdapter<E>, Obtain<List<E>, Job> {
     override fun set(es: List<E>, position: Int): Boolean {
         return adapter.set(es, position)
     }
+//
+//    override fun moveList(position: Int, from: Int, size: Int): Boolean {
+//        return adapter.moveList(position, from, size)
+//    }
 
-    override fun moveList(position: Int, from: Int, size: Int): Boolean {
-        return adapter.moveList(position, from, size)
+    override fun moveList(position: Int, es: List<E>): Boolean {
+        return adapter.moveList(position, es)
     }
 
     override fun removeList(es: List<E>): Boolean {

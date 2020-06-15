@@ -13,9 +13,9 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
 
     val adapterList: MutableList<E>
     val events: ArrayList<IEvent<E>>
-    val array:SparseArray<Any>
+    val array: SparseArray<Any>
     fun addEventAdapter(event: IEvent<E>) {
-        events.add(0,event)
+        events.add(0, event)
     }
 
     fun addEventAdapter(event: (Int, E, Int, View?) -> Any) {
@@ -41,10 +41,10 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
     }
 
     fun setList(position: Int, es: List<E>, type: Int): Boolean {
-        if (es.isEmpty()) return false
+
         return when (stateOriginal(type)) {
             AdapterType.add -> addList(es, position)
-            AdapterType.move -> moveList(position, adapterList.indexOf(es.first()), es.size)
+            AdapterType.move -> moveList(position, es)
             AdapterType.remove -> removeList(es)
             AdapterType.refresh, AdapterType.load -> refreshList(es, position)
             AdapterType.set -> set(es, position)
@@ -96,14 +96,23 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
         return notifyList(position, AdapterType.add, es)
     }
 
-    fun moveList(position: Int, from: Int, size: Int): Boolean {
-        if (from < 0) return false
-        val list = ArrayList(adapterList.subList(from, size))
-        adapterList.removeAll(list)
-        val p = if (position in adapterList.indices) position else adapterList.size
-        adapterList.addAll(p, list)
-        return notifyList(p, AdapterType.move, list)
+    fun moveList(position: Int, es: List<E>): Boolean {
+        if (es.isNotEmpty()) {
+            val from = adapterList.indexOf(es.first())
+            val size = es.size
+            if (from < 0) return false
+            val list = ArrayList(adapterList.subList(from, size))
+            adapterList.removeAll(list)
+            val p = if (position in adapterList.indices) position else adapterList.size
+            adapterList.addAll(p, list)
+            return notifyList(p, AdapterType.move, list)
+        }
+        return false
     }
+
+//    fun moveList(position: Int, from: Int, size: Int): Boolean {
+//
+//    }
 
     fun removeList(from: Int, size: Int): Boolean {
         val list = ArrayList(adapterList.subList(from, from + size))
