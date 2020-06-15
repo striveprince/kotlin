@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlinx-serialization'
+apply plugin: 'com.novoda.bintray-release'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -66,4 +67,20 @@ dependencies {
 }
 subprojects {
     tasks.withType(Javadoc).all { enabled = false }
+}
+Properties properties = new Properties()
+properties.load( project.rootProject.file('local.properties').newDataInputStream() )
+publish {
+    userOrg = 'arvinwant'
+    groupId = 'com.lifecycle'
+    artifactId = 'binding'
+    publishVersion = properties.getProperty('version')
+    repoName = 'wmt'
+    desc = 'you could use it create view, databinding or anko or the normal way'
+    website = 'https://github.com/striveprince/kotlin'
+    bintrayUser = properties.getProperty('user')
+    bintrayKey = properties.getProperty('key')
+
+//    gradle clean build generatePomFileForReleasePublication bintrayUpload -PdryRun=false
+//    gradle clean build bintrayUpload -PdryRun=false
 }
