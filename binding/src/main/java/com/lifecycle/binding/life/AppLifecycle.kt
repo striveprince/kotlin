@@ -28,15 +28,17 @@ open class AppLifecycle constructor(
 
     companion object {
         lateinit var appLifecycle: AppLifecycle
-        private val stack = Stack<Activity>()
+        val stack = Stack<Activity>()
         val toolbarList = arrayListOf<Inflate>()
         internal var initFinish = false
         lateinit var application: Application
-        fun activity(): Activity {
-            return stack.lastElement()
-        }
         var pageCount = 10
         var appInit: () -> Unit = {}
+        fun activity(): Activity = stack.lastElement()
+
+        fun finishAllWithout(vararg clazz: Class<*>){
+            for (activity in stack) if(!clazz.contains(activity.javaClass)) activity.finish()
+        }
     }
 
     init {
