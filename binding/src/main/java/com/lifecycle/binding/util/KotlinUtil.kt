@@ -103,7 +103,10 @@ fun Int.stateEqual(@AdapterEvent state: Int) = (this and 0xff) == (state and 0xf
 val gson = Gson()
 
 inline fun <reified T> Gson.fromJson(json: String) =
-    this.fromJson<T>(json, object : TypeToken<T>() {}.type)!!
+//    if (T::class.java.isAssignableFrom(List::class.java))
+        this.fromJson<T>(json, object : TypeToken<T>() {}.type)!!
+//    else
+//        this.fromJson(json, T::class.java)!!
 
 inline fun <reified T> String.fromJson() = gson.fromJson<T>(this)
 
@@ -144,7 +147,6 @@ inline fun <reified E> Any.toEntity(vararg arrayOfAny: Any?): E {
     }
     throw RuntimeException("check ${E::class.simpleName} class's constructor")
 }
-
 
 
 inline fun <reified E> List<Any>.toEntities(vararg arrayOfAny: Any?): List<E> {
@@ -413,7 +415,7 @@ fun <T : ViewModel> LifecycleOwner.lifeViewModel(clazz: Class<T>, vararg argumen
         val factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 val a = Array<Class<*>>(argument.size) { argument[it].javaClass }
-                return modelClass.getMatchConstructor(*a)?.newInstance(*argument)?:throw RuntimeException("can't find the matched class ")
+                return modelClass.getMatchConstructor(*a)?.newInstance(*argument) ?: throw RuntimeException("can't find the matched class ")
             }
         }
         lifeModel(clazz, factory)
@@ -457,7 +459,6 @@ fun <T, B> List<T>.indexOfList(b: B, block: T.(B) -> Boolean): Int {
     }
     return -1
 }
-
 
 
 fun Context.showInput(searchView: TextView, show: Boolean) {
