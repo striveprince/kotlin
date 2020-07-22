@@ -1,5 +1,6 @@
 package com.lifecycle.rx.inflate
 
+import android.content.Context
 import android.util.SparseArray
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
@@ -36,7 +37,7 @@ open class ListViewInflate<E : Inflate, Binding : ViewDataBinding>(final overrid
     override var job: Disposable? = null
     override var callback: Observable.OnPropertyChangedCallback? = null
 
-    override fun initBinding(t: Binding) {
+    override fun initBinding(context: Context,t: Binding) {
         binding = t
     }
 

@@ -28,7 +28,7 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning"
         tools:targetApi="m">
 
-        <activity android:name="com.lifecycle.demo.ui.debug.BlackActivity" />
+<!--        <activity android:name="com.lifecycle.demo.ui.debug.BlackActivity" />-->
 <!--        <activity android:name=".ui.home.HomeActivity"/>-->
         <activity android:name=".ui.start.StartActivity" >
             <intent-filter>

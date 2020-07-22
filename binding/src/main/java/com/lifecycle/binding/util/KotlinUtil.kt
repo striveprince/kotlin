@@ -446,6 +446,18 @@ class OnGlobalLayout(val activity: Activity, val block: (Boolean, Int) -> Unit) 
     }
 }
 
+fun <T, B> Array<T>.contain(b: B, block: T.(B) -> Boolean): Boolean {
+    for (it in this)
+        if (it.block(b)) return true
+    return false
+}
+
+fun <T, B> Array<T>.indexOfList(b: B, block: T.(B) -> Boolean): Int {
+    for ((index, it) in this.withIndex()) {
+        if (it.block(b)) return index
+    }
+    return -1
+}
 
 fun <T, B> List<T>.contain(b: B, block: T.(B) -> Boolean): Boolean {
     for (it in this)

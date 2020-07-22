@@ -21,13 +21,13 @@ interface BindingInflate<Binding : ViewDataBinding> : Inflate, Recycler {
         return view
     }
 
-    fun initBinding(t: Binding) {}
+    fun initBinding(context: Context,t: Binding) {}
 
     fun parse(convertView: View?, context: Context, parent: ViewGroup?): Binding {
         return convertView?.convertBinding() ?: binding(context, parent)
             .also {
                 if (context is AppCompatActivity) it.lifecycleOwner = context
-                initBinding(it)
+                initBinding(context,it)
             }
     }
 
