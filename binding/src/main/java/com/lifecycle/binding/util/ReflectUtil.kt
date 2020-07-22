@@ -1,10 +1,13 @@
+@file:Suppress("UNCHECKED_CAST", "unused")
 package com.lifecycle.binding.util
 
 import android.text.TextUtils
 import com.lifecycle.binding.BuildConfig
 import timber.log.Timber
+import java.lang.reflect.Constructor
 import java.lang.reflect.Field
 import java.lang.reflect.Method
+import java.lang.reflect.Type
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -13,7 +16,6 @@ import kotlin.collections.HashMap
  * Company:
  * Description:
  */
-
 fun invoke(methodName: String, bean: Any, vararg args: Any) {
     val cl = ArrayList<Class<*>>()
     for (arg in args) cl.add(arg.javaClass)
@@ -46,7 +48,7 @@ fun Class<*>.getAllFields(): List<Field> {
     for (declaredField in declaredFields) {
         list.add(declaredField)
     }
-    if (this != Any::class.java) list.addAll(superclass!!.getAllFields())
+    if (this != Any::class.java && superclass!=null) list.addAll(superclass!!.getAllFields())
     return list
 }
 
@@ -136,7 +138,6 @@ fun CharArray.toUpperChar(): CharArray {
     }
 }
 
-
 fun Field.noDelegateName() = name.replace("\$delegate", "")
 
 //@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -156,10 +157,9 @@ fun Field.beanGet(bean:Any) =
     runCatching { beanField { get(bean) } }.getOrNull()
 
 
-@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 inline fun <reified T, reified R> T.copy(r: R): T {
     val map = HashMap<String, Any>()
-    R::class.java.declaredFields.forEach { it.beanSetField { map[name] = get(r) } }
+    R::class.java.declaredFields.forEach { it -> it.beanSetField { get(r)?.let { map[name] = it } } }
     T::class.java.declaredFields.forEach { it -> it.beanField { map[name]?.let { set(this@copy, it) } } }
     return this
 }
@@ -186,4 +186,23 @@ fun beanFieldSet(fieldName: String, bean: Any, value: Any?) {
 
 fun beanFieldSet(field: Field, bean: Any, value: Any?) {
     field.beanField { value?.let { set(bean, it) } }
+}
+
+fun <T> Class<T>.getMatchConstructor(vararg clazz: Class<*>): Constructor<T>? {
+    return runCatching { getConstructor(*clazz) }.getOrElse {
+        constructors.forEach {
+            if(it.parameterTypes.isMatched(*clazz))
+                return it as Constructor<T>
+        }
+        null
+    }
+}
+
+fun Array<out Class<*>>.isMatched(vararg cls: Class<*>): Boolean {
+    if(size != cls.size)return false
+    for ((index,parameter) in withIndex()) {
+        if( parameter.isAssignableFrom(cls[index]))continue
+        else return false
+    }
+    return true
 }

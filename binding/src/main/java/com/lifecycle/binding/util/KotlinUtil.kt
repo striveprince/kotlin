@@ -3,27 +3,38 @@
 package com.lifecycle.binding.util
 
 import android.annotation.SuppressLint
+import android.app.ActionBar
 import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Rect
 import android.net.Uri
 import android.os.Build
 import android.text.TextUtils
 import android.view.View
+import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.view.WindowManager
-import android.widget.Toast
+import android.view.inputmethod.InputMethodManager
+import android.widget.*
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.appcompat.widget.ActionMenuView
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import androidx.databinding.*
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.lifecycle.binding.adapter.AdapterEvent
@@ -31,12 +42,15 @@ import com.lifecycle.binding.life.AppLifecycle
 import com.lifecycle.binding.rotate.TimeUtil
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
 import com.lifecycle.binding.inter.bind.data.DataBindInflate
+import com.lifecycle.binding.inter.inflate.Inflate
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.parse
 import java.io.File
 import java.lang.RuntimeException
+import java.lang.reflect.Constructor
+import java.lang.reflect.Type
 
 /**
  * Company:
@@ -59,67 +73,69 @@ import java.lang.RuntimeException
  */
 
 //end
-fun stateEnd(@AdapterEvent state :Int)= state and 0x100FF
-fun isStateEnd(@AdapterEvent state: Int)=state shr 8 and 1 == 0 &&state shr 9 and 1 == 0
+fun stateEnd(@AdapterEvent state: Int) = state and 0x100FF
+fun isStateEnd(@AdapterEvent state: Int) = state shr 8 and 1 == 0 && state shr 9 and 1 == 0
 
 
 //start
-fun stateStart(@AdapterEvent state :Int)=state or 0x00100
-fun isStateStart(@AdapterEvent state: Int)= state shr 8 and 1 == 1
+fun stateStart(@AdapterEvent state: Int) = state or 0x00100
+fun isStateStart(@AdapterEvent state: Int) = state shr 8 and 1 == 1 && !isStateRunning(state)
 
 
 //running
-fun stateRunning(state: Int)=state or 0x0200
-fun isStateRunning(@AdapterEvent state :Int)=state shr(9) and 1 == 1
+fun stateRunning(state: Int) = state or 0x0200
+fun isStateRunning(@AdapterEvent state: Int) = state shr (9) and 1 == 1
 
 
 //error
-fun stateError(state :Int)= state or 0x010000
+fun stateError(state: Int) = state or 0x010000
 
 //success
-fun stateSuccess(state :Int)=state and 0xff
+fun stateSuccess(state: Int) = state and 0xff
 
-fun isStateSuccess(state :Int)=state shr 16 == 0
+fun isStateSuccess(state: Int) = state shr 16 == 0
 
-fun stateOriginal(state: Int)= state and 0xff
+fun stateOriginal(state: Int) = state and 0xff
 
-fun Int.stateEqual(@AdapterEvent state: Int)=(this and 0xff) == (state and 0xff)
-
+fun Int.stateEqual(@AdapterEvent state: Int) = (this and 0xff) == (state and 0xff)
 
 
 val gson = Gson()
 
 inline fun <reified T> Gson.fromJson(json: String) =
-    this.fromJson<T>(json, object : TypeToken<T>() {}.type)!!
+//    if (T::class.java.isAssignableFrom(List::class.java))
+        this.fromJson<T>(json, object : TypeToken<T>() {}.type)!!
+//    else
+//        this.fromJson(json, T::class.java)!!
 
 inline fun <reified T> String.fromJson() = gson.fromJson<T>(this)
 
-fun <T> T?.toJson():String{
-    return this?.let { gson.toJson(it) }?:""
+fun <T> T?.toJson(): String {
+    return this?.let { gson.toJson(it) } ?: ""
 }
 
-fun <T,R> Collection<T>.converter(block: (T) -> R):Set<R>{
+fun <T, R> Collection<T>.converter(block: (T) -> R): Set<R> {
     val set = HashSet<R>()
     for (t in this) set.add(block(t))
     return set
 }
 
-fun Context.application():Context{
-    return if(this is Application)this else applicationContext
+fun <T, R> List<T>.converter(block: T.() -> R): List<R> {
+    val list = ArrayList<R>()
+    for (t in this) list.add(t.block())
+    return list
 }
 
-fun Context.sharedPreferences(name:String):SharedPreferences{
-    return application().getSharedPreferences(name,Activity.MODE_PRIVATE)
+fun Context.application(): Context {
+    return if (this is Application) this else applicationContext
+}
+
+fun Context.sharedPreferences(name: String): SharedPreferences {
+    return application().getSharedPreferences(name, Activity.MODE_PRIVATE)
 }
 
 
-inline fun <reified T : ViewModel> LifecycleOwner.viewModel(): T {
-    return if (this is Fragment) ViewModelProvider(this)[T::class.java]
-    else ViewModelProvider(this as FragmentActivity)[T::class.java]
-}
-
-
-inline fun <reified E : DataBindInflate<*, out ViewDataBinding>> Any.toEntity(vararg arrayOfAny: Any?): E {
+inline fun <reified E> Any.toEntity(vararg arrayOfAny: Any?): E {
     val clazz = E::class
     val list: ArrayList<Any?> = arrayListOf(this)
     list.addAll(arrayOfAny)
@@ -129,10 +145,11 @@ inline fun <reified E : DataBindInflate<*, out ViewDataBinding>> Any.toEntity(va
             return it.call(*parameters)
         }
     }
-    throw RuntimeException( "check ${E::class.simpleName} class's constructor")
+    throw RuntimeException("check ${E::class.simpleName} class's constructor")
 }
 
-inline fun <reified E : DataBindInflate<*, out ViewDataBinding>> List<Any>.toEntities(vararg arrayOfAny: Any?): List<E> {
+
+inline fun <reified E> List<Any>.toEntities(vararg arrayOfAny: Any?): List<E> {
     val list = ArrayList<E>()
     for (any in this) {
         list.add(any.toEntity(*arrayOfAny))
@@ -140,9 +157,9 @@ inline fun <reified E : DataBindInflate<*, out ViewDataBinding>> List<Any>.toEnt
     return list
 }
 
-private fun<T> observableCallback(block: (T) -> Unit) = object : Observable.OnPropertyChangedCallback(){
+private fun <T> observableCallback(block: (T) -> Unit) = object : Observable.OnPropertyChangedCallback() {
     override fun onPropertyChanged(sender: Observable, propertyId: Int) {
-        val t = when(sender){
+        val t = when (sender) {
             is ObservableInt -> sender.get()
             is ObservableBoolean -> sender.get()
             is ObservableFloat -> sender.get()
@@ -190,23 +207,26 @@ fun ObservableFloat.observe(block: (Float) -> Unit): Observable.OnPropertyChange
     return observableCallback(block).also { addOnPropertyChangedCallback(it) }
 }
 
-fun<T> ObservableField<T>.observe(block: (T) -> Unit): Observable.OnPropertyChangedCallback {
+fun <T> ObservableField<T>.observe(block: (T) -> Unit): Observable.OnPropertyChangedCallback {
     return observableCallback(block).also { addOnPropertyChangedCallback(it) }
 }
 
 fun Context.string(@StringRes id: Int, vararg any: Any) =
     getString(id, *any)
 
-fun Context.drawable(@DrawableRes id:Int) = ContextCompat.getDrawable(this,id)
-fun Context.color(@ColorRes id:Int) = ContextCompat.getColor(this,id)
+fun Context.drawable(@DrawableRes id: Int) = ContextCompat.getDrawable(this, id)
 
-val density by lazy { AppLifecycle.application.resources.displayMetrics.density }
-val screenWidth by lazy { AppLifecycle.application.resources.displayMetrics.widthPixels }
-val screenHeight by lazy { AppLifecycle.application.resources.displayMetrics.heightPixels }
-fun dip(int: Int) = (density*int).toInt()
-fun pxToDip(int: Int) = (int/density+0.5).toInt()
+fun Context.color(@ColorRes id: Int) = ContextCompat.getColor(this, id)
 
-fun<T> LiveData<T>.observer(owner: LifecycleOwner,block:(T)->Unit){
+val displayMetrics by lazy { AppLifecycle.application.resources.displayMetrics }
+val density by lazy { displayMetrics.density }
+val screenWidth by lazy { displayMetrics.widthPixels }
+val screenHeight by lazy { displayMetrics.heightPixels }
+
+fun dip(int: Int) = (density * int).toInt()
+fun pxToDip(int: Int) = (int / density + 0.5).toInt()
+
+fun <T> LiveData<T>.observer(owner: LifecycleOwner, block: (T) -> Unit) {
     observe(owner, Observer { block(it) })
 }
 
@@ -215,11 +235,6 @@ fun findLayoutView(thisCls: Class<*>): LayoutView {
     return thisCls.getAnnotation(LayoutView::class.java) ?: findLayoutView(thisCls = thisCls.superclass!!)
 }
 
-fun <T,R> List<T>.converter(block: T.() -> R):List<R>{
-    val list = ArrayList<R>()
-    for (t in this) list.add( t.block())
-    return list
-}
 
 inline fun <reified T : Activity> Activity.startActivity(vararg pairs: Pair<String, Any>) {
     val intent = Intent(this, T::class.java)
@@ -253,13 +268,13 @@ inline fun <T, R> T.transform(block: T.() -> R): R {
 
 
 fun toast(e: Throwable) {
-    if(!TextUtils.isEmpty(e.message))
+    if (!TextUtils.isEmpty(e.message))
         toast(e.message!!)
 }
 
 
 fun toast(message: String?) {
-    if(message?.trim()?.isNotEmpty() == true)
+    if (message?.trim()?.isNotEmpty() == true)
         Toast.makeText(AppLifecycle.activity(), message, Toast.LENGTH_SHORT).show()
 }
 
@@ -356,8 +371,114 @@ fun setAllUpSixVersion(activity: Activity) {
     }
 }
 
-fun post(delayMillis:Long=0, block: () -> Unit){
-    if(delayMillis<=0)TimeUtil.handler.post(Runnable(block))
-    else TimeUtil.handler.postDelayed(Runnable(block),delayMillis)
+fun post(delayMillis: Long = 0, block: () -> Unit) {
+    if (delayMillis <= 0) TimeUtil.handler.post(Runnable(block))
+    else TimeUtil.handler.postDelayed(Runnable(block), delayMillis)
 }
 
+fun ViewGroup.layoutParam(width: Int = ViewGroup.LayoutParams.MATCH_PARENT, height: Int = ViewGroup.LayoutParams.MATCH_PARENT): ViewGroup.LayoutParams {
+    return when (this) {
+        is FrameLayout -> FrameLayout.LayoutParams(width, height)
+        is LinearLayout -> LinearLayout.LayoutParams(width, height)
+        is RadioGroup -> RadioGroup.LayoutParams(width, height)
+        is RelativeLayout -> RelativeLayout.LayoutParams(width, height)
+        is DrawerLayout -> DrawerLayout.LayoutParams(width, height)
+        is androidx.appcompat.widget.Toolbar -> androidx.appcompat.widget.Toolbar.LayoutParams(width, height)
+        is RecyclerView -> RecyclerView.LayoutParams(width, height)
+        is AbsListView -> AbsListView.LayoutParams(width, height)
+        is TableRow -> TableRow.LayoutParams(width, height)
+        is ActionBar -> ActionBar.LayoutParams(width, height)
+        is ActionMenuView -> ActionMenuView.LayoutParams(width, height)
+        is CoordinatorLayout -> CoordinatorLayout.LayoutParams(width, height)
+        is CollapsingToolbarLayout -> CollapsingToolbarLayout.LayoutParams(width, height)
+        else -> ViewGroup.LayoutParams(width, height)
+    }
+}
+
+
+inline fun <reified T : ViewModel> LifecycleOwner.viewModel(factory: ViewModelProvider.Factory? = null): T {
+    return lifeModel(T::class.java, factory)
+}
+
+fun <T : ViewModel> LifecycleOwner.lifeModel(clazz: Class<T>, factory: ViewModelProvider.Factory? = null): T {
+    return if (factory == null)
+        if (this is Fragment) ViewModelProvider(this)[clazz]
+        else ViewModelProvider(this as FragmentActivity)[clazz]
+    else
+        if (this is Fragment) ViewModelProvider(this, factory)[clazz]
+        else ViewModelProvider(this as FragmentActivity, factory)[clazz]
+}
+
+fun <T : ViewModel> LifecycleOwner.lifeViewModel(clazz: Class<T>, vararg argument: Any): T {
+    return if (argument.isEmpty()) return lifeModel(clazz, null)
+    else {
+        val factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                val a = Array<Class<*>>(argument.size) { argument[it].javaClass }
+                return modelClass.getMatchConstructor(*a)?.newInstance(*argument) ?: throw RuntimeException("can't find the matched class ")
+            }
+        }
+        lifeModel(clazz, factory)
+    }
+}
+
+fun Activity.softKeyBoardListener(block: (Boolean, Int) -> Unit) {
+    val rootView = window.decorView
+    val listener = OnGlobalLayout(this, block)
+    rootView.viewTreeObserver.removeOnGlobalLayoutListener(listener)
+    rootView.viewTreeObserver.addOnGlobalLayoutListener(listener)
+}
+
+class OnGlobalLayout(val activity: Activity, val block: (Boolean, Int) -> Unit) : ViewTreeObserver.OnGlobalLayoutListener {
+    private val rootView = activity.window.decorView
+    var height = 0
+    override fun onGlobalLayout() {
+        val r = Rect()
+        rootView.getWindowVisibleDisplayFrame(r)
+        val visibleHeight = r.height()
+        if (height == 0) height = visibleHeight
+        val h = height - visibleHeight
+        when {
+            h > 200 -> block(true, h)
+            h < -200 -> block(false, h)
+        }
+        height = visibleHeight
+    }
+}
+
+fun <T, B> Array<T>.contain(b: B, block: T.(B) -> Boolean): Boolean {
+    for (it in this)
+        if (it.block(b)) return true
+    return false
+}
+
+fun <T, B> Array<T>.indexOfList(b: B, block: T.(B) -> Boolean): Int {
+    for ((index, it) in this.withIndex()) {
+        if (it.block(b)) return index
+    }
+    return -1
+}
+
+fun <T, B> List<T>.contain(b: B, block: T.(B) -> Boolean): Boolean {
+    for (it in this)
+        if (it.block(b)) return true
+    return false
+}
+
+fun <T, B> List<T>.indexOfList(b: B, block: T.(B) -> Boolean): Int {
+    for ((index, it) in this.withIndex()) {
+        if (it.block(b)) return index
+    }
+    return -1
+}
+
+
+fun Context.showInput(searchView: TextView, show: Boolean) {
+    searchView.requestFocus()
+    searchView.requestFocusFromTouch()
+    getSystemService<InputMethodManager>()?.run {
+        if (show) {
+            if (!showSoftInput(searchView, InputMethodManager.SHOW_FORCED)) searchView.postDelayed({ showInput(searchView, show) }, 500)
+        } else if (!hideSoftInputFromWindow(searchView.windowToken, 0)) searchView.postDelayed({ showInput(searchView, show) }, 500)
+    }
+}

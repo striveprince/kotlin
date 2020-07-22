@@ -5,9 +5,7 @@ import com.lifecycle.binding.IEvent
 import com.lifecycle.binding.IListAdapter
 import com.lifecycle.binding.adapter.AdapterEvent
 import com.lifecycle.binding.adapter.AdapterType
-import com.lifecycle.binding.util.isStateRunning
-import com.lifecycle.binding.util.isStateSuccess
-import com.lifecycle.binding.util.stateEqual
+import com.lifecycle.binding.util.*
 import com.lifecycle.binding.viewmodel.Obtain
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -117,9 +115,13 @@ interface ListObtain<E,Job> :IListAdapter<E>, Obtain<List<E>, Job> {
     override fun set(es: List<E>, position: Int): Boolean {
         return adapter.set(es, position)
     }
+//
+//    override fun moveList(position: Int, from: Int, size: Int): Boolean {
+//        return adapter.moveList(position, from, size)
+//    }
 
-    override fun moveList(position: Int, from: Int, size: Int): Boolean {
-        return adapter.moveList(position, from, size)
+    override fun moveList(position: Int, es: List<E>): Boolean {
+        return adapter.moveList(position, es)
     }
 
     override fun removeList(es: List<E>): Boolean {
@@ -150,7 +152,7 @@ interface ListObtain<E,Job> :IListAdapter<E>, Obtain<List<E>, Job> {
         onComplete()
     }
 
-    fun isSuccess(state :Int):Boolean{
+    fun isSuccess(state: Int):Boolean{
         return isStateSuccess(state)
     }
 }

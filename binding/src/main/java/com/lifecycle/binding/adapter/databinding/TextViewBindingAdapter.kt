@@ -8,11 +8,17 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
+import androidx.databinding.ObservableField
 import androidx.databinding.adapters.ListenerUtil
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.lifecycle.binding.R
 import com.lifecycle.binding.adapter.databinding.inter.AfterTextChangedError
+import com.lifecycle.binding.adapter.databinding.inter.Observer
+import com.lifecycle.binding.util.observe
+import com.lifecycle.binding.util.observer
 
 /**
  * Created by arvin on 2018/1/17.
@@ -105,4 +111,29 @@ object TextViewBindingAdapter {
     fun setDrawableEnd(view: TextView, drawable: Int) {
         androidx.databinding.adapters.TextViewBindingAdapter.setDrawableEnd(view, ContextCompat.getDrawable(view.context, drawable))
     }
+}
+
+fun TextView.textChange(function: (String) -> Unit): TextWatcher {
+    return object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {}
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            function(s.toString())
+        }
+    }.apply { addTextChangedListener(this) }
+}
+
+fun TextView.bindChange(s: Observer<String>):TextWatcher{
+    s.observer { text = it }
+    return textChange { if (it !=s.get())s.set(it) }
+}
+
+fun TextView.bindChange(s: ObservableField<String>):TextWatcher{
+    s.observe { text =  it }
+    return textChange { if (it !=s.get())s.set(it) }
+}
+
+fun TextView.bindChange(owner: LifecycleOwner, s: MutableLiveData<String>):TextWatcher{
+    s.observer(owner) { text =  it }
+    return textChange { if (it !=s.value)s.value = it }
 }

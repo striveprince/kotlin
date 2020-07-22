@@ -13,6 +13,7 @@ import android.text.TextUtils
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
@@ -32,6 +33,7 @@ import java.util.regex.Pattern
 
 val api = (AppLifecycle.application as DemoApplication).api
 
+fun getString(@StringRes id: Int)= AppLifecycle.application.getString(id)
 
 
 

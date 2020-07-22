@@ -2,6 +2,7 @@ package com.lifecycle.binding.util
 
 import android.annotation.TargetApi
 import android.app.Activity
+import android.app.Application
 import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.Context
@@ -13,7 +14,9 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.text.TextUtils
 import timber.log.Timber
+import java.io.BufferedReader
 import java.io.File
+import java.io.InputStreamReader
 import java.io.OutputStream
 
 
@@ -36,6 +39,15 @@ fun createPathDir(srcDirPath: File, path: String): File {
         if (isDirectory || mkdirs()) this
         else srcDirPath
     }
+}
+
+fun assertToString(context: Context, fileName:String):String{
+    val applicationContext = if(context is Application) context else context.applicationContext
+    val stringBuilder = StringBuilder()
+    BufferedReader(InputStreamReader(applicationContext.assets.open(fileName))).useLines { it ->
+        it.forEach { stringBuilder.append(it) }
+    }
+    return stringBuilder.toString()
 }
 
 fun assertToFile(context: Context, from: String, targetFile: File) :Boolean{

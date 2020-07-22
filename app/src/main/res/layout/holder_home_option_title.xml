@@ -7,8 +7,9 @@
             name="vm"
             type="com.lifecycle.demo.ui.select.popup.SelectOption" />
     </data>
-    <TextView
+    <CheckBox
         android:text="@{vm.option}"
+        android:id="@+id/select_title"
         tools:text="标题"
         android:padding="10dp"
         android:textSize="@dimen/text_title"

@@ -8,8 +8,9 @@
     <color name="font_hint">#F3EBEA</color>
     <color name="windowBackground">#FFFFFFFF</color>
     <color name="recycler_back_ground">#FFF2F2F2</color>
-
+    <color name="view_line">#EBEBEB</color>
     <color name="viewLoginLine">#B1ECE5</color>
+    <color name="color_5a">#595A5A</color>
 
     <color name="white">#FFFFFFFF</color>
     <color name="customer_service_color">#DB4147</color>

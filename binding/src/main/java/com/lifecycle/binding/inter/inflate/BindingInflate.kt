@@ -6,6 +6,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.lifecycle.binding.R
@@ -20,11 +21,14 @@ interface BindingInflate<Binding : ViewDataBinding> : Inflate, Recycler {
         return view
     }
 
-    fun initBinding(t: Binding) {}
+    fun initBinding(context: Context,t: Binding) {}
 
     fun parse(convertView: View?, context: Context, parent: ViewGroup?): Binding {
         return convertView?.convertBinding() ?: binding(context, parent)
-            .also { initBinding(it) }
+            .also {
+                if (context is AppCompatActivity) it.lifecycleOwner = context
+                initBinding(context,it)
+            }
     }
 
 
@@ -46,7 +50,7 @@ interface BindingInflate<Binding : ViewDataBinding> : Inflate, Recycler {
             .also { setProperties(it) }
     }
 
-    fun setProperties(binding:Binding) {
+    fun setProperties(binding: Binding) {
         binding.setVariable(appLifecycle.parse, this)
         binding.setVariable(appLifecycle.vm, this)
     }

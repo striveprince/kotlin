@@ -1,5 +1,7 @@
 package com.lifecycle.coroutines.inflate
 
+import android.content.Context
+import android.util.SparseArray
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
@@ -11,7 +13,6 @@ import com.lifecycle.binding.adapter.recycler.RecyclerAdapter
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.inter.list.ListInflate
 import com.lifecycle.binding.life.AppLifecycle
-import com.lifecycle.binding.util.isStateStart
 import com.lifecycle.coroutines.util.launchUI
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -20,6 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 open class ListViewInflate<E : Inflate, Binding : ViewDataBinding>(final override val adapter: IListAdapter<E> = RecyclerAdapter()) :
   ListInflate<E, Binding, Job> {
+    override val array: SparseArray<Any> = SparseArray()
     override var pageWay = true
     override var pageCount = AppLifecycle.pageCount
     override var headIndex = 0
@@ -34,7 +36,7 @@ open class ListViewInflate<E : Inflate, Binding : ViewDataBinding>(final overrid
     override var callback: Observable.OnPropertyChangedCallback? = null
     override var job: Job? = null
 
-    override fun initBinding(t: Binding) {
+    override fun initBinding(context: Context, t: Binding) {
         binding = t
     }
 

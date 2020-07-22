@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.lifecycle.binding.inter.Init
 import com.lifecycle.binding.inter.Parse
 import com.lifecycle.binding.life.AppLifecycle.Companion.appLifecycle
+import com.lifecycle.binding.util.lifeModel
 import kotlin.reflect.jvm.javaType
 
 @Suppress("UNCHECKED_CAST")
@@ -29,10 +30,6 @@ abstract class BaseFragment<Model:ViewModel,B>:Fragment(),Parse<Model,B>, Lifecy
 
     override fun inject(savedInstanceState: Bundle?)= createView(model, activity!!)
 
-    override fun initModel():Model {
-        val clazz = javaClass.kotlin.supertypes[0].arguments[0].type!!.javaType as Class<Model>
-        return ViewModelProvider(this)[clazz]
-    }
 
     override fun owner()=this
 //    override fun fragmentManager()=childFragmentManager

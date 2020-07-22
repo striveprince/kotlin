@@ -30,10 +30,7 @@ interface Binding<T,B:ViewBinding>:Parse<T, B> {
         return method.invoke(null,LayoutInflater.from(context),parent,attachToParent) as B
     }
 
-    /**
-     * 覆盖了Parse中createView的方法，调用了parse方法来获取root
-     * */
-    override fun createView(t: T, context: Context, parent: ViewGroup?, attachToParent: Boolean): View {
-        return parse(t,context,parent, attachToParent).root
+    override fun B.root(context: Context, parent: ViewGroup?, attachToParent: Boolean): View {
+        return root
     }
 }

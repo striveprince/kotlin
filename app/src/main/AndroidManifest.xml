@@ -28,7 +28,7 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning"
         tools:targetApi="m">
 
-        <activity android:name="com.lifecycle.demo.ui.debug.BlackActivity" />
+<!--        <activity android:name="com.lifecycle.demo.ui.debug.BlackActivity" />-->
 <!--        <activity android:name=".ui.home.HomeActivity"/>-->
         <activity android:name=".ui.start.StartActivity" >
             <intent-filter>
@@ -54,5 +54,6 @@
         <activity android:name=".ui.video.VideoActivity" android:label="@string/video"/>
         <activity android:name=".ui.interrogation.detail.InterrogationDetailActivity" />
         <activity android:name=".ui.select.SelectActivity"/>
+        <activity android:name=".ui.home.HomeActivity" />
     </application>
 </manifest>

@@ -3,10 +3,7 @@ package com.lifecycle.binding.inter.list
 import androidx.lifecycle.MutableLiveData
 import com.lifecycle.binding.IListAdapter
 import com.lifecycle.binding.adapter.AdapterEvent
-import com.lifecycle.binding.util.stateEnd
-import com.lifecycle.binding.util.stateError
-import com.lifecycle.binding.util.stateStart
-import com.lifecycle.binding.util.stateSuccess
+import com.lifecycle.binding.util.*
 
 interface ListModel<E,Job>:  ListObtain<E, Job> {
     val loadingState : MutableLiveData<Int>
@@ -14,7 +11,7 @@ interface ListModel<E,Job>:  ListObtain<E, Job> {
 
     override fun onNext(t: List<E>) {
         loadingState.value?.let {
-            setList(getEndOffset(it), t, it)
+            setList(getEndOffset(it), t, stateOriginal(it))
             loadingState.value = stateSuccess(it)
         }
     }

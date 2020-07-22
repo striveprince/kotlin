@@ -1,18 +1,20 @@
 package com.lifecycle.rx.viewmodel.list
 
 import android.os.Bundle
-import android.util.SparseIntArray
+import android.util.SparseArray
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import com.lifecycle.binding.IEvent
 import com.lifecycle.binding.IListAdapter
 import com.lifecycle.binding.adapter.AdapterType
+import com.lifecycle.binding.adapter.AdapterType.refresh
 import com.lifecycle.binding.adapter.recycler.RecyclerAdapter
 import com.lifecycle.binding.inter.inflate.Inflate
-import com.lifecycle.binding.util.isStateStart
-import com.lifecycle.binding.util.observer
 import com.lifecycle.binding.inter.list.ListModel
 import com.lifecycle.binding.life.AppLifecycle
+import com.lifecycle.binding.util.isStateStart
+import com.lifecycle.binding.util.observer
+import com.lifecycle.binding.util.stateStart
 import com.lifecycle.rx.observer.NormalObserver
 import com.lifecycle.rx.util.ioToMainThread
 import com.lifecycle.rx.viewmodel.LifeViewModel
@@ -23,7 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E> = RecyclerAdapter()) :
     LifeViewModel(), IListAdapter<E>, Observer<List<E>>, ListModel<E, Disposable> {
-    override val tag: SparseIntArray = SparseIntArray()
+    override val array: SparseArray<Any> = SparseArray()
     override val events: ArrayList<IEvent<E>> = adapter.events
     override var pageWay = true
     override var pageCount = AppLifecycle.pageCount
@@ -39,7 +41,7 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
     override fun attachData(owner: LifecycleOwner, bundle: Bundle?) {
         super.attachData(owner, bundle)
         loadingState.observer(owner) { if (isStateStart(it) && canRun.getAndSet(false)) getData(it) }
-        loadingState.value = AdapterType.refresh
+        start(refresh)
     }
 
 
@@ -58,7 +60,6 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
     override fun onComplete() {
         super.onComplete()
         job?.dispose()
-        canRun.compareAndSet(false, true)
     }
 
     override fun onSubscribe(job: Disposable) {

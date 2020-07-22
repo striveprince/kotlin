@@ -8,6 +8,7 @@ import com.lifecycle.binding.life.binding.data.DataBindingActivity
 import com.lifecycle.demo.R
 import com.lifecycle.demo.databinding.ActivityHomeBinding
 import com.lifecycle.demo.ui.DemoApplication
+import com.lifecycle.demo.ui.home.HomeActivity.Companion.home
 
 /**
  * Company:
@@ -16,7 +17,7 @@ import com.lifecycle.demo.ui.DemoApplication
  * Email: 1033144294@qq.com
  */
 @LayoutView(R.layout.activity_home)
-@Route(path = HomeActivity.home)
+@Route(path = home)
 class HomeActivity : DataBindingActivity<HomeModel,ActivityHomeBinding>() {
     companion object {
         const val home = DemoApplication.tomtaw + "home"

@@ -26,7 +26,7 @@ open class ListDiffViewModel<E : Diff> : ListViewModel<E>() {
                     .onCompletion { onComplete() }
                     .collect { it.dispatchUpdatesTo(adapter as ListUpdateCallback) }
             })
-        } else super.doGetData(state)
+        } else super.getData(state)
     }
 
     private fun diff(it: List<E>) = DiffUtil.calculateDiff(DiffUtilCallback(adapterList, it))

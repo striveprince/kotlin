@@ -1,18 +1,17 @@
 package com.lifecycle.binding.adapter.widget
 
-import android.util.SparseIntArray
+import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import com.lifecycle.binding.R
 import com.lifecycle.binding.IEvent
 import com.lifecycle.binding.IListAdapter
+import com.lifecycle.binding.R
 import com.lifecycle.binding.inter.inflate.Inflate
-import kotlin.collections.ArrayList
 
 @Suppress("UNCHECKED_CAST")
 open class WidgetAdapter<E:Inflate> : BaseAdapter(), IListAdapter<E> {
-    override val tag: SparseIntArray = SparseIntArray()
+    override val array: SparseArray<Any> = SparseArray()
     private val observableEvent: IEvent<E> by lazy { this }
     override val events: ArrayList<IEvent<E>> = ArrayList()
     override val adapterList: MutableList<E> = ArrayList<E>()

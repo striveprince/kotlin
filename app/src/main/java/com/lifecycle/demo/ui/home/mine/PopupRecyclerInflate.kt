@@ -12,8 +12,8 @@ import com.lifecycle.coroutines.inflate.ListViewInflate
 
 @LayoutView(layout = [R.layout.layout_swipe_recycler_view_inflate])
 class PopupRecyclerInflate<E : Select>(val context: Context, adapter: IListAdapter<E>) : ListViewInflate<E, LayoutSwipeRecyclerViewInflateBinding>(adapter) {
-    override fun initBinding(t: LayoutSwipeRecyclerViewInflateBinding) {
-        super.initBinding(t)
+    override fun initBinding(context: Context,t: LayoutSwipeRecyclerViewInflateBinding) {
+        super.initBinding(context,t)
         t.recyclerView.layoutManager = LinearLayoutManager(context)
     }
 

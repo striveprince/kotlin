@@ -10,17 +10,17 @@ import com.lifecycle.binding.IEvent
 import com.lifecycle.binding.IListAdapter
 import com.lifecycle.binding.inter.inflate.Inflate
 
+@Suppress("UNCHECKED_CAST")
 open class RecyclerAdapter<E : Inflate> : RecyclerView.Adapter<RecyclerHolder<E>>(), IListAdapter<E> {
     private val sparseArray = SparseArray<E>()
     override val events: ArrayList<IEvent<E>> = ArrayList()
     override val adapterList: MutableList<E> = ArrayList()
     private val event: IEvent<E> by lazy { this }
-    override val tag: SparseIntArray = SparseIntArray()
+    override val array: SparseArray<Any> = SparseArray()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerHolder<E> {
-        return RecyclerHolder(parent, sparseArray.get(viewType))
+        return RecyclerHolder(parent, sparseArray.get(viewType).apply { event(event as IEvent<Any>) })
     }
-
 
     override fun getItemCount(): Int {
         return adapterList.size
@@ -37,10 +37,10 @@ open class RecyclerAdapter<E : Inflate> : RecyclerView.Adapter<RecyclerHolder<E>
     }
 
     override fun getItemViewType(position: Int): Int {
-        val e = adapterList[position]
-        val viewType = e.layoutId()
-        sparseArray.put(viewType, e)
-        return viewType
+        return adapterList[position].run {
+            event(event as IEvent<Any>)
+            layoutId().also { sparseArray.put(it, this) }
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerHolder<E>, position: Int) {

@@ -1,6 +1,6 @@
 package com.lifecycle.binding.adapter.pager
 
-import android.util.SparseIntArray
+import android.util.SparseArray
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.PagerAdapter
@@ -11,7 +11,7 @@ import com.lifecycle.binding.inter.inflate.Item
 class FragmentAdapter<E: Item>(private val fm: FragmentManager,
                                         behavior:Int = BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT):
     FragmentPagerAdapter(fm,behavior), IListAdapter<E> {
-    override val tag: SparseIntArray = SparseIntArray()
+    override val array: SparseArray<Any> = SparseArray()
     override val adapterList: MutableList<E> = ArrayList()
     override fun getItem(position: Int) = adapterList[position].fragment(fm)
     override val events: ArrayList<IEvent<E>> = ArrayList()

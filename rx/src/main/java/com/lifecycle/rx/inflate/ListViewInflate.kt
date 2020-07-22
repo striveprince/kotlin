@@ -1,6 +1,7 @@
 package com.lifecycle.rx.inflate
 
-import android.util.SparseIntArray
+import android.content.Context
+import android.util.SparseArray
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
@@ -12,7 +13,6 @@ import com.lifecycle.binding.adapter.recycler.RecyclerAdapter
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.inter.list.ListInflate
 import com.lifecycle.binding.life.AppLifecycle
-import com.lifecycle.binding.util.isStateStart
 import com.lifecycle.rx.observer.NormalObserver
 import com.lifecycle.rx.util.ioToMainThread
 import io.reactivex.Observer
@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 open class ListViewInflate<E : Inflate, Binding : ViewDataBinding>(final override val adapter: IListAdapter<E> = RecyclerAdapter()) :
      IListAdapter<E>, ListInflate<E, Binding, Disposable>,Observer<List<E>> {
-    override val tag: SparseIntArray = SparseIntArray()
+    override val array: SparseArray<Any> = SparseArray()
     override var pageWay = true
     override var pageCount = AppLifecycle.pageCount
     override var headIndex = 0
@@ -37,7 +37,7 @@ open class ListViewInflate<E : Inflate, Binding : ViewDataBinding>(final overrid
     override var job: Disposable? = null
     override var callback: Observable.OnPropertyChangedCallback? = null
 
-    override fun initBinding(t: Binding) {
+    override fun initBinding(context: Context,t: Binding) {
         binding = t
     }
 
