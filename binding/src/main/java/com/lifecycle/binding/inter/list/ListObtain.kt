@@ -1,15 +1,15 @@
 package com.lifecycle.binding.inter.list
 
 import android.view.View
-import com.lifecycle.binding.IEvent
-import com.lifecycle.binding.IListAdapter
+import com.lifecycle.binding.inter.event.IEvent
+import com.lifecycle.binding.inter.event.IListAdapter
 import com.lifecycle.binding.adapter.AdapterEvent
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.util.*
 import com.lifecycle.binding.viewmodel.Obtain
 import java.util.concurrent.atomic.AtomicBoolean
 
-interface ListObtain<E,Job> :IListAdapter<E>, Obtain<List<E>, Job> {
+interface ListObtain<E,Job> : IListAdapter<E>, Obtain<List<E>, Job> {
     var pageWay:Boolean
     var pageCount :Int
     var headIndex :Int

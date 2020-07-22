@@ -1,4 +1,4 @@
-package com.lifecycle.binding
+package com.lifecycle.binding.inter.event
 
 import android.util.SparseArray
 import android.view.View
@@ -30,6 +30,9 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
     }
 
     fun size(): Int = adapterList.size
+
+    fun setIEntity(it: Event<E>) = setIEntity(it.e,it.type,it.position,it.view)
+
     fun setIEntity(e: E, position: Int, @AdapterEvent type: Int, view: View?): Boolean {
         return when (stateOriginal(type)) {
             AdapterType.add, AdapterType.load -> add(e, position)

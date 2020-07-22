@@ -4,8 +4,8 @@ import android.util.SparseArray
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.PagerAdapter
-import com.lifecycle.binding.IEvent
-import com.lifecycle.binding.IListAdapter
+import com.lifecycle.binding.inter.event.IEvent
+import com.lifecycle.binding.inter.event.IListAdapter
 import com.lifecycle.binding.inter.inflate.Item
 
 class FragmentAdapter<E: Item>(private val fm: FragmentManager,

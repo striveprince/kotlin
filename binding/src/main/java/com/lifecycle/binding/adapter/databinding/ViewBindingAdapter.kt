@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
-import com.lifecycle.binding.IListAdapter
+import com.lifecycle.binding.inter.event.IListAdapter
 import com.lifecycle.binding.adapter.recycler.RecyclerAdapter
 
 /**

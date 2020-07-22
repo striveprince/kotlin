@@ -13,8 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.lifecycle.demo.ui.select.consult.HomeConsultFragment.Companion.homeConsult
-import com.lifecycle.binding.IEvent
-import com.lifecycle.binding.adapter.databinding.ViewGroupBindingAdapter
+import com.lifecycle.binding.inter.event.IEvent
 import com.lifecycle.binding.adapter.databinding.parse
 import com.lifecycle.binding.adapter.recycler.RecyclerAdapter
 import com.lifecycle.binding.adapter.recycler.RecyclerMultiplexSelectAdapter

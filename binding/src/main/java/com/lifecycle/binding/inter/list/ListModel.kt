@@ -1,7 +1,6 @@
 package com.lifecycle.binding.inter.list
 
 import androidx.lifecycle.MutableLiveData
-import com.lifecycle.binding.IListAdapter
 import com.lifecycle.binding.adapter.AdapterEvent
 import com.lifecycle.binding.util.*
 

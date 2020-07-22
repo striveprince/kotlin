@@ -2,11 +2,10 @@ package com.lifecycle.demo.ui.select.popup
 
 import android.view.View
 import android.widget.CheckBox
-import android.widget.TextView
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ViewDataBinding
-import com.lifecycle.binding.IEvent
-import com.lifecycle.binding.IListAdapter
+import com.lifecycle.binding.inter.event.IEvent
+import com.lifecycle.binding.inter.event.IListAdapter
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.inter.MultiplexSelect
 import com.lifecycle.binding.inter.SpanLookup

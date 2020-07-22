@@ -4,7 +4,7 @@ package com.lifecycle.binding.adapter.databinding
 
 import android.view.ViewGroup
 import androidx.databinding.BindingAdapter
-import com.lifecycle.binding.IEvent
+import com.lifecycle.binding.inter.event.IEvent
 import com.lifecycle.binding.R
 import com.lifecycle.binding.inter.LayoutMeasure
 import com.lifecycle.binding.inter.inflate.Inflate

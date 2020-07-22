@@ -1,13 +1,11 @@
 package com.lifecycle.binding.adapter.recycler
 
 import android.util.SparseArray
-import android.util.SparseIntArray
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.lifecycle.binding.adapter.AdapterType
-import com.lifecycle.binding.IEvent
-import com.lifecycle.binding.IListAdapter
+import com.lifecycle.binding.inter.event.IEvent
+import com.lifecycle.binding.inter.event.IListAdapter
 import com.lifecycle.binding.inter.inflate.Inflate
 
 @Suppress("UNCHECKED_CAST")

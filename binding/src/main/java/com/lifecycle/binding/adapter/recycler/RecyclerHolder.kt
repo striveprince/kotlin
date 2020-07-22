@@ -2,7 +2,7 @@ package com.lifecycle.binding.adapter.recycler
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.lifecycle.binding.IEvent
+import com.lifecycle.binding.inter.event.IEvent
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.inter.inflate.Recycler
 import java.util.concurrent.atomic.AtomicReference

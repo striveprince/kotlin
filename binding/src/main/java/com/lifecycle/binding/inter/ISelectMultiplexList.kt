@@ -1,8 +1,8 @@
 package com.lifecycle.binding.inter
 
 import android.view.View
-import com.lifecycle.binding.IListAdapter
 import com.lifecycle.binding.adapter.AdapterType
+import com.lifecycle.binding.inter.event.IListAdapter
 
 interface ISelectMultiplexList<E : MultiplexSelect> : IListAdapter<E> {
     val selectList: MutableList<E>
