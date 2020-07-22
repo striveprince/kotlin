@@ -43,8 +43,9 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
         }
     }
 
-    fun setList(position: Int, es: List<E>, type: Int): Boolean {
+    fun setList(it: Event<List<E>>) = setList(it.position,it.e,it.type)
 
+    fun setList(position: Int, es: List<E>, type: Int): Boolean {
         return when (stateOriginal(type)) {
             AdapterType.add -> addList(es, position)
             AdapterType.move -> moveList(position, es)
