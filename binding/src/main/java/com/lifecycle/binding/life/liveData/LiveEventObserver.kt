@@ -19,20 +19,18 @@ class LiveEventObserver<T>(
     }
 
     override fun onChanged(@Nullable t: T) {
-        Timber.i("onChanged t=${t.toJson()}")
         if (isActive()) observer.onChanged(t)
         else pending.add(t)
     }
 
     private fun isActive(): Boolean {
-        return owner.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED).also { Timber.i("isActive $it") }
+        return owner.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_ANY)
     private fun onEvent(owner: LifecycleOwner, event: Lifecycle.Event) {
         if (owner !== this.owner) { return }
         if (event === Lifecycle.Event.ON_START || event === Lifecycle.Event.ON_RESUME) {
-            Timber.i("observer onChanged pending ${pending.toJson()}")
             for (i in pending.indices) {
                 observer.onChanged(pending[i])
             }
