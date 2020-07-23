@@ -31,13 +31,13 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
 
     fun size(): Int = adapterList.size
 
-    fun setIEntity(it: Event<E>) = setIEntity(it.e,it.type,it.position,it.view)
+    fun setIEntity(it: Event<E>) = setIEntity(it.e,it.position,it.type,it.view)
 
     fun setIEntity(e: E, position: Int, @AdapterEvent type: Int, view: View?): Boolean {
         return when (stateOriginal(type)) {
             AdapterType.add, AdapterType.load -> add(e, position)
             AdapterType.set -> set(e, position)
-            AdapterType.remove -> remove(e)
+            AdapterType.remove -> if(remove(e))true else removeAt(position)
             AdapterType.move -> move(e, position)
             else -> false
         }
