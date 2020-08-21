@@ -13,6 +13,7 @@ interface Parse<T,B>{
      * */
     fun createView(t:T,context: Context, parent: ViewGroup?=null, attachToParent: Boolean=false) =
         parse(t, context, parent, attachToParent).root(context)
+            .also { parent?.let { if(this is LayoutMeasure)it.layoutParams = layoutMeasure(it,parent) }}
 
     fun layoutIndex() = 0
 
