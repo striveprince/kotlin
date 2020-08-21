@@ -28,6 +28,14 @@ object ViewBindingAdapter {
         if (!(alpha < 0 || alpha > 1)) view.alpha = alpha
     }
 
+
+    @JvmStatic
+    @BindingAdapter("select")
+    fun setSelected(view:View,select:Boolean){
+        if(view.isSelected!=select)
+            view.isSelected = select
+    }
+
     @JvmStatic
     @BindingAdapter("adapter")
     fun setAdapter(view: View, adapter: IListAdapter<*>?) {

@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.lifecycle.binding.R
+import com.lifecycle.binding.inter.LayoutMeasure
 import com.lifecycle.binding.life.AppLifecycle.Companion.appLifecycle
 
 interface BindingInflate<Binding : ViewDataBinding> : Inflate, Recycler {
@@ -18,6 +19,7 @@ interface BindingInflate<Binding : ViewDataBinding> : Inflate, Recycler {
         val view = binding.root
         view.setTag(R.id.dataBinding, binding)
         view.setTag(R.id.inflate, this)
+        parent?.let { if(this is LayoutMeasure)view.layoutParams = layoutMeasure(view,parent) }
         return view
     }
 
