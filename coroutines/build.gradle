@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'com.novoda.bintray-release'
+//apply plugin: 'com.novoda.bintray-release'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -49,6 +49,8 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
     implementation 'com.scwang.smart:refresh-layout-kernel:2.0.0-alpha-1'
 }
+/*
+
 Properties properties = new Properties()
 properties.load( project.rootProject.file('local.properties').newDataInputStream() )
 publish {
@@ -64,4 +66,4 @@ publish {
 
 //    gradle clean build generatePomFileForReleasePublication bintrayUpload -PdryRun=false
 //    gradle clean build bintrayUpload -PdryRun=false
-}
+}*/

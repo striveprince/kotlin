@@ -35,7 +35,6 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
     override val adapterList: MutableList<E> = adapter.adapterList
     override var job: Disposable? = null
     var httpData: (Int, Int) -> Single<List<E>> = { _, _ -> Single.just(ArrayList()) }
-
     override val canRun: AtomicBoolean = AtomicBoolean(true)
     override fun attachData(owner: LifecycleOwner, bundle: Bundle?) {
         super.attachData(owner, bundle)
