@@ -33,7 +33,7 @@ interface ISelectList<E : Select> : IListAdapter<E> {
     }
 
     fun selectStatus(e: E, check: Boolean): Boolean {
-        asyncList()
+        selectList.asyncList()
         if (e.isSelected() == check) return check
         return if (!check) {
             if (!e.couldTakeBack()) e.select(true)
@@ -58,9 +58,9 @@ interface ISelectList<E : Select> : IListAdapter<E> {
             AdapterType.refresh, AdapterType.remove -> {
                 selectList.clear()
                 adapterList.forEach { e -> e.select(e.isSelected()).also { if (it&&selectList.size<max) selectList.add(e) } }
+                selectList.asyncList()
             }
         }
-        asyncList()
     }
 
     fun asyncEntity(e: E, type: Int) {
@@ -70,30 +70,12 @@ interface ISelectList<E : Select> : IListAdapter<E> {
         }
     }
 
-
-
-    fun asyncList() {
-        if (selectList.size > max) {
-            val arrayList = ArrayList<E>()
-            for (it in selectList) if (it.isPush()) arrayList.add(it)
-            val l = selectList.size - max
-            val min = min(l, arrayList.size)-1
-            for (index in 0..min) {
-                selectList.remove(arrayList[index])
-                arrayList[index].select(false)
-            }
-            if (l > arrayList.size)
-                for (index in 0..l - arrayList.size)
-                    selectList.removeAt(selectList.lastIndex).select(false)
-        }
+    fun MutableList<E>.asyncList() {
+        while (max in indices) removeAt(lastIndex).select(false)
     }
 
     fun selectList(list:List<E> = adapterList,boolean: Boolean = false){
-        if(adapterList == list&&!boolean){
-            selectList.clear()
-            for (e in adapterList) e.select(false)
-        }else
-            for (e in list) selectStatus(e,boolean)
+        for (e in list) selectStatus(e,boolean)
     }
 
     private fun E.isPush() = checkWay and 1 == 1

@@ -29,15 +29,4 @@ open class WidgetAdapter<E:Inflate> : BaseAdapter(), IListAdapter<E> {
     override fun getItemId(position: Int)=position.toLong()
 
     override fun getCount() = size()
-
-    override fun notify(p: Int, type: Int, from: Int): Boolean {
-        notifyDataSetChanged()
-        return true
-    }
-
-    override fun notifyList(p: Int, type: Int, es: List<E>, from: Int): Boolean {
-        notifyDataSetChanged()
-        return true
-    }
-
 }

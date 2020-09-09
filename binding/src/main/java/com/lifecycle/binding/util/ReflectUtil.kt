@@ -1,9 +1,12 @@
 @file:Suppress("UNCHECKED_CAST", "unused")
+
 package com.lifecycle.binding.util
 
 import android.text.TextUtils
 import com.lifecycle.binding.BuildConfig
+import com.lifecycle.binding.inter.inflate.Inflate
 import timber.log.Timber
+import java.lang.RuntimeException
 import java.lang.reflect.Constructor
 import java.lang.reflect.Field
 import java.lang.reflect.Method
@@ -16,14 +19,20 @@ import kotlin.collections.HashMap
  * Company:
  * Description:
  */
-fun invoke(methodName: String, bean: Any, vararg args: Any) {
-    val cl = ArrayList<Class<*>>()
-    for (arg in args) cl.add(arg.javaClass)
-    val cs = toArray(cl)
-    val method = bean.javaClass.getAllMethod(methodName, cs)
+
+fun invoke(method: Method, t: Any, vararg args: Any) {
+    try {
+        method.invoke(t, *args)
+    } catch (e: Exception) {
+        Timber.e("$method function invoke failed ${e.message}")
+    }
+}
+
+fun Any.invoke(methodName: String, vararg args: Any) {
+    val method = javaClass.getAllMethod(methodName, Array(args.size) { args[it].javaClass })
     if (method != null) {
         method.isAccessible = true
-        invoke(method, bean, *args)
+        invoke(method, this, *args)
     }
 }
 
@@ -32,46 +41,33 @@ fun Class<*>.getAllMethod(methodName: String, cs: Array<Class<*>>): Method? {
         if (methodName.isEmpty()) null else getDeclaredMethod(methodName, *cs)
     } catch (e: Exception) {
         if (BuildConfig.DEBUG) Timber.v("no such method method: $methodName(${cs.params()})")
-        for (declareMethod in declaredMethods) {
-            if (isValid(methodName, declareMethod, cs)) return declareMethod
-        }
-        if (this == Any::class.java) null else superclass!!.getAllMethod(methodName, cs)
+        for (declareMethod in declaredMethods) if (isValid(methodName, declareMethod, cs)) return declareMethod
+        if (this == Any::class.java) null else superclass?.getAllMethod(methodName, cs)
     }
 }
 
-fun Array<Class<*>>.params(): String {
-    return StringBuilder().let { forEachIndexed { index, clazz -> it.append(clazz.simpleName).append(":").append("arg").append(index) } }.toString()
+private fun isValid(methodName: String, declareMethod: Method, cs: Array<Class<*>>): Boolean {
+    if (declareMethod.name != methodName) return false
+    return declareMethod.parameterTypes.isMatched(*cs)
+}
+
+
+private fun Array<Class<*>>.params(): String {
+    return StringBuilder().let { forEachIndexed { index, clazz -> it.append(clazz.simpleName).append(":arg").append(index) } }.toString()
 }
 
 fun Class<*>.getAllFields(): List<Field> {
     val list = ArrayList<Field>()
-    for (declaredField in declaredFields) {
-        list.add(declaredField)
-    }
-    if (this != Any::class.java && superclass!=null) list.addAll(superclass!!.getAllFields())
+    list.addAll(declaredFields)
+    superclass?.let { list.addAll(it.getAllFields()) }
     return list
 }
 
-fun invoke(method: Method, t: Any, vararg args: Any) {
-    try {
-        method.invoke(t, *args)
-    } catch (e: Exception) {
-        Timber.v("$method function invoke failed")
-    }
-}
-
-
-private fun isValid(methodName: String, declareMethod: Method, cs: Array<Class<*>>): Boolean {
-    if (declareMethod.name != methodName) return false
-    val params = declareMethod.parameterTypes
-    if (cs.size != params.size) return false
-    params.forEachIndexed { index, param -> if (cs[index].let { !param.isAssignableFrom(it) && !it.baseType(param) }) return false }
-    return true
-}
 
 private fun Class<*>.baseType(param: Class<*>): Boolean {
     return kotlin == param.kotlin
 }
+
 
 fun isFieldNull(o: Any?): Boolean {
     return when {
@@ -100,7 +96,6 @@ fun beanGetMethod(f: Field, c: Class<*>): Method? {
 private fun beanSetMethod(f: Field, c: Class<*>): Method? {
     return beanMethod(f, c, "set", arrayOf(f.type))
 }
-
 
 private fun beanMethod(f: Field, c: Class<*>, prefix: String, params: Array<Class<*>>): Method? {
     f.isAccessible = true
@@ -131,29 +126,14 @@ private fun beanMethod(fieldName: String, c: Class<*>, prefix: String, params: A
 
 fun CharArray.toUpperChar(): CharArray {
     return let {
-        if (it[0].toInt() in 97..122) {
-            it[0] = (it[0].toInt() - 32).toChar()
-        }
+        if (it[0].toInt() in 97..122) it[0] = (it[0].toInt() - 32).toChar()
         it
     }
 }
 
 fun Field.noDelegateName() = name.replace("\$delegate", "")
 
-//@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-//inline fun <reified T, reified R> T.copy(r: R): T {
-//    val map = HashMap<String, Any>()
-//    R::class.java.declaredFields.forEach { runCatching { map[it.name] = it.get(r) } }
-//    T::class.java.declaredFields.forEach { field ->
-//        field.apply {
-//            isAccessible = true
-//            map[name]?.let { set(this@copy, it) }
-//        }
-//    }
-//    return this
-//}
-
-fun Field.beanGet(bean:Any) =
+fun Field.beanGet(bean: Any) =
     runCatching { beanField { get(bean) } }.getOrNull()
 
 
@@ -163,7 +143,6 @@ inline fun <reified T, reified R> T.copy(r: R): T {
     T::class.java.declaredFields.forEach { it -> it.beanField { map[name]?.let { set(this@copy, it) } } }
     return this
 }
-
 
 
 fun Field.beanSetField(block: Field.() -> Unit) {
@@ -190,19 +169,30 @@ fun beanFieldSet(field: Field, bean: Any, value: Any?) {
 
 fun <T> Class<T>.getMatchConstructor(vararg clazz: Class<*>): Constructor<T>? {
     return runCatching { getConstructor(*clazz) }.getOrElse {
-        constructors.forEach {
-            if(it.parameterTypes.isMatched(*clazz))
-                return it as Constructor<T>
-        }
+        constructors.forEach { if (it.parameterTypes.isMatched(*clazz)) return it as Constructor<T> }
         null
     }
 }
 
 fun Array<out Class<*>>.isMatched(vararg cls: Class<*>): Boolean {
-    if(size != cls.size)return false
-    for ((index,parameter) in withIndex()) {
-        if( parameter.isAssignableFrom(cls[index]))continue
+    if (size != cls.size) return false
+    for ((index, parameter) in withIndex()) {
+        if (parameter.isAssignableFrom(cls[index])) continue
         else return false
     }
     return true
+}
+
+inline fun <reified E> Any.toEntity(vararg args: Any): E {
+    val clazz = E::class.java
+    val params = Array(args.size + 1) { if (it == 0) this else args[it - 1] }
+    val array = Array<Class<*>>(params.size) { params[it].javaClass }
+    for (it in clazz.constructors) if (it.parameterTypes.isMatched(*array)) return it.newInstance(*params) as E
+    throw RuntimeException("check ${E::class.simpleName} class's constructor")
+}
+
+inline fun <reified E> List<Any>.toEntities(vararg arrayOfAny: Any): List<E> {
+    val list = ArrayList<E>()
+    for (any in this) list.add(any.toEntity(*arrayOfAny))
+    return list
 }

@@ -2,6 +2,7 @@
 
 package com.lifecycle.binding.adapter.databinding
 
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.BindingAdapter
 import com.lifecycle.binding.inter.event.IEvent
@@ -110,4 +111,12 @@ fun<T,B, E: Parse<T,B>> ViewGroup.parse(e :E,t:T):B{
     view.setTag(R.id.parse,e)
     addView(view,if (e is LayoutMeasure)e.layoutMeasure(view,this)else layoutParam())
     return b
+}
+
+
+fun <E : Inflate> ViewGroup.inflates(es: List<E>, block: (Int, E, Int, View?) -> Any = { _, _, _, _ -> }) {
+    removeAllViews()
+    for (e in es) inflate(e, object : IEvent<E> {
+        override fun setEvent(type: Int, e: E, position: Int, view: View?) = block(type, e, position, view)
+    })
 }

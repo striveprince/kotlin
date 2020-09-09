@@ -40,12 +40,12 @@ interface ListObtain<E,Job> : IListAdapter<E>, Obtain<List<E>, Job> {
 
 
 
-    override fun notify(p: Int, type: Int, from: Int): Boolean {
-        return adapter.notify(p, type, from)
+    override fun notify(type: Int, p: Int, from: Int): Boolean {
+        return adapter.notify(type,p,from)
     }
 
-    override fun notifyList(p: Int, type: Int, es: List<E>, from: Int): Boolean {
-        return adapter.notifyList(p, type, es, from)
+    override fun notifyList(type: Int, p: Int, es: List<E>, from: Int): Boolean {
+        return adapter.notifyList(type,p, es, from)
     }
 
     override fun notifyDataSetChanged() {
@@ -115,10 +115,6 @@ interface ListObtain<E,Job> : IListAdapter<E>, Obtain<List<E>, Job> {
     override fun set(es: List<E>, position: Int): Boolean {
         return adapter.set(es, position)
     }
-//
-//    override fun moveList(position: Int, from: Int, size: Int): Boolean {
-//        return adapter.moveList(position, from, size)
-//    }
 
     override fun moveList(position: Int, es: List<E>): Boolean {
         return adapter.moveList(position, es)

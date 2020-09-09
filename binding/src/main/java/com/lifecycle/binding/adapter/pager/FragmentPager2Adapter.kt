@@ -15,16 +15,6 @@ class FragmentPager2Adapter<E: Item>(private val fm: FragmentManager, lifecycle:
     override val adapterList: MutableList<E> = ArrayList()
     override val events: ArrayList<IEvent<E>> = ArrayList()
 
-    override fun notify(p: Int, type: Int, from: Int): Boolean {
-        notifyDataSetChanged()
-        return true
-    }
-
-    override fun notifyList(p: Int, type: Int, es: List<E>, from: Int): Boolean {
-        notifyDataSetChanged()
-        return true
-    }
-
     override fun getItemCount()= size()
 
     override fun createFragment(position: Int):Fragment{

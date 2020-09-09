@@ -54,7 +54,7 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
         val injectView = createView(model, this)
         initData(this, savedInstanceState)
         if(injectView.searchToolbar()==null){
-            if (AppLifecycle.toolbarList.run { isNotEmpty()&& toolbarIndex<size }){
+            if (AppLifecycle.toolbarList.run { isNotEmpty()&& toolbarIndex in indices }){
                 val toolbar = AppLifecycle.toolbarList[toolbarIndex].createView(this) as ViewGroup
                 return LinearLayout(this).apply {
                     layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
@@ -84,7 +84,7 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
 
     }
 
-    fun View.searchToolbar(): Toolbar? {
+    private fun View.searchToolbar(): Toolbar? {
         return when(this){
             is Toolbar-> this.also { setSupportActionBar(it) }.also { initToolbar(it) }
             is ViewGroup-> loopToolbar()
@@ -93,8 +93,7 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
     }
 
     private fun ViewGroup.loopToolbar(): Toolbar?{
-        for (index in 0 until childCount)
-            return getChildAt(index).searchToolbar()
+        for (index in 0 until childCount) getChildAt(index).searchToolbar()?.let { return it }
         return null
     }
 

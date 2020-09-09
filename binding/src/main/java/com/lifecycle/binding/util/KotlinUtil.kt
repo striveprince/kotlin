@@ -41,8 +41,6 @@ import com.lifecycle.binding.adapter.AdapterEvent
 import com.lifecycle.binding.life.AppLifecycle
 import com.lifecycle.binding.rotate.TimeUtil
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
-import com.lifecycle.binding.inter.bind.data.DataBindInflate
-import com.lifecycle.binding.inter.inflate.Inflate
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
@@ -135,27 +133,6 @@ fun Context.sharedPreferences(name: String): SharedPreferences {
 }
 
 
-inline fun <reified E> Any.toEntity(vararg arrayOfAny: Any?): E {
-    val clazz = E::class
-    val list: ArrayList<Any?> = arrayListOf(this)
-    list.addAll(arrayOfAny)
-    for (it in clazz.constructors) {
-        if (it.parameters.size == list.size) {
-            val parameters = list.toArray()
-            return it.call(*parameters)
-        }
-    }
-    throw RuntimeException("check ${E::class.simpleName} class's constructor")
-}
-
-
-inline fun <reified E> List<Any>.toEntities(vararg arrayOfAny: Any?): List<E> {
-    val list = ArrayList<E>()
-    for (any in this) {
-        list.add(any.toEntity(*arrayOfAny))
-    }
-    return list
-}
 
 private fun <T> observableCallback(block: (T) -> Unit) = object : Observable.OnPropertyChangedCallback() {
     override fun onPropertyChanged(sender: Observable, propertyId: Int) {
@@ -336,25 +313,15 @@ fun setMeizuStatusBarDarkIcon(activity: Activity?, dark: Boolean): Boolean {
     if (activity != null) {
         try {
             val lp = activity.window.attributes
-            val darkFlag = WindowManager.LayoutParams::class.java
-                .getDeclaredField("MEIZU_FLAG_DARK_STATUS_BAR_ICON")
-            val meizuFlags = WindowManager.LayoutParams::class.java
-                .getDeclaredField("meizuFlags")
-            darkFlag.isAccessible = true
-            meizuFlags.isAccessible = true
+            val darkFlag = WindowManager.LayoutParams::class.java.getDeclaredField("MEIZU_FLAG_DARK_STATUS_BAR_ICON").apply { isAccessible = true }
+            val meizuFlags = WindowManager.LayoutParams::class.java.getDeclaredField("meizuFlags").apply { isAccessible = true }
             val bit = darkFlag.getInt(null)
-            var value = meizuFlags.getInt(lp)
-            if (dark) {
-                value = value or bit
-            } else {
-                value = value and bit.inv()
-            }
+            val value = meizuFlags.getInt(lp).let { if (dark) it or bit else it and bit.inv() }
             meizuFlags.setInt(lp, value)
             activity.window.attributes = lp
             result = true
         } catch (e: Exception) {
         }
-
     }
     return result
 }

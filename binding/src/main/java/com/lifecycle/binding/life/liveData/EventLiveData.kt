@@ -13,14 +13,6 @@ class EventLiveData<T>(t:T? = null) : MutableLiveData<T>(t) {
 
     private val handler by lazy { Handler(Looper.getMainLooper()) }
 
-//    override fun setValue(value: T) {
-//        if (Thread.currentThread() == Looper.getMainLooper().thread) {
-//            super.setValue(value)
-//        } else {
-//            handler.post { super.setValue(value) }
-//        }
-//    }
-
     override fun postValue(d: T) {
         if (Thread.currentThread() == Looper.getMainLooper().thread) {
             setValue(d)

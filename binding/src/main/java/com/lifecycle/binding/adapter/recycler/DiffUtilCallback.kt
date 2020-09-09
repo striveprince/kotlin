@@ -21,24 +21,22 @@ class DiffUtilCallback<E : Diff>(
         return newList.size
     }
 
-    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        if(oldItemPosition in oldList.indices&&newItemPosition in newList.indices){
-            val oldItem = oldList[oldItemPosition]
-            val newItem = newList[newItemPosition]
+    override fun areItemsTheSame(oldPosition: Int, newPosition: Int): Boolean {
+        if (oldPosition in oldList.indices && newPosition in newList.indices) {
+            val oldItem = oldList[oldPosition]
+            val newItem = newList[newPosition]
             return oldItem.key() == newItem.key()
         }
-
         return false
     }
 
-    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldItemPosition in oldList.indices&&newItemPosition in newList.indices&&
-                newList[newItemPosition].value()==oldList[oldItemPosition].value()
+    override fun areContentsTheSame(oldPosition: Int, newPosition: Int): Boolean {
+        return oldPosition in oldList.indices && newPosition in newList.indices &&
+                newList[newPosition].value() == oldList[oldPosition].value()
     }
 
-    override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
-        return if ((oldItemPosition !in oldList.indices)|| newItemPosition !in newList.indices)null
-        else if(oldList[oldItemPosition].value() == newList[newItemPosition].value()) null
-        else newList[newItemPosition]
+    override fun getChangePayload(oldPosition: Int, newPosition: Int): Any? {
+        return if ((oldPosition !in oldList.indices) || newPosition !in newList.indices || oldList[oldPosition].value() == newList[newPosition].value()) null
+        else newList[newPosition]
     }
 }
