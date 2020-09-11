@@ -177,8 +177,7 @@ fun <T> Class<T>.getMatchConstructor(vararg clazz: Class<*>): Constructor<T>? {
 fun Array<out Class<*>>.isMatched(vararg cls: Class<*>): Boolean {
     if (size != cls.size) return false
     for ((index, parameter) in withIndex()) {
-        if (parameter.isAssignableFrom(cls[index])) continue
-        else if(parameter.baseType(cls[index])) continue
+        if (parameter.isAssignableFrom(cls[index])||parameter.baseType(cls[index])) continue
         else return false
     }
     return true

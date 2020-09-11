@@ -51,6 +51,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 }
 
+/*
 apply plugin: 'com.novoda.bintray-release'
 Properties properties = new Properties()
 properties.load( project.rootProject.file('local.properties').newDataInputStream() )
@@ -68,3 +69,4 @@ publish {
 //    gradlew clean build generatePomFileForReleasePublication bintrayUpload -PdryRun=false
 //    gradlew clean build bintrayUpload -PdryRun=false
 }
+*/

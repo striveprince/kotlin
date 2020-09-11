@@ -49,6 +49,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
     implementation 'com.scwang.smart:refresh-layout-kernel:2.0.0-alpha-1'
 }
+/*
 
 apply plugin: 'com.novoda.bintray-release'
 Properties properties = new Properties()
@@ -66,4 +67,4 @@ publish {
 
 //    gradle clean build generatePomFileForReleasePublication bintrayUpload -PdryRun=false
 //    gradle clean build bintrayUpload -PdryRun=false
-}
+}*/
