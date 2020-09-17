@@ -68,7 +68,6 @@ private fun Class<*>.baseType(param: Class<*>): Boolean {
     return kotlin == param.kotlin
 }
 
-
 fun isFieldNull(o: Any?): Boolean {
     return when {
         o == null -> true

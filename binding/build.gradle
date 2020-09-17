@@ -83,4 +83,6 @@ publish {
     bintrayUser = properties.getProperty('user')
     bintrayKey = properties.getProperty('key')
 
+//    gradlew clean build generatePomFileForReleasePublication bintrayUpload -PdryRun=false
+//    gradlew clean build bintrayUpload -PdryRun=false
 }

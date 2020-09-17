@@ -3,6 +3,7 @@ package com.lifecycle.binding.inter
 import android.view.View
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.inter.event.IListAdapter
+import timber.log.Timber
 import kotlin.math.min
 
 
@@ -22,7 +23,7 @@ interface ISelectList<E : Select> : IListAdapter<E> {
 
     fun select(es: List<E>, position: Int): Boolean {
         var b = true
-        es.forEachIndexed { _, e -> if (!select(e)) b = false }
+        es.forEach { e -> if (!select(e)) b = false }
         return b
     }
 
@@ -35,32 +36,26 @@ interface ISelectList<E : Select> : IListAdapter<E> {
     fun selectStatus(e: E, check: Boolean): Boolean {
         selectList.asyncList()
         if (e.isSelected() == check) return check
-        return if (!check) {
-            if (!e.couldTakeBack()) e.select(true)
-            else selectList.remove(e).let { e.select(false) }
-        } else {
+        return if (check) {
             if (e.isPush()) selectList.add(e)
                 .also { e.select(it) }
-                .apply {
-                    while (selectList.size > max)
-                        selectList.removeAt(0).select(false)
-                }
+                .apply { selectList.asyncList() }
             else add(e)
+        } else {
+            if (!e.couldTakeBack()) e.select(true)
+            else selectList.remove(e).let { e.select(false) }
         }
     }
 
     private fun add(inE: E): Boolean {
+        Timber.i("add selectList.size = ${selectList.size} max = $max")
         return selectList.size < max && selectList.add(inE).let { inE.select(it) }
     }
 
     fun firstAsync(type: Int) {
-        when (type) {
-            AdapterType.refresh, AdapterType.remove -> {
-                selectList.clear()
-                adapterList.forEach { e -> e.select(e.isSelected()).also { if (it&&selectList.size<max) selectList.add(e) } }
-                selectList.asyncList()
-            }
-        }
+        selectList.clear()
+        adapterList.forEach { e -> if (e.isSelected())add(e) }
+        when (type) { AdapterType.refresh, AdapterType.remove -> selectList.asyncList() }
     }
 
     fun asyncEntity(e: E, type: Int) {
