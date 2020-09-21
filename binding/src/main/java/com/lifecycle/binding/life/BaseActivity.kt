@@ -25,7 +25,7 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
     val model: Model by lazy { initModel() }
     var toolbarIndex = Int.MAX_VALUE
 
-    open fun isSwipe(): Int = SwipeBackLayout.FROM_LEFT
+    open fun isSwipe(): Int = AppLifecycle.isSwipe
     override fun owner() = this
     override fun requireActivity() = this
     private var usableHeightPrevious = 0
