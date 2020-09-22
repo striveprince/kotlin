@@ -28,7 +28,7 @@ object TabLayoutBindingAdapter {
         val current = getSelectedTabPosition(layout)
         if (current == position || position < 0) return
         val tab = layout.getTabAt(position)!!
-        invoke("selectTab", layout, tab)
+        layout.invoke("selectTab", tab)
         layout.setScrollPosition(position, 0f, true)
     }
 

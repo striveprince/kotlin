@@ -6,7 +6,8 @@ import com.lifecycle.binding.util.*
 
 interface ListModel<E,Job>:  ListObtain<E, Job> {
     val loadingState : MutableLiveData<Int>
-    val error : MutableLiveData<Throwable>
+//    val error : MutableLiveData<Throwable>
+    val errorMessage :MutableLiveData<CharSequence>
 
     override fun onNext(t: List<E>) {
         loadingState.value?.let {
@@ -20,7 +21,7 @@ interface ListModel<E,Job>:  ListObtain<E, Job> {
     }
 
     override fun onError(e: Throwable) {
-        error.value = e
+        errorMessage.value = e.message
         loadingState.value = stateError(loadingState.value!!)
     }
 

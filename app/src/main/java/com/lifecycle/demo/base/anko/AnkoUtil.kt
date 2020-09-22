@@ -79,7 +79,7 @@ fun <E : Inflate> recyclerAnko(
                             t.loadingState.value = type
                         }
                     }
-                    t.error.observer(lifecycleInit.owner()) { if (it != null) errorInflate.set(onLoad, it) }
+                    t.errorMessage.observer(lifecycleInit.owner()) { if (it != null) errorInflate.set(onLoad,empty =  it) }
 //                    t.enable.observer(lifecycleInit.owner()) { (this as View).isEnabled = it }
                     t.loadingState.observer(lifecycleInit.owner()) {
                         when (it) {
@@ -118,11 +118,11 @@ private fun errorInflate(): ErrorInflate {
         var throwable: Throwable? = null
 
         var view: View? = null
-        override fun set(onLoad: (Int, Int) -> Unit, throwable: Throwable?, empty: String) {
+        override fun set(onLoad: (Int, Int) -> Unit, throwable: Throwable?, empty: CharSequence) {
             this.throwable = throwable
             val message = throwable?.message ?: empty
             textView.text = message
-            toast(message)
+            toast(message.toString())
             textView.setOnClickListener { onLoad(0, AdapterType.refresh) }
         }
 

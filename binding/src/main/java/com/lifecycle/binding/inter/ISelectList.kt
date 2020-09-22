@@ -3,6 +3,7 @@ package com.lifecycle.binding.inter
 import android.view.View
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.inter.event.IListAdapter
+import timber.log.Timber
 import kotlin.math.min
 
 
@@ -22,7 +23,7 @@ interface ISelectList<E : Select> : IListAdapter<E> {
 
     fun select(es: List<E>, position: Int): Boolean {
         var b = true
-        es.forEachIndexed { _, e -> if (!select(e)) b = false }
+        es.forEach { e -> if (!select(e)) b = false }
         return b
     }
 
@@ -33,34 +34,28 @@ interface ISelectList<E : Select> : IListAdapter<E> {
     }
 
     fun selectStatus(e: E, check: Boolean): Boolean {
-        asyncList()
+        selectList.asyncList()
         if (e.isSelected() == check) return check
-        return if (!check) {
-            if (!e.couldTakeBack()) e.select(true)
-            else selectList.remove(e).let { e.select(false) }
-        } else {
+        return if (check) {
             if (e.isPush()) selectList.add(e)
                 .also { e.select(it) }
-                .apply {
-                    while (selectList.size > max)
-                        selectList.removeAt(0).select(false)
-                }
+                .apply { selectList.asyncList() }
             else add(e)
+        } else {
+            if (!e.couldTakeBack()) e.select(true)
+            else selectList.remove(e).let { e.select(false) }
         }
     }
 
     private fun add(inE: E): Boolean {
+        Timber.i("add selectList.size = ${selectList.size} max = $max")
         return selectList.size < max && selectList.add(inE).let { inE.select(it) }
     }
 
     fun firstAsync(type: Int) {
-        when (type) {
-            AdapterType.refresh, AdapterType.remove -> {
-                selectList.clear()
-                adapterList.forEach { e -> e.select(e.isSelected()).also { if (it&&selectList.size<max) selectList.add(e) } }
-            }
-        }
-        asyncList()
+        selectList.clear()
+        adapterList.forEach { e -> if (e.isSelected())add(e) }
+        when (type) { AdapterType.refresh, AdapterType.remove -> selectList.asyncList() }
     }
 
     fun asyncEntity(e: E, type: Int) {
@@ -70,30 +65,12 @@ interface ISelectList<E : Select> : IListAdapter<E> {
         }
     }
 
-
-
-    fun asyncList() {
-        if (selectList.size > max) {
-            val arrayList = ArrayList<E>()
-            for (it in selectList) if (it.isPush()) arrayList.add(it)
-            val l = selectList.size - max
-            val min = min(l, arrayList.size)-1
-            for (index in 0..min) {
-                selectList.remove(arrayList[index])
-                arrayList[index].select(false)
-            }
-            if (l > arrayList.size)
-                for (index in 0..l - arrayList.size)
-                    selectList.removeAt(selectList.lastIndex).select(false)
-        }
+    fun MutableList<E>.asyncList() {
+        while (max in indices) removeAt(lastIndex).select(false)
     }
 
     fun selectList(list:List<E> = adapterList,boolean: Boolean = false){
-        if(adapterList == list&&!boolean){
-            selectList.clear()
-            for (e in adapterList) e.select(false)
-        }else
-            for (e in list) selectStatus(e,boolean)
+        for (e in list) selectStatus(e,boolean)
     }
 
     private fun E.isPush() = checkWay and 1 == 1

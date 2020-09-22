@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlinx-serialization'
-apply plugin: 'com.novoda.bintray-release'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -68,6 +68,8 @@ dependencies {
 subprojects {
     tasks.withType(Javadoc).all { enabled = false }
 }
+
+apply plugin: 'com.novoda.bintray-release'
 Properties properties = new Properties()
 properties.load( project.rootProject.file('local.properties').newDataInputStream() )
 publish {
@@ -81,6 +83,6 @@ publish {
     bintrayUser = properties.getProperty('user')
     bintrayKey = properties.getProperty('key')
 
-//    gradle clean build generatePomFileForReleasePublication bintrayUpload -PdryRun=false
-//    gradle clean build bintrayUpload -PdryRun=false
+//    gradlew clean build generatePomFileForReleasePublication bintrayUpload -PdryRun=false
+//    gradlew clean build bintrayUpload -PdryRun=false
 }

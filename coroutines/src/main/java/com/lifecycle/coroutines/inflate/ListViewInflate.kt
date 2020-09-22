@@ -15,6 +15,7 @@ import com.lifecycle.binding.inter.list.ListInflate
 import com.lifecycle.binding.life.AppLifecycle
 import com.lifecycle.coroutines.util.launchUI
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -40,6 +41,7 @@ open class ListViewInflate<E : Inflate, Binding : ViewDataBinding>(final overrid
         binding = t
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun getData(state: Int) {
             onSubscribe(launchUI {
                 httpData(getStartOffset(state), state)
