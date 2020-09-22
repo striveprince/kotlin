@@ -31,11 +31,10 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
     override var headIndex = 0
     override var offset = 0
     override val loadingState = MutableLiveData(AdapterType.no)
-    override val error = MutableLiveData<Throwable>()
     override val adapterList: MutableList<E> = adapter.adapterList
     override var job: Disposable? = null
+    override val errorMessage: MutableLiveData<CharSequence> = MutableLiveData("")
     var httpData: (Int, Int) -> Single<List<E>> = { _, _ -> Single.just(ArrayList()) }
-
     override val canRun: AtomicBoolean = AtomicBoolean(true)
     override fun attachData(owner: LifecycleOwner, bundle: Bundle?) {
         super.attachData(owner, bundle)
