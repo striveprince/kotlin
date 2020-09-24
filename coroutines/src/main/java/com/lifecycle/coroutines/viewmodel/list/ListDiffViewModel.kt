@@ -7,6 +7,7 @@ import com.lifecycle.binding.adapter.recycler.DiffUtilCallback
 import com.lifecycle.binding.inter.inflate.Diff
 import com.lifecycle.binding.util.isStateStart
 import com.lifecycle.binding.util.stateOriginal
+import com.lifecycle.binding.util.stateRunning
 import com.lifecycle.coroutines.util.launchUI
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -14,10 +15,10 @@ import kotlinx.coroutines.flow.*
 
 open class ListDiffViewModel<E : Diff> : ListViewModel<E>() {
 
-
     @ExperimentalCoroutinesApi
     override fun getData(state: Int) {
         if (AdapterType.refresh == stateOriginal(state)) {
+            loadingState.value = stateRunning(state)
             onSubscribe(launchUI {
                 httpData(getStartOffset(state), state)
                     .flowOn(IO)
@@ -29,7 +30,10 @@ open class ListDiffViewModel<E : Diff> : ListViewModel<E>() {
         } else super.getData(state)
     }
 
-    private fun diff(it: List<E>) = DiffUtil.calculateDiff(DiffUtilCallback(adapterList, it))
-        .apply { adapterList.clear() }
-        .apply { adapterList.addAll(it) }
+    private fun diff(it: List<E>): DiffUtil.DiffResult {
+        val result = DiffUtil.calculateDiff(DiffUtilCallback(adapterList, it))
+        adapterList.clear()
+        adapterList.addAll(it)
+        return result
+    }
 }

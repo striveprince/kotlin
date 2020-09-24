@@ -45,6 +45,7 @@ import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.parse
+import timber.log.Timber
 import java.io.File
 import java.lang.RuntimeException
 import java.lang.reflect.Constructor
@@ -72,16 +73,19 @@ import java.lang.reflect.Type
 
 //end
 fun stateEnd(@AdapterEvent state: Int) = state and 0x100FF
+// (if(isStateRunning(state)) state and 0x100FF else state).also { Timber.i("stateEnd state= $state result = $it") }
 fun isStateEnd(@AdapterEvent state: Int) = state shr 8 and 1 == 0 && state shr 9 and 1 == 0
 
 
 //start
 fun stateStart(@AdapterEvent state: Int) = state or 0x00100
+// (if(isStateEnd(state)) state or 0x00100 else state).also { Timber.i("stateStart state= $state result = $it") }
 fun isStateStart(@AdapterEvent state: Int) = state shr 8 and 1 == 1 && !isStateRunning(state)
 
 
 //running
 fun stateRunning(state: Int) = state or 0x0200
+//(if(isStateStart(state)) state or 0x0200 else state).also { Timber.i("stateRunning state= $state result = $it") }
 fun isStateRunning(@AdapterEvent state: Int) = state shr (9) and 1 == 1
 
 
@@ -97,12 +101,18 @@ fun stateOriginal(state: Int) = state and 0xff
 
 fun Int.stateEqual(@AdapterEvent state: Int) = (this and 0xff) == (state and 0xff)
 
+fun Int.stateCondition() = when {
+    isStateStart(this) -> "state start"
+    isStateRunning(this) -> "state running"
+    isStateEnd(this) -> " state end"
+    else-> ""
+}
 
 val gson = Gson()
 
 inline fun <reified T> Gson.fromJson(json: String) =
 //    if (T::class.java.isAssignableFrom(List::class.java))
-        this.fromJson<T>(json, object : TypeToken<T>() {}.type)!!
+    this.fromJson<T>(json, object : TypeToken<T>() {}.type)!!
 //    else
 //        this.fromJson(json, T::class.java)!!
 
@@ -131,7 +141,6 @@ fun Context.application(): Context {
 fun Context.sharedPreferences(name: String): SharedPreferences {
     return application().getSharedPreferences(name, Activity.MODE_PRIVATE)
 }
-
 
 
 private fun <T> observableCallback(block: (T) -> Unit) = object : Observable.OnPropertyChangedCallback() {

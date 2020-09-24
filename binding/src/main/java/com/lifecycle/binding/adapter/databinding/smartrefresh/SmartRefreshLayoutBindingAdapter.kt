@@ -51,7 +51,6 @@ object SmartRefreshLayoutBindingAdapter {
     }
 
     private fun startHttp(state: Int, view: SmartRefreshLayout): Int {
-        if (BuildConfig.DEBUG) (view.getTag(R.id.smart_refresh_layout_state) as? Int ?: 0).also { Timber.i("SmartRefreshState = $it  setState = ${isStateStart(it)} startHttp") }
         when (stateOriginal(state)) {
             AdapterType.refresh -> view.autoRefresh()
             AdapterType.load, AdapterType.add -> view.autoLoadMore()
@@ -62,8 +61,8 @@ object SmartRefreshLayoutBindingAdapter {
     @JvmStatic
     @InverseBindingAdapter(attribute = "state", event = "android:stateAttrChanged")
     fun getState(view: SmartRefreshLayout): Int {
-        if (BuildConfig.DEBUG) (view.getTag(R.id.smart_refresh_layout_state) as? Int ?: 0).also { Timber.i("SmartRefreshState = $it  getState = ${isStateStart(it)}") }
         val s = view.getTag(R.id.smart_refresh_layout_state) as? Int ?: 0
+        if (BuildConfig.DEBUG)  Timber.i("loadingState = $s   condition = ${s.stateCondition()}")
         return if (isStateEnd(s) && view.isRefreshing) stateStart(AdapterType.refresh)
         else if (isStateEnd(s) && view.isLoading) stateStart(AdapterType.load)
         else s

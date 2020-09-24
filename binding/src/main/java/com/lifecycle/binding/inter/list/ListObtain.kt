@@ -8,6 +8,7 @@ import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.util.*
 import com.lifecycle.binding.viewmodel.Obtain
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicInteger
 
 interface ListObtain<E,Job> : IListAdapter<E>, Obtain<List<E>, Job> {
     var pageWay:Boolean
@@ -16,8 +17,7 @@ interface ListObtain<E,Job> : IListAdapter<E>, Obtain<List<E>, Job> {
     var offset:Int
     var job: Job?
     val adapter: IListAdapter<E>
-    val canRun: AtomicBoolean
-
+    val state : AtomicInteger
     fun start(@AdapterEvent state: Int)
 
     fun getData(state: Int)
@@ -33,12 +33,6 @@ interface ListObtain<E,Job> : IListAdapter<E>, Obtain<List<E>, Job> {
         val headIndex = if(state.stateEqual(AdapterType.refresh)) 0 else this.headIndex
         return position+headIndex
     }
-
-    override fun onComplete() {
-        canRun.compareAndSet(false,true)
-    }
-
-
 
     override fun notify(type: Int, p: Int, from: Int): Boolean {
         return adapter.notify(type,p,from)

@@ -7,6 +7,7 @@
             name="vm"
             type="com.lifecycle.demo.ui.select.popup.PopupRecyclerInflate"/>
         <import type="android.view.View"/>
+        <import type="android.text.TextUtils"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -43,8 +44,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:gravity="center"
-                        android:visibility="@{vm.error==null?View.GONE:View.VISIBLE,default=gone}"
-                        android:text="@{vm.error.message}"
+                        android:visibility="@{TextUtils.isEmpty(vm.errorMessage)?View.GONE:View.VISIBLE,default=gone}"
+                        android:text="@{vm.errorMessage}"
                         android:layout_height="match_parent"/>
                 </FrameLayout>
             </FrameLayout>

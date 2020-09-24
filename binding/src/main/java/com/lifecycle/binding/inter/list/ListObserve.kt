@@ -8,19 +8,23 @@ import com.lifecycle.binding.adapter.AdapterEvent
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.util.*
 
-interface ListObserve<E, Binding : ViewDataBinding, Job>: ListObtain<E, Job>  {
+interface ListObserve<E, Binding : ViewDataBinding, Job> : ListObtain<E, Job> {
     val loadingState: ObservableInt
-    val error: ObservableField<Throwable>
+    val errorMessage: ObservableField<CharSequence>
     var callback: Observable.OnPropertyChangedCallback?
 
-
-    fun init(){
-        callback = loadingState.observe {  if (canRun.getAndSet(false) && isStateStart(it))getData(it) }
+    fun init() {
+        callback = loadingState.observe { if (state.getAndSet(it) != it && isStateStart(it)) getData(it) }
         start(AdapterType.refresh)
     }
 
+
+    override fun getData(state: Int) {
+        loadingState.set(stateRunning(state))
+    }
+
     override fun start(@AdapterEvent state: Int) {
-        loadingState.set(stateStart(state))
+        if (isStateEnd(this.state.get()))loadingState.set(stateStart(state))
     }
 
 
@@ -34,12 +38,11 @@ interface ListObserve<E, Binding : ViewDataBinding, Job>: ListObtain<E, Job>  {
     }
 
     override fun onError(e: Throwable) {
-        error.set(e)
+        errorMessage.set(e.message)
         loadingState.set(stateError(loadingState.get()))
     }
 
     override fun onComplete() {
-        super.onComplete()
         loadingState.set(stateEnd(loadingState.get()))
     }
 
