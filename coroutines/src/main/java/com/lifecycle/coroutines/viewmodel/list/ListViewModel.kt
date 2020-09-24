@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.lifecycle.binding.inter.event.IEvent
 import com.lifecycle.binding.inter.event.IListAdapter
 import com.lifecycle.binding.adapter.AdapterType
+import com.lifecycle.binding.adapter.AdapterType.no
 import com.lifecycle.binding.adapter.recycler.RecyclerAdapter
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.inter.list.ListModel
@@ -33,13 +34,13 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
     override var pageCount = AppLifecycle.pageCount
     override var headIndex = 0
     override var offset = 0
-    override val loadingState = MutableLiveData(AdapterType.no)
+    override val loadingState = MutableLiveData(stateStart(AdapterType.refresh))
     override var job: Job? = null
     override val adapterList: MutableList<E> = adapter.adapterList
     var httpData: HttpData<E> = { _, _: Int -> flow { emit(ArrayList<E>()) } }
     override val errorMessage: MutableLiveData<CharSequence> = MutableLiveData("")
     override val events: ArrayList<IEvent<E>> = adapter.events
-    override val state: AtomicInteger = AtomicInteger()
+    override val state: AtomicInteger = AtomicInteger(no)
 
     @ExperimentalCoroutinesApi
     override fun attachData(owner: LifecycleOwner, bundle: Bundle?) {
