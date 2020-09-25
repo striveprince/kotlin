@@ -12,10 +12,7 @@ import com.lifecycle.binding.adapter.recycler.RecyclerAdapter
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.inter.list.ListModel
 import com.lifecycle.binding.life.AppLifecycle
-import com.lifecycle.binding.util.isStateStart
-import com.lifecycle.binding.util.observer
-import com.lifecycle.binding.util.stateRunning
-import com.lifecycle.binding.util.stateStart
+import com.lifecycle.binding.util.*
 import com.lifecycle.coroutines.util.HttpData
 import com.lifecycle.coroutines.util.launchUI
 import com.lifecycle.coroutines.viewmodel.LifeViewModel
@@ -45,7 +42,7 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
     @ExperimentalCoroutinesApi
     override fun attachData(owner: LifecycleOwner, bundle: Bundle?) {
         loadingState.observer(owner) {
-            Timber.i("loadingState = $it state = ${state.get()}")
+            Timber.i("loadingState = $it state = ${state.get()} condition = ${it.stateCondition()}")
             if (state.getAndSet(it) != it && isStateStart(it)) getData(it)
         }
     }

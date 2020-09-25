@@ -15,9 +15,7 @@ interface ListModel<E, Job> : ListObtain<E, Job> {
         }
     }
 
-    override fun getData(state: Int) {
-        loadingState.value = stateRunning(state)
-    }
+    override fun getData(state: Int) {}
 
     override fun start(@AdapterEvent state: Int) {
         if (isStateEnd(this.state.get())) loadingState.value = stateStart(state)
