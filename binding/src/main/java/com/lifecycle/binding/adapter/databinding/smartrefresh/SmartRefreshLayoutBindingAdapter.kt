@@ -35,7 +35,8 @@ object SmartRefreshLayoutBindingAdapter {
                 isStateStart(state) -> startHttp(state, view)
                 isStateEnd(state) -> {
                     when (stateOriginal(state)) {
-                        AdapterType.start->{}
+                        AdapterType.start -> {
+                        }
                         AdapterType.refresh -> view.finishRefresh(1000)
                         AdapterType.load -> view.finishLoadMore(1000)
                         else -> {
@@ -56,7 +57,7 @@ object SmartRefreshLayoutBindingAdapter {
             AdapterType.refresh -> view.autoRefresh()
             AdapterType.load, AdapterType.add -> view.autoLoadMore()
         }
-        return stateRunning(state)
+        return stateStart(state)
     }
 
     @JvmStatic
@@ -65,8 +66,8 @@ object SmartRefreshLayoutBindingAdapter {
         return view.getStateValue().let {
             if (BuildConfig.DEBUG) Timber.i("getState loadingState = $it condition = ${it.stateCondition()}")
             when {
-                isStateStart(it) && view.isRefreshing -> stateStart(AdapterType.refresh)
-                isStateStart(it) && view.isLoading -> stateStart(AdapterType.load)
+                view.isRefreshing -> stateStart(AdapterType.refresh)
+                view.isLoading -> stateStart(AdapterType.load)
                 else -> it
             }
         }
