@@ -9,6 +9,7 @@ interface ListModel<E, Job> : ListObtain<E, Job> {
     val errorMessage: MutableLiveData<CharSequence>
 
     override fun onNext(t: List<E>) {
+        errorMessage.value = ""
         loadingState.value?.let {
             setList(getEndOffset(it), t, stateOriginal(it))
             loadingState.value = stateSuccess(it)

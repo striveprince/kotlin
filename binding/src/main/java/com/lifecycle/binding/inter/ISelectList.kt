@@ -66,7 +66,7 @@ interface ISelectList<E : Select> : IListAdapter<E> {
     }
 
     fun MutableList<E>.asyncList() {
-        while (max in indices) removeAt(lastIndex).select(false)
+        while (max in indices) removeAt(0).select(false)
     }
 
     fun selectList(list:List<E> = adapterList,boolean: Boolean = false){

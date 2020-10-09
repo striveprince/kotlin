@@ -84,8 +84,11 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
     }
 
     fun removeAt(position: Int): Boolean {
-        if (position in adapterList.indices) adapterList.removeAt(position)
-        return notify(AdapterType.remove, position)
+        if (position in adapterList.indices){
+            adapterList.removeAt(position)
+            notify(AdapterType.remove, position)
+        }
+        return false
     }
 
     fun addList(es: List<E>, position: Int = Int.MAX_VALUE): Boolean {

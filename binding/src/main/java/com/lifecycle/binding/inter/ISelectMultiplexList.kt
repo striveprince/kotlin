@@ -110,11 +110,6 @@ interface ISelectMultiplexList<E : MultiplexSelect> : IListAdapter<E> {
         list.clear()
     }
 
-//    fun MutableMap<String, SelectType<E>>.asyncList(list: MutableList<E>) {
-//        clear()
-//        for (e in list) selectStatus(e, e.isSelected())
-//    }
-
     fun MutableMap<String, SelectType<E>>.add(inE: E, list: MutableList<E>): Boolean {
         return list.add(inE).apply {
             if (get(inE.selectType())?.selects?.add(inE) == null)
@@ -128,6 +123,5 @@ class SelectType<E>(val max: Int, val selects: ArrayList<E> = ArrayList())
 
 interface MultiplexSelect : Select {
     fun selectType() = javaClass.simpleName
-
     fun selectMax() = Int.MAX_VALUE
 }
