@@ -448,13 +448,12 @@ fun <T, B> List<T>.indexOfList(b: B, block: T.(B) -> Boolean): Int {
     return -1
 }
 
-
 fun Context.showInput(searchView: TextView, show: Boolean) {
     getSystemService<InputMethodManager>()?.run {
         if(!showInputMethod(searchView,show)) searchView.postDelayed({ showInputMethod(searchView, show) }, 500)
     }
 }
 
-private fun InputMethodManager.showInputMethod(searchView: TextView,show: Boolean) =
+fun InputMethodManager.showInputMethod(searchView: TextView,show: Boolean) =
     if (show) showSoftInput(searchView, InputMethodManager.SHOW_FORCED)
     else hideSoftInputFromWindow(searchView.windowToken, 0)
