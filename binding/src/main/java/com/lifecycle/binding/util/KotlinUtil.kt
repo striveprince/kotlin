@@ -373,7 +373,7 @@ fun ViewGroup.layoutParam(width: Int = ViewGroup.LayoutParams.MATCH_PARENT, heig
 
 
 inline fun <reified T : ViewModel> LifecycleOwner.viewModel(factory: ViewModelProvider.Factory? = null): T {
-    return lifeModel(T::class.java, factory)
+    return lifeModel<T>(T::class.java, factory)
 }
 
 fun <T : ViewModel> LifecycleOwner.lifeModel(clazz: Class<T>, factory: ViewModelProvider.Factory? = null): T {
@@ -450,11 +450,11 @@ fun <T, B> List<T>.indexOfList(b: B, block: T.(B) -> Boolean): Int {
 
 
 fun Context.showInput(searchView: TextView, show: Boolean) {
-    searchView.requestFocus()
-    searchView.requestFocusFromTouch()
     getSystemService<InputMethodManager>()?.run {
-        if (show) {
-            if (!showSoftInput(searchView, InputMethodManager.SHOW_FORCED)) searchView.postDelayed({ showInput(searchView, show) }, 500)
-        } else if (!hideSoftInputFromWindow(searchView.windowToken, 0)) searchView.postDelayed({ showInput(searchView, show) }, 500)
+        if(!showInputMethod(searchView,show)) searchView.postDelayed({ showInputMethod(searchView, show) }, 500)
     }
 }
+
+private fun InputMethodManager.showInputMethod(searchView: TextView,show: Boolean) =
+    if (show) showSoftInput(searchView, InputMethodManager.SHOW_FORCED)
+    else hideSoftInputFromWindow(searchView.windowToken, 0)
