@@ -81,7 +81,7 @@ inline fun <reified T> SharedPreferences.get(t: T = T::class.java.newInstance())
     for (field in T::class.java.getAllFields()) {
         all[field.noDelegateName()]?.let {
             val value = if (isJson(it)) gson.fromJson(it as String, field.genericType) else it
-            beanSetValue(field.noDelegateName(), value, it)
+            beanSetValue(field.noDelegateName(), t as Any, value)
         }
     }
     return t
