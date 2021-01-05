@@ -51,13 +51,13 @@ class PermissionsFragment : Fragment() {
     }
 
     @TargetApi(Build.VERSION_CODES.M)
-    fun isGranted(permission: String?): Boolean {
-        return activity!!.checkSelfPermission(permission!!) == PackageManager.PERMISSION_GRANTED
+    fun isGranted(permission: String): Boolean {
+        return requireActivity().checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
     }
 
     @TargetApi(Build.VERSION_CODES.M)
     fun isRevoked(permission: String): Boolean {
-        return activity?.let { it.packageManager.isPermissionRevokedByPolicy(permission, it.packageName) } ?: false
+        return requireActivity().let { it.packageManager.isPermissionRevokedByPolicy(permission, it.packageName) }
     }
 
 }

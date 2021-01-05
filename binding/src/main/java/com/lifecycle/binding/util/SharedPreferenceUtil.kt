@@ -6,15 +6,14 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
-import androidx.databinding.adapters.NumberPickerBindingAdapter.setValue
 import androidx.lifecycle.MutableLiveData
-import com.lifecycle.binding.util.fromJson
-import com.lifecycle.binding.util.toJson
+import com.google.gson.JsonElement
+import com.google.gson.JsonParser
+import org.json.JSONArray
 import timber.log.Timber
 import kotlin.properties.Delegates
 import kotlin.properties.ObservableProperty
 import kotlin.properties.ReadWriteProperty
-import kotlin.reflect.KProperty
 import kotlin.reflect.full.superclasses
 
 
@@ -80,9 +79,9 @@ fun SharedPreferences.clear(commit: Boolean = false) {
 
 inline fun <reified T> SharedPreferences.get(t: T = T::class.java.newInstance()): T {
     for (field in T::class.java.getAllFields()) {
-//        beanFieldSet(field, t as Any, all[field.name])
         all[field.noDelegateName()]?.let {
-            beanSetValue(field.noDelegateName(), t as Any, it)
+            val value = if (isJson(it)) gson.fromJson(it as String, field.genericType) else it
+            beanSetValue(field.noDelegateName(), value, it)
         }
     }
     return t
@@ -114,6 +113,20 @@ inline fun <reified T> SharedPreferences.liveData(key: String, t: T): MutableLiv
             putValue(key, value as Any)
         }
     }
+}
+
+
+
+fun isJson(json: Any): Boolean {
+    if (json is String) {
+        val jsonElement: JsonElement = try {
+            JsonParser().parse(json)
+        } catch (e: Exception) {
+            return false
+        }
+        return jsonElement.isJsonObject
+    }
+    return false
 }
 //
 //open class SharedPreferenceLiveData<T>:LiveData<T>(){
