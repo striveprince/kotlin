@@ -40,7 +40,7 @@ fun <T> SharedPreferences.Editor.putValue(key: String, it: T) {
 
 fun ObservableProperty<*>.value(): Any? = runCatching { javaClass.kotlin.superclasses[0].java.declaredFields[0].apply { isAccessible = true }.get(this@value) }.getOrNull()
 
-private fun <T> toJsonWithoutBaseType(it: T): String {
+private fun <T> toJsonWithoutBaseType(it: T?): String {
     return when (it) {
         null -> ""
         is Int, Boolean, Double, Float, Byte, Long, String, Char -> it.toString()
@@ -76,6 +76,7 @@ fun SharedPreferences.put(any: Any, commit: Boolean = false) {
 fun SharedPreferences.clear(commit: Boolean = false) {
     edit(commit) { clear() }
 }
+
 
 inline fun <reified T> SharedPreferences.get(t: T = T::class.java.newInstance()): T {
     for (field in T::class.java.getAllFields()) {
