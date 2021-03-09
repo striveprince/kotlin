@@ -38,12 +38,6 @@ import org.jetbrains.anko.textView
  */
 inline fun ViewManager.viewPager2(init: ViewPager2.() -> Unit): ViewPager2 =
     ankoView({ ViewPager2(it) }, theme = 0, init = init)
-//inline fun ViewManager.bottomNavigationView(init: BottomNavigationView.() -> Unit): BottomNavigationView =
-//    ankoView({ BottomNavigationView(it) }, theme = 0, init = init)
-//
-//inline fun ViewManager.recyclerView(init: RecyclerView.() -> Unit): RecyclerView =
-//    ankoView({ RecyclerView(it) }, theme = 0, init = init)
-
 
 inline fun ViewManager.smartRefreshLayout(init: SmartRefreshLayout.() -> Unit): SmartRefreshLayout =
     ankoView({ SmartRefreshLayout(it) }, theme = 0, init = init)
