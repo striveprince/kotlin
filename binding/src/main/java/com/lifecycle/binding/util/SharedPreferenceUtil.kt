@@ -9,7 +9,6 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
-import org.json.JSONArray
 import timber.log.Timber
 import kotlin.properties.Delegates
 import kotlin.properties.ObservableProperty
