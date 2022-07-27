@@ -49,6 +49,21 @@ dependencies {
     implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.1'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 }
+//
+//task makeJar(type: Copy) {
+//    //删除已经存在的 jar
+//    delete 'build/libs/kotlin_binding.jar'
+//    //设置拷贝的文件
+//    from('build/intermediates/aar_main_jar/release/')
+//    //打进jar包后的文件目录
+//    into('build/libs/')
+//    include('classes.jar')
+//    //重命名
+//    rename ('classes.jar', 'kotlin_binding.jar')
+//}
+//
+//makeJar.dependsOn(build)
+
 //Properties properties = new Properties()
 //properties.load( project.rootProject.file('local.properties').newDataInputStream() )
 //publish {

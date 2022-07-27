@@ -19,7 +19,7 @@ import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.life.LifecycleInit
 import com.lifecycle.binding.util.observer
 import com.lifecycle.binding.util.toast
-import com.lifecycle.rx.viewmodel.list.ListViewModel
+import com.lifecycle.coroutines.viewmodel.list.ListViewModel
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.simple.SimpleMultiListener
