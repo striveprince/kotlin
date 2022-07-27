@@ -2,7 +2,7 @@ package com.lifecycle.binding.inter
 
 import com.lifecycle.binding.inter.inflate.Inflate
 
-interface Select: Inflate {
+interface Select:Inflate {
 
     /**
      *          0       1       2       3

@@ -140,7 +140,7 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
     fun refreshList(es: List<E>, position: Int = 0): Boolean {
         return if (position in adapterList.indices) {
             if (position == 0) adapterList.clear()
-            else while (position in adapterList.indices) adapterList.removeAt(adapterList.lastIndex)
+            else adapterList.removeAll(adapterList.subList(position, size()))
             adapterList.addAll(position, es)
             notifyList(AdapterType.refresh, position, es)
         } else {

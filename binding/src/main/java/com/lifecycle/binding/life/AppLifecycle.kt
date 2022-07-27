@@ -40,7 +40,7 @@ open class AppLifecycle constructor(
         fun activity(): Activity = stack.lastElement()
 
         fun finishAllWithout(vararg clazz: Class<*>) {
-            for (activity in stack) if (!clazz.contain { it.isAssignableFrom(activity.javaClass) }) activity.finish()
+//            for (activity in stack) if (!clazz.contain(activity.javaClass) { isAssignableFrom(it) }) activity.finish()
         }
     }
 

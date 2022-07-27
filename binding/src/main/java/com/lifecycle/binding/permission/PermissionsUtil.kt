@@ -35,17 +35,10 @@ class PermissionsUtil(activity: FragmentActivity = AppLifecycle.activity() as Fr
     fun request(vararg permissions: String,block :(Boolean)->Unit ){
         val unrequestedPermissions = ArrayList<String>()
         for (permission in permissions) {
-            if (isGranted(permission)) {
-                continue
-            }
-            if (isRevoked(permission)) {
-                continue
-            }
-            if (permissionsFragment.permissionMap[permission] == null) {
-                unrequestedPermissions.add(permission)
-            }
+            if (isGranted(permission)||isRevoked(permission)) continue
+            if (permissionsFragment.permissionMap[permission] == null) unrequestedPermissions.add(permission)
         }
-        permissionsFragment.requestPermissions(unrequestedPermissions.toArray(Array(unrequestedPermissions.size) { "" }))
+        permissionsFragment.requestPermissions(unrequestedPermissions.toTypedArray())
             .addCollector { it ->
                 var b = true
                 it.values.forEach { b = b and it.granted }
@@ -53,35 +46,33 @@ class PermissionsUtil(activity: FragmentActivity = AppLifecycle.activity() as Fr
             }
     }
 
-
-    fun isGranted(permission: String?): Boolean {
+    private fun isGranted(permission: String): Boolean {
         return !isMarshmallow() || permissionsFragment.isGranted(permission)
     }
 
-    fun isRevoked(permission: String): Boolean {
+    private fun isRevoked(permission: String): Boolean {
         return isMarshmallow() && permissionsFragment.isRevoked(permission)
     }
 
-    fun isMarshmallow(): Boolean {
+    private fun isMarshmallow(): Boolean {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
-    fun shouldShowRequestPermissionRationaleImplementation(activity: Activity, vararg permissions: String): Boolean {
-        for (p in permissions) {
-            if (!isGranted(p) && !activity.shouldShowRequestPermissionRationale(p)) {
-                return false
-            }
-        }
-        return true
-    }
-
+//    @TargetApi(Build.VERSION_CODES.M)
+//    fun shouldShowRequestPermissionRationaleImplementation(activity: Activity, vararg permissions: String): Boolean {
+//        for (p in permissions) {
+//            if (!isGranted(p) && !activity.shouldShowRequestPermissionRationale(p)) {
+//                return false
+//            }
+//        }
+//        return true
+//    }
 }
 
 fun Fragment.requirePermission(vararg permission: String, block :(Boolean)->Unit){
-    val s = activity?.checkPermissions(*permission) ?: throw RuntimeException("the activity of ${javaClass.name} is null")
+    val s = requireActivity().checkPermissions(*permission)
     if(s)block(s)
-    else PermissionsUtil(activity!!).request(*permission){ block(it) }
+    else PermissionsUtil(requireActivity()).request(*permission){ block(it) }
 }
 
 fun FragmentActivity.requirePermission(vararg permission: String,block :(Boolean)->Unit){
@@ -90,11 +81,10 @@ fun FragmentActivity.requirePermission(vararg permission: String,block :(Boolean
     else PermissionsUtil(this).request(*permission){ block(it) }
 }
 
-
 @Suppress("DEPRECATED_IDENTITY_EQUALS")
 fun Context.checkPermissions(vararg permissions: String): Boolean {
     for (permission in permissions) {
-        if (ActivityCompat.checkSelfPermission(this, permission) !== PackageManager.PERMISSION_GRANTED)
+        if (ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED)
             return false
     }
     return true

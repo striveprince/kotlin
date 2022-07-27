@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
-import com.lifecycle.binding.adapter.recycler.RecyclerAdapter
 import com.lifecycle.binding.inter.event.IListAdapter
+import com.lifecycle.binding.adapter.recycler.RecyclerAdapter
 
 /**
  * Created by arvin on 2018/1/17.
@@ -26,6 +26,14 @@ object ViewBindingAdapter {
     @BindingAdapter("android:alpha")
     fun setAlpha(view: View, alpha: Float) {
         if (!(alpha < 0 || alpha > 1)) view.alpha = alpha
+    }
+
+
+    @JvmStatic
+    @BindingAdapter("select")
+    fun setSelected(view:View,select:Boolean){
+        if(view.isSelected!=select)
+            view.isSelected = select
     }
 
     @JvmStatic

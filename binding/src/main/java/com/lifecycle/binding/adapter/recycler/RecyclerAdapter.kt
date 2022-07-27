@@ -9,8 +9,7 @@ import com.lifecycle.binding.inter.event.IListAdapter
 import com.lifecycle.binding.inter.inflate.Inflate
 
 @Suppress("UNCHECKED_CAST")
-open class RecyclerAdapter<E : Inflate> : RecyclerView.Adapter<RecyclerHolder<E>>(),
-    IListAdapter<E> {
+open class RecyclerAdapter<E : Inflate> : RecyclerView.Adapter<RecyclerHolder<E>>(), IListAdapter<E> {
     private val sparseArray = SparseArray<E>()
     override val events: ArrayList<IEvent<E>> = ArrayList()
     override val adapterList: MutableList<E> = ArrayList()
@@ -46,7 +45,7 @@ open class RecyclerAdapter<E : Inflate> : RecyclerView.Adapter<RecyclerHolder<E>
         holder.bindViewHolder(adapterList[position], event)
     }
 
-    override fun notify(p: Int, type: Int, from: Int): Boolean {
+    override fun notify(type: Int,p: Int,  from: Int): Boolean {
         when (type) {
             AdapterType.add -> notifyItemInserted(p)
             AdapterType.move -> notifyItemMoved(from, p)
@@ -57,7 +56,7 @@ open class RecyclerAdapter<E : Inflate> : RecyclerView.Adapter<RecyclerHolder<E>
         return true
     }
 
-    override fun notifyList(p: Int, type: Int, es: List<E>, from: Int): Boolean {
+    override fun notifyList( type: Int,p: Int, es: List<E>, from: Int): Boolean {
         when (type) {
             AdapterType.add -> notifyItemRangeInserted(p, es.size)
             AdapterType.remove -> notifyItemRangeRemoved(p, es.size)

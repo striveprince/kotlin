@@ -252,10 +252,12 @@ inline fun <T, R> T.transform(block: T.() -> R): R {
     return block()
 }
 
+
 fun toast(e: Throwable) {
     if (!TextUtils.isEmpty(e.message))
         toast(e.message!!)
 }
+
 
 fun toast(message: String?) {
     if (message?.trim()?.isNotEmpty() == true)
@@ -426,14 +428,14 @@ fun <T> Array<T>.contain(block: (T) -> Boolean): Boolean {
     return false
 }
 
-fun <T> Array<T>.indexOfList(block: (T) -> Boolean): Int {
+fun <T, B> Array<T>.indexOfList(block: (T) -> Boolean): Int {
     for ((index, it) in this.withIndex()) {
         if (block(it)) return index
     }
     return -1
 }
 
-fun <T> List<T>.contain(block: (T) -> Boolean): Boolean {
+fun <T, B> List<T>.contain(block: (T) -> Boolean): Boolean {
     for (it in this)
         if (block(it)) return true
     return false
@@ -455,5 +457,3 @@ fun Context.showInput(searchView: TextView, show: Boolean) {
 fun InputMethodManager.showInputMethod(searchView: TextView,show: Boolean) =
     if (show) showSoftInput(searchView, InputMethodManager.SHOW_FORCED)
     else hideSoftInputFromWindow(searchView.windowToken, 0)
-
- 

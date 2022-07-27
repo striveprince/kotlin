@@ -1,7 +1,7 @@
 package com.lifecycle.binding.adapter.recycler
 
-import com.lifecycle.binding.inter.SpanLookup
 import com.lifecycle.binding.inter.event.IListAdapter
+import com.lifecycle.binding.inter.SpanLookup
 
 class OrderSpanSizeLookup<E : SpanLookup>(adapter: IListAdapter<E>, count: Int): ReverseSpanSizeLookup<E>(adapter, count) {
 

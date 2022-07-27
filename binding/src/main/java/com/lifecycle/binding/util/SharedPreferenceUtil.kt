@@ -6,16 +6,13 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
-import androidx.databinding.adapters.NumberPickerBindingAdapter.setValue
 import androidx.lifecycle.MutableLiveData
-import com.lifecycle.binding.util.fromJson
-import com.lifecycle.binding.util.toJson
-import org.json.JSONArray
+import com.google.gson.JsonElement
+import com.google.gson.JsonParser
 import timber.log.Timber
 import kotlin.properties.Delegates
 import kotlin.properties.ObservableProperty
 import kotlin.properties.ReadWriteProperty
-import kotlin.reflect.KProperty
 import kotlin.reflect.full.superclasses
 
 
@@ -42,7 +39,7 @@ fun <T> SharedPreferences.Editor.putValue(key: String, it: T) {
 
 fun ObservableProperty<*>.value(): Any? = runCatching { javaClass.kotlin.superclasses[0].java.declaredFields[0].apply { isAccessible = true }.get(this@value) }.getOrNull()
 
-private fun <T> toJsonWithoutBaseType(it: T): String {
+private fun <T> toJsonWithoutBaseType(it: T?): String {
     return when (it) {
         null -> ""
         is Int, Boolean, Double, Float, Byte, Long, String, Char -> it.toString()
@@ -79,11 +76,12 @@ fun SharedPreferences.clear(commit: Boolean = false) {
     edit(commit) { clear() }
 }
 
+
 inline fun <reified T> SharedPreferences.get(t: T = T::class.java.newInstance()): T {
     for (field in T::class.java.getAllFields()) {
-//        beanFieldSet(field, t as Any, all[field.name])
         all[field.noDelegateName()]?.let {
-            beanSetValue(field.noDelegateName(), t as Any, it)
+            val value = if (isJson(it)) gson.fromJson(it as String, field.genericType) else it
+            beanSetValue(field.noDelegateName(), t as Any, value)
         }
     }
     return t
@@ -118,6 +116,18 @@ inline fun <reified T> SharedPreferences.liveData(key: String, t: T): MutableLiv
 }
 
 
+
+fun isJson(json: Any): Boolean {
+    if (json is String) {
+        val jsonElement: JsonElement = try {
+            JsonParser().parse(json)
+        } catch (e: Exception) {
+            return false
+        }
+        return jsonElement.isJsonObject
+    }
+    return false
+}
 //
 //open class SharedPreferenceLiveData<T>:LiveData<T>(){
 //    override fun getValue()=super.getValue()
