@@ -1,4 +1,4 @@
-package com.lifecycle.binding
+package com.lifecycle.binding.inter.event
 
 import android.util.SparseArray
 import android.view.View
@@ -26,22 +26,26 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
 
     fun clearList() {
         adapterList.clear()
-        notifyList(0, AdapterType.no, adapterList)
+        notifyList(AdapterType.no, 0, adapterList)
     }
 
     fun size(): Int = adapterList.size
+
+    fun setIEntity(it: Event<E>) = setIEntity(it.e, it.position, it.type, it.view)
+
     fun setIEntity(e: E, position: Int, @AdapterEvent type: Int, view: View?): Boolean {
         return when (stateOriginal(type)) {
             AdapterType.add, AdapterType.load -> add(e, position)
             AdapterType.set -> set(e, position)
-            AdapterType.remove -> remove(e)
+            AdapterType.remove -> if (remove(e)) true else removeAt(position)
             AdapterType.move -> move(e, position)
             else -> false
         }
     }
 
-    fun setList(position: Int, es: List<E>, type: Int): Boolean {
+    fun setList(it: Event<List<E>>) = setList(it.position, it.e, it.type)
 
+    fun setList(position: Int, es: List<E>, type: Int): Boolean {
         return when (stateOriginal(type)) {
             AdapterType.add -> addList(es, position)
             AdapterType.move -> moveList(position, es)
@@ -53,29 +57,23 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
     }
 
     fun add(e: E, position: Int = -1): Boolean {
-        val p = if (position in adapterList.indices) {
-            adapterList.add(position, e)
-            position
-        } else {
-            adapterList.add(e)
-            adapterList.lastIndex
-        }
-        return notify(p, AdapterType.add)
+        val p = adapterList.run { if (position in indices) position.also { add(position, e) } else add(e).run { lastIndex } }
+        return notify(AdapterType.add, p)
     }
 
     fun set(e: E, position: Int): Boolean {
         return if (position in adapterList.indices) {
             adapterList[position] = e
-            notify(position, AdapterType.set)
+            notify(AdapterType.set, position)
         } else false
     }
 
     fun move(e: E, position: Int): Boolean {
         if (position !in adapterList.indices) return false
         val from = adapterList.indexOf(e)
-        return if (from >= 0 && from != position && adapterList.remove(e)) {
+        return if (from in adapterList.indices && from != position && adapterList.remove(e)) {
             adapterList.add(position, e)
-            notify(position, AdapterType.move, from)
+            notify(AdapterType.move, position, from)
         } else false
     }
 
@@ -86,14 +84,17 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
     }
 
     fun removeAt(position: Int): Boolean {
-        if (position in adapterList.indices) adapterList.removeAt(position)
-        return notify(position, AdapterType.remove)
+        if (position in adapterList.indices){
+            adapterList.removeAt(position)
+            notify(AdapterType.remove, position)
+        }
+        return false
     }
 
     fun addList(es: List<E>, position: Int = Int.MAX_VALUE): Boolean {
         val p = if (position in adapterList.indices) position else adapterList.size
         adapterList.addAll(p, es)
-        return notifyList(position, AdapterType.add, es)
+        return notifyList(AdapterType.add, position, es)
     }
 
     fun moveList(position: Int, es: List<E>): Boolean {
@@ -105,19 +106,15 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
             adapterList.removeAll(list)
             val p = if (position in adapterList.indices) position else adapterList.size
             adapterList.addAll(p, list)
-            return notifyList(p, AdapterType.move, list)
+            return notifyList(AdapterType.move, p, list)
         }
         return false
     }
 
-//    fun moveList(position: Int, from: Int, size: Int): Boolean {
-//
-//    }
-
     fun removeList(from: Int, size: Int): Boolean {
         val list = ArrayList(adapterList.subList(from, from + size))
         adapterList.removeAll(list)
-        return notifyList(from, AdapterType.remove, list)
+        return notifyList(AdapterType.remove, from, list)
     }
 
     fun removeList(es: List<E>): Boolean {
@@ -125,18 +122,16 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
         val position = adapterList.indexOf(es.first())
         if (position < 0) return false
         val list = ArrayList(adapterList.subList(position, position + es.size))
-        if (checkEqualList(list, es)) {
-            return removeList(position, es.size)
-        } else es.forEach { remove(it) }
-        return false
+        return if (list.checkEqualList(es)) removeList(position, es.size)
+        else false.also { es.forEach { remove(it) } }
     }
 
-    fun checkEqualList(list: List<E>, es: List<E>): Boolean {
+    fun List<E>.checkEqualList(es: List<E>): Boolean {
+        if (size != es.size) return false
         es.forEachIndexed { index, e ->
-            val ie = list[index]
-            if (e is Diff && ie is Diff) {
-                if (e.key() != ie.key()) return false
-            } else if (ie != e) return false
+            val ie = get(index)
+            if (e is Diff && ie is Diff && e.key() != ie.key()) return false
+            else if (ie != e) return false
         }
         return true
     }
@@ -145,9 +140,9 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
     fun refreshList(es: List<E>, position: Int = 0): Boolean {
         return if (position in adapterList.indices) {
             if (position == 0) adapterList.clear()
-            else adapterList.removeAll(adapterList.subList(position, size()))
+            else while (position in adapterList.indices) adapterList.removeAt(adapterList.lastIndex)
             adapterList.addAll(position, es)
-            notifyList(position, AdapterType.refresh, es)
+            notifyList(AdapterType.refresh, position, es)
         } else {
             addList(es, position)
         }
@@ -158,15 +153,21 @@ interface IListAdapter<E> : IEvent<E>, ListUpdateCallback {
             for (index in es.indices) {
                 adapterList[index + position] = es[index]
             }
-            notifyList(position, AdapterType.set, es)
+            notifyList(AdapterType.set, position, es)
             return true
         }
         return false
     }
 
-    fun notify(p: Int, type: Int, from: Int = 0): Boolean
+    fun notify(type: Int, p: Int, from: Int = 0): Boolean {
+        notifyDataSetChanged()
+        return true
+    }
 
-    fun notifyList(p: Int, type: Int, es: List<E>, from: Int = 0): Boolean
+    fun notifyList(type: Int, p: Int, es: List<E>, from: Int = 0): Boolean {
+        notifyDataSetChanged()
+        return true
+    }
 
     fun notifyDataSetChanged()
 

@@ -1,4 +1,4 @@
-package com.lifecycle.binding
+package com.lifecycle.binding.inter.event
 
 import android.view.View
 

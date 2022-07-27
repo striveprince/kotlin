@@ -1,23 +1,23 @@
 package com.lifecycle.binding.inter.list
 
 import android.view.View
-import com.lifecycle.binding.IEvent
-import com.lifecycle.binding.IListAdapter
+import com.lifecycle.binding.inter.event.IEvent
+import com.lifecycle.binding.inter.event.IListAdapter
 import com.lifecycle.binding.adapter.AdapterEvent
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.util.*
 import com.lifecycle.binding.viewmodel.Obtain
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicInteger
 
-interface ListObtain<E,Job> :IListAdapter<E>, Obtain<List<E>, Job> {
+interface ListObtain<E,Job> : IListAdapter<E>, Obtain<List<E>, Job> {
     var pageWay:Boolean
     var pageCount :Int
     var headIndex :Int
     var offset:Int
     var job: Job?
     val adapter: IListAdapter<E>
-    val canRun: AtomicBoolean
-
+    val state : AtomicInteger
     fun start(@AdapterEvent state: Int)
 
     fun getData(state: Int)
@@ -34,18 +34,12 @@ interface ListObtain<E,Job> :IListAdapter<E>, Obtain<List<E>, Job> {
         return position+headIndex
     }
 
-    override fun onComplete() {
-        canRun.compareAndSet(false,true)
+    override fun notify(type: Int, p: Int, from: Int): Boolean {
+        return adapter.notify(type,p,from)
     }
 
-
-
-    override fun notify(p: Int, type: Int, from: Int): Boolean {
-        return adapter.notify(p, type, from)
-    }
-
-    override fun notifyList(p: Int, type: Int, es: List<E>, from: Int): Boolean {
-        return adapter.notifyList(p, type, es, from)
+    override fun notifyList(type: Int, p: Int, es: List<E>, from: Int): Boolean {
+        return adapter.notifyList(type,p, es, from)
     }
 
     override fun notifyDataSetChanged() {
@@ -115,10 +109,6 @@ interface ListObtain<E,Job> :IListAdapter<E>, Obtain<List<E>, Job> {
     override fun set(es: List<E>, position: Int): Boolean {
         return adapter.set(es, position)
     }
-//
-//    override fun moveList(position: Int, from: Int, size: Int): Boolean {
-//        return adapter.moveList(position, from, size)
-//    }
 
     override fun moveList(position: Int, es: List<E>): Boolean {
         return adapter.moveList(position, es)

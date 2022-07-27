@@ -19,6 +19,8 @@ import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.life.LifecycleInit
 import com.lifecycle.binding.util.observer
 import com.lifecycle.binding.util.toast
+import com.lifecycle.demo.inject.ApiEmptyException
+import com.lifecycle.demo.inject.ApiException
 import com.lifecycle.rx.viewmodel.list.ListViewModel
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.scwang.smart.refresh.layout.api.RefreshLayout
@@ -73,7 +75,7 @@ fun <E : Inflate> recyclerAnko(
                             t.loadingState.value = type
                         }
                     }
-                    t.error.observer(lifecycleInit.owner()) { if (it != null) errorInflate.set(onLoad, it) }
+                    t.errorMessage.observer(lifecycleInit.owner()) { if (it != null) errorInflate.set(onLoad, ApiEmptyException()) }
 //                    t.enable.observer(lifecycleInit.owner()) { (this as View).isEnabled = it }
                     t.loadingState.observer(lifecycleInit.owner()) {
                         when (it) {

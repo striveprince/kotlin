@@ -6,6 +6,8 @@
             name="vm"
             type="com.lifecycle.binding.inter.list.ListModel"/>
         <import type="android.view.View"/>
+        <import type="android.text.TextUtils"/>
+
     </data>
     <FrameLayout
         android:layout_width="match_parent"
@@ -33,10 +35,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <TextView
-                        android:visibility="@{vm.error==null?View.GONE:View.VISIBLE,default=gone}"
                         android:layout_width="match_parent"
                         android:gravity="center"
-                        android:text="@{vm.error.message}"
+                        android:visibility="@{TextUtils.isEmpty(vm.errorMessage)?View.GONE:View.VISIBLE,default=gone}"
+                        android:text="@{vm.errorMessage}"
                         android:layout_height="match_parent"/>
                 </FrameLayout>
             </FrameLayout>

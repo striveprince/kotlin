@@ -5,12 +5,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.lifecycle.binding.IEvent
-import com.lifecycle.binding.IListAdapter
+import com.lifecycle.binding.inter.event.IEvent
+import com.lifecycle.binding.inter.event.IListAdapter
 import com.lifecycle.binding.inter.inflate.Item
 
 class FragmentPager2Adapter<E: Item>(private val fm: FragmentManager, lifecycle:Lifecycle):
-    FragmentStateAdapter(fm,lifecycle), IListAdapter<E> {
+    FragmentStateAdapter(fm,lifecycle),
+    IListAdapter<E> {
     override val array: SparseArray<Any> = SparseArray()
     override val adapterList: MutableList<E> = ArrayList()
     override val events: ArrayList<IEvent<E>> = ArrayList()

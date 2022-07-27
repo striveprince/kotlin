@@ -6,6 +6,7 @@ import android.os.Bundle
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.server.LocalServer
 import com.lifecycle.binding.util.contain
+import com.lifecycle.binding.view.SwipeBackLayout.Companion.FROM_NO
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -28,6 +29,7 @@ open class AppLifecycle constructor(
     private val localServers: ArrayList<LocalServer> = ArrayList()
 
     companion object {
+        var isSwipe: Int = FROM_NO
         lateinit var appLifecycle: AppLifecycle
         val stack = Stack<Activity>()
         val toolbarList = arrayListOf<Inflate>()
@@ -38,7 +40,7 @@ open class AppLifecycle constructor(
         fun activity(): Activity = stack.lastElement()
 
         fun finishAllWithout(vararg clazz: Class<*>) {
-            for (activity in stack) if (!clazz.contain(activity.javaClass) { isAssignableFrom(it) }) activity.finish()
+            for (activity in stack) if (!clazz.contain { it.isAssignableFrom(activity.javaClass) }) activity.finish()
         }
     }
 

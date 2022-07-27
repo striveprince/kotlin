@@ -25,7 +25,7 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
     val model: Model by lazy { initModel() }
     var toolbarIndex = Int.MAX_VALUE
 
-    open fun isSwipe(): Int = SwipeBackLayout.FROM_LEFT
+    open fun isSwipe(): Int = AppLifecycle.isSwipe
     override fun owner() = this
     override fun requireActivity() = this
     private var usableHeightPrevious = 0
@@ -39,27 +39,25 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
         val injectView = if (!AppLifecycle.initFinish) {
             startView().apply { waitFinish(savedInstanceState) }
         } else inject(savedInstanceState)
-        if (isSwipe() != SwipeBackLayout.FROM_NO) {
-            setContentView(R.layout.activity_base)
-            val swipeBackLayout = findViewById<SwipeBackLayout>(R.id.swipe_back_layout)
-            swipeBackLayout.directionMode = isSwipe()
-            val imageView: View = findViewById(R.id.iv_shadow)
-            swipeBackLayout.onSwipeBackListener = { _, f -> imageView.alpha = 1 - f }
-            swipeBackLayout.addView(injectView, ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT))
-        } else setContentView(injectView)
+        setContentView(R.layout.activity_base)
+        val swipeBackLayout = findViewById<SwipeBackLayout>(R.id.swipe_back_layout)
+        swipeBackLayout.directionMode = isSwipe()
+        val imageView: View = findViewById(R.id.iv_shadow)
+        swipeBackLayout.onSwipeBackListener = { _, f -> imageView.alpha = 1 - f }
+        swipeBackLayout.addView(injectView, ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT))
     }
 
 
     override fun inject(savedInstanceState: Bundle?): View {
         val injectView = createView(model, this)
         initData(this, savedInstanceState)
-        if(injectView.searchToolbar()==null){
-            if (AppLifecycle.toolbarList.run { isNotEmpty()&& toolbarIndex<size }){
+        if (injectView.searchToolbar() == null) {
+            if (AppLifecycle.toolbarList.run { isNotEmpty() && toolbarIndex in indices }) {
                 val toolbar = AppLifecycle.toolbarList[toolbarIndex].createView(this) as ViewGroup
                 return LinearLayout(this).apply {
                     layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
                     orientation = LinearLayout.VERTICAL
-                    addView(toolbar,MATCH_PARENT, WRAP_CONTENT)
+                    addView(toolbar, MATCH_PARENT, WRAP_CONTENT)
                     addView(injectView, MATCH_PARENT, MATCH_PARENT)
                     toolbar.searchToolbar()
                 }
@@ -84,17 +82,16 @@ abstract class BaseActivity<Model : ViewModel, B> : AppCompatActivity(), Parse<M
 
     }
 
-    fun View.searchToolbar(): Toolbar? {
-        return when(this){
-            is Toolbar-> this.also { setSupportActionBar(it) }.also { initToolbar(it) }
-            is ViewGroup-> loopToolbar()
-            else-> null
+    private fun View.searchToolbar(): Toolbar? {
+        return when (this) {
+            is Toolbar -> this.also { setSupportActionBar(it) }.also { initToolbar(it) }
+            is ViewGroup -> loopToolbar()
+            else -> null
         }
     }
 
-    private fun ViewGroup.loopToolbar(): Toolbar?{
-        for (index in 0 until childCount)
-            return getChildAt(index).searchToolbar()
+    private fun ViewGroup.loopToolbar(): Toolbar? {
+        for (index in 0 until childCount) getChildAt(index).searchToolbar()?.let { return it }
         return null
     }
 

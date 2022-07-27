@@ -1,32 +1,33 @@
 package com.lifecycle.binding.inter.list
 
 import androidx.lifecycle.MutableLiveData
-import com.lifecycle.binding.IListAdapter
 import com.lifecycle.binding.adapter.AdapterEvent
 import com.lifecycle.binding.util.*
 
-interface ListModel<E,Job>:  ListObtain<E, Job> {
-    val loadingState : MutableLiveData<Int>
-    val error : MutableLiveData<Throwable>
+interface ListModel<E, Job> : ListObtain<E, Job> {
+    val loadingState: MutableLiveData<Int>
+    val errorMessage: MutableLiveData<CharSequence>
 
     override fun onNext(t: List<E>) {
+        errorMessage.value = ""
         loadingState.value?.let {
             setList(getEndOffset(it), t, stateOriginal(it))
             loadingState.value = stateSuccess(it)
         }
     }
 
-    override fun start(@AdapterEvent state:Int){
-        loadingState.value = stateStart(state)
+    override fun getData(state: Int) {}
+
+    override fun start(@AdapterEvent state: Int) {
+        if (isStateEnd(this.state.get())) loadingState.value = stateStart(state)
     }
 
     override fun onError(e: Throwable) {
-        error.value = e
+        errorMessage.value = e.message
         loadingState.value = stateError(loadingState.value!!)
     }
 
     override fun onComplete() {
-        super.onComplete()
         loadingState.value = stateEnd(loadingState.value!!)
     }
 }

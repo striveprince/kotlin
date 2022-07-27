@@ -120,7 +120,7 @@ dependencies {
 //    implementation "com.lifecycle:rx:$binding_version"
 //    implementation "com.lifecycle:coroutines:$binding_version"
     implementation project(path: ':binding')
-    implementation project(path: ':rx')
+//    implementation project(path: ':rx')
     implementation project(path: ':coroutines')
 //    def binding_version = 2.2.0-beta02
 //    implementation 'com.lifecycle:binding:$binding_version'

@@ -10,6 +10,7 @@ import androidx.databinding.adapters.NumberPickerBindingAdapter.setValue
 import androidx.lifecycle.MutableLiveData
 import com.lifecycle.binding.util.fromJson
 import com.lifecycle.binding.util.toJson
+import org.json.JSONArray
 import timber.log.Timber
 import kotlin.properties.Delegates
 import kotlin.properties.ObservableProperty
@@ -115,6 +116,8 @@ inline fun <reified T> SharedPreferences.liveData(key: String, t: T): MutableLiv
         }
     }
 }
+
+
 //
 //open class SharedPreferenceLiveData<T>:LiveData<T>(){
 //    override fun getValue()=super.getValue()

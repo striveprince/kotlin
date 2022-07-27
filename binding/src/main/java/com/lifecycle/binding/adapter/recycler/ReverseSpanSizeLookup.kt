@@ -1,8 +1,8 @@
 package com.lifecycle.binding.adapter.recycler
 
 import androidx.recyclerview.widget.GridLayoutManager
-import com.lifecycle.binding.IListAdapter
 import com.lifecycle.binding.inter.SpanLookup
+import com.lifecycle.binding.inter.event.IListAdapter
 
 open class ReverseSpanSizeLookup<E : SpanLookup>(val adapter: IListAdapter<E>, val count: Int) : GridLayoutManager.SpanSizeLookup() {
 

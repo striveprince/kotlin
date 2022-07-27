@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.lifecycle.binding.IEvent
+import com.lifecycle.binding.inter.event.IEvent
 import com.lifecycle.binding.R
 import com.lifecycle.binding.util.findLayoutView
 

@@ -1,0 +1,68 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+Properties properties = new Properties()
+properties.load( project.rootProject.file('local.properties').newDataInputStream() )
+def kotlin_username = properties.getProperty('user')
+def kotlin_password = properties.getProperty('user')
+def kotlin_version  = properties.getProperty('version')
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+
+
+                from components.release
+                groupId = 'com.lifecycle.binding'  //sonatype平台创建的groupId
+                artifactId = project.name
+                version = kotlin_version  //库版本名
+
+                project.ext["signing.keyId"] = "xxxxxxxx"  //GPG指纹后8位
+                project.ext["signing.password"] = "xxxxxxxxxxx"  //GPG密码
+                project.ext["signing.secretKeyRingFile"] = "/xxxxx/xxxxxxxxxxxxxxx.gpg" //GPG私钥
+
+                pom {
+                    name = "kotln"
+                    description = "noting to description"
+                    url = "https://github.com/striveprince/kotlin"  //github主页地址
+                    licenses {
+                        license {
+                            name = "The Apache License, Version 2.0"
+                            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                        }
+                    }
+                    developers {
+                        developer {  //填开发者信息
+                            id = kotlin_username
+                            name = "Arvin Wang"
+                            email = "1033144294@qq.com"
+                        }
+                    }
+                    scm {
+                        connection = "scm:svn:https://github.com/striveprince/kotlin"   //后面为github主页地址
+                        developerConnection = "scm:svn:https://github.com/striveprince/kotlin"  //后面为github主页地址
+                        url = "https://github.com/striveprince/kotlin" //github主页地址
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                // release  https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/  //正式上传地址
+                name = 'sonatypeRepository'
+//                url = "https://s01.oss.sonatype.org/content/repositories/snapshots/" //快照上传地址
+                url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                credentials {
+                    //sonatype平台账号密码
+                    username = kotlin_username
+                    password = kotlin_password
+                }
+            }
+        }
+    }
+    project.signing {
+        sign project.publishing.publications
+    }
+}

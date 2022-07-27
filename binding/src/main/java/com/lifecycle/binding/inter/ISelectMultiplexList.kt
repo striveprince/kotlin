@@ -1,8 +1,8 @@
 package com.lifecycle.binding.inter
 
 import android.view.View
-import com.lifecycle.binding.IListAdapter
 import com.lifecycle.binding.adapter.AdapterType
+import com.lifecycle.binding.inter.event.IListAdapter
 
 interface ISelectMultiplexList<E : MultiplexSelect> : IListAdapter<E> {
     val selectList: MutableList<E>
@@ -110,11 +110,6 @@ interface ISelectMultiplexList<E : MultiplexSelect> : IListAdapter<E> {
         list.clear()
     }
 
-//    fun MutableMap<String, SelectType<E>>.asyncList(list: MutableList<E>) {
-//        clear()
-//        for (e in list) selectStatus(e, e.isSelected())
-//    }
-
     fun MutableMap<String, SelectType<E>>.add(inE: E, list: MutableList<E>): Boolean {
         return list.add(inE).apply {
             if (get(inE.selectType())?.selects?.add(inE) == null)
@@ -128,6 +123,5 @@ class SelectType<E>(val max: Int, val selects: ArrayList<E> = ArrayList())
 
 interface MultiplexSelect : Select {
     fun selectType() = javaClass.simpleName
-
     fun selectMax() = Int.MAX_VALUE
 }

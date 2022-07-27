@@ -7,6 +7,8 @@
             name="vm"
             type="com.lifecycle.demo.ui.select.popup.PopupRecyclerInflate"/>
         <import type="android.view.View"/>
+        <import type="android.text.TextUtils"/>
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,13 +23,13 @@
         <com.scwang.smart.refresh.layout.SmartRefreshLayout
             android:id="@+id/smart_refresh_layout"
             android:layout_width="match_parent"
-            android:enabled="@{!vm.running(vm.loadingState)}"
             app:state="@={vm.loadingState}"
             android:layout_height="match_parent">
+<!--            android:enabled="@{!vm.running(vm.loadingState)}"-->
             <FrameLayout
-                android:onClick="@{vm::onCancelClick}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+<!--                android:onClick="@{vm::onCancelClick}"-->
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"
@@ -35,16 +37,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
+<!--                    android:visibility="@{vm.isSuccess(vm.loadingState)?View.GONE:View.VISIBLE,default=gone}"-->
                 <FrameLayout
-                    android:visibility="@{vm.isSuccess(vm.loadingState)?View.GONE:View.VISIBLE,default=gone}"
                     android:id="@+id/frame_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <TextView
                         android:layout_width="match_parent"
                         android:gravity="center"
-                        android:visibility="@{vm.error==null?View.GONE:View.VISIBLE,default=gone}"
-                        android:text="@{vm.error.message}"
+                        android:visibility="@{TextUtils.isEmpty(vm.errorMessage)?View.GONE:View.VISIBLE,default=gone}"
+                        android:text="@{vm.errorMessage}"
                         android:layout_height="match_parent"/>
                 </FrameLayout>
             </FrameLayout>

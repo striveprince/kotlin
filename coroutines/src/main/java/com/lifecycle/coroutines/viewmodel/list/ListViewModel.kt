@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.util.SparseArray
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
-import com.lifecycle.binding.IEvent
-import com.lifecycle.binding.IListAdapter
+import com.lifecycle.binding.inter.event.IEvent
 import com.lifecycle.binding.adapter.AdapterType
 import com.lifecycle.binding.adapter.recycler.RecyclerAdapter
+import com.lifecycle.binding.inter.event.IListAdapter
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.inter.list.ListModel
 import com.lifecycle.binding.life.AppLifecycle
@@ -22,6 +22,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicInteger
 
 open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E> = RecyclerAdapter()) :
     LifeViewModel(), IListAdapter<E>, ListModel<E, Job> {
@@ -31,17 +32,16 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
     override var headIndex = 0
     override var offset = 0
     override val loadingState = MutableLiveData(stateStart(AdapterType.refresh))
-    override val error = MutableLiveData<Throwable>()
     override var job: Job? = null
     override val adapterList: MutableList<E> = adapter.adapterList
     var httpData: HttpData<E> = { _, _: Int -> flow { emit(ArrayList<E>()) } }
-    override val canRun: AtomicBoolean = AtomicBoolean(true)
     override val events: ArrayList<IEvent<E>> = adapter.events
-
+    override val errorMessage: MutableLiveData<CharSequence> = MutableLiveData()
+    override val state: AtomicInteger = AtomicInteger(AdapterType.no)
 
     @ExperimentalCoroutinesApi
     override fun attachData(owner: LifecycleOwner, bundle: Bundle?) {
-        loadingState.observer(owner) { if (isStateStart(it) && canRun.getAndSet(false)) getData(it) }
+        loadingState.observer(owner) { if (isStateStart(it)) getData(it) }
     }
 
     override fun onSubscribe(job: Job) {
