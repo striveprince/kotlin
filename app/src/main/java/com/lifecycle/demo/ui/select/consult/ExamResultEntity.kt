@@ -2,9 +2,9 @@ package com.lifecycle.demo.ui.select.consult
 
 import androidx.databinding.ViewDataBinding
 import com.lifecycle.binding.inter.event.IEvent
+import com.lifecycle.binding.inter.event.IListAdapter
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
 import com.lifecycle.binding.inter.bind.data.DataBindInflate
-import com.lifecycle.binding.inter.event.IListAdapter
 import com.lifecycle.binding.inter.inflate.Diff
 import com.lifecycle.demo.R
 import com.lifecycle.demo.inject.bean.ExamResultBean

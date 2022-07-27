@@ -19,8 +19,6 @@ import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.life.LifecycleInit
 import com.lifecycle.binding.util.observer
 import com.lifecycle.binding.util.toast
-import com.lifecycle.demo.inject.ApiEmptyException
-import com.lifecycle.demo.inject.ApiException
 import com.lifecycle.rx.viewmodel.list.ListViewModel
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.scwang.smart.refresh.layout.api.RefreshLayout
@@ -40,6 +38,12 @@ import org.jetbrains.anko.textView
  */
 inline fun ViewManager.viewPager2(init: ViewPager2.() -> Unit): ViewPager2 =
     ankoView({ ViewPager2(it) }, theme = 0, init = init)
+//inline fun ViewManager.bottomNavigationView(init: BottomNavigationView.() -> Unit): BottomNavigationView =
+//    ankoView({ BottomNavigationView(it) }, theme = 0, init = init)
+//
+//inline fun ViewManager.recyclerView(init: RecyclerView.() -> Unit): RecyclerView =
+//    ankoView({ RecyclerView(it) }, theme = 0, init = init)
+
 
 inline fun ViewManager.smartRefreshLayout(init: SmartRefreshLayout.() -> Unit): SmartRefreshLayout =
     ankoView({ SmartRefreshLayout(it) }, theme = 0, init = init)
@@ -75,7 +79,7 @@ fun <E : Inflate> recyclerAnko(
                             t.loadingState.value = type
                         }
                     }
-                    t.errorMessage.observer(lifecycleInit.owner()) { if (it != null) errorInflate.set(onLoad, ApiEmptyException()) }
+                    t.errorMessage.observer(lifecycleInit.owner()) { if (it != null) errorInflate.set(onLoad,empty =  it) }
 //                    t.enable.observer(lifecycleInit.owner()) { (this as View).isEnabled = it }
                     t.loadingState.observer(lifecycleInit.owner()) {
                         when (it) {
@@ -114,11 +118,11 @@ private fun errorInflate(): ErrorInflate {
         var throwable: Throwable? = null
 
         var view: View? = null
-        override fun set(onLoad: (Int, Int) -> Unit, throwable: Throwable?, empty: String) {
+        override fun set(onLoad: (Int, Int) -> Unit, throwable: Throwable?, empty: CharSequence) {
             this.throwable = throwable
             val message = throwable?.message ?: empty
             textView.text = message
-            toast(message)
+            toast(message.toString())
             textView.setOnClickListener { onLoad(0, AdapterType.refresh) }
         }
 

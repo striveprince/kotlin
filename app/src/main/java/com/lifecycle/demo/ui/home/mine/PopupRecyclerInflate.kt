@@ -2,9 +2,9 @@ package com.lifecycle.demo.ui.home.mine
 
 import android.content.Context
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.lifecycle.binding.inter.event.IListAdapter
 import com.lifecycle.binding.inter.Select
 import com.lifecycle.binding.inter.bind.annotation.LayoutView
-import com.lifecycle.binding.inter.event.IListAdapter
 import com.lifecycle.demo.R
 import com.lifecycle.demo.databinding.LayoutSwipeRecyclerViewInflateBinding
 import com.lifecycle.coroutines.inflate.ListViewInflate

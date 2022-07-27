@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.util.SparseArray
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
-import com.lifecycle.binding.IEvent
-import com.lifecycle.binding.IListAdapter
-import com.lifecycle.binding.adapter.AdapterType
+import com.lifecycle.binding.adapter.AdapterType.no
 import com.lifecycle.binding.adapter.AdapterType.refresh
 import com.lifecycle.binding.adapter.recycler.RecyclerAdapter
+import com.lifecycle.binding.inter.event.IEvent
+import com.lifecycle.binding.inter.event.IListAdapter
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.inter.list.ListModel
 import com.lifecycle.binding.life.AppLifecycle
@@ -21,7 +21,8 @@ import com.lifecycle.rx.viewmodel.LifeViewModel
 import io.reactivex.Observer
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
-import java.util.concurrent.atomic.AtomicBoolean
+import timber.log.Timber
+import java.util.concurrent.atomic.AtomicInteger
 
 open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E> = RecyclerAdapter()) :
     LifeViewModel(), IListAdapter<E>, Observer<List<E>>, ListModel<E, Disposable> {
@@ -31,26 +32,26 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
     override var pageCount = AppLifecycle.pageCount
     override var headIndex = 0
     override var offset = 0
-    override val loadingState = MutableLiveData(AdapterType.no)
-    override val error = MutableLiveData<Throwable>()
+    override val loadingState = MutableLiveData(stateStart(refresh))
     override val adapterList: MutableList<E> = adapter.adapterList
     override var job: Disposable? = null
+    override val errorMessage: MutableLiveData<CharSequence> = MutableLiveData("")
     var httpData: (Int, Int) -> Single<List<E>> = { _, _ -> Single.just(ArrayList()) }
-
-    override val canRun: AtomicBoolean = AtomicBoolean(true)
+    override val state: AtomicInteger = AtomicInteger(no)
     override fun attachData(owner: LifecycleOwner, bundle: Bundle?) {
         super.attachData(owner, bundle)
-        loadingState.observer(owner) { if (isStateStart(it) && canRun.getAndSet(false)) getData(it) }
-        start(refresh)
+        loadingState.observer(owner) {
+            Timber.i("loadingState = $it state = ${state.get()}")
+            if (state.getAndSet(it) != it && isStateStart(it)) getData(it)
+        }
     }
 
-
     override fun getData(state: Int) {
-        if (canRun.getAndSet(false) && isStateStart(state))
-            httpData(getStartOffset(state), state)
-                .ioToMainThread()
-                .map { if (it is ArrayList) it else ArrayList(it) }
-                .subscribe(NormalObserver(this))
+        super.getData(state)
+        httpData(getStartOffset(state), state)
+            .ioToMainThread()
+            .map { if (it is ArrayList) it else ArrayList(it) }
+            .subscribe(NormalObserver(this))
     }
 
     override fun onNext(t: List<E>) {

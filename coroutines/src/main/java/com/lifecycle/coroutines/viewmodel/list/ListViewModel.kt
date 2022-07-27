@@ -5,15 +5,14 @@ import android.util.SparseArray
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import com.lifecycle.binding.inter.event.IEvent
-import com.lifecycle.binding.adapter.AdapterType
-import com.lifecycle.binding.adapter.recycler.RecyclerAdapter
 import com.lifecycle.binding.inter.event.IListAdapter
+import com.lifecycle.binding.adapter.AdapterType
+import com.lifecycle.binding.adapter.AdapterType.no
+import com.lifecycle.binding.adapter.recycler.RecyclerAdapter
 import com.lifecycle.binding.inter.inflate.Inflate
 import com.lifecycle.binding.inter.list.ListModel
 import com.lifecycle.binding.life.AppLifecycle
-import com.lifecycle.binding.util.isStateStart
-import com.lifecycle.binding.util.observer
-import com.lifecycle.binding.util.stateStart
+import com.lifecycle.binding.util.*
 import com.lifecycle.coroutines.util.HttpData
 import com.lifecycle.coroutines.util.launchUI
 import com.lifecycle.coroutines.viewmodel.LifeViewModel
@@ -21,6 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
+import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -35,13 +35,16 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
     override var job: Job? = null
     override val adapterList: MutableList<E> = adapter.adapterList
     var httpData: HttpData<E> = { _, _: Int -> flow { emit(ArrayList<E>()) } }
+    override val errorMessage: MutableLiveData<CharSequence> = MutableLiveData("")
     override val events: ArrayList<IEvent<E>> = adapter.events
-    override val errorMessage: MutableLiveData<CharSequence> = MutableLiveData()
-    override val state: AtomicInteger = AtomicInteger(AdapterType.no)
+    override val state: AtomicInteger = AtomicInteger(no)
 
     @ExperimentalCoroutinesApi
     override fun attachData(owner: LifecycleOwner, bundle: Bundle?) {
-        loadingState.observer(owner) { if (isStateStart(it)) getData(it) }
+        loadingState.observer(owner) {
+            Timber.i("loadingState = $it state = ${state.get()} condition = ${it.stateCondition()}")
+            if (state.getAndSet(it) != it && isStateStart(it)) getData(it)
+        }
     }
 
     override fun onSubscribe(job: Job) {
@@ -51,6 +54,12 @@ open class ListViewModel<E : Inflate>(final override val adapter: IListAdapter<E
 
     @ExperimentalCoroutinesApi
     override fun getData(state: Int) {
+        super.getData(state)
+        httpData(state)
+    }
+
+    @ExperimentalCoroutinesApi
+    fun httpData(state:Int){
         onSubscribe(launchUI {
             httpData(getStartOffset(state), state)
                 .flowOn(Dispatchers.IO)
